@@ -1,0 +1,153 @@
+<style type="text/css">
+    .gtwin {
+        width: 400px;
+        margin: 10px;
+        float: left;
+    }
+
+    div#addgoodstype > div.texts {
+        height: 70px;
+    }
+
+    .texts > textarea {
+        height: 50px;
+        resize: none;
+        float: left;
+    }
+
+    .texts > div {
+        float: left;
+        height: 50px;
+        width: 100px;
+    }
+
+    #addProp {
+        background-color: #80E5F0;
+    }
+
+    #addProp:hover {
+        background-color: #07A1B1;
+        cursor: pointer;
+    }
+
+    .props {
+        width: 70px;
+    }
+
+    li.gtli {
+        width: 400px;
+        height: 32px;
+        display: block;
+        position: relative;
+        margin: 2px 0;
+    }
+
+    li.gtcons:hover {
+        background-color: #80E5F0;
+        cursor: pointer;
+    }
+
+    li.gtli:first-child > span {
+        text-align: center;
+        font-weight: bold;
+    }
+
+    li.gtli > span {
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
+        display: block;
+        float: left;
+        height: 28px;
+        border: 1px solid #80E5F0;
+        margin: 1px;
+        line-height: 28px;
+        font-size: 18px;
+    }
+
+    li.gtli > span:first-child {
+        width: 80px;
+    }
+
+    li.gtli > span:nth-child(2) {
+        width: 120px;
+    }
+
+    li.gtli > span:last-child {
+        width: 180px;
+    }
+</style>
+<{if $count ge 1 }>
+<div id='goodstypes' class='wins gtwin'>
+    <div style="margin-bottom: 0;">商品类型</div>
+    <ul>
+        <li class='gtli'><span>编号</span><span>商品类型名称</span><span>备注</span></li>
+        <{section name=index loop=$row}>
+        <li class='gtli gtcons '><span title="<{$row[index]['gt_number']}>"><{$row[index]['gt_number']}></span><span
+                title="<{$row[index]['gt_name']}>"><{$row[index]['gt_name']}></span><span
+                title="<{$row[index]['gt_remark']}>"><{$row[index]['gt_remark']}></span></li>
+        <{/section}>
+    </ul>
+</div>
+
+<{/if}>
+<form action="./server/addGoodsTypeSer.php" method="post" id="addgoodstype">
+    <div id='addgoodstype' class='wins gtwin'>
+        <div>添加商品类型</div>
+        <div>
+            <lable>类型编号</lable>
+            <input type="text" name="typeNumber" class="forms"/></div>
+        <div>
+            <lable>类型名称</lable>
+            <input type="text" name="typeName" class="forms"/></div>
+        <div class='texts'>
+            <lable>类型备注</lable>
+            <textarea name="typeRemark" class="forms"/></div>
+        <div class='texts'>
+            <lable>详细属性</lable>
+            <textarea name="typeProp" class="forms"/>
+
+            <div>用,分隔</div>
+        </div>
+        <div class='texts'>
+            <lable>价格属性</lable>
+            <textarea name="typePrice" class="forms"/>
+
+            <div>用,分隔，最多4个价格属性</div>
+        </div>
+        <div>
+            <div class="tijiao button">提交</div>
+        </div>
+    </div>
+</form>
+<script type="text/javascript">
+    function succ(data) {
+        toast(data.status, data.megs);
+        $('#contents').load('./inc/shoptypecontrol.php');
+    }
+    function bs() {
+
+    }
+    $(function () {
+        $.checks.checkform($('#addgoodstype'), {
+            "async": {'success': succ, 'beforeSend': bs},
+            "typeNumber": {
+                "name": "类型编号",
+                "check": ["noSpechars", {"isLength": [4]}, {"isAjax": ["/server/iskeySer.php"]}]
+            },
+            "typeName": {"name": "类型名称", "check": [{"isAjax": ["/server/iskeySer.php"]}]}
+        });
+    });
+    $(function () {
+        $('.tijiao').click(function () {
+            $(this).parents("form").submit();
+        });
+        $("li.gtli:first").css("background-color", "#80E5F0");
+        $("li.gtli:gt(0)").click(function () {
+            $.get("./inc/updateGT.php", {'name': $(this).children('span:first-child').html()}, function (data) {
+                $("body").append(data);
+                $('#updateGTwin').slideDown(500);
+            });
+        });
+    });
+</script>

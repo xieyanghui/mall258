@@ -1,0 +1,166 @@
+* {
+    margin: 0;
+    padding: 0;
+    font-size: 12px;
+}
+
+ul, li {
+    list-style: none;
+}
+
+a {
+    text-decoration: none;
+    color: #333333;
+}
+
+a:hover {
+    color: red;
+    cursor: pointer;
+}
+
+#toast {
+    z-index: 1001;
+    display: none;
+    position: absolute;
+    width: 200px;
+    height: 20px;
+    line-height: 20px;
+    text-align: center;
+    border-radius: 10px;
+    top: 40px;
+}
+
+.toasterr {
+    background-color: #FFCCCC;
+    border: 3px solid #FF0033;
+}
+
+.toastsuc {
+    background-color: #E0F8FB;
+    border: 3px solid #50D1DE;
+}
+
+div.wins {
+    background-color: #FFFFFF;
+    border-radius: 15px;
+    border: 2px solid #50D1DE;
+    overflow: hidden;
+}
+
+div.wins > div:first-child {
+    margin-bottom: 20px;
+    width: 100%;
+    height: 40px;
+    background-color: #50D1DE;
+    text-align: center;
+    line-height: 40px;
+    font-size: 30px;
+    font-weight: bold;
+}
+
+.forms {
+    width: 150px;
+    height: 20px;
+    margin-left: 5px;
+    border: 2px solid #50D1DE;
+}
+
+div.wins > div {
+    width: 100%;
+    height: 50px;
+    overflow: hidden;
+}
+
+div.wins > div > lable {
+    width: 120px;
+    text-align: right;
+    float: left;
+    color: #07A1B1;
+    font-size: 18px;
+    font-weight: 500;
+    display: block;
+}
+
+.checksu {
+    display: block;
+    clear: left;
+    font: 12px "微软雅黑";
+    color: #00ff00;
+    margin-left: 150px;
+}
+
+.checker {
+    display: block;
+    clear: left;
+    font: 12px "微软雅黑";
+    color: #FF0000;
+    margin-left: 150px;
+}
+
+div.backhead {
+    position: fixed;
+    top: 0;
+    display: none;
+    z-index: 1000;
+}
+
+div.backop {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    background-color: #000000;
+    -moz-opacity: 0.3;
+    opacity: 0.3;
+    filter: alpha(opacity=30);
+}
+
+div.showcon {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 400px;
+}
+
+div.showclose {
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 40px;
+    height: 40px;
+    text-align: center;
+    line-height: 40px;
+    font-size: 30px;
+    font-weight: bold;
+}
+
+div.showclose:hover {
+    background-color: #E0F8FB;
+    cursor: pointer;
+}
+
+.button {
+    border-radius: 10px;
+    width: 75px;
+    height: 40px;
+    text-align: center;
+    font-size: 25px;
+    font-weight: bold;
+    background-color: #50D1DE;
+    line-height: 40px;
+}
+
+.button:hover {
+    cursor: pointer;
+    background-color: #07A1B1;
+}
+
+.quxiao {
+    float: left;
+    margin-left: 100px;
+}
+
+.tijiao {
+    float: right;
+    margin-right: 100px;
+}
+

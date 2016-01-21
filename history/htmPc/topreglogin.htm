@@ -1,0 +1,28 @@
+<ul>
+    <{if $name}>
+    <li><a href='<{$HTTP_HOST}>/userHome.php'> <{$name}>！欢迎回来 </a><a href='<{$HTTP_HOST}>/server/exitSer.php'> 退出 </a>
+    </li>
+    <{else}>
+    <li><a href='javascript:void(0)' id='reg' class='reglogin'>注册</a></li>
+    <li>|</li>
+    <li><a href='javascript:void(0)' id='login' class='reglogin'>登录</a></li>
+    <{/if}>
+</ul>
+<ul>
+    <li id='megs' class="userUtil"><a href='javascript:void(0)'>我的消息</a>
+        <ul>
+            <li>111111111111</li>
+            <li>2</li>
+            <li>3</li>
+        </ul>
+    </li>
+    <li>|</li>
+    <li id='collect' class='userUtil'><a href='javascript:void(0)'>我的收藏</a>
+
+    </li>
+    <li>|</li>
+    <li id='cart' class='userUtil'><a href='javascript:void(0)'>购物车</a>
+
+    </li>
+</ul>
+

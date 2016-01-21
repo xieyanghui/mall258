@@ -1,0 +1,136 @@
+<style type="text/css">
+    .gtprop {
+        width: 240px;
+        position: relative;
+        overflow: hidden;
+        border: 1px solid #50D1DE;
+        padding: 2px;
+    }
+
+    .gezi {
+        height: 20px;
+        width: 70px;
+        float: left;
+        margin: 3px;
+        border: 2px solid #50D1DE;
+    }
+
+    .gezi > input {
+        height: 20px;
+        width: 70px;
+        border-width: 0px;
+    }
+
+    .gezi > input:hover {
+        cursor: pointer;
+    }
+
+    .gzzj {
+        font-size: 22px;
+        background-color: #E0F8FB;
+        text-align: center;
+    }
+
+    .gzzj1 {
+    }
+
+    div#updateGTwin > form > div.showcon > div.gtdiv {
+        height: auto;
+        overflow: hidden;
+    }
+</style>
+<div id="updateGTwin" class="backhead">
+    <div class="backop"></div>
+    <form id="ugtform" action="./server/updateGTSer.php" method="post">
+        <div class="showcon wins">
+            <div>修改商品类型
+                <div class="showclose">×</div>
+            </div>
+            <div>
+                <lable>编号</lable>
+                <span><{$row['gt_number']}></span></div>
+            <input type="hidden" name="number" value="<{$row['gt_id']}>"/>
+
+            <div>
+                <lable>类型名名称</lable>
+                <div><input class='lxxg' type="text" disabled="disabled" name="gtname" value="<{$row['gt_name']}>"
+                            class="forms"/></div>
+            </div>
+            <div>
+                <lable>类型备注</lable>
+                <div><input class='lxxg' type="text" disabled="disabled" name="gtnamebz" value="<{$row['gt_remark']}>"
+                            class="forms"/></div>
+            </div>
+            <div class="gtdiv">
+                <lable>详细属性</lable>
+                <div class='gtprop' name="attr">
+                    <{section name=index loop=$attr}>
+                    <div class='gezi'><input type="text" name="uattr<{$attr[index]['gta_id']}>"
+                                             value="<{$attr[index]['gta_name']}>" disabled="disabled"/>
+                    </div>
+                    <{/section}>
+                    <div class='gezi gzzj'>+</div>
+                </div>
+            </div>
+            <div class="gtdiv">
+                <lable>价格属性</lable>
+                <div class='gtprop' name="price">
+                    <{section name=index loop=$price}>
+                    <div class='gezi'><input type="text" name="uprice<{$price[index]['gtap_id']}>"
+                                             value="<{$price[index]['gtap_attrName']}>" disabled="disabled"/></div>
+                    <{/section}>
+                    <div class='gezi gzzj'>+</div>
+                </div>
+            </div>
+
+            <div>
+                <div class="button quxiao">取消</div>
+                <div class="tijiao button">提交</div>
+            </div>
+        </div>
+    </form>
+</div>
+<script type="text/javascript">
+    $(function () {
+        reset();
+        $(window).resize(reset);
+        if ($("div.gtprop[name='price']").children().size() >= 5) {
+            $("div.gtprop[name='price'] >div:last").remove();
+        }
+        $(".tijiao").click(function () {
+
+            $.ajax({
+                url: $(this).parents('form').attr('action'),
+                data: $(this).parents('form').serialize(),
+                type: "POST",
+                dataType: "json",
+                beforeSend: null,
+                success: upgtsucc
+            });
+        });
+        $(".quxiao , div.showclose").click(function () {
+            $(".backhead").remove();
+        });
+        $(".lxxg").parent().click(function () {
+            $(this).children().removeAttr("disabled");
+        });
+        $(".gezi").click(function () {
+            $(this).children("input").removeAttr("disabled");
+        });
+        $('.gzzj').click(function () {
+            //$(this).before("<div class= 'gezi'><input type='text'  name='add'/></div>");
+            var $aa = $(this).parent().attr("name");
+            $(this).before("<div class= 'gezi'><input type='text' name='a" + $aa + $(this).parent().find("input[name^='a" + $aa + "']").size() + "' ></div>");
+            if ($(this).parent().attr("name") == "price") {
+                if ($(this).parent().children().size() >= 5) {
+                    $(this).remove();
+                }
+            }
+        });
+        function upgtsucc(data) {
+            toast(data.status, data.megs);
+            $('#updateGTwin').remove();
+            $('#contents').load('./inc/shoptypecontrol.php');
+        }
+    });
+</script>
