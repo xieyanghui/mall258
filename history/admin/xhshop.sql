@@ -1,6 +1,6 @@
 ﻿
 
--- 管理员权限
+--  管理员权限
 DROP TABLE IF EXISTS `adminAuth`;
 CREATE TABLE  `adminAuth` (
 	`aa_id` INT NOT NULL , -- ID
