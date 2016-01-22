@@ -1,3 +1,0 @@
-function sshow(divs, data) {
-
-}
