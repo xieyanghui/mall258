@@ -11,7 +11,12 @@ switch ($name) {
     case 'regform.email':
         $sql = "select * from userInfo where email ='$value'";
         break;
-
+    case 'addAdminAuthForm.aaNick':
+        $sql = "select * from AdminAuth where aa_nick ='$value'";
+        break;
+    case 'addAdminForm.aName':
+        $sql = "select * from adminInfo where a_name ='$value'";
+        break;
     default:
         break;
 }
@@ -22,4 +27,3 @@ if (count($row) > 1) {
     $arr['isNull'] = true;
 }
 echo json_encode($arr);
-?>

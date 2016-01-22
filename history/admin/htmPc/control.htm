@@ -10,7 +10,6 @@
         body {
             background-color: #E0F8FB;
         }
-
         #tops {
             width: 100%;
             height: 50px;
@@ -68,7 +67,7 @@
             position: relative;
             left: 250px;
             top: 50px;
-            height: 2500px;
+            overflow: hidden;
         }
 
         #menus > ul > li {
@@ -91,15 +90,21 @@
 <div id="tops">
     <ul>
         <li class='menu' href="<{$HTTP_HOST}>/server/exitSer.php">安全退出</li>
-        <{if $auth['system'] }>
-        <li class='menu' href="11">系统设置</li>
-        <{/if}>
+
+        <li class='menu' href="./inc/systemSet.php">系统设置</li>
+
         <li class='menu' href="11">消息中心</li>
-        <li class='menu' href="11">报表统计</li>
-        <li class='menu' href="11">订单管理</li>
-        <li class='menu' href="./inc/shopcontrol.php">商品管理</li>
+
+        <{if $auth['Statement'] }><li class='menu' href="11">报表统计</li> <{/if}>
+
+        <{if $auth['order'] }>  <li class='menu' href="11">订单管理</li> <{/if}>
+
+        <{if $auth['service'] }>  <li class='menu' href="11">在线客服</li> <{/if}>
+
+        <{if $auth['goods'] }>  <li class='menu' href="./inc/goodsControl.php">商品管理</li> <{/if}>
     </ul>
 </div>
+<input type="hidden" id = "sortCache" sortLine="" value="">
 <div id="con"></div>
 </body>
 <script>

@@ -11,10 +11,9 @@ include_once($_SERVER['DOCUMENT_ROOT'] . '/tool/autoload.php');
 
 class GoodsType
 {
-    function getGoodsType()
-    {
-        $sql = "select `gt_id`,`gt_number`,`gt_name`,`gt_remark` from `goodsType`";
-    }
+
+
+
 }
 
 ?>

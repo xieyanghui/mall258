@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <script src="http://cdn.staticfile.org/jquery/2.1.1/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="<{$HTTP_HOST}>/js/main.js" type="text/javascript" charset="utf-8"></script>
+    <script src="<{$HTTP_HOST}>/js/inCheck.js" type="text/javascript" charset="utf-8"></script>
+    <link rel="stylesheet" type="text/css" href="<{$HTTP_HOST}>/css/mian.css"/>
+    <style>
+        body {
+            background-color: #E0F8FB;
+        }
+
+        #tops {
+            width: 100%;
+            height: 50px;
+            background-color: #50D1DE;
+            position: fixed;
+            top: 0;
+            z-index: 999;
+        }
+
+        #tops > ul {
+            height: 50px;
+            display: block;
+            float: right;
+        }
+
+        #tops > ul > li {
+            margin: 0 20px;
+            width: 150px;
+            height: 50px;
+            line-height: 50px;
+            float: right;
+            text-align: center;
+            font-size: 22px;
+            font-weight: bold;
+            display: block;
+            position: relative;
+        }
+
+        li.menu {
+            background-color: #50D1DE;
+        }
+
+        li.menu:hover {
+            background-color: #07A1B1;
+            cursor: pointer;
+        }
+
+        .menuclick {
+            background-color: #07A1B1;
+            cursor: pointer;
+        }
+
+        .con {
+            position: relative;
+            top: 50px;
+        }
+
+        #menus {
+            position: fixed;
+            top: 50px;
+            z-index: 999;
+        }
+
+        #contents {
+            position: relative;
+            left: 250px;
+            top: 50px;
+            height: 2500px;
+        }
+
+        #menus > ul > li {
+            height: 40px;
+            width: 200px;
+            line-height: 40px;
+            text-align: center;
+            font-size: 24px;
+            margin: 10px 25px;
+            cursor: pointer;
+            background-color: #BCEDF2;
+        }
+
+        #menus > ul > li:hover {
+            background-color: #50D1DE;
+        }
+    </style>
+</head>
+<body>
+<div id="tops">
+    <ul>
+        <li class='menu' href="<{$HTTP_HOST}>/server/exitSer.php">安全退出</li>
+        <{if $auth['SystemSet'] }><li class='menu' href="./inc/systemSet.php">系统设置</li><{/if}>
+
+        <li class='menu' href="11">消息中心</li>
+
+        <{if $auth['Statement'] }><li class='menu' href="11">报表统计</li> <{/if}>
+
+        <li class='menu' href="11">订单管理</li>
+
+        <li class='menu' href="./inc/shopcontrol.php">商品管理</li>
+    </ul>
+</div>
+<div id="con"></div>
+</body>
+<script>
+    $(function () {
+        $("#tops >ul>li").click(function () {
+            $(this).removeClass('menu');
+            $(this).addClass('menuclick');
+            $(this).siblings().removeClass('menuclick');
+            $(this).siblings().addClass('menu');
+            $('#con').load($(this).attr('href'));
+        });
+    });
+</script>
+</html>

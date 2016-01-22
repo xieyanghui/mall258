@@ -10,16 +10,24 @@ class Smartys extends Smarty
     {
         parent::__construct();
         $this->config_dir = $_SERVER['DOCUMENT_ROOT'] . '/plugin/smarty/configs/';
-
         //判断设备模板
         if (empty($_SESSION['device'])) {
             $detect = new Mobile_Detect;
             $_SESSION['device'] = $detect->isMobile() ? "mobile" : "pc";
         }
+        // 设置页面目录，前后台，PC移动端分开
         if ($_SESSION['device'] == 'pc') {
-            $this->template_dir = $_SERVER['DOCUMENT_ROOT'] . '/htmPc/';
+            if(preg_match("/^\\".Config::ADMIN_DIR."/",$_SERVER['PHP_SELF'])){
+                $this->template_dir = $_SERVER['DOCUMENT_ROOT'] .Config::ADMIN_DIR. '/htmPc/';
+            }else{
+                $this->template_dir = $_SERVER['DOCUMENT_ROOT'] . '/htmPc/';
+            }
         } elseif ($_SESSION['device'] == 'mobile') {
-            $this->template_dir = $_SERVER['DOCUMENT_ROOT'] . '/htmMobile/';
+            if(preg_match("/^\\".Config::ADMINDIR."/",$_SERVER['PHP_SELF'])){
+                $this->template_dir = $_SERVER['DOCUMENT_ROOT'] .Config::ADMINDIR. '/htmMobile/';
+            }else{
+                $this->template_dir = $_SERVER['DOCUMENT_ROOT'] . '/htmMobile/';
+            }
         }
 
         //是sea云端 ，还是本地
@@ -31,16 +39,13 @@ class Smartys extends Smarty
             $this->cache_dir = $_SERVER['DOCUMENT_ROOT'] . '/plugin/smarty/cache/';
         }
 
-
+        //自定义模板路径
         if ($local != "") {
             $this->template_dir = $_SERVER['DOCUMENT_ROOT'] . $local;
         }
         $this->compile_locking = false;
         $this->left_delimiter = '<{';
         $this->right_delimiter = '}>';
-        $this->assign("DOCUMENT_ROOT", $_SERVER['DOCUMENT_ROOT']);
         $this->assign("HTTP_HOST", 'http://' . $_SERVER['HTTP_HOST']);
     }
 }
-
-?>

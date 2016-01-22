@@ -1,0 +1,71 @@
+<style type="text/css">
+    form#adminUpdateForm > div.showcon > div.autoRow {
+        height: auto;
+        overflow: hidden;
+    }
+</style>
+<div id="sysAdminUpdatewin" class="backhead">
+    <div class="backop"></div>
+    <form id="adminUpdateForm" action="./server/adminUpdate.php" method="post">
+        <div class="showcon wins">
+            <span>修改管理员权限
+                <div class="showclose">×</div>
+            </span>
+            <div >
+                <lable>编号</lable>
+                <span><{$row['a_id']}></span></div>
+            <input type="hidden" name="aId" value="<{$row['a_id']}>"/>
+
+            <div>
+                <lable>管理员登录名</lable>
+                <div> <span><{$row['a_name']}></span></div>
+            </div>
+            <div>
+                <lable>管理员姓名</lable>
+                <div> <input name ="aNick" type="text" class="forms" value="<{$row['a_nick']}>" /></div>
+            </div>
+            <div class = "autoRow" >
+                    <lable>管理员权限</lable>
+                    <div>
+                        <{section name=index loop=$adminAuth}>
+                        <label title="<{$adminAuth[index]['aa_remark']}>"><input  name="adminAuth"  type="radio" value="<{$adminAuth[index]['aa_id']}>" <{$adminAuth[index]['checked'] }> /><{$adminAuth[index]['aa_nick']}> </label>
+                        <{/section}>
+                    </div>
+                </div>
+
+            <div>
+                <div class="button cancel">取消</div>
+                <div class="button submit">提交</div>
+            </div>
+        </div>
+    </form>
+</div>
+<script type="text/javascript">
+    function UpdateSucc(data){
+        toast(data.status, data.megs);
+        $(".backhead").remove();
+        $('#contents').load('./inc/sysAdmin.php');
+    }
+
+    function resetAuth(){
+        reset(0,"200px");
+    }
+    $(function () {
+        resetAuth();
+        $(window).resize(resetAuth);
+        $(".submit").click(function () {
+           // $(this).parents('form').submit();
+            $.ajax({
+                url: $(this).parents('form').attr('action'),
+                data: $(this).parents('form').serialize(),
+                type: "POST",
+                dataType: "json",
+                beforeSend: null,
+                success: UpdateSucc
+            });
+        });
+        $(".cancel , div.showclose").click(function () {
+            $(".backhead").remove();
+        });
+    });
+</script>

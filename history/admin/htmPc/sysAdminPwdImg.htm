@@ -1,0 +1,130 @@
+<style type="text/css">
+
+
+    div.con_value_input{
+        margin: 5px 0;
+        overflow: hidden;
+    }
+    div.con_value_input >label{
+        display: block;
+        width: 60px;
+        text-align: right;
+        color: #07A1B1;
+        float: left;
+    }
+    div.con_value_input >input{
+        float: left;
+        display: block;
+        width: 120px;
+    }
+    #showPwd >span{
+        margin: 0;
+    }
+
+</style>
+<script type="text/javascript" src="<{$HTTP_HOST}>/js/upload.js"></script>
+<form action="./server/adminPwdImg.php" method="post" id="adminForm">
+    <div id='adminInfo' class='wins showwin'>
+        <span  class="win_head" >我的信息</span>
+
+        <div class ="win_con">
+            <label class ="win_con_head">登录名</label>
+            <input type="hidden" name="aId" value="<{$row['a_id']}>" />
+            <div  class ="win_con_input"> <input  type="text" name="aName" class="forms" disabled="disabled" value="<{$row['a_name']}>" /></div>
+        </div>
+
+        <div class ="win_con">
+            <label class ="win_con_head">姓名</label>
+            <div class ="win_con_input" ><input type="text" name="aNick" class="forms" disabled="disabled" value="<{$row['a_nick']}>" /></div>
+        </div>
+
+        <div class ="win_con" >
+            <label class ="win_con_head">级别</label>
+            <div class ="win_con_input" ><input type="text" name="auth" class="forms" disabled="disabled" value="<{$row['aa_nick']}>" /></div>
+        </div>
+
+        <div class = "win_conAuto">
+            <label class ="win_con_head">修改密码</label>
+            <div class ="win_con_con">
+                <div class ="con_value_input"><label>原密码：</label><input  type="password" name="oldPwd" class="forms" autocomplete="off" /></div>
+                <div class ="con_value_input"><label>新密码：</label><input  type="password" name="newPwd" class="forms" autocomplete="off" /></div>
+                <div class ="con_value_input"><label>确认密码：</label><input  type="password" name="verifyPwd" class="forms" autocomplete="off"/></div>
+                <div id="showPwd"><div id="showPwdinfo"></div></div>
+            </div>
+        </div>
+        <div class ="win_conAuto">
+            <label class ="win_con_head" >头像</label>
+            <div class ="win_con_con">
+                <div id="adminHeadImg">
+                    <img src="<{$row['a_img']}>?imageView2/5/w/75/h/75"/>
+                    <input  type="hidden" name="img"/>
+                </div>
+                <div class="uploadImg">
+                    <div id="imgUp" class="button">选择图片</div>
+                    <div class="bars"><div id="bar"></div></div>
+                </div>
+            </div>
+        </div>
+        <div class ="win_but">
+            <div class="submit button">提交</div>
+        </div>
+    </div>
+</form>
+<script type="text/javascript">
+    $(function(){
+        $('.submit').click(function () {
+            $(this).parents("form").submit();
+        });
+
+        function succ(data) {
+            toast(data.status, data.megs);
+            $('#contents').load('./inc/sysAdminPwdImg.php');
+        }
+
+        function bs() {
+            $newPwd = $("#adminForm input[name='newPwd']").val() || null;
+            $oldPwd = $("#adminForm input[name='oldPwd']").val() || null;
+            $verifyPwd = $("#adminForm input[name='verifyPwd']").val() || null;
+            if(($newPwd ==null && $oldPwd ==null && $verifyPwd ==null)||($newPwd !=null && $oldPwd !=null && $verifyPwd !=null) ){
+                return true;
+            }
+            $("#showPwdinfo").after("<span class='checker'>密码不能为空</span>");
+            return false;
+
+        }
+        //验证
+        $.checks.checkform($('#adminForm'), {
+            "async": {'success': succ, 'beforeSend': bs},
+            "newPwd": {
+                "name": "新密码",
+                "check": ["isNULL","noSpechars", {"isLength": [4, 20]}],
+                "location":"showPwdinfo"
+            },
+            "verifyPwd": {
+                "name": "重复密码",
+                "check": ["isNULL","noSpechars", {"isContrast": ["newPwd"]}],
+                "location":"showPwdinfo"
+            }
+        });
+
+
+
+    });
+    $(function(){
+        //上传头像
+        var up = uploads.getUplad();
+        up.browse_button = "imgUp";
+        //up.container = "adminHeadImg";
+        up['init'].UploadProgress = function(up,file){
+            $("#bar").css("width",file.percent+"%");
+        };
+        up['init'].FileUploaded = function (up, file, info) {
+            var domain = up.getOption('domain');
+            var res = JSON.parse(info);
+            $("#adminHeadImg>img").attr("src", domain + "/" + res.key + "?imageView2/5/w/75/h/75");
+            $("#adminHeadImg>input[name='img']").val(domain + "/" + res.key);
+            $("#bar").css("background-color","#50D1DE");
+        };
+        var uploader = Qiniu.uploader(up);
+    });
+</script>

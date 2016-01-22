@@ -1,0 +1,15 @@
+<div id="menus">
+    <ul>
+        <{if $auth['goodsType'] }><li href='./inc/goodsType.php'>商品类型管理</li><{/if}>
+        <{if $auth['goods'] }><li href='./inc/goodsInfo.php'>商品管理</li><{/if}>
+        <{if $auth['goodsRoom'] }><li href='./inc/shopRoom.php'>推荐商品管理</li><{/if}>
+    </ul>
+</div>
+<div id='contents'>
+</div>
+<script>
+
+    $("#menus >ul >li").click(function () {
+        $("#contents").load($(this).attr('href'));
+    });
+</script>
