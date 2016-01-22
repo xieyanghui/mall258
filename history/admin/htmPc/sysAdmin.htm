@@ -1,0 +1,224 @@
+<style type="text/css">
+    div#adminList > ul > li.showlistle > span:first-child {
+        width: 120px;
+    }
+
+    div#adminList > ul > li.showlistle > span:nth-child(2) {
+        width: 100px;
+    }
+
+    div#adminList > ul > li.showlistle > span:nth-child(3) {
+        width: 100px;
+    }
+
+    div#addAdmin > div {
+        width: 400px;
+    }
+</style>
+<{if $pages['count'] ge 1 }>
+<div id='adminList' class='wins showwin'>
+    <span class="win_head">管理员列表</span>
+    <ul>
+        <li class='showlistle'>
+            <span>登录账号</span>
+            <span>姓名</span>
+            <span>权限级别</span>
+        </li>
+        <{section name=index loop=$row}>
+        <li class='showlistle showListCons '>
+            <span title="<{$row[index]['a_name']}>"><{$row[index]['a_name']}></span>
+            <span title="<{$row[index]['a_nick']}>"><{$row[index]['a_nick']}></span>
+            <span title="<{$row[index]['aa_nick']}>"><{$row[index]['aa_nick']}></span>
+            <span class="delete" value="<{$row[index]['a_id']}>">×</span>
+        </li>
+        <{/section}>
+
+        <{if $pages['count'] ge $pages['pageRow']+1}>
+        <li class="showlistle">
+            <div class="<{if $pages['page'] ge 1}> pages button <{else}> pagesoff <{/if}>">上一页</div>
+            <{section name=loop loop=$pages['pagess']}>
+            <div class="<{if $pages['start']+$smarty.section.loop.index eq $pages['page']}>
+                pageis<{/if}>  pageSum button "><{$pages['start']+$smarty.section.loop.index+1 }>
+            </div>
+            <{/section}>
+            <div class="<{if $pages['page']+1 lt $pages['countRow']}> pages button <{else}> pagesoff <{/if}>">下一页</div>
+        </li>
+        <{/if}>
+        <li class="showlistle">
+            <div class="searchtext">
+                <input type="text" class="forms" value="<{$pages['search']}>">
+                <select id="seacrhSelect">
+                    <option>登录账号</option>
+                    <option>姓名</option>
+                    <option>权限级别</option>
+                </select>
+            </div>
+            <div class="search button">搜索</div>
+            <div id="searchDelete" class="delete">×</div>
+            <div class="pageRow">
+                <div>每页显示</div>
+                <span>3</span>
+                <span>10</span>
+                <span>15</span>
+                <span>20</span>
+            </div>
+        </li>
+    </ul>
+</div>
+
+<{/if}>
+<form action="./server/adminAdd.php" method="post" id="addAdminForm">
+    <div id='addAdmin' class='wins showwin'>
+        <span class="win_head">添加管理员</span>
+        <div class="win_con">
+            <label class ="win_con_head">登录名</label>
+            <div class ="win_con_input"><input tabindex="1" type="text" name="aName" class="forms"/></div>
+        </div>
+        <div class="win_con">
+            <label class ="win_con_head">姓名</label>
+            <div class ="win_con_input"><input tabindex="2" type="text" name="aNick" class="forms"/></div>
+        </div>
+        <div class="win_con">
+            <label class ="win_con_head">密码</label>
+            <div class ="win_con_input"><input tabindex="3" type="password" name="pwd" class="forms"/></div>
+        </div>
+        <div class ="win_conAuto">
+            <label class ="win_con_head" >头像</label>
+            <div class ="win_con_con">
+                <div id="adminHeadImg">
+                    <img src="<{$defaultImg}>?imageView2/5/w/75/h/75"/>
+                    <input  type="hidden" name="img"/>
+                </div>
+                <div class="uploadImg">
+                    <div id="imgUp" class="button">选择图片</div>
+                    <div class="bars"><div id="bar"></div></div>
+                </div>
+            </div>
+        </div>
+        <div class ="win_conAuto">
+            <label class ="win_con_head" >管理员级别</label>
+            <div class ="win_con_con">
+                <{section name=index loop=$adminAuth}>
+                <label title="<{$adminAuth[index]['aa_remark']}>">
+                    <input name="asminAuth" tabindex="4" type="radio" value="<{$adminAuth[index]['aa_id']}>"/>
+                    <{$adminAuth[index]['aa_nick']}>
+                </label>
+                <{/section}>
+            </div>
+        </div>
+
+        <div>
+            <div class="submit button">提交</div>
+        </div>
+    </div>
+</form>
+<script type="text/javascript" src="<{$HTTP_HOST}>/js/upload.js"></script>
+<script type="text/javascript">
+    function succ(data) {
+        toast(data.status, data.megs);
+        $('#contents').load('./inc/sysAdmin.php');
+    }
+    function bs() {
+    }
+    $(function () {
+        //新增管理员提交
+        $('.submit').click(function () {
+            $(this).parents("form").submit();
+        });
+
+        //验证
+        $.checks.checkform($('#addAdminForm'), {
+            "async": {'success': succ, 'beforeSend': bs},
+            "aName": {
+                "name": "登录名",
+                "check": ["noSpechars", {"isLength": [4, 20]}, {"isAjax": ["/server/iskeySer.php"]}]
+            }, "aNick": {
+                "name": "姓名",
+                "check": [{"isLength": [2, 20]}]
+            }
+        });
+
+
+        //排序
+        $("li.showlistle:first > span").click(function () {
+            var $sort = "ASC";
+            if ($(this).html() == $("#sortCache").attr("sortLine")) {
+                if ($("#sortCache").val() == "ASC") {
+                    $sort = "DESC";
+                    $("#sortCache").val("DESC");
+                } else {
+                    $("#sortCache").val("ASC");
+                }
+            } else {
+                $("#sortCache").attr("sortLine", $(this).html());
+                $("#sortCache").val("ASC");
+            }
+            $('#contents').load('./inc/sysAdmin.php?sort=' + $sort + '&sortLine=' + $(this).html());
+        });
+
+        //列表搜索
+        $("li.showlistle >div.search").click(function () {
+            $('#contents').load('./inc/sysAdmin.php?page=0&searchLine='+$("#seacrhSelect").val()+'&search='+$(".searchtext >input[type='text']").val());
+        });
+
+        //列表取消搜索
+        $("li.showlistle >div#searchDelete").click(function () {
+            $('#contents').load('./inc/sysAdmin.php?page=0&searchDelete=true');
+        });
+        //列表每页多少汗设置
+        $("li.showlistle >div.pageRow>span").click(function () {
+            $('#contents').load('./inc/sysAdmin.php?page=0&pageRow=' + $(this).html());
+        });
+        //列表选页
+        $("li.showlistle >div.pageSum").click(function () {
+            $('#contents').load('./inc/sysAdmin.php?page=' + (parseInt($(this).html()) - 1));
+        });
+        //列表翻页
+        $("li.showlistle >div.pages").click(function () {
+            if ($(this).html() == "下一页") {
+                $('#contents').load('./inc/sysAdmin.php?page=' + (parseInt($("li.showlistle >div.pageis").html())));
+            } else {
+                $('#contents').load('./inc/sysAdmin.php?page=' + (parseInt($("li.showlistle >div.pageis").html()) - 2));
+            }
+        });
+        //管理员详情
+        $("li.showListCons").click(function () {
+            $.get("./inc/sysAdminUpdate.php", {'name': $(this).children('span.delete').attr("value")}, function (data) {
+                $("body").append(data);
+                $('#sysAdminUpdatewin').slideDown(500);
+            });
+        });
+
+        //删除管理员
+        $("li.showListCons >span.delete").click(function (e) {
+            $slfe = $(this);
+            showdielogue("删除权限组", "确定要删除该权限组吗？删除之后该权限组的所有管理员都将丧失所有权限", function () {
+                $.get("./server/adminDelete.php", {'name': $slfe.attr("value")}, function (data) {
+                    //alert(data);
+                    toast(data.status, data.megs);
+                    $("#contents").load("./inc/sysAdmin.php");
+                }, "json");
+            });
+            e.stopPropagation();
+        });
+
+    });
+
+    $(function(){
+        //上传头像
+        var up = uploads.getUplad();
+        up.browse_button = "imgUp";
+        //up.container = "adminHeadImg";
+        up['init'].UploadProgress = function(up,file){
+            $("#bar").css("width",file.percent+"%");
+        };
+        up['init'].FileUploaded = function (up, file, info) {
+            var domain = up.getOption('domain');
+            var res = JSON.parse(info);
+            $("#adminHeadImg>img").attr("src", domain + "/" + res.key + "?imageView2/5/w/75/h/75");
+            $("#adminHeadImg>input[name='img']").val(domain + "/" + res.key);
+            $("#bar").css("background-color","#50D1DE");
+        };
+        var uploader = Qiniu.uploader(up);
+    });
+</script>

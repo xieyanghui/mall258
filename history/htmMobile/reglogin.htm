@@ -1,0 +1,134 @@
+<style>
+    .validateimg {
+        margin-left: 5px;
+        width: 75px;
+        height: 20px;
+        float: left;
+    }
+
+    .validateimg:hover {
+        cursor: pointer;
+    }
+
+    .valis {
+        width: 70px;
+    }
+
+</style>
+<div id="regwin" class="backhead">
+    <div class="backop"></div>
+    <form id="regform" action="<{$HTTP_HOST}>/server/regSer.php" method="post">
+        <div class="showcon wins">
+            <div>注册
+                <div class="showclose">×</div>
+            </div>
+            <div>
+                <lable class='rllab'>账号：</lable>
+                <input type="text" id="reguserName" name="reguserName" class="forms"/></div>
+            <div>
+                <lable class='rllab'>密码：</lable>
+                <input type="password" id="regpwd" name="regpwd" class="forms"/></div>
+            <div>
+                <lable class='rllab'>重复密码：</lable>
+                <input type="password" id="pwd1" name="pwd1" class="forms"/></div>
+            <div>
+                <lable class='rllab'>昵称：</lable>
+                <input type="text" id="nick" name="nick" class="forms"/></div>
+            <div>
+                <lable class='rllab'>手机号码：</lable>
+                <input type="text" id="phone" name="phone" class="forms"/></div>
+            <div>
+                <lable class='rllab'>Email：</lable>
+                <input type="text" id="email" name="email" class="forms"/></div>
+            <div>
+                <lable class='rllab'>验证码：</lable>
+                <div id="regvalidate" class="validateimg"><img src="<{$HTTP_HOST}>/server/validateSer.php?name=regimg"/>
+                </div>
+                <input type="text" id="validate" name="validate" class="forms valis"/></div>
+            <div>
+                <div class="button quxiao">取消</div>
+                <div class="tijiao button">提交</div>
+            </div>
+        </div>
+    </form>
+</div>
+<div id="loginwin" class="backhead">
+    <div class="backop"></div>
+    <form id="loginform" action="<{$HTTP_HOST}>/server/loginSer.php" method="post">
+        <div class="showcon wins">
+            <div>登录
+                <div class="showclose">×</div>
+            </div>
+            <div>
+                <lable class='rllab'>账号：</lable>
+                <input type="text" id="loginuserName" name="loginuserName" class="forms"/></div>
+            <div>
+                <lable class='rllab'>密码：</lable>
+                <input type="password" id="loginpwd" name="loginpwd" class="forms"/></div>
+            <div>
+                <div class="button quxiao">取消</div>
+                <div class="tijiao button" id="logintj">提交</div>
+            </div>
+        </div>
+    </form>
+</div>
+<script src="<{$HTTP_HOST}>/js/inCheck.js" type="text/javascript" charset="utf-8"></script>
+<script src="http://cdn.staticfile.org/jquery.form/3.51/jquery.form.min.js" type="text/javascript"
+        charset="utf-8"></script>
+<script>
+    $(function () {
+        checks();
+        reset();
+        $(window).resize(reset);
+        $(".quxiao , div.showclose").click(function () {
+            $(".backhead").slideUp(500);
+        });
+        $("#regvalidate").click(function () {
+            $(this).find("img").attr('src', $url + "/server/validateSer.php?name=regimg&date=" + new Date().getTime());
+        });
+        $(".tijiao").click(function () {
+            $(this).parents('form').submit();
+        });
+        document.onkeydown = function (e) {
+            var ev = document.all ? window.event : e;
+            if (ev.keyCode == 13) {
+                $('form:visible').submit();
+            }
+
+        }
+//		$('#logintj').attr('tabindex', 1).keydown(function(event){ 
+//			if(event.keyCode==13){
+//  			$(this).parents('form').submit();
+// 			}
+//		});
+    });
+    function rlsucc(data) {
+        toast(data.status, data.meg);
+        if (data.status) {
+            $('#top >div:first-child').load($url + "/inc/topreglogin.php");
+            $(".rlback").hide();
+        }
+    }
+    function rlbs() {
+
+    }
+    function checks() {
+        $.checks.checkform($("#regform"), {
+            "async": {'success': rlsucc, 'beforeSend': rlbs},
+            "reguserName": {
+                "name": "用户名",
+                "check": ["noSpechars", {"isLength": [6, 15]}, {"isAjax": [$url + "/server/iskeySer.php"]}]
+            },
+            "nick": {"name": "昵称", "check": [{"isLength": [4, 10]}]},
+            "regpwd": {"name": "密码", "check": [{"isLength": [6, 15]}]},
+            "pwd1": {"name": "确认密码", "check": [{"isLength": [6, 15], "isContrast": ["regpwd"]}]},
+            "phone": {"name": "号码", "check": ["isNULL", "isPhone"]},
+            "validate": {"name": "验证码", "check": ["noNULL"]}
+        });
+        $.checks.checkform($("#loginform"), {
+            "async": {'success': rlsucc, 'beforeSend': rlbs},
+            "loginuserName": {"name": "用户名", "check": ["noSpechars", {"isLength": [6, 15]}]},
+            "loginpwd": {"name": "密码", "check": [{"isLength": [6, 15]}]},
+        });
+    }
+</script>

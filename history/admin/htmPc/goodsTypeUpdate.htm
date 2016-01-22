@@ -1,0 +1,156 @@
+<style type="text/css">
+    /*.gtprop {*/
+        /*width: 240px;*/
+        /*position: relative;*/
+        /*overflow: hidden;*/
+        /*border: 1px solid #50D1DE;*/
+        /*padding: 2px;*/
+    /*}*/
+
+    /*.gezi {*/
+        /*height: 20px;*/
+        /*width: 70px;*/
+        /*float: left;*/
+        /*margin: 3px;*/
+        /*border: 2px solid #50D1DE;*/
+    /*}*/
+
+    /*.gezi > input {*/
+        /*height: 20px;*/
+        /*width: 70px;*/
+        /*border-width: 0px;*/
+    /*}*/
+
+    /*.gezi > input:hover {*/
+        /*cursor: pointer;*/
+    /*}*/
+
+    /*.gzzj {*/
+        /*font-size: 22px;*/
+        /*background-color: #E0F8FB;*/
+        /*text-align: center;*/
+    /*}*/
+
+    /*.gzzj1 {*/
+    /*}*/
+
+    form#goodsTypeUpdateForm> div.showcon > div.authRow {
+        height: auto;
+        overflow: hidden;
+        margin-bottom: 20px;
+    }
+    div.listRow{
+        float: left;
+        margin-left: 4px;
+        width: 165px;
+        overflow: hidden;
+        border: 2px solid #50D1DE;
+        padding-bottom: 2px;
+    }
+    div.listRow >div> input , div.listRow > div.addList{
+        display: block;
+        float: left;
+        width: 50px;
+        height: 18px;
+        overflow: hidden;
+        margin: 2px 0 0 2px ;
+        border: 1px solid #50D1DE;
+    }
+    div.listRow >div> input:hover , div.listRow > div.addList:hover{
+        cursor: pointer;
+    }
+    div.listRow > div.addList{
+        font-size: 25px;
+        font-weight: bold;
+        text-align: center;
+        line-height: 18px;
+        background-color: #EEEEEE;
+    }
+
+
+</style>
+<div id="goodsTypeUpdateWin" class="backhead">
+    <div class="backop"></div>
+    <form id="goodsTypeUpdateForm" action="./server/goodsTypeUpdateSer.php" method="post">
+        <div class="showcon wins">
+            <span>修改商品类型
+                <div class="showclose">×</div>
+            </span>
+            <div>
+                <lable>编号</lable>
+                <span><{$row['gt_number']}></span></div>
+            <input type="hidden" name="number" value="<{$row['gt_id']}>"/>
+
+            <div>
+                <lable>类型名名称</lable>
+                <div><input type="text" disabled="disabled" name="gtName" value="<{$row['gt_name']}>" class="forms"/></div>
+            </div>
+            <div>
+                <lable>类型备注</lable>
+                <div><input  type="text"  disabled="disabled" name="gtRemark" value="<{$row['gt_remark']}>" class="forms"/></div>
+            </div>
+            <div class="authRow">
+                <lable>详细属性</lable>
+                <div class = "listRow" name="attr">
+                    <{section name=index loop=$attr}>
+                   <div> <input type="text" title="<{$attr[index]['gta_name']}>" class="forms" name="uattr<{$attr[index]['gta_id']}>" value="<{$attr[index]['gta_name']}>" disabled="disabled"/></div>
+                    <{/section}>
+                    <div class="addList" >+</div>
+                </div>
+            </div>
+            <div  class="authRow">
+                <lable>价格属性</lable>
+                <div class = "listRow" name="attrPrice">
+                    <{section name=index loop=$attrPrice}>
+                    <div><input type="text" class="forms" name="uprice<{$attrPrice[index]['gtap_id']}>" value="<{$attrPrice[index]['gtap_name']}>" title="<{$attrPrice[index]['gtap_name']}>" disabled="disabled"/></div>
+                    <{/section}>
+                    <{if $attrPriceCount lt 4 }> <div class="addList">+</div><{/if}>
+                </div>
+            </div>
+
+            <div>
+                <div class="button cancel">取消</div>
+                <div class=" button submit">提交</div>
+            </div>
+        </div>
+    </form>
+</div>
+<script type="text/javascript">
+    $(function () {
+        reset();
+        $(window).resize(reset);
+        $(".submit").click(function () {
+           // $(this).parents('form').submit();
+            $.ajax({
+                url: $(this).parents('form').attr('action'),
+                data: $(this).parents('form').serialize(),
+                type: "POST",
+                dataType: "json",
+                beforeSend: null,
+                success: upgtsucc
+            });
+        });
+
+        $(".cancel , div.showclose").click(function () {
+            $(".backhead").remove();
+        });
+
+        $(".forms").parent().click(function () {
+            $(this).children("input").removeAttr("disabled");
+        });
+        $('div.addList').click(function () {
+            var $name = $(this).parent().attr("name");
+            $(this).before("<div><input class='forms' type='text' name='a"+$name+"[]' ></div>");
+            if ($(this).parent().attr("name") == "attrPrice") {
+                if ($(this).parent().children().size() >= 5) {
+                    $(this).remove();
+                }
+            }
+        });
+        function upgtsucc(data) {
+            toast(data.status, data.megs);
+            $('#goodsTypeUpdateWin').remove();
+            $('#contents').load('./inc/goodsType.php');
+        }
+    });
+</script>

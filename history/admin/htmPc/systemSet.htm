@@ -1,0 +1,15 @@
+<div id="menus">
+    <ul>
+        <{if $auth['admin'] }>  <li href='./inc/sysAdmin.php'>管理员管理</li><{/if}>
+        <{if $auth['adminAuth'] }>  <li href='./inc/sysAuth.php'>权限管理</li><{/if}>
+        <{if $auth['log'] }>  <li href='./inc/sysLog.php'>系统日志</li><{/if}>
+        <li href='./inc/sysAdminPwdImg.php'>我的资料</li>
+    </ul>
+</div>
+<div id='contents'>
+</div>
+<script>
+    $("#menus >ul >li").click(function () {
+        $("#contents").load($(this).attr('href'));
+    });
+</script>
