@@ -5,7 +5,7 @@
  * Date: 2015/12/30
  * Time: 21:39
  */
-require_once($_SERVER['DOCUMENT_ROOT'] . '/tool/autoload.php');
+require_once($_SERVER['DOCUMENT_ROOT'] . '/util/autoload.php');
 
 //权限辨认类
 class Auth{

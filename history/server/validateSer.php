@@ -1,6 +1,5 @@
 <?php
 session_start();
-include_once($_SERVER['DOCUMENT_ROOT'] . "/tool/Filter.class.php");
 getCode(4, 60, 22, $_GET['name']);
 
 function getCode($num, $w, $h, $b)
