@@ -5,32 +5,13 @@
  * Date: 2016/1/22
  * Time: 5:06
  */
-class A
-{
-    function __construct()
-    {
-        $a = func_get_args();
-        $i = func_num_args();
-        if (method_exists($this,$f='__construct'.$i)) {
-            call_user_func_array(array($this,$f),$a);
-        }
-    }
+require_once($_SERVER['DOCUMENT_ROOT'] . '/util/autoload.php');
+header("Content-Type:text/html;charset=utf-8");
+//$sql = new Sql();
+//echo $sql->executeid("INSERT INTO `authList`(al_key,al_nick,al_remark) VALUES ('aaaa','aaaa','aaaaa')");
+$admin = "xieyanghui' or 'foo' = 'foo' -- ";
 
-    function __construct1($a1)
-    {
-        echo('__construct with 1 param called: '.$a1.PHP_EOL);
-    }
-
-    function __construct2($a1,$a2)
-    {
-        echo('__construct with 2 params called: '.$a1.','.$a2.PHP_EOL);
-    }
-
-    function __construct3($a1,$a2,$a3)
-    {
-        echo('__construct with 3 params called: '.$a1.','.$a2.','.$a3.PHP_EOL);
-    }
-}
-
-?>
-<a href="/server/exitSer.php">aaa</a>
+$pwd = "";
+$sql = new Sql();
+print_r($sql->queryLine("SELECT * FROM `adminInfo` WHERE a_name='{$admin}' AND a_pwd = '{$pwd}'"));
+//echo mysql_real_escape_string("...\"\"");

@@ -21,6 +21,4 @@ class Config{
     const QINIU_AK = "cn1tTSjMErVdNipl38zvmL9ZrAFqzBzU2qNoQxz6";
     const QINIU_SCOPE = "xxhshop";
 
-
-
 }
