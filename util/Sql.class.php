@@ -180,4 +180,53 @@ class Sql
     public function executePrep($sql,$type,$param){
 
     }
+
+    public function insert($table,$column,$arr){
+        $type="";
+        $columns="";
+        $wen ="";
+        foreach($column as $key => $value){
+            $columns .=  $key." ,";
+            $wen .="? ,";
+            $type .= $value;
+        }
+        $columns =substr($columns,0,strlen($columns)-1);
+        $wen =substr($wen,0,strlen($wen)-1);
+        $str ="INSERT INTO {$table} ({$columns}) VALUES ({$wen});";
+        echo $str;
+        $sql = $this->getConn();
+        $sqlStmt = $sql->prepare($str);
+        foreach($arr as  $value){
+            if(is_array($value)){
+                array_unshift($value,$type);
+                call_user_func_array(array($sqlStmt,"bind_param"),$this->refValues($value));
+                $res = $sqlStmt->execute();
+                if(!$res){
+                    echo 'error'.$sqlStmt->error;
+                }
+            }else{
+                array_unshift($arr,$type);
+                print_r($arr);
+                call_user_func_array(array($sqlStmt,"bind_param"),$this->refValues($arr));
+                $res = $sqlStmt->execute();
+                if(!$res){
+                    echo 'error'.$sqlStmt->error;
+                }
+                break;
+            }
+        }
+
+        $sqlStmt->close();
+        $sql->close();
+
+    }
+    private function refValues($arr){
+        if (version_compare(PHP_VERSION, '5.3.0') >= 0) {
+            $refs = array();
+            foreach($arr as $key => $value){
+                $refs[$key] = &$arr[$key];
+            }
+            return $refs;
+        } return $arr;
+    }
 }
