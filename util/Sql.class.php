@@ -180,6 +180,55 @@ class Sql
     public function executePrep($sql,$type,$param){
 
     }
+    public function delete($table,$where){
+        $wh = "";
+        $type="";
+        $arges=array();
+        foreach($where as $key =>$value){
+            $wh .=" `{$key}` =?   AND";
+            $type .=substr($value['type'],0,1);
+            array_push($arges,$value['value']);
+        }
+        array_unshift($arges,$type);
+        $wh =substr($wh,0,strlen($wh)-4);
+        $str ="DELETE  {$table} WHERE {$wh}";
+        print_r($arges);
+        $sql = $this->getConn();
+        $sqlStmt = $sql->prepare($str);
+        call_user_func_array(array($sqlStmt,"bind_param"),$this->refValues($arges));
+        $res = $sqlStmt->execute();
+        // echo "shuc $res";
+        $sqlStmt->close();
+        $sql->close();
+    }
+    public function update($table,$where,$values){
+        $set = "";
+        $wh = "";
+        $type="";
+        $arges=array();
+        foreach($values as $key =>$value){
+            $set .=" `{$key}` =? ,";
+            $type .=substr($value['type'],0,1);
+            array_push($arges,$value['value']);
+        }
+        foreach($where as $key =>$value){
+            $wh .=" `{$key}` =?   AND";
+            $type .=substr($value['type'],0,1);
+            array_push($arges,$value['value']);
+        }
+        array_unshift($arges,$type);
+        $set =substr($set,0,strlen($set)-1);
+        $wh =substr($wh,0,strlen($wh)-4);
+        $str ="UPDATE {$table}  SET   {$set} WHERE {$wh}";
+        print_r($arges);
+        $sql = $this->getConn();
+        $sqlStmt = $sql->prepare($str);
+        call_user_func_array(array($sqlStmt,"bind_param"),$this->refValues($arges));
+        $res = $sqlStmt->execute();
+       // echo "shuc $res";
+        $sqlStmt->close();
+        $sql->close();
+    }
 
     public function insert($table,$column,$arr){
         $type="";
@@ -188,7 +237,7 @@ class Sql
         foreach($column as $key => $value){
             $columns .=  $key." ,";
             $wen .="? ,";
-            $type .= $value;
+            $type .= substr($value,0,1);
         }
         $columns =substr($columns,0,strlen($columns)-1);
         $wen =substr($wen,0,strlen($wen)-1);
@@ -202,7 +251,10 @@ class Sql
                 call_user_func_array(array($sqlStmt,"bind_param"),$this->refValues($value));
                 $res = $sqlStmt->execute();
                 if(!$res){
-                    echo 'error'.$sqlStmt->error;
+                    if(Config::Debug){
+                        echo '错误：'.$sqlStmt->error;
+                    }
+                    return false;
                 }
             }else{
                 array_unshift($arr,$type);
@@ -210,7 +262,10 @@ class Sql
                 call_user_func_array(array($sqlStmt,"bind_param"),$this->refValues($arr));
                 $res = $sqlStmt->execute();
                 if(!$res){
-                    echo 'error'.$sqlStmt->error;
+                    if(Config::Debug){
+                        echo '错误：'.$sqlStmt->error;
+                    }
+                    return false;
                 }
                 break;
             }
@@ -218,7 +273,7 @@ class Sql
 
         $sqlStmt->close();
         $sql->close();
-
+        return true;
     }
     private function refValues($arr){
         if (version_compare(PHP_VERSION, '5.3.0') >= 0) {

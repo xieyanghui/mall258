@@ -16,4 +16,5 @@ $admin = "xieyanghui' or 'foo' = 'foo' -- ";
 $sql = new Sql();
 //print_r($sql->queryLine("SELECT * FROM `adminInfo` WHERE a_name='{$admin}' AND a_pwd = '{$pwd}'"));
 //echo mysql_real_escape_string("...\"\"");
-$sql->insert("authList",array('al_key'=>'s','al_nick'=>'s','al_remark'=>'s'),array(array("111w",'aaaas','gggg'),array("111e",'aaaas','gggg'),array("111t",'aaaas','gggg')));
+//$sql->insert("authList",array('al_key'=>'s','al_nick'=>'s','al_remark'=>'s'),array(array("111w",'aaaas','gggg'),array("111e",'aaaas','gggg'),array("111t",'aaaas','gggg')));
+$sql->update("authList",array('al_id'=>array('type'=>'int','value'=>'2'),'al_key'=>array('type'=>'sting','value'=>'rrrrrrr')),array('al_nick'=>array('type'=>'sting','value'=>'aaaaaaaa')));

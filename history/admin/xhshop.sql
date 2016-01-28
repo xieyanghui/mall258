@@ -303,3 +303,4 @@ INSERT INTO `webInfo`(`key`,`title`,`keywords`,`description`) VALUES('index','æ˜
 
 
 
+UPDATE authList SET `al_key` ='aaaa' WHERE `al_id` =2

@@ -10,6 +10,9 @@ class Config{
     //后台主目录
     const ADMIN_DIR = "/admin";
 
+    //调试模式
+    const Debug = true;
+
     //管理员默认头像
     const ADMIN_HEAD_DEFAULT ="http://7xkkh3.com1.z0.glb.clouddn.com/guest.png";
 
