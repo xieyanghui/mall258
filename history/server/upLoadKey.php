@@ -1,7 +1,5 @@
 <?php
-if (!isset($_SESSION)) {
-session_start();
-};
+if (!isset($_SESSION)) {session_start();};
 $name = null;
 if (!empty($_SESSION['admininfo'])) {
     $name = $_SESSION['admininfo']['a_name'];
@@ -11,7 +9,7 @@ if (!empty($_SESSION['admininfo'])) {
     header("location: ./");exit;
 }
 header("Content-type:text/html;charset=utf-8");
-include_once($_SERVER['DOCUMENT_ROOT'] .'/plugin/Qiniu.php');
+include_once($_SERVER['DOCUMENT_ROOT'] . '/plugin/Qiniu.class.php');
 include_once($_SERVER['DOCUMENT_ROOT'] . '/tool/autoload.php');
 $putPolicy['scope'] = Config::QINIU_SCOPE;
 $putPolicy['deadline'] =time()+3600;
