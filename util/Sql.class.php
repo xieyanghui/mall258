@@ -165,21 +165,44 @@ class Sql
         }
     }
 
-    /**
-     * 执行SQL预编译语句
-     *
-     * @param string $sql 预编译语句
-     *
-     * @param string $type 参数类型
-     *
-     * @param array $param 参数合集
-     *
-     * @return  boolean 成功返回ID失败返回false
-     *
-     * */
-    public function executePrep($sql,$type,$param){
 
+
+
+    public function select($table,$column,$where){
+        $wh = "";
+        $type="";
+        $columns="";
+        $arges=array();
+        foreach($where as $key =>$value){
+            $wh .=" `{$key}` =?   AND";
+            $type .=substr($value['type'],0,1);
+            array_push($arges,$value['value']);
+        }
+        if(is_array($column)){
+            foreach($column as $key=> $value){
+                $columns .=$key."  ," ;
+            }
+            $columns =substr($columns,0,strlen($columns)-1);
+        }else{
+            $columns = $column;
+        }
+        array_unshift($arges,$type);
+        $wh =substr($wh,0,strlen($wh)-4);
+        $str ="SELECT {$columns} FROM {$table} WHERE {$wh}";
+        $sql = $this->getConn();
+        $sqlStmt = $sql->prepare($str);
+        echo $str;
+        call_user_func_array(array($sqlStmt,"bind_param"),$this->refValues($arges));
+        $sqlStmt->execute();
+        $result = $sqlStmt->get_result();
+        while($r = $result->fetch_assoc()){
+            print_r($r);
+        }
+        $sqlStmt->free_result();
+        $sqlStmt->close();
+        $sql->close();
     }
+
     public function delete($table,$where){
         $wh = "";
         $type="";
@@ -191,16 +214,24 @@ class Sql
         }
         array_unshift($arges,$type);
         $wh =substr($wh,0,strlen($wh)-4);
-        $str ="DELETE  {$table} WHERE {$wh}";
-        print_r($arges);
+        $str ="DELETE FROM  {$table} WHERE {$wh}";
         $sql = $this->getConn();
         $sqlStmt = $sql->prepare($str);
         call_user_func_array(array($sqlStmt,"bind_param"),$this->refValues($arges));
         $res = $sqlStmt->execute();
-        // echo "shuc $res";
+        if(!$res){
+            if(Config::Debug){
+                echo '错误：'.$sqlStmt->error;
+            }
+            $sqlStmt->close();
+            $sql->close();
+            return false;
+        }
         $sqlStmt->close();
         $sql->close();
+        return true;
     }
+
     public function update($table,$where,$values){
         $set = "";
         $wh = "";
