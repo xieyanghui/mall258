@@ -17,7 +17,6 @@ class Sql
         return $mysqli;
     }
 
-
     public function updateSqlState($arr, $obj)
     {
         $ser = "";
@@ -99,7 +98,7 @@ class Sql
      *
      * @param string $sql 语句
      *
-     * @return   成功返回查询到的首行失败返回false
+     * @return   array|bool 成功返回查询到的首行失败返回false
      *
      * */
     public function queryLine($sql)
@@ -166,15 +165,27 @@ class Sql
     }
 
 
-
-
+    /**
+     * 执行预编译SQL查询语句
+     *
+     * @param $table  string 表名
+     *
+     * @param $column array|string 列名集合
+     *
+     * @param $where array 条件必须是二维数组，子数组条件必须 columnName，type ，value，可选logic，mark
+     *
+     * @return array|bool 成功返回二维数组，失败返回false
+     *
+     */
     public function select($table,$column,$where){
-        $wh = "";
-        $type="";
-        $columns="";
-        $arges=array();
-        foreach($where as $key =>$value){
-            $wh .=" `{$key}` =?   AND";
+        $wh = "";           //条件
+        $type="";           //数据类型
+        $columns="";        //列名集合
+        $arges=array();    // 值
+        foreach($where as $value){
+            empty($value['logic'])?$logic = "AND" :$logic = $value['logic'];
+            empty($value['mark'])?$mark = "=" :$mark = $value['mark'];
+            $wh .="{$logic}  `{$value['columnName']}` {$mark} ?  ";
             $type .=substr($value['type'],0,1);
             array_push($arges,$value['value']);
         }
@@ -187,41 +198,145 @@ class Sql
             $columns = $column;
         }
         array_unshift($arges,$type);
-        $wh =substr($wh,0,strlen($wh)-4);
+        $wh =substr($wh,4);
         $str ="SELECT {$columns} FROM {$table} WHERE {$wh}";
         $sql = $this->getConn();
         $sqlStmt = $sql->prepare($str);
-        echo $str;
-        call_user_func_array(array($sqlStmt,"bind_param"),$this->refValues($arges));
-        $sqlStmt->execute();
-        $result = $sqlStmt->get_result();
-        while($r = $result->fetch_assoc()){
-            print_r($r);
+        if(!call_user_func_array(array($sqlStmt,"bind_param"),$this->refValues($arges))){
+            if(Config::Debug){
+                echo '语句或参数错误'.$str;
+            }
+            $sqlStmt->close();
+            $sql->close();
+            return false;
         }
+        $sqlStmt->execute();
+ //       $res = $sqlStmt->execute();
+//        if(!$res){
+//            if(Config::Debug){
+//                echo '错误：'.$sqlStmt->error;
+//            }
+//            $sqlStmt->close();
+//            $sql->close();
+//            return false;
+//        }
+        $result = $sqlStmt->get_result();
+        $data = array();
+        while($r = $result->fetch_assoc()){
+            array_push($data,$r);
+        }
+        $result->close();
         $sqlStmt->free_result();
         $sqlStmt->close();
         $sql->close();
+        return $data;
     }
 
+
+    /**
+     * 执行预编译SQL删除语句
+     *
+     * @param $table  string 表名
+     *
+     * @param $where array 条件必须是二维数组，子数组条件必须 columnName，type ，value，可选logic，mark
+     *
+     * @return bool 成功返回true，失败返回false
+     *
+     */
     public function delete($table,$where){
         $wh = "";
         $type="";
         $arges=array();
-        foreach($where as $key =>$value){
-            $wh .=" `{$key}` =?   AND";
+        foreach($where as $value){
+            empty($value['logic'])?$logic = "AND" :$logic = $value['logic'];
+            empty($value['mark'])?$mark = "=" :$mark = $value['mark'];
+            $wh .="{$logic}  `{$value['columnName']}` {$mark} ?  ";
             $type .=substr($value['type'],0,1);
             array_push($arges,$value['value']);
         }
         array_unshift($arges,$type);
-        $wh =substr($wh,0,strlen($wh)-4);
+        $wh =substr($wh,4);
         $str ="DELETE FROM  {$table} WHERE {$wh}";
         $sql = $this->getConn();
         $sqlStmt = $sql->prepare($str);
-        call_user_func_array(array($sqlStmt,"bind_param"),$this->refValues($arges));
-        $res = $sqlStmt->execute();
-        if(!$res){
+        if(!call_user_func_array(array($sqlStmt,"bind_param"),$this->refValues($arges))){
             if(Config::Debug){
-                echo '错误：'.$sqlStmt->error;
+                echo '语句或参数错误'.$str;
+            }
+            $sqlStmt->close();
+            $sql->close();
+            return false;
+        }
+        $res = $sqlStmt->execute();
+        if($sqlStmt->affected_rows == 0){
+            if(Config::Debug){
+                echo '错误：没有这条记录';
+            }
+            $sqlStmt->close();
+            $sql->close();
+            return false;
+        }
+//        if(!$res){
+//            if(Config::Debug){
+//                echo '错误：'.$sqlStmt->error;
+//            }
+//            $sqlStmt->close();
+//            $sql->close();
+//            return false;
+//        }
+        $sqlStmt->close();
+        $sql->close();
+        return true;
+    }
+
+    /**
+     * 执行预编译SQL修改语句
+     *
+     * @param $table  string 表名
+     *
+     * @param $where array 条件,必须是二维数组，子数组条件必须 columnName，type ，value，可选logic，mark
+     *
+     * @param $values array 需要修改的字段必须是二维数组，子数组条件必须 columnName，type ，value
+     *
+     * @return bool 成功返回true，失败返回false
+     *
+     */
+    public function update($table,$where,$values){
+        $set = "";
+        $wh = "";
+        $type="";
+        $arges=array();
+        foreach($values as $value){
+            $set .=" `{$value['columnName']}` =? ,";
+            $type .=substr($value['type'],0,1);
+            array_push($arges,$value['value']);
+        }
+        foreach($where as $value){
+            empty($value['logic'])?$logic = "AND" :$logic = $value['logic'];
+            empty($value['mark'])?$mark = "=" :$mark = $value['mark'];
+            $wh .="{$logic}  `{$value['columnName']}` {$mark} ?  ";
+            $type .=substr($value['type'],0,1);
+            array_push($arges,$value['value']);
+        }
+        array_unshift($arges,$type);
+        $set =substr($set,0,strlen($set)-1);
+        $wh =substr($wh,4);
+        $str ="UPDATE {$table}  SET   {$set} WHERE {$wh}";
+        print_r($arges);
+        $sql = $this->getConn();
+        $sqlStmt = $sql->prepare($str);
+        if(!call_user_func_array(array($sqlStmt,"bind_param"),$this->refValues($arges))){
+            if(Config::Debug){
+                echo '语句或参数错误'.$str;
+            }
+            $sqlStmt->close();
+            $sql->close();
+            return false;
+        }
+        $sqlStmt->execute();
+        if($sqlStmt->affected_rows == 0){
+            if(Config::Debug){
+                echo '错误：没有修改成功';
             }
             $sqlStmt->close();
             $sql->close();
@@ -232,43 +347,27 @@ class Sql
         return true;
     }
 
-    public function update($table,$where,$values){
-        $set = "";
-        $wh = "";
-        $type="";
-        $arges=array();
-        foreach($values as $key =>$value){
-            $set .=" `{$key}` =? ,";
-            $type .=substr($value['type'],0,1);
-            array_push($arges,$value['value']);
-        }
-        foreach($where as $key =>$value){
-            $wh .=" `{$key}` =?   AND";
-            $type .=substr($value['type'],0,1);
-            array_push($arges,$value['value']);
-        }
-        array_unshift($arges,$type);
-        $set =substr($set,0,strlen($set)-1);
-        $wh =substr($wh,0,strlen($wh)-4);
-        $str ="UPDATE {$table}  SET   {$set} WHERE {$wh}";
-        print_r($arges);
-        $sql = $this->getConn();
-        $sqlStmt = $sql->prepare($str);
-        call_user_func_array(array($sqlStmt,"bind_param"),$this->refValues($arges));
-        $res = $sqlStmt->execute();
-       // echo "shuc $res";
-        $sqlStmt->close();
-        $sql->close();
-    }
 
-    public function insert($table,$column,$arr){
+    /**
+     * 执行预编译SQL插入语句
+     *
+     * @param $table  string 表名
+     *
+     * @param $column array 列名,二维数组,子数组 type, columnName
+     *
+     * @param $data array 需要插入的值,可以是一维数组,也可以是二维的
+     *
+     * @return bool 成功返回true，失败返回false
+     *
+     */
+    public function insert($table,$column,$data){
         $type="";
         $columns="";
         $wen ="";
-        foreach($column as $key => $value){
-            $columns .=  $key." ,";
+        foreach($column as  $value){
+            $columns .=  $value['columnName']." ,";
             $wen .="? ,";
-            $type .= substr($value,0,1);
+            $type .= substr($value['type'],0,1);
         }
         $columns =substr($columns,0,strlen($columns)-1);
         $wen =substr($wen,0,strlen($wen)-1);
@@ -276,10 +375,17 @@ class Sql
         echo $str;
         $sql = $this->getConn();
         $sqlStmt = $sql->prepare($str);
-        foreach($arr as  $value){
+        foreach($data as  $value){
             if(is_array($value)){
                 array_unshift($value,$type);
-                call_user_func_array(array($sqlStmt,"bind_param"),$this->refValues($value));
+                if(!call_user_func_array(array($sqlStmt,"bind_param"),$this->refValues($value))){
+                    if(Config::Debug){
+                        echo '语句或参数错误'.$str;
+                    }
+                    $sqlStmt->close();
+                    $sql->close();
+                    return false;
+                }
                 $res = $sqlStmt->execute();
                 if(!$res){
                     if(Config::Debug){
@@ -288,9 +394,15 @@ class Sql
                     return false;
                 }
             }else{
-                array_unshift($arr,$type);
-                print_r($arr);
-                call_user_func_array(array($sqlStmt,"bind_param"),$this->refValues($arr));
+                array_unshift($data,$type);
+                if(!call_user_func_array(array($sqlStmt,"bind_param"),$this->refValues($data))){
+                    if(Config::Debug){
+                        echo '语句或参数错误'.$str;
+                    }
+                    $sqlStmt->close();
+                    $sql->close();
+                    return false;
+                }
                 $res = $sqlStmt->execute();
                 if(!$res){
                     if(Config::Debug){
@@ -306,6 +418,9 @@ class Sql
         $sql->close();
         return true;
     }
+
+
+   //配合call_user_func_array的参数
     private function refValues($arr){
         if (version_compare(PHP_VERSION, '5.3.0') >= 0) {
             $refs = array();
