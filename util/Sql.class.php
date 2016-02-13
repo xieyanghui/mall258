@@ -172,23 +172,13 @@ class Sql
      *
      * @param $column array|string 列名集合
      *
-     * @param $where array 条件必须是二维数组，子数组条件必须 columnName，type ，value，可选logic，mark
+     * @param $where Where 条件必须是二维数组，子数组条件必须 columnName，type ，value，可选logic，mark
      *
      * @return array|bool 成功返回二维数组，失败返回false
      *
      */
     public function select($table,$column,$where){
-        $wh = "";           //条件
-        $type="";           //数据类型
         $columns="";        //列名集合
-        $arges=array();    // 值
-        foreach($where as $value){
-            empty($value['logic'])?$logic = "AND" :$logic = $value['logic'];
-            empty($value['mark'])?$mark = "=" :$mark = $value['mark'];
-            $wh .="{$logic}  `{$value['columnName']}` {$mark} ?  ";
-            $type .=substr($value['type'],0,1);
-            array_push($arges,$value['value']);
-        }
         if(is_array($column)){
             foreach($column as $key=> $value){
                 $columns .=$key."  ," ;
@@ -197,12 +187,12 @@ class Sql
         }else{
             $columns = $column;
         }
-        array_unshift($arges,$type);
-        $wh =substr($wh,4);
-        $str ="SELECT {$columns} FROM {$table} WHERE {$wh}";
+
+        $str ="SELECT {$columns} FROM {$table} WHERE {$where->getPrepWhere()}";
+       // print_r($where->getPrepValue());
         $sql = $this->getConn();
         $sqlStmt = $sql->prepare($str);
-        if(!call_user_func_array(array($sqlStmt,"bind_param"),$this->refValues($arges))){
+        if(!call_user_func_array(array($sqlStmt,"bind_param"),$this->refValues($where->getPrepValue()))){
             if(Config::Debug){
                 echo '语句或参数错误'.$str;
             }
@@ -211,7 +201,7 @@ class Sql
             return false;
         }
         $sqlStmt->execute();
- //       $res = $sqlStmt->execute();
+//       $res = $sqlStmt->execute();
 //        if(!$res){
 //            if(Config::Debug){
 //                echo '错误：'.$sqlStmt->error;
@@ -238,28 +228,16 @@ class Sql
      *
      * @param $table  string 表名
      *
-     * @param $where array 条件必须是二维数组，子数组条件必须 columnName，type ，value，可选logic，mark
+     * @param $where Where 条件必须是二维数组，子数组条件必须 columnName，type ，value，可选logic，mark
      *
      * @return bool 成功返回true，失败返回false
      *
      */
     public function delete($table,$where){
-        $wh = "";
-        $type="";
-        $arges=array();
-        foreach($where as $value){
-            empty($value['logic'])?$logic = "AND" :$logic = $value['logic'];
-            empty($value['mark'])?$mark = "=" :$mark = $value['mark'];
-            $wh .="{$logic}  `{$value['columnName']}` {$mark} ?  ";
-            $type .=substr($value['type'],0,1);
-            array_push($arges,$value['value']);
-        }
-        array_unshift($arges,$type);
-        $wh =substr($wh,4);
-        $str ="DELETE FROM  {$table} WHERE {$wh}";
+        $str ="DELETE FROM  {$table} WHERE {$where->getPrepWhere()}";
         $sql = $this->getConn();
         $sqlStmt = $sql->prepare($str);
-        if(!call_user_func_array(array($sqlStmt,"bind_param"),$this->refValues($arges))){
+        if(!call_user_func_array(array($sqlStmt,"bind_param"),$this->refValues($where->getPrepValue()))){
             if(Config::Debug){
                 echo '语句或参数错误'.$str;
             }
@@ -294,7 +272,7 @@ class Sql
      *
      * @param $table  string 表名
      *
-     * @param $where array 条件,必须是二维数组，子数组条件必须 columnName，type ，value，可选logic，mark
+     * @param $where Where 条件,必须是二维数组，子数组条件必须 columnName，type ，value，可选logic，mark
      *
      * @param $values array 需要修改的字段必须是二维数组，子数组条件必须 columnName，type ，value
      *
@@ -303,7 +281,6 @@ class Sql
      */
     public function update($table,$where,$values){
         $set = "";
-        $wh = "";
         $type="";
         $arges=array();
         foreach($values as $value){
@@ -311,18 +288,12 @@ class Sql
             $type .=substr($value['type'],0,1);
             array_push($arges,$value['value']);
         }
-        foreach($where as $value){
-            empty($value['logic'])?$logic = "AND" :$logic = $value['logic'];
-            empty($value['mark'])?$mark = "=" :$mark = $value['mark'];
-            $wh .="{$logic}  `{$value['columnName']}` {$mark} ?  ";
-            $type .=substr($value['type'],0,1);
-            array_push($arges,$value['value']);
-        }
+        $vars = $where->getPrepValue();
+        $type .= array_shift($vars);
         array_unshift($arges,$type);
+        $arges = array_combine($arges,$vars);
         $set =substr($set,0,strlen($set)-1);
-        $wh =substr($wh,4);
-        $str ="UPDATE {$table}  SET   {$set} WHERE {$wh}";
-        print_r($arges);
+        $str ="UPDATE {$table}  SET   {$set} WHERE {$where->getPrepWhere()}";
         $sql = $this->getConn();
         $sqlStmt = $sql->prepare($str);
         if(!call_user_func_array(array($sqlStmt,"bind_param"),$this->refValues($arges))){

@@ -13,6 +13,7 @@ include_once($_SERVER['DOCUMENT_ROOT'] . "/util/autoload.php");
 
 class Admin
 {
+
     public function isNumber($columnName)
     {
         // TODO: Implement isNumber() method.
@@ -25,10 +26,12 @@ class Admin
     }
     public function updateAdminPwd($id,$oldPwd,$newPwd){
         $sql = new Sql;
-        $id = $sql->sqlVerif($id);
-        $row = $sql->queryLine("SELECT `a_id` from `adminInfo` WHERE `a_id` =$id AND `a_pwd` ='$oldPwd'");
-        //print_r($row);
-        if(!empty($row)){
+       // $row = $sql->queryLine("SELECT `a_id` from `adminInfo` WHERE `a_id` =$id AND `a_pwd` ='$oldPwd'");
+        $wh = new Where('a_id',$id,'int');
+        $wh->setWhere('a_pwd',$oldPwd);
+        $data = $sql->select('admin','*',$wh);
+        print_r($data);
+        if(!empty($data[0])){
             return $sql->execute("UPDATE `adminInfo` SET `a_pwd` = '$newPwd' WHERE `a_id` = $id");
         }else{
            return  false;
