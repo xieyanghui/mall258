@@ -11,7 +11,7 @@ include_once($_SERVER['DOCUMENT_ROOT'] . "/util/autoload.php");
  * `a_nick` 管理员姓名
  * */
 
-class Admin implements Modes
+class Admin
 {
     public function isNumber($columnName)
     {
