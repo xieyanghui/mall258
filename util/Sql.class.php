@@ -291,7 +291,8 @@ class Sql
         $vars = $where->getPrepValue();
         $type .= array_shift($vars);
         array_unshift($arges,$type);
-        $arges = array_combine($arges,$vars);
+        print_r($arges);
+        $arges = array_merge($arges,$vars);
         $set =substr($set,0,strlen($set)-1);
         $str ="UPDATE {$table}  SET   {$set} WHERE {$where->getPrepWhere()}";
         $sql = $this->getConn();

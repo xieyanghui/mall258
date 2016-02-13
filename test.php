@@ -24,4 +24,5 @@ $sql = new Sql();
 //echo $wh;
 //print_r($sql->select('gt_attr',"*",$wh));
 $admin = new Admin();
-$admin->updateAdminPwd(1,md5("123456a"),"aaa");
+//$admin->updateAdminPwd(1,md5("123456"),"aaa");
+print_r($admin->getAdmin(0,4));
