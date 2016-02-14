@@ -17,16 +17,18 @@ class Auth{
      *
      * @param $alKey string 权限简称
      *
-     * @return 如果有返回TRUE,否则FALSE
+     * @return boolean 如果有返回TRUE,否则FALSE
      *
      */
     static public function inAdmin($adminID,$alKey){
         $sql = new Sql;
-        $aaID = $sql->queryLine("SELECT `aa_id` FROM `adminInfo` WHERE `a_id` =$adminID");
-        $aaID = $aaID['aa_id'] ;
-        if($aaID == 1){return true;}
-        $row = $sql->queryLine("SELECT `aal_id` FROM `adminAuthList` WHERE `aa_id` =$aaID AND `al_id` =(SELECT `al_id` FROM `authList` WHERE `al_key` = $alKey)");
-        if(!empty($row['aal_id'])){
+       // $aaID = $sql->queryLine("SELECT `aa_id` FROM `adminInfo` WHERE `a_id` =$adminID");
+        $aaID=  $sql->select('admin','aa_id',new Where('a_id',$adminID,'int'));
+        if($aaID['aa_id'] == 1){return true;}
+       $where = new Where('aa_id',$aaID['aa_id'],'int');
+        $where->setWhere('al_key',$alKey);
+        $row = $sql->select('admin_auth_v',"al_key",$where);
+        if(!empty($row['al_key'])){
             return true;
         }else{
             return false;
@@ -41,14 +43,16 @@ class Auth{
      *
      * @param $alKey string 权限简称
      *
-     * @return 如果有返回TRUE,否则FALSE
+     * @return boolean 如果有返回TRUE,否则FALSE
      *
      */
     static public function inAdminAuth($aaID,$alKey){
         $sql = new Sql;
         if($aaID == 1){return true;}
-        $row = $sql->queryLine("SELECT `aal_id` FROM `adminAuthList` WHERE `aa_id` =$aaID AND `al_id` =(SELECT `al_id` FROM `authList` WHERE `al_key` = $alKey)");
-        if(!empty($row['aal_id'])){
+        $where = new Where('aa_id',$aaID,'int');
+        $where->setWhere('al_key',$alKey);
+        $row = $sql->select('admin_auth_v',"al_key",$where);
+        if(!empty($row['al_key'])){
             return true;
         }else{
             return false;

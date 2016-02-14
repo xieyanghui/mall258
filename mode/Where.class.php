@@ -6,20 +6,40 @@
  * Time: 14:56
  */
 class Where{
-    private $where =array(),$close = false;
+    private $where =array(); //条件集合
+    private $close = false;  //如果get过就不能在set了
+    private $end = "";        //条件后面的语句
+    /**
+     * @param $columnName string 列名
+     * @param $value string 值
+     * @param $type string 列类型,默认string
+     * @param $logic string 逻辑,默认AND
+     * @param $mark string 操作符,默认'='
+    */
     public function __construct($columnName =null,$value = null,$type = 'string',$logic = 'AND', $mark = '='){
-        $this->setWhere($columnName,$value,$type ,$logic , $mark);
+        if($columnName !=null ){
+            $this->setWhere($columnName,$value,$type ,$logic , $mark);
+        }
     }
 
-    public function setWhere($columnName =null,$value = null,$type = 'string',$logic = 'AND', $mark = '='){
+    /**
+     * 设置条件
+     * @param $columnName string 列名
+     * @param $value string 值
+     * @param $type string 列类型,默认string
+     * @param $logic string 逻辑,默认AND
+     * @param $mark string 操作符,默认'='
+     * @throws Exception
+     */
+    public function setWhere($columnName =null,$value ,$type = 'string',$logic = 'AND', $mark = '='){
         if($this->close){
             throw new Exception("你已经获取过get过了,不能在set了!");
         }
-        if($columnName !=null && $value != null ){
+        if($columnName !=null ){
             $wh = array();
             $wh["columnName"] = $columnName;
             $wh['type'] = $type;
-            $wh["value"] = $value;
+            empty($value)?$wh["value"] ='':$wh["value"] = $value;
             $wh["logic"] = $logic;
             $wh["mark"] = $mark;
             array_push($this->where,$wh);
@@ -27,13 +47,26 @@ class Where{
             throw new Exception("缺少参数!");
         }
     }
+
+    /**
+     * 设置条件后面句子
+     *
+     * @param $end string
+    */
+    public function setWhereEnd($end){
+        $this->end .= $end;
+    }
     public function getPrepWhere(){
         $wh = "";
-        foreach($this->where as $value){
+        foreach($this->where as $key=>$value){
+
             $wh .="{$value['logic']}  `{$value['columnName']}` {$value['mark']} ?  ";
         }
         $this->close = true;
-        return substr($wh,4);
+        if(strlen($wh) >4){
+            return "WHERE ".(substr($wh,4).$this->end);
+        }
+        return $wh.$this->end;
     }
 
     public function getPrepType(){
@@ -44,14 +77,23 @@ class Where{
         $this->close = true;
         return $type;
     }
-    public function getPrepValue(){
-        $arges = array();
+    public function getPrepValues(){
+        $values = array();
         foreach($this->where as $value){
-            array_push($arges,$value['value']);
+            if($value['mark'] == "LIKE"){
+                array_push($values,"%{$value['value']}%");
+            }else{
+                array_push($values,$value['value']);
+            }
         }
         $this->close = true;
-        array_unshift($arges,$this->getPrepType());
-        return $arges;
+        return $values;
+    }
+    public function getPrepArges(){
+        $this->close = true;
+        $vs = $this->getPrepValues();
+        array_unshift($vs,$this->getPrepType());
+        return $vs;
     }
     public function __toString(){
         $str = "";

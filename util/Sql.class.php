@@ -17,65 +17,46 @@ class Sql
         return $mysqli;
     }
 
-    public function updateSqlState($arr, $obj)
-    {
-        $ser = "";
-        foreach ($arr as $key => $value) {
-            if(empty($value)){ continue; }
-            if ($obj->isInt($key)) {
-                $ser .= " `$key` = $value ,";
-            } else {
-                $ser .= " `$key` = '$value' ,";
-            }
-        }
-        return substr($ser, 0, strlen($ser) - 1);
-    }
+//    public function updateSqlState($arr, $obj)
+//    {
+//        $ser = "";
+//        foreach ($arr as $key => $value) {
+//            if(empty($value)){ continue; }
+//            if ($obj->isInt($key)) {
+//                $ser .= " `$key` = $value ,";
+//            } else {
+//                $ser .= " `$key` = '$value' ,";
+//            }
+//        }
+//        return substr($ser, 0, strlen($ser) - 1);
+//    }
 
 
 
     //拼装插入语句
-    public function addSqlState($arr, $obj)
-    {
-        $columns = "";
-        $values = "";
-        foreach ($arr as $key => $value) {
-            if(is_array($value)){continue;}
-            $columns .= " `$key` ,";
-            if ($obj->isInt($key)) {
-                $values .= "$value ,";
-            } else {
-                $values .= "'$value' ,";
-            }
-        }
-        return "(" . substr($columns, 0, strlen($columns) - 1) . ") values (" . substr($values, 0, strlen($values) - 1) . ");";
-    }
+//    public function addSqlState($arr, $obj)
+//    {
+//        $columns = "";
+//        $values = "";
+//        foreach ($arr as $key => $value) {
+//            if(is_array($value)){continue;}
+//            $columns .= " `$key` ,";
+//            if ($obj->isInt($key)) {
+//                $values .= "$value ,";
+//            } else {
+//                $values .= "'$value' ,";
+//            }
+//        }
+//        return "(" . substr($columns, 0, strlen($columns) - 1) . ") values (" . substr($values, 0, strlen($values) - 1) . ");";
+//    }
 
 
-    //sql字符验证
-    public function sqlVerify($value)
-    {
-        return mysqli_real_escape_string($this,$value);
-    }
-
-    //数组验证
-    public function arrSqlVerify($arr)
-    {
-        if(empty($arr)){return $arr;};
-        foreach ((array)$arr as $key => $value) {
-            if (is_array($value)) {
-                $arr[$key] = $this->arrSqlVerif($value);
-            }else {
-                $arr[$key] = mysqli_real_escape_string($value);
-            }
-        }
-        return $arr;
-    }
 
     /**
      * 执行SQL语句
      * @param string $sql 语句
      *
-     * @return  boolean成功返回true失败返回false
+     * @return  boolean 成功返回true失败返回false
      *
      * */
     public function execute($sql)
@@ -120,7 +101,7 @@ class Sql
      *
      * @param string $sql 语句
      *
-     * @return   成功返回查询到数据 失败返回false
+     * @return  array|bool 成功返回查询到数据 失败返回false
      *
      * */
     public function queryData($sql)
@@ -145,10 +126,10 @@ class Sql
      *
      * @param string $sql 语句
      *
-     * @return  boolean 成功返回ID失败返回false
+     * @return  int|boolean 成功返回ID失败返回false
      *
      * */
-    public function executeid($sql)
+    public function executeId($sql)
     {
         $mysqli = $this->getConn();
         if($mysqli->query($sql)){
@@ -174,33 +155,37 @@ class Sql
      *
      * @param $where Where 条件必须是二维数组，子数组条件必须 columnName，type ，value，可选logic，mark
      *
-     * @return array|bool 成功返回二维数组，失败返回false
+     * @return array|bool 成功返回数组集合，失败返回false
      *
      */
     public function select($table,$column,$where){
         $columns="";        //列名集合
         if(is_array($column)){
-            foreach($column as $key=> $value){
-                $columns .=$key."  ," ;
+            foreach($column as  $value){
+                $columns .=$value."  ," ;
             }
             $columns =substr($columns,0,strlen($columns)-1);
         }else{
             $columns = $column;
         }
-
-        $str ="SELECT {$columns} FROM {$table} WHERE {$where->getPrepWhere()}";
-       // print_r($where->getPrepValue());
+        $str ="SELECT {$columns} FROM {$table} {$where->getPrepWhere()}";
         $sql = $this->getConn();
         $sqlStmt = $sql->prepare($str);
-        if(!call_user_func_array(array($sqlStmt,"bind_param"),$this->refValues($where->getPrepValue()))){
-            if(Config::Debug){
-                echo '语句或参数错误'.$str;
+        //echo $str;
+        if($where->getPrepType() ==""){
+            $sqlStmt->execute();
+        }else{
+            if(!call_user_func_array(array($sqlStmt,"bind_param"),$this->refValues($where->getPrepArges()))){
+                if(Config::Debug){
+                    echo '语句或参数错误'.$str;
+                }
+                $sqlStmt->close();
+                $sql->close();
+                return false;
             }
-            $sqlStmt->close();
-            $sql->close();
-            return false;
+            $sqlStmt->execute();
         }
-        $sqlStmt->execute();
+
 //       $res = $sqlStmt->execute();
 //        if(!$res){
 //            if(Config::Debug){
@@ -219,6 +204,10 @@ class Sql
         $sqlStmt->free_result();
         $sqlStmt->close();
         $sql->close();
+        if(empty($data[1])){
+            if(empty($data[0])){return null;}
+            return $data[0];
+        }
         return $data;
     }
 
@@ -234,10 +223,10 @@ class Sql
      *
      */
     public function delete($table,$where){
-        $str ="DELETE FROM  {$table} WHERE {$where->getPrepWhere()}";
+        $str ="DELETE FROM  {$table} {$where->getPrepWhere()}";
         $sql = $this->getConn();
         $sqlStmt = $sql->prepare($str);
-        if(!call_user_func_array(array($sqlStmt,"bind_param"),$this->refValues($where->getPrepValue()))){
+        if(!call_user_func_array(array($sqlStmt,"bind_param"),$this->refValues($where->getPrepArges()))){
             if(Config::Debug){
                 echo '语句或参数错误'.$str;
             }
@@ -288,12 +277,11 @@ class Sql
             $type .=substr($value['type'],0,1);
             array_push($arges,$value['value']);
         }
-        $vars = $where->getPrepValue();
-        $type .= array_shift($vars);
+        $type .= $where->getPrepType();
         array_unshift($arges,$type);
-        $arges = array_combine($arges,$vars);
+        $arges = array_merge($arges,$where->getPrepValues());
         $set =substr($set,0,strlen($set)-1);
-        $str ="UPDATE {$table}  SET   {$set} WHERE {$where->getPrepWhere()}";
+        $str ="UPDATE {$table}  SET   {$set}  {$where->getPrepWhere()}";
         $sql = $this->getConn();
         $sqlStmt = $sql->prepare($str);
         if(!call_user_func_array(array($sqlStmt,"bind_param"),$this->refValues($arges))){
@@ -324,7 +312,7 @@ class Sql
      *
      * @param $table  string 表名
      *
-     * @param $column array 列名,二维数组,子数组 type, columnName
+     * @param $column array 列名,数组,key是列名, value 是类型
      *
      * @param $data array 需要插入的值,可以是一维数组,也可以是二维的
      *
@@ -335,10 +323,10 @@ class Sql
         $type="";
         $columns="";
         $wen ="";
-        foreach($column as  $value){
-            $columns .=  $value['columnName']." ,";
+        foreach($column as  $key=>$value){
+            $columns .=  $key." ,";
             $wen .="? ,";
-            $type .= substr($value['type'],0,1);
+            $type .= substr($value,0,1);
         }
         $columns =substr($columns,0,strlen($columns)-1);
         $wen =substr($wen,0,strlen($wen)-1);
@@ -384,7 +372,6 @@ class Sql
                 break;
             }
         }
-
         $sqlStmt->close();
         $sql->close();
         return true;
