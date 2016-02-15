@@ -1,4 +1,4 @@
-﻿
+﻿﻿
 
 --  管理员权限
 DROP TABLE IF EXISTS `admin_auth`;
