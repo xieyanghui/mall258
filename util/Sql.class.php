@@ -235,22 +235,22 @@ class Sql
             return false;
         }
         $res = $sqlStmt->execute();
-        if($sqlStmt->affected_rows == 0){
-            if(Config::Debug){
-                echo '错误：没有这条记录';
-            }
-            $sqlStmt->close();
-            $sql->close();
-            return false;
-        }
-//        if(!$res){
+//        if($sqlStmt->affected_rows == 0){
 //            if(Config::Debug){
-//                echo '错误：'.$sqlStmt->error;
+//                echo '错误：没有这条记录';
 //            }
 //            $sqlStmt->close();
 //            $sql->close();
 //            return false;
 //        }
+        if(!$res){
+            if(Config::Debug){
+                echo '错误：'.$sqlStmt->error;
+            }
+            $sqlStmt->close();
+            $sql->close();
+            return false;
+        }
         $sqlStmt->close();
         $sql->close();
         return true;
@@ -273,9 +273,24 @@ class Sql
         $type="";
         $arges=array();
         foreach($values as $value){
-            $set .=" `{$value['columnName']}` =? ,";
-            $type .=substr($value['type'],0,1);
-            array_push($arges,$value['value']);
+            if(is_array($value)){
+                $set .=" `{$value['columnName']}` =? ,";
+                if(!empty($value['type'])){
+                    $type .=substr($value['type'],0,1);
+                }else{
+                    $type .='s';
+                }
+                array_push($arges,$value['value']);
+            }else{
+                $set .=" `{$values['columnName']}` =? ,";
+                if(!empty($values['type'])){
+                    $type .=substr($values['type'],0,1);
+                }else{
+                    $type .='s';
+                }
+                array_push($arges,$values['value']);
+                break;
+            }
         }
         $type .= $where->getPrepType();
         array_unshift($arges,$type);
@@ -292,10 +307,18 @@ class Sql
             $sql->close();
             return false;
         }
-        $sqlStmt->execute();
-        if($sqlStmt->affected_rows == 0){
+        $res = $sqlStmt->execute();
+//        if($sqlStmt->affected_rows == 0){
+//            if(Config::Debug){
+//                echo '错误：没有修改成功';
+//            }
+//            $sqlStmt->close();
+//            $sql->close();
+//            return false;
+//        }
+        if(!$res){
             if(Config::Debug){
-                echo '错误：没有修改成功';
+                echo '错误：'.$sqlStmt->error;
             }
             $sqlStmt->close();
             $sql->close();
@@ -316,7 +339,7 @@ class Sql
      *
      * @param $data array 需要插入的值,可以是一维数组,也可以是二维的
      *
-     * @return bool 成功返回true，失败返回false
+     * @return bool|int 单条成功返回ID,多条成功返回true，失败返回false
      *
      */
     public function insert($table,$column,$data){
@@ -367,9 +390,14 @@ class Sql
                     if(Config::Debug){
                         echo '错误：'.$sqlStmt->error;
                     }
+                    $sqlStmt->close();
+                    $sql->close();
                     return false;
                 }
-                break;
+                $id= $sqlStmt->insert_id;
+                $sqlStmt->close();
+                $sql->close();
+                return $id;
             }
         }
         $sqlStmt->close();

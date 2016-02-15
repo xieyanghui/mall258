@@ -9,7 +9,7 @@ require_once($_SERVER['DOCUMENT_ROOT'] . '/util/autoload.php');
 header("Content-Type:text/html;charset=utf-8");
 //$sql = new Sql();
 //echo $sql->executeid("INSERT INTO `authList`(al_key,al_nick,al_remark) VALUES ('aaaa','aaaa','aaaaa')");
-$admin = "xieyanghui' or 'foo' = 'foo' -- ";
+//$admin = "xieyanghui' or 'foo' = 'foo' -- ";
 
 
 //$pwd = "";
@@ -24,12 +24,27 @@ $sql = new Sql();
 //echo $wh;
 //print_r($sql->select('gt_attr',"*",$wh));
 $admin = new Admin();
+//print_r($admin->getAdmin(0,4));
+//$admin->deleteAdmin(2,1);
+//echo '------------<br>';
+//print_r($admin->getAdmin(0,4));
+
 //$admin->updateAdminPwd(1,md5("123456"),"aaa");
 //print_r($admin->getAdmin(1,4));
 //$admin->searchAdmin(array('searchLine'=>'a_nick','key'=>'谢'),0,2);
 //print_r($admin->queryAdmin(2));
 //print_r($admin->adminLogin('xieyanghui',md5('123456'),'111'));
 //$admin->addAdmin(array('a_name'=>'aaaa','a_pwd'=>'ddddd','a_nick'=>'bbbbb'));
-$admin->updateAdmins(array('a_id'=>'3','a_name'=>'bbb','a_pwd'=>'dddsss','a_nick'=>'aaabb'),1);
-$auth = new Auth();
+//$admin->updateAdmins(array('a_id'=>'3','a_name'=>'bb','a_pwd'=>'dddsss','a_nick'=>'aaabb'),1);
+//$auth = new Auth();
 //$auth->inAdmin(2,'admin');
+//print_r($admin->searchAdminAuth('管',0,4));
+//print_r($admin->getAdminAuth(0,4));
+//print_r($admin->getAuthList());
+//print_r($admin->queryAdminAuth(2));
+//$admin->addAdminAuth('什aaaaa么','',array(2,4,5,6,7,8));
+//if('' ===null){
+//    echo '不会吧';
+//}
+//$admin->updateAdminAuth(3,'',null,array(2,3,5,6,7,8,9111),1);
+//$admin->updateAdminImg(1,"aaaa");

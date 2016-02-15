@@ -1,6 +1,4 @@
-﻿﻿
-
---  管理员权限
+﻿--  管理员权限
 DROP TABLE IF EXISTS `admin_auth`;
 CREATE TABLE  `admin_auth` (
 	`aa_id` INT NOT NULL , -- ID
@@ -10,7 +8,7 @@ CREATE TABLE  `admin_auth` (
 ALTER TABLE `admin_auth` ADD PRIMARY KEY (`aa_id`);
 ALTER TABLE `admin_auth` MODIFY `aa_id` INT UNSIGNED AUTO_INCREMENT;
 ALTER TABLE `admin_auth` ADD UNIQUE (`aa_nick`);
-INSERT INTO `admin_auth` (`aa_nick`,`aa_remark`) VALUES ('超级管理员','系统的主宰'),('普通管理员','一般的管理');
+INSERT INTO `admin_auth` (`aa_nick`,`aa_remark`) VALUES ('超级管理员','系统的主宰'),('无权限管理员','一点权限都没有'),('普通管理员','一般的管理');
 
 DROP TABLE IF EXISTS `auth_list`;
 -- 权限列表
@@ -31,13 +29,10 @@ INSERT INTO `auth_list` (`al_key`,`al_nick`,`al_remark`) VALUES ('goods_type','�
 --  连接表
 DROP TABLE IF EXISTS `admin_auth_list`;
 CREATE TABLE `admin_auth_list`(
-	`aal_id` INT NOT NULL , -- ID
 	`al_id` INT UNSIGNED NOT NULL ,     -- 权限列表ID
 	`aa_id` INT UNSIGNED NOT NULL   -- 权限ID
 )DEFAULT CHARSET = utf8 ENGINE=MyISAM;
-ALTER TABLE `admin_auth_list` ADD PRIMARY KEY (`aal_id`);
-ALTER TABLE `admin_auth_list` MODIFY `aal_id` INT UNSIGNED AUTO_INCREMENT;
-INSERT INTO `admin_auth_list` (aa_id,al_id) VALUES (2,3),(2,5),(2,6),(2,4);
+ALTER TABLE `admin_auth_list` ADD PRIMARY KEY (`al_id`,`aa_id`);
 INSERT INTO `admin_auth_list` (aa_id,al_id) VALUES (1,1),(1,2),(1,3),(1,4),(1,5),(1,6),(1,7),(1,8);
 
 -- 管理员
@@ -49,6 +44,7 @@ CREATE TABLE `admin`(
 	`a_reg` TIMESTAMP DEFAULT NOW(),  -- 注册时间
 	`a_img` VARCHAR(200) ,             -- 头像图片
 	`a_nick` CHAR(20)  ,                -- 真实姓名
+	`a_status` TINYINT NOT NULL DEFAULT 1,  -- 权限状态 1启用,2不启用
 	`aa_id` INT UNSIGNED NOT NULL    -- 权限ID
 )DEFAULT CHARSET = utf8 ENGINE=MyISAM;
 
@@ -105,6 +101,7 @@ CREATE TABLE `user`(
 	`u_email` CHAR(40) ,            -- 电子邮件
 	`u_address` CHAR(12) ,					-- 地址
 	`u_reg` TIMESTAMP DEFAULT NOW(), -- 注册时间
+	`u_status` TINYINT NOT NULL DEFAULT 1,  -- 权限状态 1启用,2不启用
 	`u_img` VARCHAR(400)              -- 头像
 )DEFAULT CHARSET = utf8 ENGINE=MyISAM;
 
@@ -179,64 +176,68 @@ ALTER TABLE `gt_attr` MODIFY `gta_id` INT UNSIGNED AUTO_INCREMENT;
 INSERT INTO gt_attr(`gt_id`,`gta_name`)VALUES(1,'品牌'),(1,'型号'),(1,'屏幕尺寸'),(1,'分辨率'),(1,'CPU'),(1,'前置摄像头'),(1,'后置摄像头'),(1,'长'),(1,'厚'),(1,'宽'),(1,'RAM'),(1,'上市时间'),(2,'品牌'),(2,'型号'),(2,'像素'),(2,'显示屏类型'),(2,'上市时间');
 
 -- 商品属性
-DROP TABLE IF EXISTS `g_attr_value`;
-CREATE TABLE `g_attr_value`(
-  `gav_id` INT UNSIGNED NOT NULL,   -- ID
+DROP TABLE IF EXISTS `g_attr`;
+CREATE TABLE `g_attr`(
+  `ga_id` INT UNSIGNED NOT NULL,   -- ID
   `g_id` INT UNSIGNED NOT NULL,     -- 商品ID
   `gta_id` INT UNSIGNED NOT NULL,   -- 商品属性ID
-  `gav_value` CHAR(20)              -- 值
+  `ga_value` CHAR(20)              -- 值
 )DEFAULT CHARSET =utf8 ENGINE=MyISAM;
 
-ALTER TABLE `g_attr_value` ADD PRIMARY KEY (`gav_id`);
-ALTER TABLE `g_attr_value` MODIFY `gav_id` INT UNSIGNED AUTO_INCREMENT;
+ALTER TABLE `g_attr` ADD PRIMARY KEY (`ga_id`);
+ALTER TABLE `g_attr` MODIFY `ga_id` INT UNSIGNED AUTO_INCREMENT;
 
 -- 商品类型属性价格
-DROP TABLE IF EXISTS `gt_attr_price`;
-CREATE TABLE `gt_attr_price`(
-	`gtap_id` INT  NOT NULL,             -- ID
+DROP TABLE IF EXISTS `gt_price`;
+CREATE TABLE `gt_price`(
+	`gtp_id` INT  NOT NULL,             -- ID
 	`gt_id` INT UNSIGNED NOT NULL,      -- 商品类型ID
-	`gtap_name` CHAR(20) NOT NULL  -- 价格属性名称
+	`gtp_name` CHAR(20) NOT NULL  -- 价格属性名称
 )DEFAULT CHARSET =utf8 ENGINE=MyISAM;
 
-ALTER TABLE `gt_attr_price` ADD PRIMARY KEY (`gtap_id`);
-ALTER TABLE `gt_attr_price` MODIFY `gtap_id` INT UNSIGNED AUTO_INCREMENT;
+ALTER TABLE `gt_price` ADD PRIMARY KEY (`gtp_id`);
+ALTER TABLE `gt_price` MODIFY `gtp_id` INT UNSIGNED AUTO_INCREMENT;
 
-INSERT INTO gt_attr_price(`gt_id`,`gtap_name`) VALUES(1,'版本'),(1,'颜色'),(1,'容量'),(1,'套餐'),(2,'版本'),(2,'套餐');
+INSERT INTO gt_price(`gt_id`,`gtp_name`) VALUES(1,'版本'),(1,'颜色'),(1,'容量'),(1,'套餐'),(2,'版本'),(2,'套餐');
 
--- 商品价格属性
-DROP TABLE IF EXISTS `g_price_attr`;
-CREATE TABLE `g_price_attr`(
-	`gpa_id` INT  NOT NULL,          -- ID
+-- 商品价格名
+DROP TABLE IF EXISTS `g_price`;
+CREATE TABLE `g_price`(
+	`gp_id` INT  NOT NULL,          -- ID
 	`g_id` INT UNSIGNED NOT NULL,  -- 商品ID
-  `gtap_id` INT UNSIGNED NOT NULL ,-- 商品类型价格属性名
-  `gpa_name` CHAR(20) NOT NULL     -- 价格属性
+  `gtp_id` INT UNSIGNED NOT NULL ,-- 商品类型价格ID
+  `gp_name` CHAR(20) NOT NULL     -- 价格属性
 )DEFAULT CHARSET =utf8 ENGINE=MyISAM;
+ALTER TABLE `g_price` ADD PRIMARY KEY (`gp_id`);
+ALTER TABLE `g_price` MODIFY `gp_id` INT UNSIGNED AUTO_INCREMENT;
 
-ALTER TABLE `g_price_attr` ADD PRIMARY KEY (`gpa_id`);
-ALTER TABLE `g_price_attr` MODIFY `gpa_id` INT UNSIGNED AUTO_INCREMENT;
+INSERT INTO g_price(`g_id`,`gtp_id`,`gp_name`)VALUES (1,1,'亚太'),(1,1,'欧版'),(1,1,'国行'),(1,2,'红色'),(1,2,'白色'),(1,3,'16'),(1,3,'32'),(1,4,'套餐1');
+INSERT INTO g_price(`g_id`,`gtp_id`,`gp_name`)VALUES (2,5,'亚太'),(2,5,'欧版'),(2,5,'国行'),(2,6,'套餐1'),(2,6,'套餐2');
 
-DROP TABLE IF EXISTS `g_prices`;
+
+
 -- 商品组合价格
-CREATE TABLE  `g_prices`(
-  `gps_id` INT NOT NULL ,
+DROP TABLE IF EXISTS `g_price_info`;
+CREATE TABLE  `g_price_info`(
+  `gpi_id` INT NOT NULL ,    -- ID
   `g_id` INT UNSIGNED NOT NULL,  -- 商品ID
-  `gps_img` VARCHAR(200) ,   -- 图片
-  `gps_sum` INT UNSIGNED NOT NULL DEFAULT 0,  -- 数量
-  `gps_price` float(8,2)   -- 价格
+  `gpi_img` VARCHAR(200) ,   -- 图片
+  `gpi_sum` INT UNSIGNED NOT NULL DEFAULT 0,  -- 数量
+  `gpi_price` float(8,2)   -- 价格
 )DEFAULT CHARSET =utf8 ENGINE=MyISAM;
-ALTER TABLE `g_prices` ADD PRIMARY KEY (`gps_id`);
-ALTER TABLE `g_prices` MODIFY `gps_id` INT UNSIGNED AUTO_INCREMENT;
+ALTER TABLE `g_price_info` ADD PRIMARY KEY (`gpi_id`);
+ALTER TABLE `g_price_info` MODIFY `gpi_id` INT UNSIGNED AUTO_INCREMENT;
 
-DROP TABLE IF EXISTS `g_prices_link`;
+INSERT INTO `g_price_info`(`g_id`,`gpi_img`,`gpi_sum`,`gpi_price`)VALUES (1,'aaa',100,1688), (1,'qqqqq',88,2088) ,(1,'aaqqqa',100,1999);
+INSERT INTO g_price_list(`gp_id`,`gpi_id`) VALUES (1,1),(4,1),(6,1),(7,1),(1,2),(4,2),(5,2),(7,2),(2,3),(6,3),(7,3);
+
+DROP TABLE IF EXISTS `g_price_list`;
 -- 商品组合价格连接表
-CREATE TABLE  `g_prices_link`(
-  `gpsl_id` INT NOT NULL ,
-  `g_id` INT UNSIGNED NOT NULL,  -- 商品ID
-  `gps_id` INT UNSIGNED NOT NULL ,   -- 商品组合价格ID
-  `gpa_id` INT UNSIGNED NOT NULL  -- 商品价格属性ID
+CREATE TABLE  `g_price_list`(
+  `gpi_id` INT UNSIGNED NOT NULL ,   -- 商品组合价格ID
+  `gp_id` INT UNSIGNED NOT NULL  -- 商品价格属性ID
 )DEFAULT CHARSET =utf8 ENGINE=MyISAM;
-ALTER TABLE `g_prices_link` ADD PRIMARY KEY (`gpsl_id`);
-ALTER TABLE `g_prices_link` MODIFY `gpsl_id` INT UNSIGNED AUTO_INCREMENT;
+ALTER TABLE `g_price_list` ADD PRIMARY KEY (`gpi_id`,`gp_id`);
 
 
 
@@ -313,6 +314,7 @@ CREATE VIEW `admin_info_v` AS
 		admin.aa_id as `aa_id`,
 		`aa_nick`,
 		`a_img`,
+		`a_status`,
 		`a_nick`
 	FROM `admin`,`admin_auth` WHERE admin_auth.aa_id = admin.aa_id;
 
@@ -327,4 +329,35 @@ CREATE VIEW `admin_auth_v` AS
 		`al_nick`
 	FROM `admin_auth`,`auth_list`,admin_auth_list WHERE admin_auth.aa_id = admin_auth_list.aa_id AND auth_list.al_id = admin_auth_list.al_id;
 
+DROP VIEW IF EXISTS `goods_info_v`;
+CREATE VIEW `goods_info_v` AS
+	SELECT
+		`g_id`,
+		`g_number`,
+		`g_name` ,
+		`gt_name` ,
+		`g_price` ,
+		`g_reg`,
+		`g_status`,
+		goods.gt_id as `gt_id`
+	FROM goods,goods_type WHERE goods.gt_id = goods_type.gt_id ;
 
+DROP VIEW IF EXISTS `g_attr_v`;
+CREATE VIEW `g_attr_v` AS
+	SELECT
+		`ga_id`,
+		`g_id`,
+		`gt_id`,
+		`gta_name`,
+		`ga_value` ,
+		g_attr.gta_id as 'gta_id'
+	FROM g_attr,gt_attr WHERE g_attr.gta_id = gt_attr.gta_id ;
+
+DROP VIEW IF EXISTS `g_price_v`;
+CREATE VIEW `g_price_v` AS
+	SELECT
+		`g_id`,
+		`gp_id`,
+		`gp_name`,
+		`gtp_name`
+	FROM gt_price,g_price WHERE g_price.gtp_id = gt_price.gtp_id;

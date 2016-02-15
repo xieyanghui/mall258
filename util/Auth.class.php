@@ -25,6 +25,7 @@ class Auth{
        // $aaID = $sql->queryLine("SELECT `aa_id` FROM `adminInfo` WHERE `a_id` =$adminID");
         $aaID=  $sql->select('admin','aa_id',new Where('a_id',$adminID,'int'));
         if($aaID['aa_id'] == 1){return true;}
+        if($aaID['aa_id'] == 2){return false;}
        $where = new Where('aa_id',$aaID['aa_id'],'int');
         $where->setWhere('al_key',$alKey);
         $row = $sql->select('admin_auth_v',"al_key",$where);
@@ -49,6 +50,7 @@ class Auth{
     static public function inAdminAuth($aaID,$alKey){
         $sql = new Sql;
         if($aaID == 1){return true;}
+        if($aaID == 2){return false;}
         $where = new Where('aa_id',$aaID,'int');
         $where->setWhere('al_key',$alKey);
         $row = $sql->select('admin_auth_v',"al_key",$where);
