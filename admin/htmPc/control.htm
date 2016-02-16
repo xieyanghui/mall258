@@ -40,18 +40,24 @@
             font-weight: bold;
             display: block;
             position: relative;
-        }
-
-        li.menu {
             background-color: #50D1DE;
         }
-
-        li.menu:hover {
+        li.top_menu:hover {
             background-color: #07A1B1;
             cursor: pointer;
         }
 
-        .menuclick {
+        .menuClick {
+            margin: 0 20px;
+            width: 150px;
+            height: 50px;
+            line-height: 50px;
+            float: right;
+            text-align: center;
+            font-size: 22px;
+            font-weight: bold;
+            display: block;
+            position: relative;
             background-color: #07A1B1;
             cursor: pointer;
         }
@@ -88,12 +94,17 @@
         /*#menus > ul > li:hover {*/
             /*background-color: #50D1DE;*/
         /*}*/
+        .admin_head_s {
+            width: 50px;
+            height: 50px;
+            border-radius: 25px;
+        }
     </style>
 </head>
 <body>
 <div id="tops">
     <ul class = 'top_left'>
-        <li> <img src="<{$admin['a_img']}>"/></li>
+        <li><img class="admin_head_s" src="<{$admin['a_img']}>"/></li>
     </ul>
     <ul class = 'top_menus'>
         <li class='top_menu' href="<{$HTTP_HOST}>/server/exitSer.php">安全退出</li>
@@ -116,10 +127,10 @@
 </body>
 <script>
     $(function () {
-        $("#tops >ul>li").click(function () {
-            $(this).removeClass('menu');
-            $(this).addClass('menuclick');
-            $(this).siblings().removeClass('menuclick');
+        $(".top_menus >li").click(function () {
+            //$(this).removeClass('top_menu');
+            $(this).addClass('menuClick');
+            $(this).siblings().removeClass('menuClick');
             $(this).siblings().addClass('menu');
             $('#con').load($(this).attr('href'));
         });
