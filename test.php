@@ -24,6 +24,7 @@ $sql = new Sql();
 //echo $wh;
 //print_r($sql->select('gt_attr',"*",$wh));
 $admin = new Admin();
+
 //print_r($admin->getAdmin(0,4));
 //$admin->deleteAdmin(2,1);
 //echo '------------<br>';
@@ -41,10 +42,8 @@ $admin = new Admin();
 //print_r($admin->searchAdminAuth('管',0,4));
 //print_r($admin->getAdminAuth(0,4));
 //print_r($admin->getAuthList());
-//print_r($admin->queryAdminAuth(2));
-//$admin->addAdminAuth('什aaaaa么','',array(2,4,5,6,7,8));
-//if('' ===null){
-//    echo '不会吧';
-//}
+//print_r($admin->queryAdminAuth(4));
+$admin->addAdminAuth('什染发膏么','',array(2,4,5,6,7,8),1,"申毛送的毛");
+
 //$admin->updateAdminAuth(3,'',null,array(2,3,5,6,7,8,9111),1);
 //$admin->updateAdminImg(1,"aaaa");

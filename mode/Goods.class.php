@@ -126,9 +126,18 @@ class Goods
 //        return $row;
     }
 
-    public function addeGoods($goods,$aId){
+    public function addGoods($goods,$aId,$meg){
         $sql = new Sql;
-        $g_id = $sql->executeid("INSERT INTO `goods` ".$sql->addSqlState($goods,$this));
+        $columns = array();
+        $values = array();
+        foreach($goods as $key=>$value){
+            if(is_array($value)){break;}
+            $columns[$key] = $this->isNumber($key,true);
+            array_push($values,$value);
+        }
+        if($g_id = $sql->insert('goods',$columns,$values)){
+
+        }
 
         $gAttrValue= "INSERT INTO `gAttrValue` (`g_id`,`gta_id`,`gav_value`) VALUES ";
         foreach((array)$goods['gAttrValue'] as $key=>$value){
@@ -147,6 +156,29 @@ class Goods
         }
     }
 
+
+    public function addGoodsAttrs($gAttr,$gId){
+        $sql = new Sql();
+        if(!empty($gAttr) && is_array($gAttr)){
+            $data = array();
+            foreach($gAttr as $key=>$value) {
+                array_push($data, array($gId, $value, $key));
+            }
+            return $sql->insert('g_attr',array('g_id'=>'int','gta_id'=>'int','ga_value'),$data);
+        }
+        return true;
+    }
+    public function addGoodsPrices($gAttr,$gId){
+        $sql = new Sql();
+        if(!empty($gAttr) && is_array($gAttr)){
+            $data = array();
+            foreach($gAttr as $key=>$value) {
+                array_push($data, array($gId, $value, $key));
+            }
+            return $sql->insert('g_attr',array('g_id'=>'int','gta_id'=>'int','ga_value'),$data);
+        }
+        return true;
+    }
     //返回商品类型列表
     public function getGoodsType($start, $sum  ,$sortLine , $sort = "asc"){
         $sql = new Sql;

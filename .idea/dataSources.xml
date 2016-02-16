@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="DataSourceManagerImpl" format="xml" hash="1237792659">
-    <data-source source="LOCAL" name="mall258" uuid="dfe892d7-8b65-4419-bb59-069405a447c9">
+  <component name="DataSourceManagerImpl" format="xml" hash="1103655719">
+    <data-source source="LOCAL" name="BBBm99cixwebhosting" uuid="f9d2df33-2bcc-450b-ad85-59447ff12f6f">
       <driver-ref>mysql</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>com.mysql.jdbc.Driver</jdbc-driver>
-      <jdbc-url>jdbc:mysql://localhost:3306/mall258</jdbc-url>
+      <jdbc-url>jdbc:mysql://mysql1108.ixwebhosting.com:3306/BBBm99c_xiehui</jdbc-url>
       <driver-properties>
         <property name="zeroDateTimeBehavior" value="convertToNull" />
         <property name="tinyInt1isBit" value="false" />
@@ -14,11 +14,11 @@
         <property name="yearIsDateType" value="false" />
       </driver-properties>
     </data-source>
-    <data-source source="LOCAL" name="BBBm99cixwebhosting" uuid="f9d2df33-2bcc-450b-ad85-59447ff12f6f">
+    <data-source source="LOCAL" name="mall258" uuid="194b072f-14ac-4858-871a-c31998dc926a">
       <driver-ref>mysql</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>com.mysql.jdbc.Driver</jdbc-driver>
-      <jdbc-url>jdbc:mysql://mysql1108.ixwebhosting.com:3306/BBBm99c_xiehui</jdbc-url>
+      <jdbc-url>jdbc:mysql://localhost:3306/mall258</jdbc-url>
       <driver-properties>
         <property name="zeroDateTimeBehavior" value="convertToNull" />
         <property name="tinyInt1isBit" value="false" />

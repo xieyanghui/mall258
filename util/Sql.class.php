@@ -347,14 +347,21 @@ class Sql
         $columns="";
         $wen ="";
         foreach($column as  $key=>$value){
-            $columns .=  $key." ,";
-            $wen .="? ,";
-            $type .= substr($value,0,1);
+            if(is_int($key)){
+                $columns .=  $value." ,";
+                $wen .="? ,";
+                $type .= 's';
+            }else{
+                $columns .=  $key." ,";
+                $wen .="? ,";
+                $type .= substr($value,0,1);
+            }
         }
         $columns =substr($columns,0,strlen($columns)-1);
         $wen =substr($wen,0,strlen($wen)-1);
         $str ="INSERT INTO {$table} ({$columns}) VALUES ({$wen});";
-        echo $str;
+            print_r($data);
+        echo $type."<br>";
         $sql = $this->getConn();
         $sqlStmt = $sql->prepare($str);
         foreach($data as  $value){

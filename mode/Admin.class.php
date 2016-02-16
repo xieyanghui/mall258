@@ -138,15 +138,17 @@ class Admin
      *
      * @param $aId int 操作者ID
      *
+     * @param $meg string 系统日志详细
+     *
      * @return boolean 成功返回true,失败返回false
      */
-    public function deleteAdmin($dId,$aId){
+    public function deleteAdmin($dId,$aId,$meg){
         $sql = new Sql;
         if($dId == 1){
             return false;
         }
         if($sql->update('admin',new Where('a_id',$dId),array('columnName'=>'a_status','value'=>2,'type'=>'int'))){
-            return $sql->insert('admin_log',array('a_id'=>'int','alog_key'=>'string','alog_content'=>'string'),array($aId,'删除管理员',$dId));
+            return $sql->insert('admin_log',array('a_id'=>'int','alog_key'=>'string','alog_content'=>'string'),array($aId,'删除管理员',$meg));
         }else{
             return false;
         }
@@ -188,9 +190,11 @@ class Admin
      *
      * @param $aId int 操作者ID
      *
+     * @param $meg string 系统日志详细
+     *
      * @return boolean 成功返回true,失败返回false
      */
-    public function addAdmin($admin,$aId)
+    public function addAdmin($admin,$aId,$meg)
     {
         $sql = new Sql;
         $columns =array();
@@ -205,7 +209,7 @@ class Admin
         }
         $b = $sql->insert('admin',$columns,$values);
         if($b > 0){
-            return $this->addAdminLog($aId,'增加管理员',$b);
+            return $this->addAdminLog($aId,'增加管理员',$meg);
         }
         return false;
         //$sqls = "INSERT INTO admin" . $sql->addSqlState($arr, $this);
@@ -213,25 +217,28 @@ class Admin
     }
 
     /**
-     * 超级管理员修改管理员
+     * 管理员修改管理员
      *
      * @param $admin array 管理员信息
      *
-     * @param $aId int 超级管理员ID
+     * @param $aId int 管理员ID
+     *
+     * @param $meg string 系统日志详细
      *
      * @return boolean 成功返回true,失败返回false
      */
-    public function updateAdmins($admin,$aId)
+    public function updateAdmins($admin,$aId,$meg)
     {
         $sql = new Sql;
         $values = array();
+        if($admin['a_id'] ==1){return false;}
         foreach($admin as $key=>$value){
             if($key=='a_name' || $key=='a_nick'|| $key=='aa_id'){
                 array_push($values,array('columnName'=>$key,'value'=>$value,'type'=>$this->isNumber($key,true)));
             }
         }
         if($sql->update('admin',new Where('a_id',$admin['a_id'],'int'),$values)){
-            return $this->addAdminLog($aId,'修改管理员',$admin['a_id']);
+            return $this->addAdminLog($aId,'修改管理员',$meg);
         }else{
             return false;
         }
@@ -343,17 +350,19 @@ class Admin
      *
      * @param $aId int 操作者ID
      *
+     * @param $meg string 系统日志详细
+     *
      * @return boolean 成功返回true,失败返回false
      */
-    public  function addAdminAuth($name,$remark,$auth,$aId){
+    public  function addAdminAuth($name,$remark,$auth,$aId,$meg){
         $sql = new Sql;
-        $aaId = $sql->insert('admin_auth',array('aa_nick'=>'string','aa_remark'=>'string'),array($name,$remark));
+        $aaId = $sql->insert('admin_auth',array('aa_nick','aa_remark'),array($name,$remark));
         $data= array();
         foreach((array)$auth as $value){
             array_push($data,array($aaId,$value));
         }
         if($sql->insert('admin_auth_list',array('aa_id'=>'int','al_id'=>'int'),$data)){
-            return $this->addAdminLog($aId,'增加权限组',$name);
+            return $this->addAdminLog($aId,'增加权限组',$meg);
         }
         return false;
        // $sqls = "INSERT INTO `admin_auth`(`aa_nick` ,`aa_remark`) VALUES ('$name','$remark') ;";
@@ -382,9 +391,11 @@ class Admin
      *
      * @param $aId int 操作者ID
      *
+     * @param $meg string 系统日志详细
+     *
      * @return boolean 成功返回true,失败返回false
      */
-    public function updateAdminAuth($aaId ,$name,$remark,$auth,$aId){
+    public function updateAdminAuth($aaId ,$name,$remark,$auth,$aId,$meg){
         $sql = new Sql;
         if($aaId ==1 || $aaId ==2){ return false; }
         $where = new Where('aa_id',$aaId);
@@ -409,7 +420,7 @@ class Admin
             }
         }
         if($b){
-            $this->addAdminLog($aId,'更新了权限',$aaId);
+            $this->addAdminLog($aId,'更新了权限',$meg);
         }
         return $b;
     }
@@ -421,16 +432,18 @@ class Admin
      *
      * @param $aId int 操作者ID
      *
+     * @param $meg string 系统日志详细
+     *
      * @return boolean 成功返回true,失败返回false
     */
-    public function deleteAdminAuth($dId,$aId){
+    public function deleteAdminAuth($dId,$aId,$meg){
         $sql = new Sql;
         if($dId ==1 || $dId ==2){ return false; }
         $where = new Where('aa_id',$dId);
         if($sql->delete('admin_auth_list',$where)){
             if($sql->update('admin',$where,array('columnName'=>'aa_id','type'=>'int','value'=>2))){
                 if($sql->delete('admin_auth',$where)){
-                    return $this->addAdminLog($aId,'删除权限组',$dId);
+                    return $this->addAdminLog($aId,'删除权限组',$meg);
                 }
             }
         }

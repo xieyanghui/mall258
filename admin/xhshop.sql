@@ -229,7 +229,6 @@ ALTER TABLE `g_price_info` ADD PRIMARY KEY (`gpi_id`);
 ALTER TABLE `g_price_info` MODIFY `gpi_id` INT UNSIGNED AUTO_INCREMENT;
 
 INSERT INTO `g_price_info`(`g_id`,`gpi_img`,`gpi_sum`,`gpi_price`)VALUES (1,'aaa',100,1688), (1,'qqqqq',88,2088) ,(1,'aaqqqa',100,1999);
-INSERT INTO g_price_list(`gp_id`,`gpi_id`) VALUES (1,1),(4,1),(6,1),(7,1),(1,2),(4,2),(5,2),(7,2),(2,3),(6,3),(7,3);
 
 DROP TABLE IF EXISTS `g_price_list`;
 -- 商品组合价格连接表
@@ -238,6 +237,7 @@ CREATE TABLE  `g_price_list`(
   `gp_id` INT UNSIGNED NOT NULL  -- 商品价格属性ID
 )DEFAULT CHARSET =utf8 ENGINE=MyISAM;
 ALTER TABLE `g_price_list` ADD PRIMARY KEY (`gpi_id`,`gp_id`);
+INSERT INTO g_price_list(`gp_id`,`gpi_id`) VALUES (1,1),(4,1),(6,1),(7,1),(1,2),(4,2),(5,2),(7,2),(2,3),(6,3),(7,3);
 
 
 
