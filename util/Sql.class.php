@@ -263,7 +263,7 @@ class Sql
      *
      * @param $where Where 条件,必须是二维数组，子数组条件必须 columnName，type ，value，可选logic，mark
      *
-     * @param $values array 需要修改的字段必须是二维数组，子数组条件必须 columnName，type ，value
+     * @param $values array 需要修改的字段必须是二维数组，子数组条件必须 columnName，value,可选 type默认string
      *
      * @return bool 成功返回true，失败返回false
      *
@@ -360,8 +360,6 @@ class Sql
         $columns =substr($columns,0,strlen($columns)-1);
         $wen =substr($wen,0,strlen($wen)-1);
         $str ="INSERT INTO {$table} ({$columns}) VALUES ({$wen});";
-            print_r($data);
-        echo $type."<br>";
         $sql = $this->getConn();
         $sqlStmt = $sql->prepare($str);
         foreach($data as  $value){

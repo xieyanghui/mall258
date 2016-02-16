@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <script src="http://cdn.staticfile.org/jquery/2.1.1/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+    <script type="text/javascript" charset="UTF-8" src="<{$HTTP_HOST}>/js/inCheck.js"></script>
+    <script type="text/javascript" charset="UTF-8" src="<{$HTTP_HOST}>/js/main.js"></script>
+    <link rel="stylesheet" type="text/css" href="<{$HTTP_HOST}>/css/main.css"/>
+    <title>后台管理</title>
+    <style type="text/css">
+        body{
+            background-image: url('http://huiweixin.qiniudn.com/background.jpg');
+        }
+        #login_win{
+            width: 400px;
+            margin: 200px auto 0;
+        }
+        .validateRow >div{
+            float: left;
+        }
+        #validateMeg{
+            clear: both;
+        }
+        #validateImg:hover{
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body >
+    <form id="login_form" method="post" action="<{$HTTP_HOST}>/admin/server/adminLoginSer.php">
+        <div id="login_win" class="win">
+            <h1 class="win_head">后台管理系统</h1>
+            <div class="win_row"><label class='win_row_head' for="a_name">账号：</label><div><input id="a_name"  type="text" name="a_name" class="forms"/></div></div>
+            <div class="win_row"><label class='win_row_head' for="a_pwd">密码：</label><div><input id="a_pwd" type="password" name="a_pwd" class="forms"/></div></div>
+            <div class="win_row validateRow"><label class = 'win_row_head' for="validate">验证码：</label><div><input type ="text" id ="validate" name ="validate" class= "validate forms "/></div>
+                <div><img id="validateImg" src="<{$HTTP_HOST}>/server/validateSer.php?name=adminLoginCheck" /></div>
+                <div id="validateMeg"></div>
+            </div>
+            <div class="win_row"><div class="submit button">登录</div></div>
+        </div>
+    </form>
+
+</body>
+<script>
+    function succ(data){
+        toast(data.status,data.megs);
+        if(data.status){
+            setInterval(function(){
+                window.location.reload();
+            },2000);
+        }else{
+            $('#validateImg').attr("src", $('#validateImg').attr("src") + "&data=" + new Date().getTime());
+            $('#a_pwd').val("");
+            $('#validate').val("");
+        }
+
+       // alert(data.megs);
+    }
+    $(function () {
+        $('#validateImg').click(function () {
+            $(this).attr("src", $(this).attr("src") + "&data=" + new Date().getTime());
+        });
+        $.checks.checkform($("#login_form"), {
+            "async": {'success': succ},
+            "validate": {"name": "验证码",'location':'validateMeg', "check": ["noNULL"]},
+            "a_name": {"name": "用户名", "check": ["noSpechars", {"isLength": [6, 15]}]},
+            "a_pwd": {"name": "密码", "mags": {"success": "ok"}, "check": ["noSpechars", {"isLength": [6, 15]}]}
+        });
+    });
+</script>
+</html>

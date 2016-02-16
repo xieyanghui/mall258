@@ -1,36 +1,23 @@
-<?php
-/**
- * Created by PhpStorm.
- * User: 谢扬辉
- * Date: 2016/1/22
- * Time: 5:06
- */
-class A
-{
-    function __construct()
-    {
-        $a = func_get_args();
-        $i = func_num_args();
-        if (method_exists($this,$f='__construct'.$i)) {
-            call_user_func_array(array($this,$f),$a);
-        }
-    }
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <script src="http://cdn.staticfile.org/jquery/2.1.1/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+    <script type="text/javascript" charset="UTF-8" src="<{$HTTP_HOST}>/js/inCheck.js"></script>
+    <link rel="stylesheet" type="text/css" href="<{$HTTP_HOST}>/css/mian.css"/>
+    <title>后台管理</title>
+</head>
+<body >
+<div id="test">
+    <div>1</div>
+    <div>2</div>
+    <div>3</div>
+</div>
+</body>
+<script>
+    $(function () {
+        alert($('#test').children().first().html('aaa'));
 
-    function __construct1($a1)
-    {
-        echo('__construct with 1 param called: '.$a1.PHP_EOL);
-    }
-
-    function __construct2($a1,$a2)
-    {
-        echo('__construct with 2 params called: '.$a1.','.$a2.PHP_EOL);
-    }
-
-    function __construct3($a1,$a2,$a3)
-    {
-        echo('__construct with 3 params called: '.$a1.','.$a2.','.$a3.PHP_EOL);
-    }
-}
-
-?>
-<a href="/server/exitSer.php">aaa</a>
+    });
+</script>
+</html>

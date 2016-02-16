@@ -358,6 +358,7 @@ CREATE VIEW `g_price_v` AS
 	SELECT
 		`g_id`,
 		`gp_id`,
+		g_price.gtp_id as `gtp_id`,
 		`gp_name`,
 		`gtp_name`
 	FROM gt_price,g_price WHERE g_price.gtp_id = gt_price.gtp_id;

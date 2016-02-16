@@ -127,7 +127,6 @@ class Admin
     {
         $sql = new Sql;
         $where =new Where('a_id',$id,'int');
-        //$sqls = "SELECT `a_id`, `a_name`,`a_reg`,`aa_nick`,`a_img`,`a_nick` FROM `admin`,`admin_auth` WHERE admin_auth.aa_id =admin.aa_id AND  `a_id` = $id";
         return $sql->select('admin_info_v',array('a_id','a_name','a_reg','aa_nick','a_img','a_nick'),$where);
     }
 
@@ -169,14 +168,12 @@ class Admin
     public function adminLogin($name, $pwd, $ip)
     {
         $sql = new Sql;
-        //$row = $sql->queryLine("SELECT `a_id` ,`a_nick` ,`aa_id`,`a_img` FROM `admin` WHERE `a_name` = '$name' and `a_pwd` ='$pwd'");
-        //$row['auth'] = array();
         $where = new Where('a_name',$name);
         $where->setWhere('a_pwd',$pwd);
         $row = $sql->select('admin','a_id',$where);
-        if (count($row) > 1) {
+       // print_r($row);
+        if (count($row) >= 1) {
             $sql->insert('admin_login_log',array('a_id'=>'int','ip'=>'string'),array($row['a_id'],$ip));
-            //$sql->execute("INSERT INTO `adminLoginLog`(a_id,ip) VALUES (" . $row['a_id'] . ",'" . $ip . "')");
             return $this->queryAdmin($row['a_id']);
         } else {
             return false;
@@ -336,7 +333,7 @@ class Admin
    //增加日志
     private function addAdminLog($aId,$key,$content){
         $sql = new Sql();
-        return $sql->insert('admin_log',array('a_id'=>'int','alog_key'=>'string','alog_content'=>'string'),array($aId,$key,$content));
+        return $sql->insert('admin_log',array('a_id'=>'int','alog_key','alog_content'),array($aId,$key,$content));
     }
 
     /**
