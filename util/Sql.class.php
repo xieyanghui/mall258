@@ -170,7 +170,8 @@ class Sql
         }
         $str ="SELECT {$columns} FROM {$table} {$where->getPrepWhere()}";
         $sql = $this->getConn();
-        $sqlStmt = $sql->prepare($str);
+        $sqlStmt = $sql->stmt_init();
+        $sqlStmt->prepare($str);
         //echo $str;
         if($where->getPrepType() ==""){
             $sqlStmt->execute();
@@ -185,30 +186,36 @@ class Sql
             }
             $sqlStmt->execute();
         }
-
-//       $res = $sqlStmt->execute();
-//        if(!$res){
-//            if(Config::Debug){
-//                echo '错误：'.$sqlStmt->error;
-//            }
-//            $sqlStmt->close();
-//            $sql->close();
-//            return false;
-//        }
-        $result = $sqlStmt->get_result();
-        $data = array();
-        while($r = $result->fetch_assoc()){
-            array_push($data,$r);
+        $result = array();
+        $md = $sqlStmt->result_metadata();
+        $params = array();
+        while($field = $md->fetch_field()) {
+            $params[] = &$result[$field->name];
         }
-        $result->close();
+        call_user_func_array(array($sqlStmt,'bind_result'),$params);
+        $ret = array();
+        while($sqlStmt->fetch()){
+            $mf = array();
+            foreach($result as $k => $v){
+                $mf[$k] = $v;
+            }
+            $ret[] = $mf;
+        }
+
+//        $result = $sqlStmt->get_result();
+//        $data = array();
+//        while($r = $result->fetch_assoc()){
+//            array_push($data,$r);
+//        }
+//        $result->close();
         $sqlStmt->free_result();
         $sqlStmt->close();
         $sql->close();
-        if(empty($data[1])){
-            if(empty($data[0])){return null;}
-            return $data[0];
+        if(empty($ret[1])){
+            if(empty($ret[0])){return null;}
+            return $ret[0];
         }
-        return $data;
+        return $ret;
     }
 
 
@@ -235,14 +242,6 @@ class Sql
             return false;
         }
         $res = $sqlStmt->execute();
-//        if($sqlStmt->affected_rows == 0){
-//            if(Config::Debug){
-//                echo '错误：没有这条记录';
-//            }
-//            $sqlStmt->close();
-//            $sql->close();
-//            return false;
-//        }
         if(!$res){
             if(Config::Debug){
                 echo '错误：'.$sqlStmt->error;

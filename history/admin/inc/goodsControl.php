@@ -18,4 +18,4 @@ foreach ($_SESSION['admininfo']['auth'] as $value) {
 }
 $sma = new Smartys;
 $sma->assign("auth",$auth);
-$sma->display('goodsControl.htm');
+$sma->display('menuGoods.htm');

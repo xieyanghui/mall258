@@ -23,6 +23,13 @@
             display: block;
             float: left;
         }
+        .top_left >li{
+            float: left;
+            font-weight: bold;
+            height: 50px;
+            line-height: 50px;
+            margin-left: 5px;
+        }
          .top_menus {
             height: 50px;
             display: block;
@@ -80,20 +87,20 @@
             overflow: hidden;
         }
 
-        /*#menus > ul > li {*/
-            /*height: 40px;*/
-            /*width: 200px;*/
-            /*line-height: 40px;*/
-            /*text-align: center;*/
-            /*font-size: 24px;*/
-            /*margin: 10px 25px;*/
-            /*cursor: pointer;*/
-            /*background-color: #BCEDF2;*/
-        /*}*/
+        #menus > ul > li {
+            height: 40px;
+            width: 200px;
+            line-height: 40px;
+            text-align: center;
+            font-size: 24px;
+            margin: 10px 25px;
+            cursor: pointer;
+            background-color: #BCEDF2;
+        }
 
-        /*#menus > ul > li:hover {*/
-            /*background-color: #50D1DE;*/
-        /*}*/
+        #menus > ul > li:hover {
+            background-color: #50D1DE;
+        }
         .admin_head_s {
             width: 50px;
             height: 50px;
@@ -105,11 +112,12 @@
 <div id="tops">
     <ul class = 'top_left'>
         <li><img class="admin_head_s" src="<{$admin['a_img']}>"/></li>
+        <li><{$admin['a_nick']}>欢迎您</li>
     </ul>
     <ul class = 'top_menus'>
         <li class='top_menu' href="<{$HTTP_HOST}>/server/exitSer.php">安全退出</li>
 
-        <li class='top_menu' href="./inc/systemSet.php">系统设置</li>
+        <li class='top_menu' href="./inc/menuSystem.php">系统设置</li>
 
         <li class='top_menu' href="11">消息中心</li>
 
@@ -119,7 +127,7 @@
 
         <{if $auth['service'] }>  <li class='top_menu' href="11">在线客服</li> <{/if}>
 
-        <{if $auth['goods'] }>  <li class='top_menu' href="./inc/goodsControl.php">商品管理</li> <{/if}>
+        <{if $auth['goods'] }>  <li class='top_menu' href="./inc/menuGoods.php">商品管理</li> <{/if}>
     </ul>
 </div>
 <input type="hidden" id = "sortCache" sortLine="" value="">

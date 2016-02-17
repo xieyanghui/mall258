@@ -53,13 +53,19 @@
             $('#a_pwd').val("");
             $('#validate').val("");
         }
-
-       // alert(data.megs);
     }
     $(function () {
+
+        $(document).keydown(function(event){
+            if(event.keyCode ==13){
+                $("input:focus").parents('form').submit();
+            }
+        });
+
         $('#validateImg').click(function () {
             $(this).attr("src", $(this).attr("src") + "&data=" + new Date().getTime());
         });
+
         $.checks.checkform($("#login_form"), {
             "async": {'success': succ},
             "validate": {"name": "验证码",'location':'validateMeg', "check": ["noNULL"]},

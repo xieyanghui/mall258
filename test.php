@@ -31,10 +31,11 @@ $admin = new Admin();
 //print_r($admin->getAdmin(0,4));
 
 //$admin->updateAdminPwd(1,md5("123456"),"aaa");
-//print_r($admin->getAdmin(1,4));
+print_r($admin->getAdmin(0,4));
 //$admin->searchAdmin(array('searchLine'=>'a_nick','key'=>'谢'),0,2);
+//print_r($sql->queryLine("SELECT * FROM `auth_list` WHERE al_id =2"));
 //print_r($admin->queryAdmin(2));
-print_r($admin->adminLogin('xieyang3hui',md5('123456'),'111'));
+//print_r($admin->adminLogin('xieyang3hui',md5('123456'),'111'));
 //$admin->addAdmin(array('a_name'=>'aaaa','a_pwd'=>'ddddd','a_nick'=>'bbbbb'));
 //$admin->updateAdmins(array('a_id'=>'3','a_name'=>'bb','a_pwd'=>'dddsss','a_nick'=>'aaabb'),1);
 //$auth = new Auth();
@@ -47,7 +48,8 @@ print_r($admin->adminLogin('xieyang3hui',md5('123456'),'111'));
 
 //$admin->updateAdminAuth(3,'',null,array(2,3,5,6,7,8,9111),1);
 //$admin->updateAdminImg(1,"aaaa");
-$goods = new Goods();
+//$goods = new Goods();
 //print_r($goods->getGoods(0,6));
 //print_r($goods->searchGoods(array('searchLine'=>'g_name','key'=>'一'),0,6));
 //print_r($goods->queryGoodsType(1));
+echo dirname($_SERVER['DOCUMENT_ROOT']);

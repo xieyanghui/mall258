@@ -5,7 +5,7 @@
       <paths name="mall258">
         <serverdata>
           <mappings>
-            <mapping local="$PROJECT_DIR$" web="/" />
+            <mapping deploy="mall258.com" local="$PROJECT_DIR$" web="/" />
           </mappings>
         </serverdata>
       </paths>
