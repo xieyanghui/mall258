@@ -81,6 +81,8 @@ class Admin
     {
         $sql = new Sql;
         $where = new Where('a_status',1);
+        if(empty($sortLine)){$sortLine = "a_id";}
+        if(empty($sort)){$sort = "asc";}
         $count = $sql->select('admin_info_v',"COUNT(*) as count",$where);
         $where->setWhereEnd("ORDER BY `$sortLine` $sort   limit $start,$sum");
         $data = $sql->select('admin_info_v',array('a_id','a_name','a_reg','aa_nick','a_img','a_nick'),$where);
@@ -107,6 +109,8 @@ class Admin
     {
         $sql = new Sql;
         $where =new Where($name['searchLine'],$name['key'],'string','AND','LIKE');
+        if(empty($sortLine)){$sortLine = "a_id";}
+        if(empty($sort)){$sort = "asc";}
         $where->setWhere('a_status',1);
         $count = $sql->select('admin_info_v',"COUNT(*) as count",$where);
         $where->setWhereEnd("ORDER BY `$sortLine` $sort   limit $start,$sum");

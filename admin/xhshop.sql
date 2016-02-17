@@ -23,7 +23,7 @@ ALTER TABLE `auth_list` ADD UNIQUE(`al_key`);
 ALTER TABLE `auth_list` MODIFY `al_id` INT UNSIGNED AUTO_INCREMENT;
 INSERT INTO `auth_list` (`al_key`,`al_nick`,`al_remark`) VALUES ('report','报表统计','营运状况'),('service','客服管理','管理客服'),('order','订单管理','订单处理'),('goods','商品管理','商品各种操作');
 INSERT INTO `auth_list` (`al_key`,`al_nick`,`al_remark`) VALUES ('admin','管理员管理',''),('log','系统日志','查看系统日志'),('adminAuth','管理员权限管理','');
-INSERT INTO `auth_list` (`al_key`,`al_nick`,`al_remark`) VALUES ('goods_type','商品类型管理',''),('goodsinfo','商品管理',''),('recommend','推荐商品管理','');
+INSERT INTO `auth_list` (`al_key`,`al_nick`,`al_remark`) VALUES ('goodsType','商品类型管理',''),('goodsInfo','商品管理',''),('goodsRecommend','推荐商品管理','');
 
 
 --  连接表

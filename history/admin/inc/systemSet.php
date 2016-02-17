@@ -22,5 +22,5 @@ $auth['adminAuth'] = Auth::inAdmin($_SESSION['admininfo']['a_id'],'adminAuth');
 $sma = new Smartys();
 
 $sma->assign('auth', $auth);
-$sma->display('systemSet.htm');
+$sma->display('menuSystem.htm');
 

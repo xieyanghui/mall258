@@ -17,7 +17,7 @@
 </style>
 <{if $pages['count'] ge 1 }>
 <div id='adminList' class='wins showwin'>
-    <span class="win_head">管理员列表</span>
+    <h1 class="win_head">管理员列表</h1>
     <ul>
         <li class='showlistle'>
             <span>登录账号</span>
@@ -36,7 +36,7 @@
         <{if $pages['count'] ge $pages['pageRow']+1}>
         <li class="showlistle">
             <div class="<{if $pages['page'] ge 1}> pages button <{else}> pagesoff <{/if}>">上一页</div>
-            <{section name=loop loop=$pages['pagess']}>
+            <{section name=loop loop=$pages['pages']}>
             <div class="<{if $pages['start']+$smarty.section.loop.index eq $pages['page']}>
                 pageis<{/if}>  pageSum button "><{$pages['start']+$smarty.section.loop.index+1 }>
             </div>
@@ -118,8 +118,6 @@
         toast(data.status, data.megs);
         $('#contents').load('./inc/sysAdmin.php');
     }
-    function bs() {
-    }
     $(function () {
         //新增管理员提交
         $('.submit').click(function () {
@@ -128,7 +126,7 @@
 
         //验证
         $.checks.checkform($('#addAdminForm'), {
-            "async": {'success': succ, 'beforeSend': bs},
+            "async": {'success': succ},
             "aName": {
                 "name": "登录名",
                 "check": ["noSpechars", {"isLength": [4, 20]}, {"isAjax": ["/server/iskeySer.php"]}]
