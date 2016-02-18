@@ -17,6 +17,7 @@ a:hover {
     color: red;
     cursor: pointer;
 }
+/*对话框*/
 #showdielogue {
     z-index: 1001;
     display: none;
@@ -94,7 +95,7 @@ a:hover {
 div.win {
     background-color: #FFFFFF;
     /*border-radius: 15px;*/
-    border: 2px solid #50D1DE;
+    border: 2px solid #80E5F0;
     overflow: hidden;
 }
 /*主窗口标题*/
@@ -247,14 +248,6 @@ li.showlistle {
 li.showListCons:hover {
     background-color: #80E5F0;
     cursor: pointer;
-}
-/*列表首行*/
-li.showlistle:first-child{
-    background-color: #80E5F0;
-}
-li.showlistle:first-child > span {
-    text-align: center;
-    font-weight: bold;
 }
 /*列表删除*/
 li.showlistle >span.delete,li.showlistle >div.delete {

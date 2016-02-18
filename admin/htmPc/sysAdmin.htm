@@ -1,31 +1,102 @@
 <style type="text/css">
-    div#adminList > ul > li.showlistle > span:first-child {
-        width: 120px;
+    #adminList li.list_row > span:first-child ,#adminList li.list_row_head > span:first-child {
+        width: 150px;
     }
 
-    div#adminList > ul > li.showlistle > span:nth-child(2) {
-        width: 100px;
+    #adminList li.list_row  > span:nth-child(2) ,#adminList li.list_row_head  > span:nth-child(2){
+        width: 150px;
     }
-
-    div#adminList > ul > li.showlistle > span:nth-child(3) {
-        width: 100px;
+    #adminList li.list_row >span:nth-child(3) , #adminList li.list_row_head >span:nth-child(3){
+        width: 140px;
     }
-
+    li.list_row >span.delete {
+        width: 28px;
+        height: 28px;
+        color : red;
+        float: left;
+        display: block;
+        text-align: center;
+        line-height: 28px;
+        font-size: 25px;
+        font-weight: bold;
+    }
+    .delete:hover{
+        cursor: pointer;
+        background-color: #a94442;
+    }
+    .list_row>span {
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
+        display: block;
+        float: left;
+        height: 28px;
+        border: 1px solid #80E5F0;
+        line-height: 28px;
+        font-size: 18px;
+    }
     div#addAdmin > div {
         width: 400px;
     }
+    .list_row{
+        overflow: hidden;
+    }
+    .list_row_hover{
+        background-color: #80E5F0;
+    }
+    #adminList{
+        margin-top: 10px;
+        float: left;
+    }
+    li.list_row_head {
+        text-align: center;
+        background-color: #80E5F0;
+        overflow: hidden;
+        height: 30px;
+        line-height: 30px;
+        font-weight: bold;
+    }
+    li.list_row_head >span{
+        font-size: 20px;
+        display: block;
+        float: left;
+
+    }
+    h1.list_head{
+        height: 40px;
+        display: block;
+        background-color: #50D1DE;
+        text-align: center;
+        line-height: 40px;
+        font-size: 30px;
+        font-weight: bold;
+        overflow: hidden;
+    }
+
+    li.list_row_search{
+        margin: 4px;
+        overflow: hidden;
+    }
+    li.list_row_search >div{
+        float: left;
+    }
+    .list_search{
+        height: 30px;
+        font-size: 18px;
+
+    }
 </style>
 <{if $pages['count'] ge 1 }>
-<div id='adminList' class='wins showwin'>
-    <h1 class="win_head">管理员列表</h1>
+<div id='adminList' class='win'>
+    <h1 class="list_head">管理员列表</h1>
     <ul>
-        <li class='showlistle'>
+        <li class='list_row_head'>
             <span>登录账号</span>
             <span>姓名</span>
             <span>权限级别</span>
         </li>
         <{section name=index loop=$row}>
-        <li class='showlistle showListCons '>
+        <li class='list_row'>
             <span title="<{$row[index]['a_name']}>"><{$row[index]['a_name']}></span>
             <span title="<{$row[index]['a_nick']}>"><{$row[index]['a_nick']}></span>
             <span title="<{$row[index]['aa_nick']}>"><{$row[index]['aa_nick']}></span>
@@ -34,7 +105,7 @@
         <{/section}>
 
         <{if $pages['count'] ge $pages['pageRow']+1}>
-        <li class="showlistle">
+        <li class="list_row_page">
             <div class="<{if $pages['page'] ge 1}> pages button <{else}> pagesoff <{/if}>">上一页</div>
             <{section name=loop loop=$pages['pages']}>
             <div class="<{if $pages['start']+$smarty.section.loop.index eq $pages['page']}>
@@ -44,17 +115,17 @@
             <div class="<{if $pages['page']+1 lt $pages['countRow']}> pages button <{else}> pagesoff <{/if}>">下一页</div>
         </li>
         <{/if}>
-        <li class="showlistle">
-            <div class="searchtext">
+        <li class="list_row_search">
+            <div>
                 <input type="text" class="forms" value="<{$pages['search']}>">
-                <select id="seacrhSelect">
-                    <option>登录账号</option>
+                <select id="search_select">
+                    <option >登录账号</option>
                     <option>姓名</option>
                     <option>权限级别</option>
                 </select>
             </div>
-            <div class="search button">搜索</div>
-            <div id="searchDelete" class="delete">×</div>
+            <div class="list_search button">搜索</div>
+            <div class="search_delete delete">×</div>
             <div class="pageRow">
                 <div>每页显示</div>
                 <span>3</span>
@@ -123,7 +194,14 @@
         $('.submit').click(function () {
             $(this).parents("form").submit();
         });
-
+        $('li.list_row:even ').css('background-color','#fff');
+        $('li.list_row:odd').css('background-color','#E0F8FB');
+        $('li.list_row').mouseover(function(){
+            $(this).children().addClass('list_row_hover');
+        });
+        $('li.list_row').mouseout(function(){
+            $(this).children().removeClass('list_row_hover');
+        });
         //验证
         $.checks.checkform($('#addAdminForm'), {
             "async": {'success': succ},
