@@ -54,7 +54,7 @@ class Admin
        // $row = $sql->queryLine("SELECT `a_id` from `admin` WHERE `a_id` =$id AND `a_pwd` ='$oldPwd'");
         $wh = new Where('a_id',$id,'int');
         $wh->setWhere('a_pwd',$oldPwd);
-        $data = $sql->select('admin','a_id',$wh);
+        $data = $sql->selectData('admin','a_id',$wh);
         print_r($data);
         if(!empty($data[0])){
             return $sql->update('admin',new Where('a_id',$id,'int'),array(array('columnName'=>'a_pwd','value'=>$newPwd,'type'=>'string')));
@@ -83,9 +83,9 @@ class Admin
         $where = new Where('a_status',1);
         if(empty($sortLine)){$sortLine = "a_id";}
         if(empty($sort)){$sort = "asc";}
-        $count = $sql->select('admin_info_v',"COUNT(*) as count",$where);
+        $count = $sql->selectLine('admin_info_v',"COUNT(*) as count",$where);
         $where->setWhereEnd("ORDER BY `$sortLine` $sort   limit $start,$sum");
-        $data = $sql->select('admin_info_v',array('a_id','a_name','a_reg','aa_nick','a_img','a_nick'),$where);
+        $data = $sql->selectData('admin_info_v',array('a_id','a_name','a_reg','aa_nick','a_img','a_nick'),$where);
         return array('count'=>$count['count'],'data'=>$data);
 
     }
@@ -112,9 +112,9 @@ class Admin
         if(empty($sortLine)){$sortLine = "a_id";}
         if(empty($sort)){$sort = "asc";}
         $where->setWhere('a_status',1);
-        $count = $sql->select('admin_info_v',"COUNT(*) as count",$where);
+        $count = $sql->selectLine('admin_info_v',"COUNT(*) as count",$where);
         $where->setWhereEnd("ORDER BY `$sortLine` $sort   limit $start,$sum");
-        $data = $sql->select('admin_info_v',array('a_id','a_name','a_reg','aa_nick','a_img','a_nick'),$where);
+        $data = $sql->selectData('admin_info_v',array('a_id','a_name','a_reg','aa_nick','a_img','a_nick'),$where);
        // $count = $sql->queryLine("SELECT COUNT(`a_id`) as count FROM `admin`,`admin_auth` WHERE admin_auth.aa_id = admin.aa_id   AND  ".$name['searchLine']." LIKE  '%".$name['key']."%'");
       //  $data = $sql->queryData("SELECT `a_id`,`a_name`,`a_reg`,`aa_nick`,`a_img`,`a_nick` FROM `admin`,`admin_auth` WHERE admin_auth.aa_id = admin.aa_id   AND  ".$name['searchLine']." LIKE  '%".$name['key']."%'  ORDER BY `$sortLine` $sort   limit $start,$sum");
         return array('count'=>$count['count'],'data'=>$data);
@@ -131,7 +131,7 @@ class Admin
     {
         $sql = new Sql;
         $where =new Where('a_id',$id,'int');
-        return $sql->select('admin_info_v',array('a_id','a_name','a_reg','aa_nick','a_img','a_nick'),$where);
+        return $sql->selectLine('admin_info_v',array('a_id','a_name','a_reg','aa_nick','a_img','a_nick'),$where);
     }
 
     /**
@@ -174,7 +174,7 @@ class Admin
         $sql = new Sql;
         $where = new Where('a_name',$name);
         $where->setWhere('a_pwd',$pwd);
-        $row = $sql->select('admin','a_id',$where);
+        $row = $sql->selectLine('admin','a_id',$where);
        // print_r($row);
         if (count($row) >= 1) {
             $sql->insert('admin_login_log',array('a_id'=>'int','ip'=>'string'),array($row['a_id'],$ip));
@@ -265,9 +265,9 @@ class Admin
         $sql = new Sql;
         $where =new Where('aa_nick',$name,'string','AND','LIKE');
         $where->setWhere('aa_remark',$name,'string','OR','LIKE');
-        $count = $sql->select('admin_auth',"COUNT(*) as count",$where);
+        $count = $sql->selectLine('admin_auth',"COUNT(*) as count",$where);
         $where->setWhereEnd("ORDER BY `$sortLine` $sort   limit $start,$sum");
-        $data = $sql->select('admin_auth',array('aa_id','aa_nick','aa_remark'),$where);
+        $data = $sql->selectData('admin_auth',array('aa_id','aa_nick','aa_remark'),$where);
         // $count = $sql->queryLine("SELECT COUNT(`a_id`) as count FROM `admin`,`admin_auth` WHERE admin_auth.aa_id = admin.aa_id   AND  ".$name['searchLine']." LIKE  '%".$name['key']."%'");
         //  $data = $sql->queryData("SELECT `a_id`,`a_name`,`a_reg`,`aa_nick`,`a_img`,`a_nick` FROM `admin`,`admin_auth` WHERE admin_auth.aa_id = admin.aa_id   AND  ".$name['searchLine']." LIKE  '%".$name['key']."%'  ORDER BY `$sortLine` $sort   limit $start,$sum");
         return array('count'=>$count['count'],'data'=>$data);
@@ -296,9 +296,9 @@ class Admin
         $sql = new Sql;
         // $sqls = "SELECT ``,`a_name`,`a_reg`,`aa_nick`,`a_img`,`a_nick` FROM `admin_info_v` WHERE admin_auth.aa_id = admin.aa_id ORDER BY `$sortLine` $sort   limit $start,$sum";
         $where = new Where();
-        $count = $sql->select('admin_auth',"COUNT(*) as count",$where);
+        $count = $sql->selectLine('admin_auth',"COUNT(*) as count",$where);
         $where->setWhereEnd("ORDER BY `$sortLine` $sort   limit $start,$sum");
-        $data = $sql->select('admin_auth',array('aa_id','aa_nick','aa_remark'),$where);
+        $data = $sql->selectData('admin_auth',array('aa_id','aa_nick','aa_remark'),$where);
         return array('count'=>$count['count'],'data'=>$data);
 //        $sql = new Sql;
 //        if(empty($sortLine)){$sortLine = "aa_id"; }
@@ -323,8 +323,8 @@ class Admin
     public function queryAdminAuth($aaId){
         $sql = new Sql;
         $where = new Where('aa_id',$aaId,'int');
-        $row = $sql->select('admin_auth',array('aa_id', 'aa_nick','aa_remark'),$where);
-        $data = $sql->select('admin_auth_list','al_id',$where);
+        $row = $sql->selectLine('admin_auth',array('aa_id', 'aa_nick','aa_remark'),$where);
+        $data = $sql->selectData('admin_auth_list','al_id',$where);
         //$row = $sql->queryLine("SELECT `aa_id`, `aa_nick`,`aa_remark` FROM `admin_auth` WHERE `aa_id` = $aa_id");
         //$data = $sql->queryData("SELECT `al_id` FROM `admin_authList` WHERE `aa_id` = $aa_id;");
         //$row = null;

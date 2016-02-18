@@ -23,7 +23,6 @@ a:hover {
     display: none;
     position: fixed;
     width: 300px;
-    height: 150px;
     /*border-radius: 10px;*/
     background-color: #E0F8FB;
     top: 200px;
@@ -42,10 +41,12 @@ a:hover {
 }
 #showdielogue >div:nth-child(2){
     height: 60px;
+    padding: 5px;
+
 }
 #showdielogue >div:nth-child(3) >div{
     float: left;
-    margin-left: 50px;
+    margin: 10px 0 10px 50px;
 }
 /*吐司*/
 #toast {
@@ -224,6 +225,7 @@ div.autoRow > div {
     padding-bottom: 2px;
     margin: 5px;
 }
+
 div.autoRow >div >label{
     display: block;
     height: 20px;
@@ -237,43 +239,6 @@ div.autoRow >div >label{
 div.wins > ul>li:first-child{
     margin-top: -2px;
 }
-    /*列表样式*/
-li.showlistle {
-    height: 32px;
-    display: block;
-    position: relative;
-    margin: 2px 0;
-}
-/*列表数据*/
-li.showListCons:hover {
-    background-color: #80E5F0;
-    cursor: pointer;
-}
-/*列表删除*/
-li.showlistle >span.delete,li.showlistle >div.delete {
-    width: 28px;
-    height: 28px;
-    color : red;
-    float: left;
-    display: block;
-    text-align: center;
-    line-height: 28px;
-    font-size: 25px;
-    font-weight: bold;
-}
-/*列表行内*/
-li.showlistle > span {
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    overflow: hidden;
-    display: block;
-    float: left;
-    height: 28px;
-    border: 1px solid #80E5F0;
-    margin: 1px;
-    line-height: 28px;
-    font-size: 18px;
-}
 
 /*按钮*/
 .button {
@@ -286,7 +251,6 @@ li.showlistle > span {
     background-color: #50D1DE;
     line-height: 40px;
 }
-/*按钮*/
 .button:hover {
     cursor: pointer;
     background-color: #07A1B1;
@@ -296,90 +260,10 @@ li.showlistle > span {
     float: left;
     margin-left: 100px;
 }
-
 .submit {
     float: right;
     margin-right: 100px;
 }
-/*列表分页上下页*/
-li.showlistle >div.pages{
-    float: left;
-    height: 30px;
-    line-height: 30px;
-    font-size: 15px;
-}
-/*列表分页冻结状态*/
-li.showlistle >div.pagesoff{
-    float: left;
-    height: 30px;
-    width: 75px;
-    line-height: 30px;
-    font-size: 15px;
-    text-align: center;
-    background-color:#AAAAAA ;
-    /*border-radius: 10px;*/
-}
-/*列表分页数字*/
-li.showlistle >div.pageSum{
-    font-weight: 100;
-    width: 12px;
-    float: left;
-    height: 18px;
-    line-height: 18px;
-    font-size: 10px;
-    margin: 8px 2px;
-    /*border-radius: 2px;*/
-}
-/*列表分页选中状态*/
-li.showlistle >div.pageis{
-    font-weight:bold;
-}
-/*列表分页显示每页多少行*/
-li.showlistle >div.pageRow{
-    float: left;
-    height: 20px;
-    width: 70px;
-    font-size: 9px;
-}
-/*列表分页显示每页多少行标签*/
-li.showlistle >div.pageRow>div{
-    width: 100%;
-    float: left;
-}
-/*列表分页显示每页多少行按钮*/
-li.showlistle >div.pageRow>span{
-    float: left;
-    width: 10px;
-    display: block;
-    margin: 0px 3px;
-}
-li.showlistle >div.pageRow>span:hover{
-    cursor: pointer;
-    background-color: #07A1B1;
-}
-/*搜索行*/
-li.showlistle >div.search{
-    height: 30px;
-    line-height: 30px;
-    font-size: 15px;
-    width: 60px;
-    float: left;
-}
-/*搜索文本*/
-li.showlistle >div.searchtext{
-    float: left;
-    margin-top: 4px;
-    margin-right: 4px;
-}
-#searchDelete:hover{
-    cursor: pointer;
-    background-color: #07A1B1;
-}
-div.searchtext > input[type='text'] {
-    width: 100px;
-}
-
-
 div#adminHeadImg{
     float: left;
 }
@@ -405,4 +289,184 @@ div#imgUp {
     width: 0;
     height: 100%;
     background-color: #07A1B1;
+}
+
+/*列表删除框样式*/
+li.list_row >span.delete{
+    width: 28px;
+    height: 28px;
+    color : red;
+    float: left;
+    display: block;
+    text-align: center;
+    line-height: 28px;
+    font-size: 25px;
+    font-weight: bold;
+}
+li.list_row >span.delete:hover{
+    cursor: pointer;
+    background-color: #a94442;
+}
+
+/*列表单元格样式*/
+li.list_row>span {
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    display: block;
+    float: left;
+    height: 28px;
+    border: 1px solid #80E5F0;
+    line-height: 28px;
+    font-size: 18px;
+}
+div#addAdmin > div {
+    width: 400px;
+}
+/*列表样式*/
+li.list_row{
+    overflow: hidden;
+}
+li.list_row_hover{
+    background-color: #80E5F0;
+}
+li.list_row_odd{
+    background-color:#E0F8FB;
+}
+li.list_row_even{
+    background-color: #fff;
+}
+/*列表列名样式*/
+li.list_row_head {
+    text-align: center;
+    background-color: #80E5F0;
+    overflow: hidden;
+    height: 30px;
+    line-height: 30px;
+    font-weight: bold;
+}
+li.list_row_head >span{
+    font-size: 20px;
+    display: block;
+    float: left;
+
+}
+
+/*列表主标题样式*/
+h1.list_head{
+    height: 40px;
+    display: block;
+    background-color: #50D1DE;
+    text-align: center;
+    line-height: 40px;
+    font-size: 30px;
+    font-weight: bold;
+    overflow: hidden;
+}
+/*列表子搜索*/
+li.list_row_search{
+    margin: 4px;
+    height: 40px;
+    line-height: 40px;
+    overflow: hidden;
+
+}
+li.list_row_search >*{
+    float: left;
+    margin: 5px;
+}
+/*输入框样式*/
+.form_div{
+    display: block;
+    padding: 3px 5px;
+    outline:none;
+    border: 1px solid #50D1DE;
+    height: 20px;
+}
+
+/*列表搜索框样式*/
+#search_value{
+    width: 100px;
+}
+/*列表搜索框列名选择样式*/
+#search_select{
+    width:85px;
+    height: 28px;
+}
+/*列表搜索按钮样式*/
+#list_search{
+    height: 30px;
+    width: 60px;
+    line-height: 30px;
+    font-size: 14px;
+}
+/*列表取消搜索按钮样式*/
+#search_delete{
+    width: 28px;
+    height: 28px;
+    color : red;
+    float: left;
+    display: block;
+    text-align: center;
+    line-height: 28px;
+    font-size: 25px;
+    font-weight: bold;
+    border: 1px solid #50D1DE;
+}
+#search_delete:hover{
+    background-color: #50D1DE;
+    cursor: pointer;
+}
+/*每页显示多少行*/
+span.list_row_sum{
+    display: inline-block;
+    line-height: 30px;
+    text-align: center;
+    height: 30px;
+    width: 20px;
+    margin-left: 0;
+    margin-right: 0;
+}
+span.list_row_sumOn,span.list_row_sum:hover{
+    text-decoration:underline;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+/*列表分页行*/
+.list_row_page{
+    overflow: hidden;
+    height:30px;
+    margin: 5px;
+}
+.list_row_page>div{
+    float: left;
+    margin-left: 10px;
+}
+/*上下页按钮*/
+.pageButton{
+    height: 30px;
+    width: 60px;
+    line-height: 30px;
+    font-size: 14px;
+}
+/*上下页失效*/
+.pageOff{
+    background-color:#ABADB3;
+    text-align: center;
+    font-weight: bold;
+}
+/*数字选择页*/
+.pageNumber{
+    width: 25px;
+    height: 25px;
+    line-height: 25px;
+    text-align: center;
+    border-radius: 25px;
+    margin-top: 5px;
+}
+.pageOn,.pageNumber:hover{
+    background-color: #BCEDF2;
+    font-weight: bold;
+    cursor: pointer;
 }

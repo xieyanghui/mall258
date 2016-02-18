@@ -1,0 +1,174 @@
+<style type="text/css">
+    #adminList li.list_row > span:first-child ,#adminList li.list_row_head > span:first-child {
+        width: 150px;
+    }
+
+    #adminList li.list_row  > span:nth-child(2) ,#adminList li.list_row_head  > span:nth-child(2){
+        width: 150px;
+    }
+    #adminList li.list_row >span:nth-child(3) , #adminList li.list_row_head >span:nth-child(3){
+        width: 140px;
+    }
+    #adminList{
+        margin-top: 10px;
+        float: left;
+    }
+    #adminAddShow{
+        width: 200px;
+        float: left;
+        margin: 10px 20px;
+    }
+</style>
+<{if $page['count'] ge 1 || $page['search'] ne "" }>
+<div id='adminList' class='win'>
+    <h1 class="list_head">管理员列表<{$page['pageRow']}></h1>
+    <form id = 'list_form'>
+        <input type="hidden" name="sort" value="<{$page['sort']['key']}>" />
+        <input type="hidden" name="sortLine" value="<{$page['sort']['sortLine']}>" />
+        <input type="hidden" name="search" value="<{$page['search']['key']}>" />
+        <input type="hidden" name="searchLine" value="<{$page['search']['searchLine']}>" />
+        <input type="hidden" name="page" value="<{$page['page']}>" />
+        <input type="hidden" name="pageRow" value="<{$page['pageRow']}>" />
+    </form>
+    <ul>
+        <li class='list_row_head'>
+            <span>登录账号</span>
+            <span>姓名</span>
+            <span>权限级别</span>
+        </li>
+        <{section name=index loop=$row}>
+        <li class='list_row'>
+            <span title="<{$row[index]['a_name']}>"><{$row[index]['a_name']}></span>
+            <span title="<{$row[index]['a_nick']}>"><{$row[index]['a_nick']}></span>
+            <span title="<{$row[index]['aa_nick']}>"><{$row[index]['aa_nick']}></span>
+            <span class="delete" value="<{$row[index]['a_id']}>">×</span>
+        </li>
+        <{/section}>
+
+        <{if $page['count'] ge $page['pageRow']+1}>
+        <li class="list_row_page">
+            <div class="  pageButton  <{if $page['page'] ge 1}>button<{else}> pageOff <{/if}>">上一页</div>
+            <{section name=loop loop=$page['pages']}>
+            <div class="<{if $page['start']+$smarty.section.loop.index eq $page['page']}>
+                pageOn<{/if}>  pageNumber"><{$page['start']+$smarty.section.loop.index+1 }>
+            </div>
+            <{/section}>
+            <div class=" pageButton <{if $page['page']+1 lt $page['countPages']}>  button<{else}> pageOff <{/if}>">下一页</div>
+        </li>
+        <{/if}>
+        <li class="list_row_search">
+            <input type="text" id="search_value" class="form_div" placeholder="搜索关键字" value="<{$page['search']['key']}>">
+            <select id="search_select" class="form_div">
+                <option >登录账号</option>
+                <option>姓名</option>
+                <option>权限级别</option>
+            </select>
+            <div id = "list_search" class="button">搜索</div>
+            <div id = "search_delete" class="delete">×</div>
+                <span class="list_row_sum" title="每页显示3行">3</span>
+                <span class="list_row_sum" title="每页显示10行">10</span>
+                <span class="list_row_sum" title="每页显示15行">15</span>
+                <span class="list_row_sum" title="每页显示20行">20</span>
+        </li>
+    </ul>
+</div>
+<{/if}>
+<div id="adminAddShow" class="button">增加管理员</div>
+<div id = 'CRUD'></div>
+<script type="text/javascript">
+    $(function () {
+
+        $('li.list_row:even ').addClass('list_row_even');
+        $('li.list_row:odd').addClass('list_row_odd');
+        $('li.list_row').mouseover(function(){
+            $(this).children().addClass('list_row_hover');
+        });
+        $('li.list_row').mouseout(function(){
+            $(this).children().removeClass('list_row_hover');
+        });
+
+        $("span.list_row_sum").map(function(){
+            if($(this).html() ==$('#list_form').children("input[name='pageRow']").val()){
+                $(this).addClass("list_row_sumOn");
+            }
+        });
+
+        $('#search_select >option').map(function(){
+            if($(this).html() ==$('#list_form').children("input[name='searchLine']").val()){
+                $(this).parent().val($(this).html());
+            }
+        });
+        //排序
+        $("li.list_row_head > span").click(function () {
+            var sortLine = $('#list_form').children("input[name='sortLine']");
+            var sort = $('#list_form').children("input[name='sort']");
+            if(sortLine.val() == $(this).html()){
+                if(sort.val() == "DESC"){
+                    sort.val("ASC");
+                }else{
+                    sort.val("DESC");
+                }
+            }else{
+                sortLine.val($(this).html());
+                sort.val("DESC");
+            }
+            $('#contents').load('./inc/adminInfo.php',$('#list_form').serialize());
+        });
+
+        //列表搜索
+        $("#list_search").click(function () {
+            if($('#search_value').val() !=""){
+                $('#list_form').children("input[name='page']").val('0');
+                $('#list_form').children("input[name='searchLine']").val($("#search_select").val());
+                $('#list_form').children("input[name='search']").val($('#search_value').val());
+                $('#contents').load('./inc/adminInfo.php',$('#list_form').serialize());
+            }
+        });
+
+        //列表取消搜索
+        $("div#search_delete").click(function () {
+            $('#list_form').children("input[name='search']").val("");
+            $('#contents').load('./inc/adminInfo.php',$('#list_form').serialize());
+        });
+        //列表每页多少汗设置
+        $("span.list_row_sum").click(function () {
+            $('#list_form').children("input[name='page']").val("0");
+            $('#list_form').children("input[name='pageRow']").val($(this).html());
+            $('#contents').load('./inc/adminInfo.php',$('#list_form').serialize());
+        });
+        //列表选页
+        $("div.pageNumber").click(function () {
+            $('#list_form').children("input[name='page']").val(parseInt($(this).html()) - 1);
+        $('#contents').load('./inc/adminInfo.php',$('#list_form').serialize());
+        });
+        //列表翻页
+        $("div.pageButton").click(function () {
+           if($(this).hasClass('pageOff')){
+               return;
+           }
+            if ($(this).html() == "下一页") {
+                $('#list_form').children("input[name='page']").val($("div.pageOn").html());
+            } else {
+                $('#list_form').children("input[name='page']").val(parseInt($("div.pageOn").html()) - 2);
+            }
+            $('#contents').load('./inc/adminInfo.php',$('#list_form').serialize());
+        });
+
+        //删除管理员
+        $('.list_row > span.delete').click(function(){
+            var self = $(this);
+            showdielogue('确定要删除吗?','删除之之后很严重哦',function(){
+                $.getJSON("./server/adminDelete.php?name="+self.attr('value'),function(data){
+                    toast(data.status,data.megs);
+                    $('#contents').load('./inc/adminInfo.php',$('#list_form').serialize());
+                });
+            });
+
+        });
+    });
+    $(function(){
+        $('#adminAddShow').click(function(){
+            $('#CRUD').load('./inc/adminAdd.php');
+        });
+    });
+</script>

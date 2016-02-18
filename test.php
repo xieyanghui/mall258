@@ -31,11 +31,15 @@ $admin = new Admin();
 //print_r($admin->getAdmin(0,4));
 
 //$admin->updateAdminPwd(1,md5("123456"),"aaa");
-print_r($admin->getAdmin(0,4));
+print_r($admin->getAdmin(25,40));
 //$admin->searchAdmin(array('searchLine'=>'a_nick','key'=>'谢'),0,2);
 //print_r($sql->queryLine("SELECT * FROM `auth_list` WHERE al_id =2"));
 //print_r($admin->queryAdmin(2));
 //print_r($admin->adminLogin('xieyang3hui',md5('123456'),'111'));
+//for($i = 1 ;$i< 30;$i++){
+//
+//    $admin->addAdmin(array('a_name'=>'aaaa'.$i,'a_pwd'=>'ddddd','a_nick'=>'bbbbb'),1,"测试用的");
+//}
 //$admin->addAdmin(array('a_name'=>'aaaa','a_pwd'=>'ddddd','a_nick'=>'bbbbb'));
 //$admin->updateAdmins(array('a_id'=>'3','a_name'=>'bb','a_pwd'=>'dddsss','a_nick'=>'aaabb'),1);
 //$auth = new Auth();

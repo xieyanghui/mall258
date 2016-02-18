@@ -98,4 +98,4 @@ $sma = new Smartys;
 $sma->assign('pages', $pages);
 $sma->assign('row' ,$row);
 $sma->assign('authList',$authList);
-$sma->display('sysAuth.htm');
+$sma->display('adminAuth.htm');

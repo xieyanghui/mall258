@@ -5,13 +5,9 @@
  * Date: 2015/11/14
  * Time: 19:10
  */
-if (!isset($_SESSION)) {
-    session_start();
-};
-if (empty($_SESSION['admininfo'])) {
-    exit('登录超时');
-}
-include_once($_SERVER['DOCUMENT_ROOT'] . '/tool/autoload.php');
+if (!isset($_SESSION)) {session_start();}
+if (empty($_SESSION['adminInfo'])) {exit('登录超时');}
+include_once($_SERVER['DOCUMENT_ROOT'] . '/util/autoload.php');
 
 //if(!empty($_GET['sort'])){
 //    echo $_GET['sort'];
@@ -98,4 +94,4 @@ $sma = new Smartys;
 $sma->assign('pages', $pages);
 $sma->assign('row' ,$row);
 $sma->assign('authList',$authList);
-$sma->display('sysAuth.htm');
+$sma->display('adminAuth.htm');

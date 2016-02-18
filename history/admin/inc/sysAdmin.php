@@ -92,4 +92,4 @@ $sma->assign('pages', $pages);
 $sma->assign('row' ,$row);
 $sma->assign('defaultImg',Config::ADMIN_HEAD_DEFAULT);
 $sma->assign('adminAuth',$adminAuth);
-$sma->display('sysAdmin.htm');
+$sma->display('adminInfo.htm');

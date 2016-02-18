@@ -17,12 +17,8 @@ if($sp->isSearch()){
 }else{
     $data = call_user_func_array(array($admin,'getAdmin'),$sp->getParam());//  获取全部管理员列表
 }
-$adminAuth = $admin->getAdminAuth();    //  获取权限组列表
-$sp->getPages($data['count']);
 
 $sma = new Smartys;
-$sma->assign('pages', $sp->getPages($data['count']));
+$sma->assign('page', $sp->getPages($data['count']));
 $sma->assign('row' ,$data['data']);
-$sma->assign('defaultImg',Config::ADMIN_HEAD_DEFAULT);
-$sma->assign('adminAuth',$adminAuth);
-$sma->display('sysAdmin.htm');
+$sma->display('adminInfo.htm');

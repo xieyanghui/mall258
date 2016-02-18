@@ -11,7 +11,7 @@ class SearchPage{
     private $page = 0;   //当前第几页
     private $pageRow = 10; //每页几行
     private $search = "";  //搜索关键字
-    private $sort = null;  //排序方法
+    private $sort = "";  //排序方法
     private $sortLine = null;//排序的列
     private $searchLine = null;//搜索关键列
     public function __construct($columnName,$get)
@@ -40,6 +40,13 @@ class SearchPage{
             }
         }
     }
+    private function tropeColumn($Line){
+        foreach($this->columnName as $key=>$value){
+            if($Line == $key){
+                return $value;
+            }
+        }
+    }
     public function isSearch(){
         if($this->search != null){
             return true;
@@ -62,25 +69,28 @@ class SearchPage{
         return $params;
     }
     public function getPages($count){
-        $pages['page'] = $this->page;//当前第几页
-        $pages['pageRow'] = $this->pageRow;  //每页几行
-        $pages['count'] = (int)$count;  //总行数
-        $pages['pages'] =  5; //需要显示的页数
-        $pages['start'] = 0; //开始显示的页数
+        $page['page'] = $this->page;//当前第几页
+        $page['pageRow'] = $this->pageRow;  //每页几行
+        $page['count'] = (int)$count;  //总行数
+        $page['pages'] =  5; //需要显示的页数
+        $page['start'] = 0; //开始显示的页数
+        $page['countPages'] = ceil($count/$this->pageRow);//总页面数
+        $page['search'] = array('searchLine'=>"",'key'=>"");// 搜索
+        $page['sort'] = array('sortLine'=>"",'key'=>""); //排序
         if($this->search != null){
-            $pages['search']  = array('searchLine'=>$this->searchLine,'key'=>$this->search);
-        }else{
-            $pages['search'] = "";
+            $page['search']  = array('searchLine'=>$this->tropeColumn($this->searchLine),'key'=>$this->search);
         }
-        $pages['countPages'] = ceil($count/$this->pageRow);
-        if($pages['countPages'] < $pages['pages']){  //当总页数小于显示的页数
-            $pages['pages'] = $pages['countPages'];
-        }elseif($pages['countPages'] -$this->page < ceil($pages['pages']/2) ){
-            $pages['start'] = $pages['countPages'] -$pages['pages'];
-        }elseif(($this->page+1) >= ceil($pages['pages']/2) ) {
-            $pages['start'] = ($this->page+1) - ceil($pages['pages']/2);
+        if($this->sort != null){
+            $page['sort']  = array('sortLine'=>$this->tropeColumn($this->sortLine),'key'=>$this->sort);
         }
-        return $pages;
+        if($page['countPages'] < $page['pages']){  //当总页数小于显示的页数
+            $page['pages'] = $page['countPages'];
+        }elseif($page['countPages'] -$this->page < ceil($page['pages']/2) ){
+            $page['start'] = $page['countPages'] -$page['pages'];
+        }elseif(($this->page+1) >= ceil($page['pages']/2) ) {
+            $page['start'] = ($this->page+1) - ceil($page['pages']/2);
+        }
+        return $page;
     }
 }
 
