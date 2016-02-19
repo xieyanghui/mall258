@@ -2,17 +2,12 @@
     #adminAdd{
         position: absolute;
         z-index: 100;
-
-    }
-    #backgrounds{
-        position: absolute;
-        z-index: 99;
-        opacity:0.4;
+        width: 500px;
+        overflow: hidden;
     }
 </style>
-<div id = "backgrounds"></div>
 <form action="./server/adminAdd.php" method="post" id="adminAddForm">
-    <div id='adminAdd' class='win'>
+    <div id='adminAdd' class='win show_win'>
         <h1 class="win_head">添加管理员</h1>
         <div class="win_con">
             <label class ="win_con_head">登录名</label>
@@ -62,7 +57,7 @@
         $('#contents').load('./inc/sysAdmin.php');
     }
     $(function(){
-
+        reset(500);
         $('#backgrounds').css();
         //新增管理员提交
         $('.submit').click(function () {

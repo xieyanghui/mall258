@@ -16,7 +16,7 @@
             background-color: #50D1DE;
             position: fixed;
             top: 0;
-            z-index: 999;
+            z-index: 10;
         }
         .top_left{
             height: 50px;
@@ -77,7 +77,7 @@
         #menus {
             position: fixed;
             top: 50px;
-            z-index: 999;
+            z-index: 10;
         }
 
         #contents {
@@ -106,6 +106,16 @@
             height: 50px;
             border-radius: 25px;
         }
+        .backdrop{
+            top:0;
+            position: fixed;
+            background-color: #000000;
+            opacity: 0.3;
+            z-index: 20;
+        }
+        #con{
+            float: left;
+        }
     </style>
 </head>
 <body>
@@ -130,8 +140,9 @@
         <{if $auth['goods'] }>  <li class='top_menu' href="./inc/menuGoods.php">商品管理</li> <{/if}>
     </ul>
 </div>
-<input type="hidden" id = "sortCache" sortLine="" value="">
 <div id="con"></div>
+<div class= "backdrop"></div>
+<div id = 'CRUD'></div>
 </body>
 <script>
     $(function () {
@@ -144,4 +155,5 @@
         });
     });
 </script>
+
 </html>

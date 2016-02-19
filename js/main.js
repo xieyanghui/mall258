@@ -31,10 +31,10 @@ function toast(sru, meg, time) {
 function reset(thiswidth,top) {
     var top  =top || "200px";
     var thiswidth = thiswidth || 200;
-    $(".backhead").css("width", $(window).width() + "px");
-    $(".backhead").css("height", $(window).height() + "px");
-    $('.showcon').css("top", top);
-    $('.showcon').css("left", ($(window).width() / 2 - thiswidth) + "px");
+    $(".backdrop").css("width", $(window).width() + "px");
+    $(".backdrop").css("height", $(window).height() + "px");
+    $('.show_win').css("top", top);
+    $('.show_win').css("left", ($(window).width() / 2 - (thiswidth/2)) + "px");
 }
 /**
 * 消息对话框
