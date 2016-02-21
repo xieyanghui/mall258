@@ -8,25 +8,25 @@
 </style>
 <form action="./server/adminAdd.php" method="post" id="adminAddForm">
     <div id='adminAdd' class='win show_win'>
-        <h1 class="win_head">添加管理员</h1>
-        <div class="win_con">
-            <label class ="win_con_head">登录名</label>
-            <div class ="win_con_input"><input tabindex="1" type="text" name="aName" class="forms"/></div>
+        <h1 class="win_head">添加管理员 <div class="show_win_close">×</div></h1>
+        <div class="win_row">
+            <label class ="win_row_head">登录名</label>
+            <div class ="win_row_input"><input tabindex="1" type="text" name="a_name" class="form_div"/></div>
         </div>
-        <div class="win_con">
-            <label class ="win_con_head">姓名</label>
-            <div class ="win_con_input"><input tabindex="2" type="text" name="aNick" class="forms"/></div>
+        <div class="win_row">
+            <label class ="win_row_head">姓名</label>
+            <div class ="win_row_input"><input tabindex="2" type="text" name="a_nick" class="form_div"/></div>
         </div>
-        <div class="win_con">
-            <label class ="win_con_head">密码</label>
-            <div class ="win_con_input"><input tabindex="3" type="password" name="pwd" class="forms"/></div>
+        <div class="win_row">
+            <label class ="win_row_head">密码</label>
+            <div class ="win_row_input"><input tabindex="3" type="password" name="a_pwd" class="form_div"/></div>
         </div>
-        <div class ="win_conAuto">
-            <label class ="win_con_head" >头像</label>
-            <div class ="win_con_con">
+        <div class ="win_row_auto">
+            <label class ="win_row_head" >头像</label>
+            <div class ="win_row_con">
                 <div id="adminHeadImg">
-                    <img src="<{$defaultImg}>?imageView2/5/w/75/h/75"/>
-                    <input  type="hidden" name="img"/>
+                    <img src="<{$adminHeadDefault}>?imageView2/5/w/75/h/75"/>
+                    <input  type="hidden" name="a_img"/>
                 </div>
                 <div class="uploadImg">
                     <div id="imgUp" class="button">选择图片</div>
@@ -34,19 +34,20 @@
                 </div>
             </div>
         </div>
-        <div class ="win_conAuto">
-            <label class ="win_con_head" >管理员级别</label>
-            <div class ="win_con_con">
+        <div class ="win_row_auto">
+            <label class ="win_row_head" >管理员级别</label>
+            <div class ="win_row_con">
                 <{section name=index loop=$adminAuth}>
                 <label title="<{$adminAuth[index]['aa_remark']}>">
-                    <input name="asminAuth" tabindex="4" type="radio" value="<{$adminAuth[index]['aa_id']}>"/>
+                    <input name="adminAuth" tabindex="4" type="radio" value="<{$adminAuth[index]['aa_id']}>"/>
                     <{$adminAuth[index]['aa_nick']}>
                 </label>
                 <{/section}>
             </div>
         </div>
 
-        <div>
+        <div class="win_row">
+            <div class="button cancel">取消</div>
             <div class="submit button">提交</div>
         </div>
     </div>
@@ -54,51 +55,36 @@
 <script>
     function succ(data) {
         toast(data.status, data.megs);
-        $('#contents').load('./inc/sysAdmin.php');
+        $('#contents').load('./inc/adminInfo.php');
+        $('#CRUD').children().remove();
+        $('.backdrop').hide();
     }
     $(function(){
-        reset(500);
-        $('#backgrounds').css();
         //新增管理员提交
         $('.submit').click(function () {
             $(this).parents("form").submit();
         });
         //验证
-        $.checks.checkform($('#addAdminForm'), {
+        $.checks.checkform($('#adminAddForm'), {
             "async": {'success': succ},
-            "aName": {
+            "a_name": {
                 "name": "登录名",
                 "check": ["noSpechars", {"isLength": [4, 20]}, {"isAjax": ["/server/iskeySer.php"]}]
-            }, "aNick": {
+            },
+            "a_nick": {
                 "name": "姓名",
                 "check": [{"isLength": [2, 20]}]
+            },
+            "a_pwd": {
+                "name": "密码",
+                "check": [{"isLength": [6, 20]}]
             }
-        });
-        //管理员详情
-        $("li.showListCons").click(function () {
-            $.get("./inc/sysAdminUpdate.php", {'name': $(this).children('span.delete').attr("value")}, function (data) {
-                $("body").append(data);
-                $('#sysAdminUpdatewin').slideDown(500);
-            });
-        });
-
-        //删除管理员
-        $("li.showListCons >span.delete").click(function (e) {
-            $slfe = $(this);
-            showdielogue("删除权限组", "确定要删除该权限组吗？删除之后该权限组的所有管理员都将丧失所有权限", function () {
-                $.get("./server/adminDelete.php", {'name': $slfe.attr("value")}, function (data) {
-                    //alert(data);
-                    toast(data.status, data.megs);
-                    $("#contents").load("./inc/sysAdmin.php");
-                }, "json");
-            });
-            e.stopPropagation();
         });
 
     });
     $(function(){
         //上传头像
-        var up = uploads.getUplad();
+        var up = getUpload();
         up.browse_button = "imgUp";
         //up.container = "adminHeadImg";
         up['init'].UploadProgress = function(up,file){
@@ -108,7 +94,7 @@
             var domain = up.getOption('domain');
             var res = JSON.parse(info);
             $("#adminHeadImg>img").attr("src", domain + "/" + res.key + "?imageView2/5/w/75/h/75");
-            $("#adminHeadImg>input[name='img']").val(domain + "/" + res.key);
+            $("#adminHeadImg>input[name='a_img']").val(domain + "/" + res.key);
             $("#bar").css("background-color","#50D1DE");
         };
         var uploader = Qiniu.uploader(up);

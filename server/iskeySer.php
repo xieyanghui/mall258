@@ -14,8 +14,8 @@ switch ($name) {
     case 'addAdminAuthForm.aaNick':
         $sql = "select * from AdminAuth where aa_nick ='$value'";
         break;
-    case 'addAdminForm.aName':
-        $sql = "select * from adminInfo where a_name ='$value'";
+    case 'adminAddForm.a_name':
+        $sql = "select * from admin where a_name ='$value'";
         break;
     default:
         break;

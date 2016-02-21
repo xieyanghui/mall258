@@ -1,38 +1,25 @@
 <?php
-if (!isset($_SESSION)) {
-    session_start();
-};
-if (empty($_SESSION['admininfo'])) {
-    header("location: ./");
-    exit;
-}
+if (!isset($_SESSION)) {session_start();};
+if (empty($_SESSION['adminInfo'])) {header("location: ./");exit('登录超时');}
 header("Content-type:text/html;charset=utf-8");
 
-//权限检查
-$aauth = true;
-foreach((array)$_SESSION['admininfo']['auth'] as $value){
-    if($value == 10003){
-        $aauth = false;
-    }
-}
-if($aauth){
-    $arr = array("status" => FALSE, "megs" => "权限不够");
-    exit(json_encode($arr));
+include_once($_SERVER['DOCUMENT_ROOT'] . '/util/autoload.php');
+if(!Auth::inAdmin($_SESSION['adminInfo']['a_id'],'adminAdd')){
+    exit(json_encode(array("status" => FALSE, "megs" => "权限不够！！")));
 }
 
 
-include_once($_SERVER['DOCUMENT_ROOT'] . '/tool/autoload.php');
-$admins["a_name"] = $_POST['aName'];
-$admins["a_nick"] = $_POST['aNick'];
-$admins["a_pwd"] = md5($_POST['pwd']);
-if(!empty($_POST['img'])){
-    $admins["a_img"] = $_POST['img'];
+$admin["a_name"] = $_POST['a_name'];
+$admin["a_nick"] = $_POST['a_nick'];
+$admin["a_pwd"] = md5($_POST['a_pwd']);
+if(!empty($_POST['a_img'])){
+    $admin["a_img"] = $_POST['a_img'];
 }
-$admins["aa_id"] = $_POST['asminAuth'];
+$admin["aa_id"] = $_POST['adminAuth'];
 
 
-$admin = new AdminInfo();
-$b = $admin->addAdmin($admins);
+$a = new Admin();
+$b = $a->addAdmin($admin,$_SESSION['adminInfo']['a_id'],'增加了 '.$admin["a_nick"].' 管理员');
 $arr = array("status" => FALSE, "megs" => "添加失败！！");
 if($b){
     $arr = array("status" => true, "megs" => "添加成功");

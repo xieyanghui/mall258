@@ -11,6 +11,6 @@ include_once($_SERVER['DOCUMENT_ROOT'] . '/util/autoload.php');
 if(!Auth::inAdmin($_SESSION['adminInfo']['a_id'],'adminAdd')){exit('权限不够!!');}
 $sma = new Smartys;
 $admin = new Admin();
-$sma->assign('authList',$admin->getAuthList());
+$sma->assign('adminAuth',$admin->getAdminAuth(0,100)['data']);
 $sma->assign('adminHeadDefault',Config::ADMIN_HEAD_DEFAULT);
 $sma->display('adminAdd.htm');

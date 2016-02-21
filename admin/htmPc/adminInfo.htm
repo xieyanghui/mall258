@@ -154,8 +154,26 @@
             $('#contents').load('./inc/adminInfo.php',$('#list_form').serialize());
         });
 
+
+    });
+    $(function(){
+        $('#adminAddShow').click(function(){
+            $('#CRUD').load('./inc/adminAdd.php',function(){
+                showWinInit(500);
+                $(".backdrop").show();
+                resizeWin(function(){
+                    showWinInit(500);
+                });
+                $('.show_win_close').click(function(){
+                    $('#CRUD').children().remove();
+                    $('.backdrop').hide();
+                });
+            });
+
+        });
+
         //删除管理员
-        $('.list_row > span.delete').click(function(){
+        $('.list_row > span.delete').click(function(e){
             var self = $(this);
             showdielogue('确定要删除吗?','删除之之后很严重哦',function(){
                 $.getJSON("./server/adminDelete.php?name="+self.attr('value'),function(data){
@@ -163,13 +181,21 @@
                     $('#contents').load('./inc/adminInfo.php',$('#list_form').serialize());
                 });
             });
-
+            e.stopPropagation();
         });
-    });
-    $(function(){
-        $('#adminAddShow').click(function(){
-            $('#CRUD').load('./inc/adminAdd.php');
 
+        $('.list_row').click(function(){
+            $('#CRUD').load('./inc/adminUpdate.php?name='+$(this).children('span.delete').attr('value'),function(){
+                showWinInit(500);
+                $(".backdrop").show();
+                resizeWin(function(){
+                    showWinInit(500);
+                });
+                $('.show_win_close ,.cancel').click(function(){
+                    $('#CRUD').children().remove();
+                    $('.backdrop').hide();
+                });
+            });
         });
     });
 </script>

@@ -28,4 +28,4 @@ foreach((array)$adminAuth as $key=> $value){
 $sma = new Smartys;
 $sma->assign('row' ,$row);
 $sma->assign('adminAuth',$adminAuth);
-$sma->display('sysAdminUpdate.htm');
+$sma->display('adminUpdate.htm');

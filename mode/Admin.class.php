@@ -131,7 +131,7 @@ class Admin
     {
         $sql = new Sql;
         $where =new Where('a_id',$id,'int');
-        return $sql->selectLine('admin_info_v',array('a_id','a_name','a_reg','aa_nick','a_img','a_nick'),$where);
+        return $sql->selectLine('admin_info_v',array('a_id','a_name','a_reg','aa_id','aa_nick','a_img','a_nick'),$where);
     }
 
     /**

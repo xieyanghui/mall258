@@ -1,11 +1,6 @@
 <?php
-if (!isset($_SESSION)) {
-    session_start();
-};
-if (empty($_SESSION['admininfo'])) {
-    header("location: ./");
-    exit;
-}
+if (!isset($_SESSION)) { session_start();};
+if (empty($_SESSION['adminInfo'])) { header("location: ./");exit('登录超时');}
 header("Content-type:text/html;charset=utf-8");
 
 //权限检查
@@ -21,7 +16,7 @@ if($aauth){
 }
 
 
-include_once($_SERVER['DOCUMENT_ROOT'] . '/tool/autoload.php');
+include_once($_SERVER['DOCUMENT_ROOT'] . '/util/autoload.php');
 $aa_id = $_POST['aaId'];
 $aa_nick = $_POST['aaNick'];
 $aa_remark = $_POST['aaRemark'];
