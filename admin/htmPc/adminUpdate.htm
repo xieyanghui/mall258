@@ -5,20 +5,27 @@
         width: 500px;
         overflow: hidden;
     }
+    .win_row_span{
+        display: block;
+        height: 30px;
+        line-height: 30px;
+        font-size: 20px;
+        font-weight: bold;
+    }
 </style>
 <form id="adminUpdateForm" action="./server/adminUpdate.php" method="post">
     <div id="adminUpdate" class="show_win win">
-        <input type="hidden" name="aId" value="<{$row['a_id']}>"/>
+        <input type="hidden" name="a_id" value="<{$row['a_id']}>"/>
         <h1 class="win_head">修改管理员权限
             <div class="show_win_close">×</div>
         </h1>
         <div class="win_row">
             <label class="win_row_head" >编号</label>
-            <div class="win_row_input"><span><{$row['a_id']}></span></div>
+            <div class="win_row_input"><span class="win_row_span" ><{$row['a_id']}></span></div>
         </div>
         <div class="win_row">
             <label class="win_row_head">管理员登录名</label>
-            <div class="win_row_input"> <span><{$row['a_name']}></span></div>
+            <div class="win_row_input"> <span class="win_row_span" ><{$row['a_name']}></span></div>
         </div>
         <div class="win_row" >
             <label class="win_row_head">管理员姓名</label>
@@ -28,7 +35,7 @@
                 <label class="win_row_head">管理员权限</label>
                 <div class="win_row_con">
                     <{section name=index loop=$adminAuth}>
-                    <label title="<{$adminAuth[index]['aa_remark']}>"><input  name="adminAuth"  type="radio" value="<{$adminAuth[index]['aa_id']}>" <{$adminAuth[index]['checked'] }> /><{$adminAuth[index]['aa_nick']}> </label>
+                    <label title="<{$adminAuth[index]['aa_remark']}>"><input  name="aa_id"  type="radio" value="<{$adminAuth[index]['aa_id']}>" <{$adminAuth[index]['checked'] }> /><{$adminAuth[index]['aa_nick']}> </label>
                     <{/section}>
                 </div>
             </div>
@@ -42,8 +49,7 @@
 <script type="text/javascript">
     function UpdateSucc(data){
         toast(data.status, data.megs);
-        $(".backhead").remove();
-        $('#contents').load('./inc/sysAdmin.php');
+        Resize.resizeF5('./inc/adminInfo.php');
     }
     $(function () {
         $(".submit").click(function () {

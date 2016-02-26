@@ -15,7 +15,7 @@ $admin["a_pwd"] = md5($_POST['a_pwd']);
 if(!empty($_POST['a_img'])){
     $admin["a_img"] = $_POST['a_img'];
 }
-$admin["aa_id"] = $_POST['adminAuth'];
+$admin["aa_id"] = $_POST['aa_id'];
 
 
 $a = new Admin();

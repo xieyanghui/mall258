@@ -25,7 +25,7 @@
 </style>
 <{if $page['count'] ge 1 || $page['search'] ne "" }>
 <div id='adminList' class='win'>
-    <h1 class="list_head">管理员列表></h1>
+    <h1 class="list_head">管理员列表</h1>
     <form id = 'list_form'>
         <input type="hidden" name="sort" value="<{$page['sort']['key']}>" />
         <input type="hidden" name="sortLine" value="<{$page['sort']['sortLine']}>" />
@@ -81,7 +81,9 @@
 
 <script type="text/javascript">
     $(function () {
-
+        var load =function(){
+            $('#contents').load('./inc/adminInfo.php',$('#list_form').serialize());
+        }
         $('li.list_row:even ').addClass('list_row_even');
         $('li.list_row:odd').addClass('list_row_odd');
         $('li.list_row').mouseover(function(){
@@ -116,7 +118,7 @@
                 sortLine.val($(this).html());
                 sort.val("DESC");
             }
-            $('#contents').load('./inc/adminInfo.php',$('#list_form').serialize());
+            load();
         });
 
         //列表搜索
@@ -125,25 +127,25 @@
                 $('#list_form').children("input[name='page']").val('0');
                 $('#list_form').children("input[name='searchLine']").val($("#search_select").val());
                 $('#list_form').children("input[name='search']").val($('#search_value').val());
-                $('#contents').load('./inc/adminInfo.php',$('#list_form').serialize());
+                load();
             }
         });
 
         //列表取消搜索
         $("div#search_delete").click(function () {
             $('#list_form').children("input[name='search']").val("");
-            $('#contents').load('./inc/adminInfo.php',$('#list_form').serialize());
+            load();
         });
         //列表每页多少汗设置
         $("span.list_row_sum").click(function () {
             $('#list_form').children("input[name='page']").val("0");
             $('#list_form').children("input[name='pageRow']").val($(this).html());
-            $('#contents').load('./inc/adminInfo.php',$('#list_form').serialize());
+            load();
         });
         //列表选页
         $("div.pageNumber").click(function () {
             $('#list_form').children("input[name='page']").val(parseInt($(this).html()) - 1);
-        $('#contents').load('./inc/adminInfo.php',$('#list_form').serialize());
+            load();
         });
         //列表翻页
         $("div.pageButton").click(function () {
@@ -155,25 +157,17 @@
             } else {
                 $('#list_form').children("input[name='page']").val(parseInt($("div.pageOn").html()) - 2);
             }
-            $('#contents').load('./inc/adminInfo.php',$('#list_form').serialize());
+            load();
         });
 
 
     });
     $(function(){
+        //增加管理员
         $('#adminAddShow').click(function(){
             $('#CRUD').load('./inc/adminAdd.php',function(){
-                showWinInit(500);
-                $(".backdrop").show();
-                resizeWin(function(){
-                    showWinInit(500);
-                });
-                $('.show_win_close').click(function(){
-                    $('#CRUD').children().remove();
-                    $('.backdrop').hide();
-                });
+                Resize.resizeAdd(500);
             });
-
         });
 
         //删除管理员
@@ -188,18 +182,10 @@
             e.stopPropagation();
         });
 
-
+        //修改管理员
         $('.list_row').click(function(){
             $('#CRUD').load('./inc/adminUpdate.php?name='+$(this).children('span.delete').attr('value'),function(){
-                showWinInit(500);
-                $(".backdrop").show();
-                resizeWin(function(){
-                    showWinInit(500);
-                });
-                $('.show_win_close ,.cancel').click(function(){
-                    $('#CRUD').children().remove();
-                    $('.backdrop').hide();
-                });
+                Resize.resizeAdd(500);
             });
         });
     });
