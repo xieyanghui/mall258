@@ -1,5 +1,5 @@
 
-/*
+/**
 * 吐司
 * sru bool值 true为成功 false 为失败
 * meg string 消息
@@ -23,7 +23,7 @@ function toast(sru, meg, time) {
     });
 }
 
-/*
+/**
 * 初始化弹出窗口
 * thiswidth int 需要弹出窗口的宽度
 * top   string  弹出窗口的高度；
@@ -36,6 +36,7 @@ function reset(thiswidth,top) {
     $('.showcon').css("top", top);
     $('.showcon').css("left", ($(window).width() / 2 - thiswidth) + "px");
 }
+
 /*
 * 消息对话框
 * title string  标题

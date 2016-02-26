@@ -6,22 +6,26 @@
     #adminList li.list_row  > span:nth-child(2) ,#adminList li.list_row_head  > span:nth-child(2){
         width: 150px;
     }
+
     #adminList li.list_row >span:nth-child(3) , #adminList li.list_row_head >span:nth-child(3){
         width: 140px;
     }
+
     #adminList{
         margin-top: 10px;
         float: left;
     }
+
     #adminAddShow{
         width: 200px;
         float: left;
         margin: 10px 20px;
     }
+
 </style>
 <{if $page['count'] ge 1 || $page['search'] ne "" }>
 <div id='adminList' class='win'>
-    <h1 class="list_head">管理员列表<{$page['pageRow']}></h1>
+    <h1 class="list_head">管理员列表></h1>
     <form id = 'list_form'>
         <input type="hidden" name="sort" value="<{$page['sort']['key']}>" />
         <input type="hidden" name="sortLine" value="<{$page['sort']['sortLine']}>" />
@@ -183,6 +187,7 @@
             });
             e.stopPropagation();
         });
+
 
         $('.list_row').click(function(){
             $('#CRUD').load('./inc/adminUpdate.php?name='+$(this).children('span.delete').attr('value'),function(){
