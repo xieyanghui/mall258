@@ -159,52 +159,11 @@ class Sql
      *
      */
     public function selectLine($table,$column,$where){
-        $columns="";        //列名集合
-        if(is_array($column)){
-            foreach($column as  $value){
-                $columns .=$value."  ," ;
-            }
-            $columns =substr($columns,0,strlen($columns)-1);
-        }else{
-            $columns = $column;
+        $ret = $this->selectData($table,$column,$where);
+        if(!empty($ret)){
+            return $ret[0];
         }
-        $str ="SELECT {$columns} FROM {$table} {$where->getPrepWhere()}";
-        $sql = $this->getConn();
-        $sqlStmt = $sql->stmt_init();
-        $sqlStmt->prepare($str);
-        //echo $str;
-        if($where->getPrepType() ==""){
-            $sqlStmt->execute();
-        }else{
-            if(!call_user_func_array(array($sqlStmt,"bind_param"),$this->refValues($where->getPrepArges()))){
-                if(Config::Debug){
-                    echo '语句或参数错误'.$str;
-                }
-                $sqlStmt->close();
-                $sql->close();
-                return false;
-            }
-            $sqlStmt->execute();
-        }
-        $result = array();
-        $md = $sqlStmt->result_metadata();
-        $params = array();
-        while($field = $md->fetch_field()) {
-            $params[] = &$result[$field->name];
-        }
-        call_user_func_array(array($sqlStmt,'bind_result'),$params);
-        $ret = array();
-        while($sqlStmt->fetch()){
-            $mf = array();
-            foreach($result as $k => $v){
-                $mf[$k] = $v;
-            }
-            $ret[] = $mf;
-        }
-        $sqlStmt->free_result();
-        $sqlStmt->close();
-        $sql->close();
-        return $ret[0];
+        return null;
     }
 
     /**

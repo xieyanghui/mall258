@@ -174,7 +174,7 @@
         $('.list_row > span.delete').click(function(e){
             var self = $(this);
             showdielogue('确定要删除吗?','删除之之后很严重哦',function(){
-                $.getJSON("./server/adminDelete.php?name="+self.attr('value'),function(data){
+                $.getJSON("./server/adminDeleteSer.php?name="+self.attr('value'),function(data){
                     toast(data.status,data.megs);
                     $('#contents').load('./inc/adminInfo.php',$('#list_form').serialize());
                 });

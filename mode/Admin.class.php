@@ -51,11 +51,9 @@ class Admin
     */
     public function updateAdminPwd($id,$oldPwd,$newPwd){
         $sql = new Sql;
-       // $row = $sql->queryLine("SELECT `a_id` from `admin` WHERE `a_id` =$id AND `a_pwd` ='$oldPwd'");
         $wh = new Where('a_id',$id,'int');
         $wh->setWhere('a_pwd',$oldPwd);
         $data = $sql->selectData('admin','a_id',$wh);
-        print_r($data);
         if(!empty($data[0])){
             return $sql->update('admin',new Where('a_id',$id,'int'),array(array('columnName'=>'a_pwd','value'=>$newPwd,'type'=>'string')));
         }else{
@@ -263,9 +261,11 @@ class Admin
      */
     public function searchAdminAuth($name,$start,$sum,$sortLine = "aa_id", $sort = "asc" ){
         $sql = new Sql;
-        $where =new Where('aa_nick',$name,'string','AND','LIKE');
-        $where->setWhere('aa_remark',$name,'string','OR','LIKE');
-        $count = $sql->selectLine('admin_auth',"COUNT(*) as count",$where);
+        $where =new Where('aa_nick',$name['key'],'string','AND','LIKE');
+        $where->setWhere('aa_remark',$name['key'],'string','OR','LIKE');
+        if(empty($sortLine)){$sortLine = "aa_id";}
+        if(empty($sort)){$sort = "asc";}
+        $count = $sql->selectLine('admin_auth',"COUNT(*) as count ",$where);
         $where->setWhereEnd("ORDER BY `$sortLine` $sort   limit $start,$sum");
         $data = $sql->selectData('admin_auth',array('aa_id','aa_nick','aa_remark'),$where);
         // $count = $sql->queryLine("SELECT COUNT(`a_id`) as count FROM `admin`,`admin_auth` WHERE admin_auth.aa_id = admin.aa_id   AND  ".$name['searchLine']." LIKE  '%".$name['key']."%'");
@@ -296,6 +296,8 @@ class Admin
         $sql = new Sql;
         // $sqls = "SELECT ``,`a_name`,`a_reg`,`aa_nick`,`a_img`,`a_nick` FROM `admin_info_v` WHERE admin_auth.aa_id = admin.aa_id ORDER BY `$sortLine` $sort   limit $start,$sum";
         $where = new Where();
+        if(empty($sortLine)){$sortLine = "aa_id";}
+        if(empty($sort)){$sort = "asc";}
         $count = $sql->selectLine('admin_auth',"COUNT(*) as count",$where);
         $where->setWhereEnd("ORDER BY `$sortLine` $sort   limit $start,$sum");
         $data = $sql->selectData('admin_auth',array('aa_id','aa_nick','aa_remark'),$where);
@@ -382,7 +384,7 @@ class Admin
     /**
      * 更新权限组
      *
-     * @param $aaId string 权限组ID
+     * @param $aaId int 权限组ID
      *
      * @param $name string 权限组名
      *

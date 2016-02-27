@@ -122,6 +122,7 @@ div.win_row {
 div.win_row_auto {
     overflow: hidden;
     margin-bottom: 20px;
+
 }
 /*主窗口的固定行里input样式*/
 div.win_row_input{
@@ -131,7 +132,7 @@ div.win_row_input{
 /*主窗口的自动增长行里的con样式*/
 div.win_row_con{
     border: 1px solid #50D1DE;
-    margin-left: 5px;
+    margin: 0 5px;
     padding: 3px;
     float: left;
 }
@@ -147,7 +148,16 @@ label.win_row_head {
     height: 30px;
     line-height: 30px;
 }
-
+label.row_con_head{
+    width: 80px;
+    text-align: right;
+    float: left;
+    color: #07A1B1;
+    font-size: 13px;
+    display: block;
+    height: 30px;
+    line-height: 30px;
+}
 .validate {
     width: 60px;
     margin-right: 5px;

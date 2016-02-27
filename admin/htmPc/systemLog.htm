@@ -1,27 +1,30 @@
 <style type="text/css">
-    #adminAuthList li.list_row > span:first-child ,#adminAuthList li.list_row_head > span:first-child {
-        width: 150px;
+    #adminList li.list_row > span:first-child ,#adminList li.list_row_head > span:first-child {
+        width: 120px;
     }
 
-    #adminAuthList li.list_row  > span:nth-child(2) ,#adminAuthList li.list_row_head  > span:nth-child(2){
-        width: 150px;
+    #adminList li.list_row  > span:nth-child(2) ,#adminList li.list_row_head  > span:nth-child(2){
+        width: 100px;
     }
 
-    #adminAuthList{
+    #adminList li.list_row >span:nth-child(3) , #adminList li.list_row_head >span:nth-child(3){
+        width: 200px;
+    }
+
+    #adminList li.list_row >span:nth-child(4) , #adminList li.list_row_head >span:nth-child(4){
+        width: 400px;
+    }
+
+    #adminList{
         margin-top: 10px;
         float: left;
     }
 
-    #adminAuthAddShow{
-        width: 200px;
-        float: left;
-        margin: 10px 20px;
-    }
 
 </style>
 <{if $page['count'] ge 1 || $page['search'] ne "" }>
-<div id='adminAuthList' class='win'>
-    <h1 class="list_head">权限组列表</h1>
+<div id='adminList' class='win'>
+    <h1 class="list_head">管理员列表</h1>
     <form id = 'list_form'>
         <input type="hidden" name="sort" value="<{$page['sort']['key']}>" />
         <input type="hidden" name="sortLine" value="<{$page['sort']['sortLine']}>" />
@@ -32,18 +35,20 @@
     </form>
     <ul>
         <li class='list_row_head'>
-            <span>权限级别</span>
-            <span>备注</span>
+            <span>事件</span>
+            <span>管理员</span>
+            <span>时间</span>
+            <span>详细内容</span>
         </li>
         <{section name=index loop=$row}>
         <li class='list_row'>
-            <span title="<{$row[index]['aa_nick']}>"><{$row[index]['aa_nick']}></span>
-            <span title="<{$row[index]['aa_remark']}>"><{$row[index]['aa_remark']}></span>
-            <span class="delete" value="<{$row[index]['aa_id']}>">×</span>
+            <span title="<{$row[index]['alog_key']}>"><{$row[index]['alog_key']}></span>
+            <span title="<{$row[index]['a_nick']}>"><{$row[index]['a_nick']}></span>
+            <span title="<{$row[index]['date']}>"><{$row[index]['date']}></span>
+            <span title="<{$row[index]['alog_content']}>"><{$row[index]['alog_content']}></span>
         </li>
         <{/section}>
 
-        <!--分页-->
         <{if $page['count'] ge $page['pageRow']+1}>
         <li class="list_row_page">
             <div class="  pageButton  <{if $page['page'] ge 1}>button<{else}> pageOff <{/if}>">上一页</div>
@@ -55,10 +60,13 @@
             <div class=" pageButton <{if $page['page']+1 lt $page['countPages']}>  button<{else}> pageOff <{/if}>">下一页</div>
         </li>
         <{/if}>
-
-        <!--搜索-->
         <li class="list_row_search">
             <input type="text" id="search_value" class="form_div" placeholder="搜索关键字" value="<{$page['search']['key']}>">
+            <select id="search_select" class="form_div">
+                <option >事件</option>
+                <option>管理员</option>
+                <option>详细内容</option>
+            </select>
             <div id = "list_search" class="button">搜索</div>
             <div id = "search_delete" class="delete">×</div>
             <span class="list_row_sum" title="每页显示3行">3</span>
@@ -66,18 +74,13 @@
             <span class="list_row_sum" title="每页显示15行">15</span>
             <span class="list_row_sum" title="每页显示20行">20</span>
         </li>
-
     </ul>
 </div>
 <{/if}>
-<div id="adminAuthAddShow" class="button">增加权限组</div>
-
 <script type="text/javascript">
-
-
     $(function () {
         var load =function(){
-            $('#contents').load('./inc/adminAuth.php',$('#list_form').serialize());
+            $('#contents').load('./inc/systemLog.php',$('#list_form').serialize());
         }
         $('li.list_row:even ').addClass('list_row_even');
         $('li.list_row:odd').addClass('list_row_odd');
@@ -88,13 +91,12 @@
             $(this).children().removeClass('list_row_hover');
         });
 
-        //设置每页显示默认值
         $("span.list_row_sum").map(function(){
             if($(this).html() ==$('#list_form').children("input[name='pageRow']").val()){
                 $(this).addClass("list_row_sumOn");
             }
         });
-        //设置搜索列默认值
+
         $('#search_select >option').map(function(){
             if($(this).html() ==$('#list_form').children("input[name='searchLine']").val()){
                 $(this).parent().val($(this).html());
@@ -156,33 +158,32 @@
             load();
         });
 
-
     });
-    $(function(){
-        //增加
-        $('#adminAuthAddShow').click(function(){
-            $('#CRUD').load('./inc/adminAuthAdd.php',function(){
-                Resize.resizeAdd(500);
-            });
-        });
-
-        //删除
-        $('.list_row > span.delete').click(function(e){
-            var self = $(this);
-            showdielogue('确定要删除吗?','删除之之后很严重哦',function(){
-                $.getJSON("./server/adminAuthDeleteSer.php?name="+self.attr('value'),function(data){
-                    toast(data.status,data.megs);
-                    $('#contents').load('./inc/adminAuth.php',$('#list_form').serialize());
-                });
-            });
-            e.stopPropagation();
-        });
-
-        //修改
-        $('.list_row').click(function(){
-            $('#CRUD').load('./inc/adminAuthUpdate.php?name='+$(this).children('span.delete').attr('value'),function(){
-                Resize.resizeAdd(500);
-            });
-        });
-    });
+//    $(function(){
+//        //增加管理员
+//        $('#adminAddShow').click(function(){
+//            $('#CRUD').load('./inc/adminAdd.php',function(){
+//                Resize.resizeAdd(500);
+//            });
+//        });
+//
+//        //删除管理员
+//        $('.list_row > span.delete').click(function(e){
+//            var self = $(this);
+//            showdielogue('确定要删除吗?','删除之之后很严重哦',function(){
+//                $.getJSON("./server/adminDeleteSer.php?name="+self.attr('value'),function(data){
+//                    toast(data.status,data.megs);
+//                    $('#contents').load('./inc/adminInfo.php',$('#list_form').serialize());
+//                });
+//            });
+//            e.stopPropagation();
+//        });
+//
+//        //修改管理员
+//        $('.list_row').click(function(){
+//            $('#CRUD').load('./inc/adminUpdate.php?name='+$(this).children('span.delete').attr('value'),function(){
+//                Resize.resizeAdd(500);
+//            });
+//        });
+//    });
 </script>

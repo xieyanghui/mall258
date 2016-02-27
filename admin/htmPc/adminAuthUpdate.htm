@@ -1,29 +1,30 @@
 <style type="text/css">
-    #adminAuthAdd{
+    #adminAuthUpdate{
         position: absolute;
         z-index: 100;
         width: 400px;
         overflow: hidden;
     }
 </style>
-<form action="./server/adminAuthAdd.php" method="post" id="adminAuthAddForm">
-    <div id='adminAuthAdd' class='win show_win'>
-        <h1 class="win_head">添加权限组 <div class="show_win_close">×</div></h1>
+<form action="./server/adminAuthUpdateSer.php" method="post" id="adminAuthUpdateForm">
+    <input type="hidden" name="aa_id" value="<{$row['aa_id']}>" />
+    <div id='adminAuthUpdate' class='win show_win'>
+        <h1 class="win_head">修改权限组 <div class="show_win_close">×</div></h1>
         <div class="win_row">
             <label class ="win_row_head">权限组名</label>
-            <div class ="win_row_input"><input tabindex="1" type="text" name="aa_nick" class="form_div"/></div>
+            <div class ="win_row_input"><input tabindex="1" value="<{$row['aa_nick']}>" type="text" name="aa_nick" class="form_div"/></div>
         </div>
         <div class="win_row">
             <label class ="win_row_head">备注</label>
-            <div class ="win_row_input"><input tabindex="2" type="text" name="aa_remark" class="form_div"/></div>
+            <div class ="win_row_input"><input tabindex="2" value="<{$row['aa_remark']}>" type="text" name="aa_remark" class="form_div"/></div>
         </div>
         <div class ="win_row_auto">
             <label class ="win_row_head" >权限列表</label>
             <div class ="win_row_con">
                 <{section name=index loop=$authList}>
-                <div title="<{$authList[index]['al_remark']}>">
-                    <input name="al_id[]" tabindex="3" type="checkbox" value="<{$authList[index]['al_id']}>"/>
-                    <{$authList[index]['al_nick']}>
+                <div >
+                    <label title="<{$authList[index]['al_remark']}>" ><input name="al_id[]" tabindex="3" type="checkbox" <{$authList[index]['checked']}> value="<{$authList[index]['al_id']}>"/> <{$authList[index]['al_nick']}></label>
+
                 </div>
                 <{/section}>
             </div>
@@ -46,7 +47,7 @@
             $(this).parents("form").submit();
         });
         //验证
-        $.checks.checkform($('#adminAuthAddForm'), {
+        $.checks.checkform($('#adminAuthUpdateForm'), {
             "async": {'success': succ}
         });
 

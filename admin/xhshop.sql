@@ -363,3 +363,13 @@ CREATE VIEW `g_price_v` AS
 		`gp_name`,
 		`gtp_name`
 	FROM gt_price,g_price WHERE g_price.gtp_id = gt_price.gtp_id;
+
+CREATE VIEW `admin_log_v` AS
+	SELECT
+		`alog_id`,
+		`alog_key`,
+		`alog_content`,
+		`date`,
+		admin_log.a_id as `a_id`,
+		`a_nick`
+	FROM admin_log,admin WHERE admin_log.a_id = admin.a_id;

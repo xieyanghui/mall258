@@ -39,6 +39,7 @@ class SearchPage{
                 return $key;
             }
         }
+        return '';
     }
     private function tropeColumn($Line){
         foreach($this->columnName as $key=>$value){
@@ -46,6 +47,7 @@ class SearchPage{
                 return $value;
             }
         }
+        return "";
     }
     public function isSearch(){
         if($this->search != null){

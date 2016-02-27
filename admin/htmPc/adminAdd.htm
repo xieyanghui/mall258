@@ -6,7 +6,7 @@
         overflow: hidden;
     }
 </style>
-<form action="./server/adminAdd.php" method="post" id="adminAddForm">
+<form action="./server/adminAddSer.php" method="post" id="adminAddForm">
     <div id='adminAdd' class='win show_win'>
         <h1 class="win_head">添加管理员 <div class="show_win_close">×</div></h1>
         <div class="win_row">
@@ -63,7 +63,7 @@
             $(this).parents("form").submit();
         });
         //验证
-        $.checks.checkform($('#adminAddForm'), {
+        $.checks.checkform($('#adminAddForm'),{
             "async": {'success': succ},
             "a_name": {
                 "name": "登录名",

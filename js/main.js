@@ -44,13 +44,13 @@ function showWinInit(thisWidth,top) {
 * */
 function showdielogue(title ,mage ,fun ){
     if ($('#showdielogue').length < 1) {
-        $('body').append("<div id = 'showdielogue'><span></span><div></div>" +
-            "<div><div class ='button'>取消</div><div class ='button'>确定</div></div></div>")
+        $('body').append("<div id = 'showdielogue'><span></span><div></div>" +"<div><div class ='button'>取消</div><div class ='button'>确定</div></div></div>");
     }
     $("#showdielogue >span").html(title);
     $("#showdielogue >div:first").html(""+mage);
     $('#showdielogue').css("left", ($(window).width() / 2 - 200) + "px");
     $("#showdielogue").show();
+    $("#showdielogue >div >div.button").unbind();
     $("#showdielogue >div >div.button").click(function(){
         if($(this).html() == "确定"){
             $("#showdielogue").hide();
@@ -60,32 +60,48 @@ function showdielogue(title ,mage ,fun ){
         }
     });
 }
-var resizeFuns = [];
-function resizeWin(fun){
-    if(!in_array(fun,resizeFuns)){
-        resizeFuns.push(fun);
-    }
-}
-$(window).resize(function(){
-    for (var fun in resizeFuns){
-        resizeFuns[fun]();
-    }
-});
-$(function(){
-    $(".submit").click(function(){
-        $(this).parents('form').submit();
-    });
-});
 
-function in_array(stringToSearch, arrayToSearch) {
-    for (var s = 0; s < arrayToSearch.length; s++) {
-       // var thisEntry = arrayToSearch[s].toString();
-        if (stringToSearch == arrayToSearch[s]) {
-            return true;
+
+var Resize = (function() {
+    var resizeFuns = [];
+    var resizeWin=function(fun){
+        if(!in_array(fun,resizeFuns)){
+            resizeFuns.push(fun);
+        }
+    };
+    var in_array = function(stringToSearch, arrayToSearch) {
+        for (var s = 0; s < arrayToSearch.length; s++) {
+            if (stringToSearch == arrayToSearch[s]) {
+                return true;
+            }
+        }
+        return false;
+    };
+    return {
+        resizeRun:function(){
+            for (var fun in resizeFuns){
+                resizeFuns[fun]();
+            }
+        },
+        resizeF5:function(url){
+            $('#contents').load(url);
+            $('#CRUD').children().remove();
+            $('.backdrop').hide();
+        },
+        resizeAdd:function(width){
+            showWinInit(width);
+            $(".backdrop").show();
+            resizeWin(function(){
+                showWinInit(width);
+            });
+            $('.show_win_close ,.cancel').click(function(){
+                $('#CRUD').children().remove();
+                $('.backdrop').hide();
+            });
         }
     }
-    return false;
-}
+})();
+$(window).resize(Resize.resizeRun);
 
 //上传模板
 function getUpload(){
