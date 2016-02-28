@@ -208,7 +208,7 @@ class Admin
         }
         $b = $sql->insert('admin',$columns,$values);
         if($b > 0){
-            return $this->addAdminLog($aId,'增加管理员',$meg);
+            return SystemLog::addSystemLog($aId,'增加管理员',$meg);
         }
         return false;
         //$sqls = "INSERT INTO admin" . $sql->addSqlState($arr, $this);
@@ -237,7 +237,7 @@ class Admin
             }
         }
         if($sql->update('admin',new Where('a_id',$admin['a_id'],'int'),$values)){
-            return $this->addAdminLog($aId,'修改管理员',$meg);
+            return SystemLog::addSystemLog($aId,'修改管理员',$meg);
         }else{
             return false;
         }
@@ -268,15 +268,8 @@ class Admin
         $count = $sql->selectLine('admin_auth',"COUNT(*) as count ",$where);
         $where->setWhereEnd("ORDER BY `$sortLine` $sort   limit $start,$sum");
         $data = $sql->selectData('admin_auth',array('aa_id','aa_nick','aa_remark'),$where);
-        // $count = $sql->queryLine("SELECT COUNT(`a_id`) as count FROM `admin`,`admin_auth` WHERE admin_auth.aa_id = admin.aa_id   AND  ".$name['searchLine']." LIKE  '%".$name['key']."%'");
-        //  $data = $sql->queryData("SELECT `a_id`,`a_name`,`a_reg`,`aa_nick`,`a_img`,`a_nick` FROM `admin`,`admin_auth` WHERE admin_auth.aa_id = admin.aa_id   AND  ".$name['searchLine']." LIKE  '%".$name['key']."%'  ORDER BY `$sortLine` $sort   limit $start,$sum");
         return array('count'=>$count['count'],'data'=>$data);
-//        $sql = new Sql;
-//        if(empty($sortLine)){$sortLine = "aa_id"; }
-//        $ro = $sql->queryLine("SELECT COUNT(`aa_id`)as count FROM `admin_auth` WHERE `aa_nick` LIKE '%$name%' OR  `aa_remark` LIKE '%$name%';");
-//         $data = $sql->queryData("SELECT `aa_id`, `aa_nick` ,`aa_remark` FROM `admin_auth` WHERE `aa_nick` LIKE '%$name%' OR  `aa_remark` LIKE '%$name%' ORDER BY `$sortLine` $sort LIMIT  $start ,$sum; ");
-//        $data[0]['count'] = $ro['count'];
-//        return $data;
+
     }
 
     /**
@@ -294,7 +287,6 @@ class Admin
      */
     public function getAdminAuth($start =0, $sum = 10 ,$sortLine = "aa_id", $sort = "asc"){
         $sql = new Sql;
-        // $sqls = "SELECT ``,`a_name`,`a_reg`,`aa_nick`,`a_img`,`a_nick` FROM `admin_info_v` WHERE admin_auth.aa_id = admin.aa_id ORDER BY `$sortLine` $sort   limit $start,$sum";
         $where = new Where();
         if(empty($sortLine)){$sortLine = "aa_id";}
         if(empty($sort)){$sort = "asc";}
@@ -302,10 +294,6 @@ class Admin
         $where->setWhereEnd("ORDER BY `$sortLine` $sort   limit $start,$sum");
         $data = $sql->selectData('admin_auth',array('aa_id','aa_nick','aa_remark'),$where);
         return array('count'=>$count['count'],'data'=>$data);
-//        $sql = new Sql;
-//        if(empty($sortLine)){$sortLine = "aa_id"; }
-//        $sqls = "SELECT `aa_id`, `aa_nick` ,`aa_remark` FROM `admin_auth` ORDER BY `$sortLine` $sort LIMIT  $start ,$sum; ";
-//        return $sql->queryData($sqls);
 }
 
     //权限列表
@@ -336,11 +324,6 @@ class Admin
         return $row;
     }
 
-   //增加日志
-    private function addAdminLog($aId,$key,$content){
-        $sql = new Sql();
-        return $sql->insert('admin_log',array('a_id'=>'int','alog_key','alog_content'),array($aId,$key,$content));
-    }
 
     /**
      * 增加权限组
@@ -365,7 +348,7 @@ class Admin
             array_push($data,array($aaId,$value));
         }
         if($sql->insert('admin_auth_list',array('aa_id'=>'int','al_id'=>'int'),$data)){
-            return $this->addAdminLog($aId,'增加权限组',$meg);
+            return SystemLog::addSystemLog($aId,'增加权限组',$meg);
         }
         return false;
        // $sqls = "INSERT INTO `admin_auth`(`aa_nick` ,`aa_remark`) VALUES ('$name','$remark') ;";
@@ -423,7 +406,7 @@ class Admin
             }
         }
         if($b){
-            $this->addAdminLog($aId,'更新了权限',$meg);
+            SystemLog::addSystemLog($aId,'更新了权限',$meg);
         }
         return $b;
     }
@@ -446,7 +429,7 @@ class Admin
         if($sql->delete('admin_auth_list',$where)){
             if($sql->update('admin',$where,array('columnName'=>'aa_id','type'=>'int','value'=>2))){
                 if($sql->delete('admin_auth',$where)){
-                    return $this->addAdminLog($aId,'删除权限组',$meg);
+                    return SystemLog::addSystemLog($aId,'删除权限组',$meg);
                 }
             }
         }

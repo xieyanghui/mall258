@@ -55,17 +55,17 @@ ALTER TABLE `admin` ADD UNIQUE (`a_name`);
 INSERT INTO `admin`(`a_name`,`a_pwd` ,`a_nick`,`aa_id`) VALUES('xieyanghui' , 'e10adc3949ba59abbe56e057f20f883e' ,'谢扬辉',1),('yefengxi' , 'e10adc3949ba59abbe56e057f20f883e' ,'逗比',2);
 
 -- 管理员日志
-DROP TABLE IF EXISTS `admin_log`;
-CREATE TABLE `admin_log`(
-	`alog_id` INT NOT NULL ,          -- 管理员日志 ID
+DROP TABLE IF EXISTS `system_log`;
+CREATE TABLE `system_log`(
+	`sl_id` INT NOT NULL ,          -- 管理员日志 ID
 	`a_id` INT UNSIGNED NOT NULL ,  -- 管理员ID
-	`alog_key` CHAR(20) NOT NULL ,  -- 事件KEY
-  `alog_content` VARCHAR(200) NOT NULL ,-- 事件详细
-	`date` TIMESTAMP DEFAULT NOW()    -- 事件时间
+	`sl_key` CHAR(20) NOT NULL ,  -- 事件KEY
+  `sl_content` VARCHAR(200) NOT NULL ,-- 事件详细
+	`sl_date` TIMESTAMP DEFAULT NOW()    -- 事件时间
 
 )DEFAULT CHARSET = utf8 ENGINE=MyISAM;
-ALTER TABLE `admin_log` ADD PRIMARY KEY (`alog_id`);
-ALTER TABLE `admin_log` MODIFY `alog_id` INT UNSIGNED AUTO_INCREMENT;
+ALTER TABLE `system_log` ADD PRIMARY KEY (`sl_id`);
+ALTER TABLE `system_log` MODIFY `sl_id` INT UNSIGNED AUTO_INCREMENT;
 
 -- 管理员登录日志
 DROP TABLE IF EXISTS `admin_login_log`;
@@ -364,12 +364,12 @@ CREATE VIEW `g_price_v` AS
 		`gtp_name`
 	FROM gt_price,g_price WHERE g_price.gtp_id = gt_price.gtp_id;
 
-CREATE VIEW `admin_log_v` AS
+CREATE VIEW `system_log_v` AS
 	SELECT
-		`alog_id`,
-		`alog_key`,
-		`alog_content`,
-		`date`,
-		admin_log.a_id as `a_id`,
+		`sl_id`,
+		`sl_key`,
+		`sl_content`,
+		`sl_date`,
+    system_log.a_id as `a_id`,
 		`a_nick`
-	FROM admin_log,admin WHERE admin_log.a_id = admin.a_id;
+	FROM system_log,admin WHERE system_log.a_id = admin.a_id;

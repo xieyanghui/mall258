@@ -33,10 +33,10 @@
             <h1 class="win_head">后台管理系统</h1>
             <div class="win_row"><label class='win_row_head' for="a_name">账号：</label><div class="win_row_input"><input id="a_name"  type="text" name="a_name" class="form_div"/></div></div>
             <div class="win_row"><label class='win_row_head' for="a_pwd">密码：</label><div class="win_row_input"><input id="a_pwd" type="password" name="a_pwd" class="form_div"/></div></div>
-            <div class="win_row validateRow"><label class = 'win_row_head' for="validate">验证码：</label><div class="win_row_input" ><input type ="text" id ="validate" name ="validate" class= "validate form_div "/></div>
-                <div><img id="validateImg" src="<{$HTTP_HOST}>/server/validateSer.php?name=adminLoginCheck" /></div>
-                <div id="validateMeg"></div>
-            </div>
+            <!--<div class="win_row validateRow"><label class = 'win_row_head' for="validate">验证码：</label><div class="win_row_input" ><input type ="text" id ="validate" name ="validate" class= "validate form_div "/></div>-->
+                <!--<div><img id="validateImg" src="<{$HTTP_HOST}>/server/validateSer.php?name=adminLoginCheck" /></div>-->
+                <!--<div id="validateMeg"></div>-->
+            <!--</div>-->
             <div class="win_row"><div class="submit button">登录</div></div>
         </div>
     </form>
@@ -56,7 +56,9 @@
         }
     }
     $(function () {
-
+        $('.submit').click(function () {
+            $(this).parents("form").submit();
+        });
         $(document).keydown(function(event){
             if(event.keyCode ==13){
                 $("input:focus").parents('form').submit();

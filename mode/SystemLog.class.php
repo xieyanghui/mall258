@@ -9,7 +9,7 @@ include_once($_SERVER['DOCUMENT_ROOT'] . "/util/autoload.php");
 class SystemLog{
     public static function addSystemLog($aId,$key,$content){
         $sql = new Sql();
-        return $sql->insert('admin_log',array('a_id'=>'int','alog_key','alog_content'),array($aId,$key,$content));
+        return $sql->insert('system_log',array('a_id'=>'int','sl_key','sl_content'),array($aId,$key,$content));
     }
     /**
      * 查询系统日志
@@ -26,14 +26,14 @@ class SystemLog{
      *
      * @return array 关联数组count总行数,data查询到的数据
      */
-    public function searchSystemLog($name,$start,$sum,$sortLine = "date", $sort = "asc" ){
+    public function searchSystemLog($name,$start,$sum,$sortLine = "sl_date", $sort = "asc" ){
         $sql = new Sql;
         $where =new Where($name['searchLine'],$name['key'],'string','AND','LIKE');
-        if(empty($sortLine)){$sortLine = "date";}
+        if(empty($sortLine)){$sortLine = "sl_date";}
         if(empty($sort)){$sort = "asc";}
-        $count = $sql->selectLine('admin_log_v',"COUNT(*) as count ",$where);
+        $count = $sql->selectLine('system_log_v',"COUNT(*) as count ",$where);
         $where->setWhereEnd("ORDER BY `$sortLine` $sort   limit $start,$sum");
-        $data = $sql->selectData('admin_log_v',array('alog_key','alog_content','a_nick','date'),$where);
+        $data = $sql->selectData('system_log_v',array('sl_key','sl_content','a_nick','sl_date'),$where);
         return array('count'=>$count['count'],'data'=>$data);
 
     }
@@ -51,14 +51,14 @@ class SystemLog{
      *
      * @return array 关联数组count总行数,data查询到的数据
      */
-    public function getSystemLog($start =0, $sum = 10 ,$sortLine = "date", $sort = "asc"){
+    public function getSystemLog($start =0, $sum = 10 ,$sortLine = "sl_date", $sort = "asc"){
         $sql = new Sql;
         $where = new Where();
-        if(empty($sortLine)){$sortLine = "date";}
+        if(empty($sortLine)){$sortLine = "sl_date";}
         if(empty($sort)){$sort = "asc";}
-        $count = $sql->selectLine('admin_log_v',"COUNT(*) as count",$where);
+        $count = $sql->selectLine('system_log_v',"COUNT(*) as count",$where);
         $where->setWhereEnd("ORDER BY `$sortLine` $sort   limit $start,$sum");
-        $data = $sql->selectData('admin_log_v',array('alog_key','alog_content','a_nick','date'),$where);
+        $data = $sql->selectData('system_log_v',array('sl_key','sl_content','a_nick','sl_date'),$where);
         return array('count'=>$count['count'],'data'=>$data);
     }
 }
