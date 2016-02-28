@@ -1,27 +1,46 @@
 <style type="text/css">
-    div#goodstypes > ul > li.showlistle > span:first-child {
-        width: 80px;
-    }
-
-    div#goodstypes > ul > li.showlistle > span:nth-child(2) {
+    #goodsTypeList li.list_row > span:first-child ,#goodsTypeList li.list_row_head > span:first-child {
         width: 150px;
     }
 
-    div#goodstypes > ul > li.showlistle > span:nth-child(3) {
-        width: 200px;
+    #goodsTypeList li.list_row  > span:nth-child(2) ,#goodsTypeList li.list_row_head  > span:nth-child(2){
+        width: 150px;
     }
+    #goodsTypeList li.list_row  > span:nth-child(3) ,#goodsTypeList li.list_row_head  > span:nth-child(3){
+        width: 250px;
+    }
+
+    #goodsTypeList{
+        margin-top: 10px;
+        float: left;
+    }
+
+    #goodsTypeAddShow{
+        width: 200px;
+        float: left;
+        margin: 10px 20px;
+    }
+
 </style>
-<{if $count ge 1 }>
-<div id='goodstypes' class='wins showwin'>
-    <span>商品类型</span>
+<{if $page['count'] ge 1 || $page['search'] ne "" }>
+<div id='goodsTypeList' class='win'>
+    <h1 class="list_head">商品类型列表</h1>
+    <form id = 'list_form'>
+        <input type="hidden" name="sort" value="<{$page['sort']['key']}>" />
+        <input type="hidden" name="sortLine" value="<{$page['sort']['sortLine']}>" />
+        <input type="hidden" name="search" value="<{$page['search']['key']}>" />
+        <input type="hidden" name="searchLine" value="<{$page['search']['searchLine']}>" />
+        <input type="hidden" name="page" value="<{$page['page']}>" />
+        <input type="hidden" name="pageRow" value="<{$page['pageRow']}>" />
+    </form>
     <ul>
-        <li class="showlistle">
+        <li class='list_row_head'>
             <span>编号</span>
             <span>商品类型名称</span>
             <span>备注</span>
         </li>
         <{section name=index loop=$row}>
-        <li class='showlistle showListCons'>
+        <li class='list_row'>
             <span title="<{$row[index]['gt_number']}>"><{$row[index]['gt_number']}></span>
             <span title="<{$row[index]['gt_name']}>"><{$row[index]['gt_name']}></span>
             <span title="<{$row[index]['gt_remark']}>"><{$row[index]['gt_remark']}></span>
@@ -30,141 +49,188 @@
         <{/section}>
 
         <!--分页-->
-        <{if $pages['count'] ge $pages['pageRow']+1}>
-        <li class="showlistle">
-            <div class="<{if $pages['page'] ge 1}> pages button <{else}> pagesoff <{/if}>">上一页</div>
-            <{section name=loop loop=$pages['pagess']}>
-            <div class="<{if $pages['start']+$smarty.section.loop.index eq $pages['page']}>
-                pageis<{/if}>  pageSum button "><{$pages['start']+$smarty.section.loop.index+1 }>
+        <{if $page['count'] ge $page['pageRow']+1}>
+        <li class="list_row_page">
+            <div class="  pageButton  <{if $page['page'] ge 1}>button<{else}> pageOff <{/if}>">上一页</div>
+            <{section name=loop loop=$page['pages']}>
+            <div class="<{if $page['start']+$smarty.section.loop.index eq $page['page']}>
+                pageOn<{/if}>  pageNumber"><{$page['start']+$smarty.section.loop.index+1 }>
             </div>
             <{/section}>
-            <div class="<{if $pages['page']+1 lt $pages['countRow']}> pages button <{else}> pagesoff <{/if}>">下一页</div>
+            <div class=" pageButton <{if $page['page']+1 lt $page['countPages']}>  button<{else}> pageOff <{/if}>">下一页</div>
         </li>
         <{/if}>
 
         <!--搜索-->
-        <li class="showlistle">
-            <div class="searchtext">
-                <input type="text" class="forms" value="<{$pages['search']}>">
-            </div>
-            <div class="search button">搜索</div>
-            <div id="searchDelete" class="delete">×</div>
-            <div class="pageRow">
-                <div>每页显示</div>
-                <span>3</span>
-                <span>10</span>
-                <span>15</span>
-                <span>20</span>
-            </div>
+        <li class="list_row_search">
+            <input type="text" id="search_value" class="form_div" placeholder="搜索关键字" value="<{$page['search']['key']}>">
+            <select id="search_select" class="form_div">
+                <option >编号</option>
+                <option>商品类型名称</option>
+                <option>备注</option>
+            </select>
+            <div id = "list_search" class="button">搜索</div>
+            <div id = "search_delete" class="delete">×</div>
+            <span class="list_row_sum" title="每页显示3行">3</span>
+            <span class="list_row_sum" title="每页显示10行">10</span>
+            <span class="list_row_sum" title="每页显示15行">15</span>
+            <span class="list_row_sum" title="每页显示20行">20</span>
         </li>
+
     </ul>
 </div>
-
 <{/if}>
-<form action="./server/goodsTypeAdd.php" method="post" id="goodsTypeAddForm">
-    <div id = "goodsTypeAdd"  class='wins showwin'>
-        <span>添加商品类型</span>
-        <div>
-            <lable>类型编号</lable>
-            <input type="text" name="typeNumber" class="forms"/></div>
-        <div>
-            <lable>类型名称</lable>
-            <input type="text" name="typeName" class="forms"/></div>
-        <div >
-            <lable>类型备注</lable>
-            <input type="text" name="typeRemark" class="forms"/></div>
-        <div class='texts'>
-            <lable>详细属性</lable>
-            <textarea name="typeProp" class="forms"/>
+<div id="goodsTypeAddShow" class="button">增加商品类型</div>
 
-            <div>用,分隔</div>
-        </div>
-        <div class='texts'>
-            <lable>价格属性</lable>
-            <textarea name="typePrice" class="forms"/>
-
-            <div>用,分隔，最多4个价格属性</div>
-        </div>
-        <div>
-            <div class="submit button">提交</div>
-        </div>
-    </div>
-</form>
 <script type="text/javascript">
-    function succ(data) {
-        toast(data.status, data.megs);
-        $('#contents').load('./inc/goodsType.php');
-    }
-    function bs() {}
+
+
     $(function () {
-
-        $('.submit').click(function () {
-            $(this).parents("form").submit();
+        var load =function(){
+            $('#contents').load('./inc/goodsType.php',$('#list_form').serialize());
+        }
+        $('li.list_row:even ').addClass('list_row_even');
+        $('li.list_row:odd').addClass('list_row_odd');
+        $('li.list_row').mouseover(function(){
+            $(this).children().addClass('list_row_hover');
+        });
+        $('li.list_row').mouseout(function(){
+            $(this).children().removeClass('list_row_hover');
         });
 
-        //详细资料
-        $("li.showListCons").click(function () {
-            $.get("./inc/goodsTypeUpdate.php", {'name': $(this).children('span.delete').attr("value")}, function (data) {
-                $("body").append(data);
-                $('#goodsTypeUpdateWin').slideDown(500);
-            });
-        });
-
-        //验证
-        $.checks.checkform($('#goodsTypeAddForm'), {
-            "async": {'success': succ, 'beforeSend': bs},
-            "typeNumber": {
-                "name": "类型编号",
-                "check": ["noSpechars", {"isLength": [4]}, {"isAjax": ["/server/iskeySer.php"]}]
-            },
-            "typeName": {"name": "类型名称", "check": [{"isAjax": ["/server/iskeySer.php"]}]}
-        });
-
-        //排序
-        $("li.showlistle:first > span").click(function () {
-            var $sort = "ASC";
-            if ($(this).html() == $("#sortCache").attr("sortLine")) {
-                if ($("#sortCache").val() == "ASC") {
-                    $sort = "DESC";
-                    $("#sortCache").val("DESC");
-                } else {
-                    $("#sortCache").val("ASC");
-                }
-            } else {
-                $("#sortCache").attr("sortLine", $(this).html());
-                $("#sortCache").val("ASC");
+        //设置每页显示默认值
+        $("span.list_row_sum").map(function(){
+            if($(this).html() ==$('#list_form').children("input[name='pageRow']").val()){
+                $(this).addClass("list_row_sumOn");
             }
-            $('#contents').load('<{$thispath}>?sort=' + $sort + '&sortLine=' + $(this).html());
+        });
+        //设置搜索列默认值
+        $('#search_select >option').map(function(){
+            if($(this).html() ==$('#list_form').children("input[name='searchLine']").val()){
+                $(this).parent().val($(this).html());
+            }
+        });
+        //排序
+        $("li.list_row_head > span").click(function () {
+            var sortLine = $('#list_form').children("input[name='sortLine']");
+            var sort = $('#list_form').children("input[name='sort']");
+            if(sortLine.val() == $(this).html()){
+                if(sort.val() == "DESC"){
+                    sort.val("ASC");
+                }else{
+                    sort.val("DESC");
+                }
+            }else{
+                sortLine.val($(this).html());
+                sort.val("DESC");
+            }
+            load();
         });
 
         //列表搜索
-        $("li.showlistle >div.search").click(function () {
-            $('#contents').load('<{$thispath}>?page=0&search='+$(".searchtext >input[type='text']").val());
-        });
-
-        //列表取消搜索
-        $("li.showlistle >div#searchDelete").click(function () {
-            $('#contents').load('<{$thispath}>?page=0&searchDelete=true');
-        });
-
-        //列表每页多少汗设置
-        $("li.showlistle >div.pageRow>span").click(function () {
-            $('#contents').load('<{$thispath}>?page=0&pageRow=' + $(this).html());
-        });
-
-        //列表选页
-        $("li.showlistle >div.pageSum").click(function () {
-            $('#contents').load('<{$thispath}>?page='+(parseInt($(this).html())-1));
-        });
-
-        //列表翻页
-        $("li.showlistle >div.pages").click(function () {
-            if ($(this).html() == "下一页") {
-                $('#contents').load('<{$thispath}>?page=' + (parseInt($("li.showlistle >div.pageis").html())));
-            } else {
-                $('#contents').load('<{$thispath}>?page=' + (parseInt($("li.showlistle >div.pageis").html()) - 2));
+        $("#list_search").click(function () {
+            if($('#search_value').val() !=""){
+                $('#list_form').children("input[name='page']").val('0');
+                $('#list_form').children("input[name='searchLine']").val($("#search_select").val());
+                $('#list_form').children("input[name='search']").val($('#search_value').val());
+                load();
             }
         });
 
+        //列表取消搜索
+        $("div#search_delete").click(function () {
+            $('#list_form').children("input[name='search']").val("");
+            load();
+        });
+        //列表每页多少汗设置
+        $("span.list_row_sum").click(function () {
+            $('#list_form').children("input[name='page']").val("0");
+            $('#list_form').children("input[name='pageRow']").val($(this).html());
+            load();
+        });
+        //列表选页
+        $("div.pageNumber").click(function () {
+            $('#list_form').children("input[name='page']").val(parseInt($(this).html()) - 1);
+            load();
+        });
+        //列表翻页
+        $("div.pageButton").click(function () {
+            if($(this).hasClass('pageOff')){
+                return;
+            }
+            if ($(this).html() == "下一页") {
+                $('#list_form').children("input[name='page']").val($("div.pageOn").html());
+            } else {
+                $('#list_form').children("input[name='page']").val(parseInt($("div.pageOn").html()) - 2);
+            }
+            load();
+        });
+
+
+    });
+    $(function(){
+        //增加
+        $('#goodsTypeAddShow').click(function(){
+            $('#CRUD').load('./inc/goodsTypeAdd.php',function(){
+                Resize.resizeAdd(500);
+            });
+        });
+
+        //删除
+        $('.list_row > span.delete').click(function(e){
+            var self = $(this);
+            showdielogue('确定要删除吗?','删除之之后很严重哦',function(){
+                $.getJSON("./server/goodsTypeDeleteSer.php?name="+self.attr('value'),function(data){
+                    toast(data.status,data.megs);
+                    $('#contents').load('./inc/goodsType.php',$('#list_form').serialize());
+                });
+            });
+            e.stopPropagation();
+        });
+
+        //修改
+        $('.list_row').click(function(){
+            $('#CRUD').load('./inc/goodsTypeUpdate.php?name='+$(this).children('span.delete').attr('value'),function(){
+                Resize.resizeAdd(500);
+            });
+        });
     });
 </script>
+<!--//验证-->
+<!--$.checks.checkform($('#goodsTypeAddForm'), {-->
+<!--"async": {'success': succ, 'beforeSend': bs},-->
+<!--"typeNumber": {-->
+<!--"name": "类型编号",-->
+<!--"check": ["noSpechars", {"isLength": [4]}, {"isAjax": ["/server/iskeySer.php"]}]-->
+<!--},-->
+<!--"typeName": {"name": "类型名称", "check": [{"isAjax": ["/server/iskeySer.php"]}]}-->
+<!--});-->
+<!--<form action="./server/goodsTypeAddSer.php" method="post" id="goodsTypeAddForm">-->
+    <!--<div id = "goodsTypeAdd"  class='wins showwin'>-->
+        <!--<span>添加商品类型</span>-->
+        <!--<div>-->
+            <!--<lable>类型编号</lable>-->
+            <!--<input type="text" name="typeNumber" class="forms"/></div>-->
+        <!--<div>-->
+            <!--<lable>类型名称</lable>-->
+            <!--<input type="text" name="typeName" class="forms"/></div>-->
+        <!--<div >-->
+            <!--<lable>类型备注</lable>-->
+            <!--<input type="text" name="typeRemark" class="forms"/></div>-->
+        <!--<div class='texts'>-->
+            <!--<lable>详细属性</lable>-->
+            <!--<textarea name="typeProp" class="forms"/>-->
+
+            <!--<div>用,分隔</div>-->
+        <!--</div>-->
+        <!--<div class='texts'>-->
+            <!--<lable>价格属性</lable>-->
+            <!--<textarea name="typePrice" class="forms"/>-->
+
+            <!--<div>用,分隔，最多4个价格属性</div>-->
+        <!--</div>-->
+        <!--<div>-->
+            <!--<div class="submit button">提交</div>-->
+        <!--</div>-->
+    <!--</div>-->
+<!--</form>-->

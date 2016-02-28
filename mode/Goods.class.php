@@ -42,12 +42,6 @@ class Goods
         return FALSE;
 
     }
-    //增加日志
-    private function addAdminLog($aId,$key,$content){
-        $sql = new Sql();
-        return $sql->insert('admin_log',array('a_id'=>'int','alog_key','alog_content'),array($aId,$key,$content));
-    }
-
     /**
      * 获取商品列表
      *
@@ -64,9 +58,11 @@ class Goods
     public function getGoods($start, $sum ,$sortLine ='g_id', $sort = "asc"){
         $sql = new Sql;
         $where = new Where();
-        $count = $sql->select('goods_info_v',"COUNT(*) as count",$where);
+        if(empty($sortLine)){$sortLine = "g_id";}
+        if(empty($sort)){$sort = "asc";}
+        $count = $sql->selectLine('goods_info_v',"COUNT(*) as count",$where);
         $where->setWhereEnd("ORDER BY `$sortLine` $sort   limit $start,$sum");
-        $data = $sql->select('goods_info_v',array('g_id','g_number','g_name','gt_name','g_price','g_reg','g_status'),$where);
+        $data = $sql->selectData('goods_info_v',array('g_id','g_number','g_name','gt_name','g_price','g_reg','g_status'),$where);
         return array('count'=>$count['count'],'data'=>$data);
     }
 
@@ -87,10 +83,12 @@ class Goods
      */
     public function searchGoods($name,$start,$sum,$sortLine ='g_id' , $sort = "asc" ){
         $sql = new Sql;
+        if(empty($sortLine)){$sortLine = "g_id";}
+        if(empty($sort)){$sort = "asc";}
         $where =new Where($name['searchLine'],$name['key'],'string','AND','LIKE');
-        $count = $sql->select('goods_info_v',"COUNT(*) as count",$where);
+        $count = $sql->selectLine('goods_info_v',"COUNT(*) as count",$where);
         $where->setWhereEnd("ORDER BY `$sortLine` $sort   limit $start,$sum");
-        $data = $sql->select('goods_info_v',array('g_id','g_number','g_name','gt_name','g_price','g_reg','g_status'),$where);
+        $data = $sql->selectData('goods_info_v',array('g_id','g_number','g_name','gt_name','g_price','g_reg','g_status'),$where);
         return array('count'=>$count['count'],'data'=>$data);
     }
 
@@ -104,9 +102,9 @@ class Goods
     public function queryGoods($gId){
         $sql = new Sql;
         $where = new Where('g_id',$gId);
-        $goods = $sql->select('goods_info_v',array('g_id','g_number','g_name','gt_name','g_price','g_reg','g_status','gt_id'),$where);
-        $attr = $sql->select('g_attr_v',array('ga_id','ga_value','gta_name','gta_id'),$where);
-        $price = $sql->select('g_price_v',array('gp_id','gp_name','gtp_name','gtp_id'),$where);
+        $goods = $sql->selectLine('goods_info_v',array('g_id','g_number','g_name','gt_name','g_price','g_reg','g_status','gt_id'),$where);
+        $attr = $sql->selectData('g_attr_v',array('ga_id','ga_value','gta_name','gta_id'),$where);
+        $price = $sql->selectData('g_price_v',array('gp_id','gp_name','gtp_name','gtp_id'),$where);
         $goods['attr'] =$attr;
         $goods['price'] = $price;
         return $goods;
@@ -134,7 +132,7 @@ class Goods
         }
         if($gId = $sql->insert('goods',$columns,$values)){
             $this->addGoodsAttrPrice($goods['attr'],$goods['price'],$gId);
-            $this->addAdminLog($aId,'增加商品',$meg);
+            SystemLog::addSystemLog($aId,'增加商品',$meg);
             return true;
         }
         return false;
@@ -174,7 +172,7 @@ class Goods
                 $b = false;
             }
         }
-        $this->addAdminLog($aId,'更新商品类型',$meg);
+        SystemLog::addSystemLog($aId,'更新商品类型',$meg);
         return $b;
     }
 
@@ -262,10 +260,12 @@ class Goods
      */
     public function getGoodsType($start, $sum  ,$sortLine ='gt_id' , $sort = "asc"){
         $sql = new Sql;
-        $where = new Where();
-        $count = $sql->select('goods_type',"COUNT(*) as count",$where);
+        $where = new Where('gt_status','1','int');
+        if(empty($sortLine)){$sortLine = "gt_id";}
+        if(empty($sort)){$sort = "asc";}
+        $count = $sql->selectLine('goods_type',"COUNT(*) as count",$where);
         $where->setWhereEnd("ORDER BY `$sortLine` $sort   limit $start,$sum");
-        $data = $sql->select('goods_type',array('gt_id','gt_number','gt_name','gt_remark'),$where);
+        $data = $sql->selectData('goods_type',array('gt_id','gt_number','gt_name','gt_remark'),$where);
         return array('count'=>$count['count'],'data'=>$data);
     }
 
@@ -286,10 +286,13 @@ class Goods
      */
     public function searchGoodsType($name,$start,$sum,$sortLine ='gt_id' , $sort = "asc" ){
         $sql = new Sql;
+        if(empty($sortLine)){$sortLine = "gt_id";}
+        if(empty($sort)){$sort = "asc";}
         $where =new Where($name['searchLine'],$name['key'],'string','AND','LIKE');
-        $count = $sql->select('goods_type',"COUNT(*) as count",$where);
+        $where->setWhere('gt_status','1','int');
+        $count = $sql->selectLine('goods_type',"COUNT(*) as count",$where);
         $where->setWhereEnd("ORDER BY `$sortLine` $sort   limit $start,$sum");
-        $data = $sql->select('goods_type',array('gt_id','gt_name','gt_remark','gt_remark'),$where);
+        $data = $sql->selectData('goods_type',array('gt_id','gt_name','gt_remark','gt_number'),$where);
         return array('count'=>$count['count'],'data'=>$data);
     }
 
@@ -303,9 +306,9 @@ class Goods
     public function queryGoodsType($gtId){
         $sql = new Sql;
         $where = new Where('gt_id',$gtId);
-        $row = $sql->select('goods_type',array('gt_id','gt_number','gt_name','gt_remark'),$where);
-        $row['price'] = $sql->select('gt_price',array('gtp_id','gtp_name'),$where);
-        $row['attr'] = $sql->select('gt_attr',array('gta_id','gta_name'),$where);
+        $row = $sql->selectLine('goods_type',array('gt_id','gt_number','gt_name','gt_remark'),$where);
+        $row['price'] = $sql->selectData('gt_price',array('gtp_id','gtp_name'),$where);
+        $row['attr'] = $sql->selectData('gt_attr',array('gta_id','gta_name'),$where);
         return $row;
     }
 
@@ -326,17 +329,16 @@ class Goods
         $values = array();
         foreach($goodsType as $key=>$value){
             if(is_array($value)){break;}
+            if(empty($value)){break;}
             $columns[$key] = $this->isNumber($key,true);
             array_push($values,$value);
         }
         if($gtId = $sql->insert('goods_type',$columns,$values)){
             $this->addGtAttrPrice($goodsType['attr'],$goodsType['price'],$gtId);
-            $this->addAdminLog($aId,'增加商品类型',$meg);
+            SystemLog::addSystemLog($aId,'增加商品类型',$meg);
             return true;
         }
         return false;
-        //$gt_id = $sql->executeid("INSERT INTO `goodsType` ".$sql->addSqlState($goodsType,$this)." ;");
-        //return $this->addGtAttrPrice($gt_id,$gtAttr,$gtAttrPrice);
 
     }
 
@@ -355,26 +357,28 @@ class Goods
         $sql = new Sql;
         $data = array();
         $b = true;
+        $column = array('gt_name','gt_remark');
         foreach($goodsType as $key=>$value){
-            if(is_array($value) && $key =='gt_id'){break;}
-            array_push($data,array('columnName'=>$key,'value'=>$value,'type'=>$this->isNumber($key,true)));
+            if(in_array($key,$column)&& !empty($value)){
+                array_push($data,array('columnName'=>$key,'value'=>$value,'type'=>$this->isNumber($key,true)));
+            }
         }
         if(!empty($data)){
             if(!$sql->update('goods_type',new Where('gt_id',$goodsType['gt_id']),$data)){
                 $b = false;
             }
         }
-        if(!empty($goodsType['aAttr']) ||!empty($goodsType['aPrice'])){
-            if($this->addGtAttrPrice($goodsType['aAttr'],$goodsType['aPrice'],$goodsType['gt_id'])){
+        if(!empty($goodsType['attr']) ||!empty($goodsType['price'])){
+            if(!$this->addGtAttrPrice($goodsType['attr'],$goodsType['price'],$goodsType['gt_id'])){
                 $b = false;
             }
         }
         if(!empty($goodsType['uAttr']) ||!empty($goodsType['uPrice'])){
-            if($this->updateGtAttrPrice($goodsType['uAttr'],$goodsType['uPrice'])){
+            if(!$this->updateGtAttrPrice($goodsType['uAttr'],$goodsType['uPrice'])){
                 $b = false;
             }
         }
-        $this->addAdminLog($aId,'更新商品类型',$meg);
+        SystemLog::addSystemLog($aId,'更新商品类型',$meg);
         return $b;
     }
 
@@ -442,20 +446,14 @@ class Goods
         return $b;
     }
 
+    public function deleteGoodsType($gtId,$aId,$meg){
+        $sql = new Sql;
+        if($sql->update('goods_type',new Where('gt_id',$gtId,'int'),array('columnName'=>'gt_status','value'=>'2','type'=>'int'))){
+            return SystemLog::addSystemLog($aId,"删除商品类型",$meg);
+        }
+    }
 
 
-
-//    //返回商品类型详细属性
-//    public function queryGoodsTypeAttr($gt_id){
-//        $sql = new Sql;
-//        $gt_id =  $sql->sqlVerif($gt_id);
-//        $row =null;
-//        $gt_attr =  $sql->queryData("SELECT `gta_id`, `gta_name` FROM `gtAttr` WHERE `gt_id` =$gt_id;");
-//        $gt_attrPrice = $sql->queryData("SELECT `gtap_id`, `gtap_name` FROM `gtAttrPrice` WHERE `gt_id` =$gt_id;");
-//        $row['gt_attr'] = $gt_attr ;
-//        $row['gt_attrPrice'] = $gt_attrPrice;
-//        return $row;
-//    }
 
 
 

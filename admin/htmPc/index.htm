@@ -59,6 +59,7 @@
         $('.submit').click(function () {
             $(this).parents("form").submit();
         });
+        $('#a_name').focus();
         $(document).keydown(function(event){
             if(event.keyCode ==13){
                 $("input:focus").parents('form').submit();

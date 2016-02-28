@@ -23,10 +23,10 @@ ALTER TABLE `auth_list` ADD UNIQUE(`al_key`);
 ALTER TABLE `auth_list` MODIFY `al_id` INT UNSIGNED AUTO_INCREMENT;
 INSERT INTO `auth_list` (`al_key`,`al_nick`,`al_remark`) VALUES ('report','报表统计','营运状况'),('service','客服管理','管理客服'),('order','订单管理','订单处理'),('goods','商品管理','商品各种操作');
 INSERT INTO `auth_list` (`al_key`,`al_nick`,`al_remark`) VALUES ('log','系统日志','查看系统日志');
-INSERT INTO `auth_list` (`al_key`,`al_nick`,`al_remark`) VALUES ('goodsType','商品类型管理',''),('goodsInfo','商品管理',''),('goodsRecommend','推荐商品管理','');
+INSERT INTO `auth_list` (`al_key`,`al_nick`,`al_remark`) VALUES ('goodsInfo','商品管理',''),('goodsRecommend','推荐商品管理','');
 INSERT INTO `auth_list` (`al_key`,`al_nick`,`al_remark`) VALUES ('admin','管理员管理',''),('adminDelete','删除管理员','超级权限'),('adminAdd','增加管理员',''),('adminUpdate','修改管理员','');
 INSERT INTO `auth_list` (`al_key`,`al_nick`,`al_remark`) VALUES ('adminAuth','管理员权限管理',''),('adminAuthAdd','增加管理员权限',''),('adminAuthUpdate','修改管理员权限',''),('adminAuthDelete','删除管理员权限','');
-
+INSERT INTO `auth_list` (`al_key`,`al_nick`,`al_remark`) VALUES ('goodsType','商品类型管理',null),('goodsTypeAdd','增加商品类型',''),('goodsTypeUpdate','修改商品类型',''),('goodsTypeDelete','删除商品类型','');
 --  连接表
 DROP TABLE IF EXISTS `admin_auth_list`;
 CREATE TABLE `admin_auth_list`(
@@ -45,7 +45,7 @@ CREATE TABLE `admin`(
 	`a_reg` TIMESTAMP DEFAULT NOW(),  -- 注册时间
 	`a_img` VARCHAR(200) ,             -- 头像图片
 	`a_nick` CHAR(20)  ,                -- 真实姓名
-	`a_status` TINYINT NOT NULL DEFAULT 1,  -- 权限状态 1启用,2不启用
+	`a_status` TINYINT NOT NULL DEFAULT 1,  -- 状态 1启用,2不启用
 	`aa_id` INT UNSIGNED NOT NULL  DEFAULT 2  -- 权限ID
 )DEFAULT CHARSET = utf8 ENGINE=MyISAM;
 
@@ -129,7 +129,8 @@ CREATE TABLE `goods_type`(
 	`gt_id` INT NOT NULL ,  -- ID
 	`gt_number` CHAR(5) NOT NULL,  -- 商品类型编号
 	`gt_name` CHAR(20) NOT NULL ,   -- 类型名称
-	`gt_remark` CHAR(60)             -- 备注
+	`gt_remark` CHAR(60),             -- 备注
+	`gt_status` TINYINT NOT NULL DEFAULT 1  -- 状态 1启用,2不启用
 )DEFAULT CHARSET =utf8 ENGINE=MyISAM;
 
 ALTER TABLE `goods_type` ADD PRIMARY KEY (`gt_id`);

@@ -19,7 +19,7 @@ $admin["aa_id"] = $_POST['aa_id'];
 
 
 $a = new Admin();
-$b = $a->addAdmin($admin,$_SESSION['adminInfo']['a_id'],'增加了 '.$admin["a_nick"].' 管理员');
+$b = $a->addAdmin($admin,$_SESSION['adminInfo']['a_id'],"{$_SESSION['adminInfo']['a_nick']}增加了 {$admin['a_nick']} 管理员");
 $arr = array("status" => FALSE, "megs" => "添加失败！！");
 if($b){
     $arr = array("status" => true, "megs" => "添加成功");

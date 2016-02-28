@@ -22,8 +22,8 @@
             <div class ="win_row_con">
                 <{section name=index loop=$authList}>
                 <div title="<{$authList[index]['al_remark']}>">
-                    <input name="al_id[]" tabindex="3" type="checkbox" value="<{$authList[index]['al_id']}>"/>
-                    <{$authList[index]['al_nick']}>
+                    <label><input name="al_id[]" tabindex="3" type="checkbox" value="<{$authList[index]['al_id']}>"/><{$authList[index]['al_nick']}></label>
+
                 </div>
                 <{/section}>
             </div>
@@ -47,7 +47,8 @@
         });
         //验证
         $.checks.checkform($('#adminAuthAddForm'), {
-            "async": {'success': succ}
+            "async": {'success': succ},
+            "aa_nick":{'name':'权限组',"check": [{"isLength": [2, 20]}, {"isAjax": ["/server/iskeySer.php"]}]}
         });
 
     });

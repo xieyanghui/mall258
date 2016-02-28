@@ -1,21 +1,15 @@
 <?php
-if (!isset($_SESSION)) {
-    session_start();
-};
-if (empty($_SESSION['admininfo'])) {
-    header("location: ./");
-    exit;
-}
-header("Content-type:text/html;charset=utf-8");
-include_once($_SERVER['DOCUMENT_ROOT'] . '/tool/autoload.php');
-$sma = new Smartys;
+if (!isset($_SESSION)) {session_start();}
+if (empty($_SESSION['adminInfo'])) {exit('登录超时');}
+include_once($_SERVER['DOCUMENT_ROOT'] . '/util/autoload.php');
+if(!Auth::inAdmin($_SESSION['adminInfo']['a_id'],'goodsTypeUpdate')){exit('权限不够!!');}
+
 $goods = new Goods;
 $row = $goods->queryGoodsType($_GET['name']);
-
+$sma = new Smartys;
 $sma->assign('row', $row);
-$sma->assign('attr', $row['gt_attr']);
-$sma->assign('attrPrice', $row['gt_attrPrice']);
-$sma->assign('attrPriceCount', count($row['gt_attrPrice']));
+$sma->assign('attr', $row['attr']);
+$sma->assign('price', $row['price']);
 
 $sma->display('goodsTypeUpdate.htm');
 ?>

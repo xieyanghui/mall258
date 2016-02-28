@@ -22,8 +22,8 @@ class Smartys extends Smarty
                 $this->template_dir = $_SERVER['DOCUMENT_ROOT'] . '/htmPc/';
             }
         } elseif ($_SESSION['device'] == 'mobile') {
-            if(preg_match("/^\\".Config::ADMINDIR."/",$_SERVER['PHP_SELF'])){
-                $this->template_dir = $_SERVER['DOCUMENT_ROOT'] .Config::ADMINDIR. '/htmMobile/';
+            if(preg_match("/^\\".Config::ADMIN_DIR."/",$_SERVER['PHP_SELF'])){
+                $this->template_dir = $_SERVER['DOCUMENT_ROOT'] .Config::ADMIN_DIR. '/htmMobile/';
             }else{
                 $this->template_dir = $_SERVER['DOCUMENT_ROOT'] . '/htmMobile/';
             }

@@ -39,7 +39,7 @@
             <div class ="win_row_con">
                 <{section name=index loop=$adminAuth}>
                 <label title="<{$adminAuth[index]['aa_remark']}>">
-                    <input name="aa_id" tabindex="4" type="radio" value="<{$adminAuth[index]['aa_id']}>"/>
+                    <input name="aa_id" tabindex="4" type="radio"  value="<{$adminAuth[index]['aa_id']}>" <{if $adminAuth[index]['aa_id'] eq 2 }>checked<{/if}>/>
                     <{$adminAuth[index]['aa_nick']}>
                 </label>
                 <{/section}>

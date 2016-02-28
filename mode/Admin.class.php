@@ -149,7 +149,7 @@ class Admin
             return false;
         }
         if($sql->update('admin',new Where('a_id',$dId),array('columnName'=>'a_status','value'=>2,'type'=>'int'))){
-            return $sql->insert('admin_log',array('a_id'=>'int','alog_key'=>'string','alog_content'=>'string'),array($aId,'删除管理员',$meg));
+            return SystemLog::addSystemLog($aId,'删除管理员',$meg);
         }else{
             return false;
         }

@@ -1,27 +1,30 @@
 <?php
-if (!isset($_SESSION)) {
-    session_start();
-};
-if (empty($_SESSION['admininfo'])) {
-    header("location: ./");
-    exit;
-}
+if (!isset($_SESSION)) {session_start();};
+if (empty($_SESSION['adminInfo'])) {header("location: ./");exit('登录超时');}
 header("Content-type:text/html;charset=utf-8");
-include_once($_SERVER['DOCUMENT_ROOT'] . '/tool/autoload.php');
-$gt['gt_id'] = $_POST['number'];
-$gt['goodsType']['gt_name'] = !empty($_POST['gtName'])?$_POST['gtName']:null;
-$gt['goodsType']['gt_remark'] = $_POST['gtRemark'];
-$gt['agtAttr'] = !empty($_POST['aattr'])?$_POST['aattr']:null;
-$gt['agtAttrPrice'] = !empty($_POST['aattrPrice'])?$_POST['aattrPrice']:null;
+
+include_once($_SERVER['DOCUMENT_ROOT'] . '/util/autoload.php');
+if(!Auth::inAdmin($_SESSION['adminInfo']['a_id'],'goodsTypeAdd')){
+    exit(json_encode(array("status" => FALSE, "megs" => "权限不够！！")));
+}
+
+$gt['gt_id'] = $_POST['gt_id'];
+!empty($_POST['gt_name'])?$gt['gt_name'] =$_POST['gt_name']:null;
+!empty($_POST['gt_remark'])?$gt['gt_remark'] =$_POST['gt_remark']:null;
+!empty($_POST['attr'])?$gt['attr'] =$_POST['attr']:$gt['attr'] =null;
+!empty($_POST['price'])?$gt['price'] =$_POST['price']:$gt['price'] =null;
+$gt['uAttr'] = array();
+$gt['uPrice'] = array();
 foreach ($_POST as $key => $value) {
-    if (strstr($key, "uattr") && !empty($value)) {
-        $gt['ugtAttr'][substr($key, 5)] = $value;
-    } elseif (strstr($key, "uprice") && !empty($value)) {
-        $gt['ugtAttrPrice'][substr($key, 6)] = $value;
+    if (strstr($key, "uAttr") && !empty($value)) {
+        $gt['uAttr'][substr($key, 5)] = $value;
+    } elseif (strstr($key, "uPrice") && !empty($value)) {
+        $gt['uPrice'][substr($key, 6)] = $value;
     }
 }
+//print_r($gt);
 $goods = new Goods;
-$b = $goods->updateGoodsType($gt);
+$b = $goods->updateGoodsType($gt,$_SESSION['adminInfo']['a_id'],"{$_SESSION['adminInfo']['a_nick']} 修改了ID为{$_POST['gt_id']}的商品类型");
 $arr = array("status" => false, "megs" => "修改失败");
 
 if ($b) {
