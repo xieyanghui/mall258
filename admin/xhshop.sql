@@ -366,6 +366,7 @@ CREATE VIEW `g_price_v` AS
 		`gtp_name`
 	FROM gt_price,g_price WHERE g_price.gtp_id = gt_price.gtp_id;
 
+DROP VIEW IF EXISTS `system_log_v`;
 CREATE VIEW `system_log_v` AS
 	SELECT
 		`sl_id`,
@@ -375,3 +376,8 @@ CREATE VIEW `system_log_v` AS
     system_log.a_id as `a_id`,
 		`a_nick`
 	FROM system_log,admin WHERE system_log.a_id = admin.a_id;
+
+
+-- show variables like "%char%";
+-- SET character_set_database = utf8;
+-- SET character_set_server = utf8;

@@ -11,9 +11,7 @@ class Sql
         if (mysqli_connect_errno()){
             die('Unable to connect!'.mysqli_connect_error());
         }
-        $mysqli->query("SET NAMES 'UTF8'");
-        $mysqli->query("SET CHARACTER SET UTF8");
-        $mysqli->query("SET CHARACTER_SET_RESULTS=UTF8");
+        $mysqli->query("SET NAMES 'utf8'");
         return $mysqli;
     }
 

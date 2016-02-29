@@ -110,7 +110,7 @@
         <div class ="win_row_auto">
             <label class ="win_row_head" >价格</label>
             <div class ="win_row_con attr_price" id = 'price'>
-                <div class="goods_price_list"><label class="row_con_head">shenm</label><div><div class="con_list_add">+</div></div></div>
+                <div class="goods_price_list"><label class="row_con_head">shenm</label><div class="win_row_con"><div class="con_list_add">+</div></div></div>
             </div>
         </div>
 
@@ -148,10 +148,10 @@
             $('.select_div').html($(this).html());
             $('.select_ul').hide();
             $('#attr').children().remove();
-            $('#price').children().remove();
+           // $('#price').children().remove();
             $.getJSON('./server/goodsTypeInfoSer.php',{'gt_id':$(this).attr('value')},function(data){
                 for(var j in data['attr']){
-                    $('#attr').append("<div class='goods_attr_list'><input name='attr"+j+"' type='text'/><label class='row_con_head'>"+data['attr'][j]+"</label></div>");
+                    $('#attr').append("<div class='goods_attr_list'><input id='attr"+j+"' name='attr"+j+"' type='text'/><label for='attr"+j+"'  class='row_con_head'>"+data['attr'][j]+"</label></div>");
                 }
 //                for(var j in data['price']){
 //                    $('#'+i).append("<div class='goods_price_list'>"+data[i][j]+"</div>");
