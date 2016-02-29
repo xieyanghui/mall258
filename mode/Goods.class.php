@@ -18,6 +18,13 @@ include_once($_SERVER['DOCUMENT_ROOT'] . '/util/autoload.php');
 
 class Goods
 {
+    private $sql =null;
+    private function getSql(){
+        if(empty($this->sql)){
+            $this->sql = new Sql();
+        }
+        return $this->sql;
+    }
     /**
      * 判断是否是数字
      *
@@ -56,7 +63,7 @@ class Goods
      * @return array 关联数组count总行数,data查询到的数据
      */
     public function getGoods($start, $sum ,$sortLine ='g_id', $sort = "asc"){
-        $sql = new Sql;
+        $sql = $this->getSql(); 
         $where = new Where();
         if(empty($sortLine)){$sortLine = "g_id";}
         if(empty($sort)){$sort = "asc";}
@@ -82,7 +89,7 @@ class Goods
      * @return array 关联数组count总行数,data查询到的数据
      */
     public function searchGoods($name,$start,$sum,$sortLine ='g_id' , $sort = "asc" ){
-        $sql = new Sql;
+        $sql = $this->getSql(); 
         if(empty($sortLine)){$sortLine = "g_id";}
         if(empty($sort)){$sort = "asc";}
         $where =new Where($name['searchLine'],$name['key'],'string','AND','LIKE');
@@ -100,7 +107,7 @@ class Goods
      * @return array 商品详细资料
     */
     public function queryGoods($gId){
-        $sql = new Sql;
+        $sql = $this->getSql(); 
         $where = new Where('g_id',$gId);
         $goods = $sql->selectLine('goods_info_v',array('g_id','g_number','g_name','gt_name','g_price','g_reg','g_status','gt_id'),$where);
         $attr = $sql->selectData('g_attr_v',array('ga_id','ga_value','gta_name','gta_id'),$where);
@@ -122,7 +129,7 @@ class Goods
      * @return boolean 成功返回true,失败返回false
     */
     public function addGoods($goods,$aId,$meg){
-        $sql = new Sql;
+        $sql = $this->getSql(); 
         $columns = array();
         $values = array();
         foreach($goods as $key=>$value){
@@ -150,7 +157,7 @@ class Goods
      * @return boolean 成功返回true,失败返回false
      */
     public function updateGoods($goods,$aId,$meg){
-        $sql = new Sql;
+        $sql = $this->getSql(); 
         $data = array();
         $b = true;
         foreach($goods as $key=>$value){
@@ -188,7 +195,7 @@ class Goods
      * @return boolean 成功返回true,失败返回false
      */
     public function addGoodsAttrPrice($gAttr,$gPrice,$gId){
-        $sql = new Sql();
+        $sql = $this->getSql();
         $b = true;
         if(!empty($gAttr) && is_array($gAttr)){
             $data = array();
@@ -221,7 +228,7 @@ class Goods
      * @return boolean 成功返回true,失败返回false
      */
     public function updateGoodsAttrPrice($gAttr,$gPrice){
-        $sql = new Sql();
+        $sql = $this->getSql();
         $b = true;
         if(!empty($gPrice) && is_array($gPrice)){
             foreach($gPrice as $key=>$value) {
@@ -259,7 +266,7 @@ class Goods
      * @return array 关联数组count总行数,data查询到的数据
      */
     public function getGoodsType($start, $sum  ,$sortLine ='gt_id' , $sort = "asc"){
-        $sql = new Sql;
+        $sql = $this->getSql(); 
         $where = new Where('gt_status','1','int');
         if(empty($sortLine)){$sortLine = "gt_id";}
         if(empty($sort)){$sort = "asc";}
@@ -285,7 +292,7 @@ class Goods
      * @return array 关联数组count总行数,data查询到的数据
      */
     public function searchGoodsType($name,$start,$sum,$sortLine ='gt_id' , $sort = "asc" ){
-        $sql = new Sql;
+        $sql = $this->getSql(); 
         if(empty($sortLine)){$sortLine = "gt_id";}
         if(empty($sort)){$sort = "asc";}
         $where =new Where($name['searchLine'],$name['key'],'string','AND','LIKE');
@@ -304,14 +311,27 @@ class Goods
      * @return array 商品类型详细资料
      */
     public function queryGoodsType($gtId){
-        $sql = new Sql;
+        $sql = $this->getSql(); 
         $where = new Where('gt_id',$gtId);
         $row = $sql->selectLine('goods_type',array('gt_id','gt_number','gt_name','gt_remark'),$where);
         $row['price'] = $sql->selectData('gt_price',array('gtp_id','gtp_name'),$where);
         $row['attr'] = $sql->selectData('gt_attr',array('gta_id','gta_name'),$where);
         return $row;
     }
-
+    public function queryGoodsTypeInfo($gtId){
+        $sql = $this->getSql(); 
+        $where = new Where('gt_id',$gtId);
+        $price = $sql->selectData('gt_price',array('gtp_id','gtp_name'),$where);
+        $attr = $sql->selectData('gt_attr',array('gta_id','gta_name'),$where);
+        $row= array('price'=>array(),'attr'=>array());
+        foreach($price as $value){
+            $row['price'][$value['gtp_id']] = $value['gtp_name'];
+        }
+        foreach($attr as $value){
+            $row['attr'][$value['gta_id']] = $value['gta_name'];
+        }
+        return $row;
+    }
     /**
      * 增加商品类型
      *
@@ -324,7 +344,7 @@ class Goods
      * @return boolean 成功返回true,失败返回false
      */
     public function addGoodsType($goodsType,$aId,$meg){
-        $sql = new Sql;
+        $sql = $this->getSql(); 
         $columns = array();
         $values = array();
         foreach($goodsType as $key=>$value){
@@ -339,7 +359,6 @@ class Goods
             return true;
         }
         return false;
-
     }
 
     /**
@@ -354,7 +373,7 @@ class Goods
      * @return boolean 成功返回true,失败返回false
      */
     public function updateGoodsType($goodsType,$aId,$meg){
-        $sql = new Sql;
+        $sql = $this->getSql(); 
         $data = array();
         $b = true;
         $column = array('gt_name','gt_remark');
@@ -394,24 +413,30 @@ class Goods
      * @return boolean 成功返回true,失败返回false
      */
     public function addGtAttrPrice($gtAttr,$gtPrice,$gtId){
-        $sql = new Sql;
+        $sql = $this->getSql(); 
         $b = true;
         if(!empty($gtAttr) && is_array($gtAttr)){
             $data = array();
             foreach($gtAttr as $value) {
+                if(empty($value)){continue;}
                 array_push($data, array($gtId, $value));
             }
-            if(!$sql->insert('gt_attr',array('gt_id'=>'int','gta_name'),$data)){
-                $b = false;
+            if(!empty($data)){
+                if(!$sql->insert('gt_attr',array('gt_id'=>'int','gta_name'),$data)){
+                    $b = false;
+                }
             }
         }
         if(!empty($gtPrice) && is_array($gtPrice)){
             $data = array();
             foreach($gtPrice as $value) {
+                if(empty($value)){continue;}
                 array_push($data, array($gtId, $value));
             }
-            if(!$sql->insert('gt_price',array('gt_id'=>'int','gtp_name'),$data)){
-                $b = false;
+            if(!empty($data)){
+                if(!$sql->insert('gt_price',array('gt_id'=>'int','gtp_name'),$data)){
+                    $b = false;
+                }
             }
         }
         return $b;
@@ -426,7 +451,7 @@ class Goods
      * @return boolean 成功返回true,失败返回false
      */
     public function updateGtAttrPrice($gtAttr,$gtPrice){
-        $sql = new Sql;
+        $sql = $this->getSql(); 
         $b = true;
 
         if(!empty($gtAttr) && is_array($gtAttr)){
@@ -447,7 +472,7 @@ class Goods
     }
 
     public function deleteGoodsType($gtId,$aId,$meg){
-        $sql = new Sql;
+        $sql = $this->getSql(); 
         if($sql->update('goods_type',new Where('gt_id',$gtId,'int'),array('columnName'=>'gt_status','value'=>'2','type'=>'int'))){
             return SystemLog::addSystemLog($aId,"删除商品类型",$meg);
         }

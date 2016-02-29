@@ -128,6 +128,7 @@ div.win_row_auto {
 div.win_row_input{
     margin-left: 5px;
     float: left;
+    overflow: hidden;
 }
 /*主窗口的自动增长行里的con样式*/
 div.win_row_con{
@@ -427,4 +428,25 @@ span.list_row_sumOn,span.list_row_sum:hover{
     background-color: #BCEDF2;
     font-weight: bold;
     cursor: pointer;
+}
+div.con_list_input ,div.con_list_add{
+    display: block;
+    float: left;
+    width: 60px;
+    height: 25px;
+    padding-left:5px ;
+    overflow: hidden;
+    margin: 0 3px 3px 0 ;
+    border: 1px solid #50D1DE;
+    line-height: 25px;
+}
+div.con_list_add{
+    font-size: 30px;
+    font-weight: bold;
+    text-align: center;
+    background-color: #EEEEEE;
+}
+input.list_form_div{
+    border-style: hidden;
+    outline:none;
 }

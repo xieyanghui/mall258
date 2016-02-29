@@ -1,0 +1,196 @@
+<style type="text/css">
+    #goodsAdd{
+        position: absolute;
+        z-index: 100;
+        width: 500px;
+        overflow: hidden;
+    }
+    .select_div{
+        width: 80px;
+        height: 30px;
+        border: 1px solid #50D1DE;
+        text-align: center;
+        line-height: 30px;
+        background-color: #EEEEEE;
+    }
+    .select_div_bottom{
+        border-bottom: hidden;
+    }
+    .select_ul{
+        display: none;
+        position: absolute;
+        z-index: 1000;
+        overflow: hidden;
+        border-top: 1px solid #50D1DE;
+        border-left: 1px solid #50D1DE;
+        background-color: #FFFFFF;
+
+    }
+    .select_li{
+        width: 50px;
+        height: 30px;
+        border-bottom: 1px solid #50D1DE;
+        border-right: 1px solid #50D1DE;
+        text-align: center;
+        line-height: 30px;
+        background-color: #EEEEEE;
+        float: left;
+    }
+    .select_li:hover{
+        background-color: #50D1DE;
+        cursor: pointer;
+    }
+    .goods_attr_list{
+        height: 30px;
+        line-height: 30px;
+        border: 1px solid #50D1DE;
+        margin: 0 2px 2px 0;
+        width: 120px;
+        float: left;
+        overflow: hidden;
+    }
+    .goods_attr_list>label{
+        width: 70px;
+        float: right;
+    }
+    .goods_attr_list>input{
+        width:40px;
+        display: block;
+        padding: 5px;
+        height: 18px;
+
+        border: hidden;
+        outline:none;
+        float: right;
+    }
+    .attr_price{
+        width: 250px;
+    }
+</style>
+<form action="./server/goodsAddSer.php" method="post" id="goodsAddForm">
+    <div id='goodsAdd' class='win show_win'>
+        <h1 class="win_head">添加商品基本资料 <div class="show_win_close">×</div></h1>
+        <div class="win_row">
+            <label class ="win_row_head">商品类型</label>
+            <div class ="win_row_input"><div class="select_div">请选择类型</div>
+                <ul class="select_ul">
+                    <{section name=index loop=$goodsType}>
+                        <li class="select_li" value="<{$goodsType[index]['gt_id']}>"><{$goodsType[index]['gt_name']}> </li>
+                    <{/section}>
+                </ul>
+            </div>
+        </div>
+        <div class="win_row">
+            <label class ="win_row_head">商品编号</label>
+            <div class ="win_row_input"><input tabindex="2" type="text" name="a_nick" class="form_div"/></div>
+        </div>
+        <div class="win_row">
+            <label class ="win_row_head">商品名称</label>
+            <div class ="win_row_input"><input tabindex="3" type="text" name="a_pwd" class="form_div"/></div>
+        </div>
+        <div class ="win_row_auto">
+            <label class ="win_row_head" >商品预览图</label>
+            <div class ="win_row_con">
+                <div id="adminHeadImg">
+                    <img src="<{$adminHeadDefault}>?imageView2/5/w/75/h/75"/>
+                    <input  type="hidden" name="a_img"/>
+                </div>
+                <div class="uploadImg">
+                    <div id="imgUp" class="button">选择图片</div>
+                    <div class="bars"><div id="bar"></div></div>
+                </div>
+            </div>
+        </div>
+        <div class ="win_row_auto">
+            <label class ="win_row_head" >属性</label>
+            <div class ="win_row_con attr_price" id ='attr'>
+
+            </div>
+        </div>
+        <div class ="win_row_auto">
+            <label class ="win_row_head" >价格</label>
+            <div class ="win_row_con attr_price" id = 'price'>
+                <div class="goods_price_list"><label class="row_con_head">shenm</label><div><div class="con_list_add">+</div></div></div>
+            </div>
+        </div>
+
+        <div class="win_row">
+            <div class="button cancel">取消</div>
+            <div class="submit button">下一步</div>
+        </div>
+    </div>
+</form>
+<script>
+    function succ(data) {
+        toast(data.status, data.megs);
+        Resize.resizeF5('./inc/adminInfo.php');
+    }
+    $(function(){
+        //新增管理员提交
+        $('.submit').click(function () {
+            $(this).parents("form").submit();
+        });
+        if($('.select_li').length >4){
+            $('.select_ul').css('width','208px');
+        }
+
+        $('.select_div').parent().mousemove(function(){
+            $('.select_ul').show();
+            $('.select_div').addClass('select_div_bottom');
+        });
+        $('.select_div').parent().mouseout(function(){
+            $('.select_ul').hide();
+            $('.select_div').removeClass('select_div_bottom');
+        });
+
+        //选择商品类型
+        $('.select_li').click(function(){
+            $('.select_div').html($(this).html());
+            $('.select_ul').hide();
+            $('#attr').children().remove();
+            $('#price').children().remove();
+            $.getJSON('./server/goodsTypeInfoSer.php',{'gt_id':$(this).attr('value')},function(data){
+                for(var j in data['attr']){
+                    $('#attr').append("<div class='goods_attr_list'><input name='attr"+j+"' type='text'/><label class='row_con_head'>"+data['attr'][j]+"</label></div>");
+                }
+//                for(var j in data['price']){
+//                    $('#'+i).append("<div class='goods_price_list'>"+data[i][j]+"</div>");
+//                }
+            });
+        });
+        //验证
+        $.checks.checkform($('#goodsAddForm'),{
+            "async": {'success': succ},
+//            "a_name": {
+//                "name": "登录名",
+//                "check": ["noSpechars", {"isLength": [4, 20]}, {"isAjax": ["/server/iskeySer.php"]}]
+//            },
+//            "a_nick": {
+//                "name": "姓名",
+//                "check": [{"isLength": [2, 20]}]
+//            },
+//            "a_pwd": {
+//                "name": "密码",
+//                "check": [{"isLength": [6, 20]}]
+//            }
+        });
+
+    });
+    $(function(){
+        //上传头像
+        var up = getUpload();
+        up.browse_button = "imgUp";
+        //up.container = "adminHeadImg";
+        up['init'].UploadProgress = function(up,file){
+            $("#bar").css("width",file.percent+"%");
+        };
+        up['init'].FileUploaded = function (up, file, info) {
+            var domain = up.getOption('domain');
+            var res = JSON.parse(info);
+            $("#adminHeadImg>img").attr("src", domain + "/" + res.key + "?imageView2/5/w/75/h/75");
+            $("#adminHeadImg>input[name='a_img']").val(domain + "/" + res.key);
+            $("#bar").css("background-color","#50D1DE");
+        };
+        var uploader = Qiniu.uploader(up);
+    });
+</script>
