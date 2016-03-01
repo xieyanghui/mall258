@@ -378,6 +378,9 @@ CREATE VIEW `system_log_v` AS
 	FROM system_log,admin WHERE system_log.a_id = admin.a_id;
 
 
+
 -- show variables like "%char%";
 -- SET character_set_database = utf8;
 -- SET character_set_server = utf8;
+-- show variables like '%time_zone%';
+-- set time_zone = '+8:00';

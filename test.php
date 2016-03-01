@@ -29,9 +29,9 @@ $admin = new Admin();
 //$admin->deleteAdmin(2,1);
 //echo '------------<br>';
 //print_r($admin->getAdmin(0,4));
-
+echo date("Y-m-d H:i:s",time());
 //$admin->updateAdminPwd(1,md5("123456"),"aaa");
-print_r($admin->getAdmin(25,40));
+//print_r($admin->getAdmin(25,40));
 //$admin->searchAdmin(array('searchLine'=>'a_nick','key'=>'谢'),0,2);
 //print_r($sql->queryLine("SELECT * FROM `auth_list` WHERE al_id =2"));
 //print_r($admin->queryAdmin(2));
@@ -56,4 +56,4 @@ print_r($admin->getAdmin(25,40));
 //print_r($goods->getGoods(0,6));
 //print_r($goods->searchGoods(array('searchLine'=>'g_name','key'=>'一'),0,6));
 //print_r($goods->queryGoodsType(1));
-echo dirname($_SERVER['DOCUMENT_ROOT']);
+//echo dirname($_SERVER['DOCUMENT_ROOT']);

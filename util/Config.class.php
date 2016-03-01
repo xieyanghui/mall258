@@ -17,7 +17,7 @@ class Config{
     const ADMIN_HEAD_DEFAULT ="http://7xkkh3.com1.z0.glb.clouddn.com/guest.png";
 
     //默认商品图片
-    const GOODS_IMG_DEFAULT ="";
+    const GOODS_IMG_DEFAULT ="http://7xkkh3.com1.z0.glb.clouddn.com/o_1acosioac169617htcvo1e761s941a.jpg";
 
     //七牛配置
     const QINIU_SK = "Zao6vAyCTxM1QKAmVv3VSr1SoUdXi-4GQPFs5WCp";

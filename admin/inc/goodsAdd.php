@@ -11,5 +11,6 @@ include_once($_SERVER['DOCUMENT_ROOT'] . '/util/autoload.php');
 if(!Auth::inAdmin($_SESSION['adminInfo']['a_id'],'goodsAdd')){exit('权限不够!!');}
 $sma = new Smartys;
 $goods = new Goods();
+$sma->assign('GOODS_IMG_DEFAULT',Config::GOODS_IMG_DEFAULT);
 $sma->assign('goodsType',$goods->getGoodsType(0,10000)['data']);
 $sma->display('goodsAdd.htm');

@@ -6,7 +6,7 @@
         overflow: hidden;
     }
     .select_div{
-        width: 80px;
+        width: 65px;
         height: 30px;
         border: 1px solid #50D1DE;
         text-align: center;
@@ -27,7 +27,7 @@
 
     }
     .select_li{
-        width: 50px;
+        width: 65px;
         height: 30px;
         border-bottom: 1px solid #50D1DE;
         border-right: 1px solid #50D1DE;
@@ -60,12 +60,32 @@
         width:160px;
         margin-bottom: 3px;
     }
-    .goods_attr_list>input{
+    div.input_label{
+        border: 1px solid #50D1DE;
+        padding-left: 5px;
+        overflow: hidden;
+        display: block;
+    }
+    label#gt_number{
+        height: 30px;
+        line-height: 30px;
+        width: 35px;
+        float: left;
+        text-align: right;
+        display: block;
+    }
+    input.input_label_value{
+        height: 30px;
+        line-height: 30px;
+        width:40px;
+        border: hidden;
+        outline:none;
+    }
+    div.goods_attr_list>input{
         width:40px;
         display: block;
         padding: 5px;
         height: 18px;
-
         border: hidden;
         outline:none;
         float: right;
@@ -76,6 +96,7 @@
 </style>
 <form action="./server/goodsAddSer.php" method="post" id="goodsAddForm">
     <div id='goodsAdd' class='win show_win'>
+        <input type="hidden" name="gt_id" id="gt_id" />
         <h1 class="win_head">添加商品基本资料 <div class="show_win_close">×</div></h1>
         <div class="win_row">
             <label class ="win_row_head">商品类型</label>
@@ -89,17 +110,17 @@
         </div>
         <div class="win_row">
             <label class ="win_row_head">商品编号</label>
-            <div class ="win_row_input"><input tabindex="2" type="text" name="a_nick" class="form_div"/></div>
+            <div class ="win_row_input"><div class="input_label" ><label id="gt_number"></label><input tabindex="2" type="text" name="g_number" class="input_label_value"/></div></div>
         </div>
         <div class="win_row">
             <label class ="win_row_head">商品名称</label>
-            <div class ="win_row_input"><input tabindex="3" type="text" name="a_pwd" class="form_div"/></div>
+            <div class ="win_row_input"><input tabindex="3" type="text" name="g_name" class="form_div"/></div>
         </div>
         <div class ="win_row_auto">
             <label class ="win_row_head" >商品预览图</label>
             <div class ="win_row_con">
                 <div id="adminHeadImg">
-                    <img src="<{$adminHeadDefault}>?imageView2/5/w/75/h/75"/>
+                    <img src="<{$GOODS_IMG_DEFAULT}>?imageView2/5/w/75/h/75"/>
                     <input  type="hidden" name="a_img"/>
                 </div>
                 <div class="uploadImg">
@@ -137,7 +158,7 @@
             $(this).parents("form").submit();
         });
         if($('.select_li').length >4){
-            $('.select_ul').css('width','208px');
+            $('.select_ul').css('width','268px');
         }
 
         $('.select_div').parent().mousemove(function(){
@@ -153,25 +174,29 @@
             $('.select_div').html($(this).html());
             $('.select_ul').hide();
             $('#attr').children().remove();
-           // $('#price').children().remove();
+            $('#price').children().remove();
+            $('#gt_id').val($(this).attr('value'));
             $.getJSON('./server/goodsTypeInfoSer.php',{'gt_id':$(this).attr('value')},function(data){
+                $('#gt_number').html(data['gt_number']);
                 for(var j in data['attr']){
                     $('#attr').append("<div class='goods_attr_list'><input id='attr"+j+"' name='attr"+j+"' type='text'/><label for='attr"+j+"'  class='row_con_head'>"+data['attr'][j]+"</label></div>");
                 }
                 for(var i in data['price']){
                     $('#price').append("<div class='goods_price_list'><label class='row_con_head'>"+data['price'][i]+"</label><div class='win_row_con' id='price"+i+"'><div class='con_list_add'>+</div></div></div>");
                 }
+                $('.con_list_add').unbind();
                 $('.con_list_add').click(function(){
                     var name = $(this).parent().attr("id");
                     $(this).before("<div class='con_list_input'><input class='list_form_div' type='text' name='"+name+"[]' ></div>");
                     $(this).prev().children('input').focus();
                 });
+                $('.input_label_value').focus();
             });
 
         });
         //验证
         $.checks.checkform($('#goodsAddForm'),{
-            "async": {'success': succ},
+            "async": {'success': succ}
 //            "a_name": {
 //                "name": "登录名",
 //                "check": ["noSpechars", {"isLength": [4, 20]}, {"isAjax": ["/server/iskeySer.php"]}]

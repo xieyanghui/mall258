@@ -11,44 +11,10 @@ class Sql
         if (mysqli_connect_errno()){
             die('Unable to connect!'.mysqli_connect_error());
         }
-        $mysqli->query("SET NAMES 'utf8'");
+        $mysqli->query("SET NAMES 'utf8'"); ;
+        $mysqli->query("set time_zone = '+8:00'");
         return $mysqli;
     }
-
-//    public function updateSqlState($arr, $obj)
-//    {
-//        $ser = "";
-//        foreach ($arr as $key => $value) {
-//            if(empty($value)){ continue; }
-//            if ($obj->isInt($key)) {
-//                $ser .= " `$key` = $value ,";
-//            } else {
-//                $ser .= " `$key` = '$value' ,";
-//            }
-//        }
-//        return substr($ser, 0, strlen($ser) - 1);
-//    }
-
-
-
-    //拼装插入语句
-//    public function addSqlState($arr, $obj)
-//    {
-//        $columns = "";
-//        $values = "";
-//        foreach ($arr as $key => $value) {
-//            if(is_array($value)){continue;}
-//            $columns .= " `$key` ,";
-//            if ($obj->isInt($key)) {
-//                $values .= "$value ,";
-//            } else {
-//                $values .= "'$value' ,";
-//            }
-//        }
-//        return "(" . substr($columns, 0, strlen($columns) - 1) . ") values (" . substr($values, 0, strlen($values) - 1) . ");";
-//    }
-
-
 
     /**
      * 执行SQL语句

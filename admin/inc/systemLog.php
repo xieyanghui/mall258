@@ -9,7 +9,7 @@ if (!isset($_SESSION)) { session_start();}
 if (empty($_SESSION['adminInfo'])) { exit('登录超时');}
 include_once($_SERVER['DOCUMENT_ROOT'] . '/util/autoload.php');
 $log = new SystemLog();
-$columnName = array('alog_key'=>'事件','alog_content'=>'详细内容','a_name'=>'管理员','date'=>'时间');
+$columnName = array('sl_key'=>'事件','sl_content'=>'详细内容','a_name'=>'管理员','sl_date'=>'时间');
 $sp = new SearchPage($columnName,$_GET);
 $data = array();
 if($sp->isSearch()){

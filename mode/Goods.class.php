@@ -321,9 +321,11 @@ class Goods
     public function queryGoodsTypeInfo($gtId){
         $sql = $this->getSql(); 
         $where = new Where('gt_id',$gtId);
+
         $price = $sql->selectData('gt_price',array('gtp_id','gtp_name'),$where);
         $attr = $sql->selectData('gt_attr',array('gta_id','gta_name'),$where);
         $row= array('price'=>array(),'attr'=>array());
+        $row['gt_number'] = $sql->selectLine('goods_type',array('gt_number'),$where)['gt_number'];
         foreach($price as $value){
             $row['price'][$value['gtp_id']] = $value['gtp_name'];
         }
