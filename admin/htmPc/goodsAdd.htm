@@ -53,6 +53,13 @@
         width: 70px;
         float: right;
     }
+    .goods_price_list >label{
+        width: 70px;
+    }
+    .goods_price_list >div.win_row_con{
+        width:160px;
+        margin-bottom: 3px;
+    }
     .goods_attr_list>input{
         width:40px;
         display: block;
@@ -110,7 +117,6 @@
         <div class ="win_row_auto">
             <label class ="win_row_head" >价格</label>
             <div class ="win_row_con attr_price" id = 'price'>
-                <div class="goods_price_list"><label class="row_con_head">shenm</label><div class="win_row_con"><div class="con_list_add">+</div></div></div>
             </div>
         </div>
 
@@ -142,7 +148,6 @@
             $('.select_ul').hide();
             $('.select_div').removeClass('select_div_bottom');
         });
-
         //选择商品类型
         $('.select_li').click(function(){
             $('.select_div').html($(this).html());
@@ -153,10 +158,16 @@
                 for(var j in data['attr']){
                     $('#attr').append("<div class='goods_attr_list'><input id='attr"+j+"' name='attr"+j+"' type='text'/><label for='attr"+j+"'  class='row_con_head'>"+data['attr'][j]+"</label></div>");
                 }
-//                for(var j in data['price']){
-//                    $('#'+i).append("<div class='goods_price_list'>"+data[i][j]+"</div>");
-//                }
+                for(var i in data['price']){
+                    $('#price').append("<div class='goods_price_list'><label class='row_con_head'>"+data['price'][i]+"</label><div class='win_row_con' id='price"+i+"'><div class='con_list_add'>+</div></div></div>");
+                }
+                $('.con_list_add').click(function(){
+                    var name = $(this).parent().attr("id");
+                    $(this).before("<div class='con_list_input'><input class='list_form_div' type='text' name='"+name+"[]' ></div>");
+                    $(this).prev().children('input').focus();
+                });
             });
+
         });
         //验证
         $.checks.checkform($('#goodsAddForm'),{
