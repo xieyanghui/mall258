@@ -29,11 +29,11 @@ function toast(sru, meg, time) {
 * top   string  弹出窗口的高度；
 * */
 function showWinInit(thisWidth,top) {
-    var top  =top || "200px";
+    var top  =top || 200;
     var thisWidth = thisWidth || 200;
     $(".backdrop").css("width", $(window).width() + "px");
     $(".backdrop").css("height", $(window).height() + "px");
-    $('.show_win').css("top", top);
+    $('.show_win').css("top", top+'px');
     $('.show_win').css("left", ($(window).width() / 2 - (thisWidth/2)) + "px");
 }
 /**
@@ -88,11 +88,12 @@ var Resize = (function() {
             $('#CRUD').children().remove();
             $('.backdrop').hide();
         },
-        resizeAdd:function(width){
-            showWinInit(width);
+        resizeAdd:function(width,top){
+
+            showWinInit(width,top);
             $(".backdrop").show();
             resizeWin(function(){
-                showWinInit(width);
+                showWinInit(width,top);
             });
             $('.show_win_close ,.cancel').click(function(){
                 $('#CRUD').children().remove();

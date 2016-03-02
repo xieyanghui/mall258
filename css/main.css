@@ -286,8 +286,8 @@ div#addAdmin > div {
 li.list_row{
     overflow: hidden;
 }
-li.list_row_hover{
-    background-color: #80E5F0;
+.list_row_hover{
+    background-color: #BCEDF2;
 }
 li.list_row_odd{
     background-color:#E0F8FB;

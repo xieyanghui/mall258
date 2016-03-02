@@ -1,8 +1,8 @@
 <style type="text/css">
-    #goodsAdd{
+    #goodsAdd2{
         position: absolute;
         z-index: 100;
-        width: 500px;
+        width: 1200px;
         overflow: hidden;
     }
     .select_div{
@@ -104,68 +104,27 @@
         width: 150px;
     }
 </style>
-<form action="./server/goodsAddSer.php" method="post" id="goodsAddForm">
-    <div id='goodsAdd' class='win show_win'>
+<form action="./server/goodsAdd2Ser.php" method="post" id="goodsAdd2Form">
+    <div id='goodsAdd2' class='win show_win'>
         <input type="hidden" name="gt_id" id="gt_id" />
-        <h1 class="win_head">添加商品基本资料 <div class="show_win_close">×</div></h1>
-        <div class="win_row">
+        <h1 class="win_head">添加商品详细资料 <div class="show_win_close">×</div></h1>
+        <div class="win_column">
             <label class ="win_row_head">商品类型</label>
             <div class ="win_row_input"><div class="select_div">请选择类型</div>
                 <ul class="select_ul">
                     <{section name=index loop=$goodsType}>
-                        <li class="select_li" value="<{$goodsType[index]['gt_id']}>"><{$goodsType[index]['gt_name']}> </li>
+                    <li class="select_li" value="<{$goodsType[index]['gt_id']}>"><{$goodsType[index]['gt_name']}> </li>
                     <{/section}>
                 </ul>
             </div>
         </div>
-        <div class="win_row">
+        <div class="win_column">
             <label class ="win_row_head">商品编号</label>
             <div class ="win_row_input"><div class="input_label" ><label id="gt_number"></label><input tabindex="2" type="text" name="g_number" class="input_label_value"/></div></div>
         </div>
-        <div class="win_row">
+        <div class="win_column">
             <label class ="win_row_head">商品名称</label>
             <div class ="win_row_input"><input tabindex="3" type="text" name="g_name" class="form_div"/></div>
-        </div>
-        <div class="win_row">
-            <label class ="win_row_head">商品默认价格</label>
-            <div class ="win_row_input"><input tabindex="4" type="text" name="g_price" class="form_div"/></div>
-        </div>
-
-        <div class ="win_row_auto">
-            <label class ="win_row_head" >商品预览图</label>
-            <div class ="win_row_con">
-                <div id="adminHeadImg">
-                    <img src="<{$GOODS_IMG_DEFAULT}>?imageView2/5/w/75/h/75"/>
-                    <input  type="hidden" name="img"/>
-                </div>
-                <div class="uploadImg">
-                    <div id="imgUp" class="button">选择图片</div>
-                    <div class="bars"><div id="bar"></div></div>
-                </div>
-            </div>
-        </div>
-
-        <div class ="win_row_auto">
-            <label class ="win_row_head">SEO</label>
-            <div class ="win_row_con">
-                <div ><label class='row_con_head'>关键字</label><textarea class="con_textarea" name="g_keywords"></textarea></div>
-                <div ><label class='row_con_head'>描述</label><textarea class="con_textarea" name="g_description"></textarea></div>
-            </div>
-        </div>
-
-        <div class ="win_row_auto">
-            <label class ="win_row_head" >属性</label>
-            <div class ="win_row_con attr_price" id ='attr'>
-            </div>
-        </div>
-        <div class ="win_row_auto">
-            <label class ="win_row_head" >价格</label>
-            <div class ="win_row_con attr_price" id = 'price'>
-            </div>
-        </div>
-        <div class="win_row">
-            <div class="button cancel">取消</div>
-            <div class="submit button">NEXT</div>
         </div>
     </div>
 </form>
@@ -174,7 +133,7 @@
         toast(data.status, data.megs);
         if(data.status){
             $('#CRUD').load('./inc/goodsAdd2.php',{'g_id':data.g_id},function(){
-                Resize.resizeAdd(1200,50);
+                Resize.resizeAdd(1000,100);
             });
         }
     }

@@ -149,7 +149,7 @@ CREATE TABLE `goods`(
 	`g_name` VARCHAR(100) NOT NULL, -- 商品名
 	`gt_id` INT UNSIGNED NOT NULL,  -- 商品类型ID
 	`g_price` float(8,2) NOT NULL,   -- 价格
-	`g_keywoeds` VARCHAR(200) ,      -- 商品关键字SEO
+	`g_keywords` VARCHAR(200) ,      -- 商品关键字SEO
 	`g_description` VARCHAR(200),     -- 商品描述SEO
 	`g_img` VARCHAR(300),              -- 商品图片
 	`g_reg` TIMESTAMP DEFAULT NOW(),   -- 上架时间
@@ -161,7 +161,7 @@ ALTER TABLE `goods` ADD PRIMARY KEY (`g_id`);
 ALTER TABLE `goods` MODIFY `g_id` INT UNSIGNED AUTO_INCREMENT;
 ALTER TABLE `goods` ADD UNIQUE (`g_name`,`g_number`);
 
-INSERT INTO  `goods`(`g_number`,`g_name`,`gt_id`,`g_price`,`g_keywoeds`,`g_description`)VALUES
+INSERT INTO  `goods`(`g_number`,`g_name`,`gt_id`,`g_price`,`g_keywords`,`g_description`)VALUES
 	('0100100001','一加one',1,1999.99,'智能手机，4G手机','不错的一款手机' ),
 	('0100200001','佳能',2,1999.99,'100000s，wifi','不错的一款相机' );
 

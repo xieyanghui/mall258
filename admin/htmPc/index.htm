@@ -2,9 +2,6 @@
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <script src="http://cdn.staticfile.org/jquery/2.1.1/jquery.min.js" type="text/javascript" charset="utf-8"></script>
-    <script type="text/javascript" charset="UTF-8" src="<{$HTTP_HOST}>/js/inCheck.js"></script>
-    <script type="text/javascript" charset="UTF-8" src="<{$HTTP_HOST}>/js/main.js"></script>
     <link rel="stylesheet" type="text/css" href="<{$HTTP_HOST}>/css/main.css"/>
     <title>后台管理</title>
     <style type="text/css">
@@ -40,8 +37,11 @@
             <div class="win_row"><div class="submit button">登录</div></div>
         </div>
     </form>
-
 </body>
+
+<script src="http://cdn.staticfile.org/jquery/2.1.1/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript" charset="UTF-8" src="<{$HTTP_HOST}>/js/inCheck.js"></script>
+<script type="text/javascript" charset="UTF-8" src="<{$HTTP_HOST}>/js/main.js"></script>
 <script>
     function succ(data){
         toast(data.status,data.megs);

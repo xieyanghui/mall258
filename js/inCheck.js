@@ -45,6 +45,12 @@
                     }
                     this.isRegExp(/^[\w-]+$/, "noSpechars");
                 },
+                "isMoney":function (){
+                    if (this.lian) {
+                        return this;
+                    }
+                    this.isRegExp(/^\d{1,10}(.\d)?\d?$/, "isMoney");
+                },
 
 //邮件验证
                 "isEmail": function () {
@@ -179,7 +185,8 @@
                     "isPhone": "格式不对     列：13888888888",
                     "isAjax": "已存在",
                     "isContrast": "不一致",
-                    "noSczw": "不能使用特殊字符"
+                    "noSczw": "不能使用特殊字符",
+                    "isMoney":"数字格式不对 如 :147.55"
                 },
 
 //根据消息KEY 判断是否为用户自定义消息
