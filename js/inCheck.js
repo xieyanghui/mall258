@@ -237,6 +237,7 @@
                     v.isNULL();
                 }
             };
+
             var checkform = function (from, verifys, method) {
                 method = method || "blur";
                 from.submit(function () {//提交时在检查一次

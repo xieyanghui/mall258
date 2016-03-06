@@ -17,12 +17,14 @@
 <div id="test" >
     <div id = "tt" style="height:500px;">1</div>
 </div>
+<div id="aaaa">sdfdf</div>
 </body>
 
 <script src="\js\wangEdit\js\lib\jquery-1.10.2.min.js" type="text/javascript" charset="utf-8"></script>
-<script type="text/javascript" src="/js/wangEdit/js/wangEditor.js"></script>
 <script>
-    var editor = new wangEditor('tt');
-    editor.create();
+    $('#aaaa').click(function(){
+        $('#test').load('/admin/inc/header.inc.php');
+    });
 </script>
 </html>
+

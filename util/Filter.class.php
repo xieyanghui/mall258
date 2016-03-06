@@ -20,11 +20,9 @@ class Filter
             }
         }
         if ($zhijie) {
-            if (isset($_SERVER['HTTP_REFERER'])){
+            if (!empty($_SERVER['HTTP_REFERER'])){
                 exit("此文件不允许直接访问");
             }
         }
     }
 }
-
-?>
