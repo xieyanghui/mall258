@@ -30,7 +30,7 @@ class SearchPage{
         }
         if(!empty($get['search'])){
             $this->search = $get['search'];
-            $this->searchLine = $this->tropeKey($get['searchLine']);
+            $this->searchLine = $get['searchLine'];
         }
     }
     private function tropeKey($column){
@@ -80,7 +80,7 @@ class SearchPage{
         $page['search'] = array('searchLine'=>"",'key'=>"");// 搜索
         $page['sort'] = array('sortLine'=>"",'key'=>""); //排序
         if($this->search != null){
-            $page['search']  = array('searchLine'=>$this->tropeColumn($this->searchLine),'key'=>$this->search);
+            $page['search']  = array('searchLine'=>$this->searchLine,'key'=>$this->search);
         }
         if($this->sort != null){
             $page['sort']  = array('sortLine'=>$this->tropeColumn($this->sortLine),'key'=>$this->sort);
@@ -93,6 +93,18 @@ class SearchPage{
             $page['start'] = ($this->page+1) - ceil($page['pages']/2);
         }
         return $page;
+    }
+    public function getSearchLine(){
+        if(!empty($this->searchLine)){
+            return $this->searchLine;
+        }else{
+            $v = "";
+            foreach($this->columnName as $key =>$value){
+                $v =  $key;
+                break;
+            }
+            return $v;
+        }
     }
 }
 

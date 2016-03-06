@@ -61,7 +61,7 @@ function showdielogue(title ,mage ,fun ){
     });
 }
 
-
+//页面刷新
 var Resize = (function() {
     var resizeFuns = [];
     var resizeWin=function(fun){
@@ -89,7 +89,6 @@ var Resize = (function() {
             $('.backdrop').hide();
         },
         resizeAdd:function(width,top){
-
             showWinInit(width,top);
             $(".backdrop").show();
             resizeWin(function(){
@@ -174,3 +173,121 @@ function getUpload(){
     };
     return upload;
 }
+
+function PageSearch(page_url){
+    var load =function(){
+        $('#contents').load(page_url,$('#list_form').serialize());
+    }
+    //列表背景颜色
+    $('li.list_row:even ').addClass('list_row_even');
+    $('li.list_row:odd').addClass('list_row_odd');
+    $('li.list_row').mouseover(function(){
+        $(this).children().addClass('list_row_hover');
+    });
+    $('li.list_row').mouseout(function(){
+        $(this).children().removeClass('list_row_hover');
+    });
+
+    $("span.list_row_sum").map(function(){
+        if($(this).html() ==$('#list_form').children("input[name='pageRow']").val()){
+            $(this).addClass("list_row_sumOn");
+        }
+    });
+    //
+    //$('#search_select >option').map(function(){
+    //    if($(this).html() ==$('#list_form').children("input[name='searchLine']").val()){
+    //        $(this).parent().val($(this).html());
+    //    }
+    //});
+    //排序
+   // $("li.list_row_head > span").unbind();
+    $("li.list_row_head > span").click(function () {
+        var sortLine = $('#list_form').children("input[name='sortLine']");
+        var sort = $('#list_form').children("input[name='sort']");
+        if(sortLine.val() == $(this).html()){
+            if(sort.val() == "DESC"){
+                sort.val("ASC");
+            }else{
+                sort.val("DESC");
+            }
+        }else{
+            sortLine.val($(this).html());
+            sort.val("DESC");
+        }
+        load();
+    });
+    //列表搜索
+   // $("#list_search").unbind();
+    $("#list_search").click(function () {
+        if($('#search_value').val() !=""){
+            $('#list_form').children("input[name='page']").val('0');
+            $('#list_form').children("input[name='searchLine']").val($("#search_select").val());
+            $('#list_form').children("input[name='search']").val($('#search_value').val());
+            load();
+        }
+    });
+
+    //列表取消搜索
+    $("div#search_delete").click(function () {
+        $('#list_form').children("input[name='search']").val("");
+        load();
+    });
+    //列表每页多少汗设置
+    $("span.list_row_sum").click(function () {
+        $('#list_form').children("input[name='page']").val("0");
+        $('#list_form').children("input[name='pageRow']").val($(this).html());
+        load();
+    });
+    //列表选页
+    $("div.pageNumber").click(function () {
+        $('#list_form').children("input[name='page']").val(parseInt($(this).html()) - 1);
+        load();
+    });
+    //列表翻页
+    $("div.pageButton").click(function () {
+        if($(this).hasClass('pageOff')){
+            return;
+        }
+        if ($(this).html() == "下一页") {
+            $('#list_form').children("input[name='page']").val($("div.pageOn").html());
+        } else {
+            $('#list_form').children("input[name='page']").val(parseInt($("div.pageOn").html()) - 2);
+        }
+        load();
+    });
+}
+
+var CRUD = {
+    add:function(url,width,top){
+        $('.add_show_button').click(function(){
+            $.get(url,function(data){
+                try{
+                    var j = JSON.parse(data);
+                    toast(j.status, j.megs);
+                }catch(error){
+                    $('#CRUD').html(data);
+                    Resize.resizeAdd(width,top);
+                }
+            });
+        });
+    },
+    update:function(url,width,top){
+        $('.list_row').click(function(){
+            $('#CRUD').load(url+'?name='+$(this).children('span.delete').attr('value'),function(){
+                Resize.resizeAdd(width,top);
+            });
+        });
+    },
+    delete:function(url,loal_url,title,megs){
+        $('.list_row > span.delete').click(function(e){
+            var self = $(this);
+            showdielogue(title,megs,function(){
+                $.getJSON(url+"?name="+self.attr('value'),function(data){
+                    toast(data.status,data.megs);
+                    $('#contents').load(loal_url,$('#list_form').serialize());
+                });
+            });
+            e.stopPropagation();
+        });
+    }
+};

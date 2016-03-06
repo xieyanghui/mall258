@@ -1,10 +1,5 @@
 <?php
-if (!isset($_SESSION)) {session_start();}
-if (empty($_SESSION['adminInfo'])) {
-    header("location: ./");
-    exit;
-}
-include_once($_SERVER['DOCUMENT_ROOT'] . '/util/autoload.php');
+include_once ("./inc/header.inc.php");
 $sma = new Smartys;
 //权限辨认
 $auth['report'] = Auth::inAdmin($_SESSION['adminInfo']['a_id'],'report');  //报表统计

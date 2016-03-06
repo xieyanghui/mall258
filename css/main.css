@@ -451,3 +451,9 @@ input.list_form_div{
     border-style: hidden;
     outline:none;
 }
+
+.add_show_button{
+    width: 200px;
+    float: left;
+    margin: 10px 20px;
+}
