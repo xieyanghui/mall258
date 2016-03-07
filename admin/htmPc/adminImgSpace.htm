@@ -1,0 +1,37 @@
+<style type="text/css">
+    #adminList li.list_row > span:first-child ,#adminList li.list_row_head > span:first-child {
+        width: 150px;
+    }
+
+    #adminList li.list_row  > span:nth-child(2) ,#adminList li.list_row_head  > span:nth-child(2){
+        width: 150px;
+    }
+
+    #adminList li.list_row >span:nth-child(3) , #adminList li.list_row_head >span:nth-child(3){
+        width: 140px;
+    }
+    #adminList{
+        margin-top: 10px;
+        float: left;
+    }
+</style>
+<div id='adminList' class='win'>
+    <h1 class="list_head">图片空间</h1>
+    <ul>
+        <li class='list_row_head'>
+            <span>登录账号</span>
+            <span>姓名</span>
+            <span>权限级别</span>
+        </li>
+
+    </ul>
+</div>
+<div class="add_show_button button">增加管理员</div>
+<script type="text/javascript">
+    $(function () {
+        PageSearch('./inc/adminInfo.php');
+        CRUD.add('./inc/adminAdd.php',500);
+        CRUD.update('./inc/adminUpdate.php',500);
+        CRUD.delete('./server/adminDeleteSer.php','./inc/adminInfo.php','确定要删除吗?','删除之之后很严重哦');
+    });
+</script>

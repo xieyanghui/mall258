@@ -1,13 +1,6 @@
 <?php
-if (!isset($_SESSION)) {session_start();};
-if (empty($_SESSION['adminInfo'])) {header("location: ./");exit('登录超时');}
-header("Content-type:text/html;charset=utf-8");
-
-include_once($_SERVER['DOCUMENT_ROOT'] . '/util/autoload.php');
-if(!Auth::inAdmin($_SESSION['adminInfo']['a_id'],'adminAdd')){
-    exit(json_encode(array("status" => FALSE, "megs" => "权限不够！！")));
-}
-
+$auth = "adminAdd";
+include_once ("../inc/header.inc.php");
 
 $admin["a_name"] = $_POST['a_name'];
 $admin["a_nick"] = $_POST['a_nick'];

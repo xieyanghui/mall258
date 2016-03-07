@@ -447,7 +447,7 @@ class Admin
      */
     public function updateAdminImg($id,$path){
         $sql = new Sql;
-        return $sql->update('admin',new Where('a_id',$id),array('columnName'=>'a_img','value'=>$path));
+        return $sql->update('admin',new Where('a_id',$id),array($path=>'a_img'));
     }
 
 }

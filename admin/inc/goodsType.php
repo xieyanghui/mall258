@@ -5,9 +5,7 @@
  * Date: 2015/11/14
  * Time: 19:10
  */
-if (!isset($_SESSION)) { session_start();}
-if (empty($_SESSION['adminInfo'])) { exit('登录超时');}
-include_once($_SERVER['DOCUMENT_ROOT'] . '/util/autoload.php');
+include_once("header.inc.php");
 $goods = new Goods();
 $columnName = array('gt_number'=>'编号','gt_name'=>'商品类型名称','gt_remark'=>'备注');
 $sp = new SearchPage($columnName,$_GET);

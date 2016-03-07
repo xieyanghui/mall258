@@ -242,14 +242,14 @@ class Goods
         $b = true;
         if(!empty($gPrice) && is_array($gPrice)){
             foreach($gPrice as $key=>$value) {
-                if(!$sql->update('g_price',new Where('gp_id',$key),array('columnName'=>'gp_name','value'=>$value))){
+                if(!$sql->update('g_price',new Where('gp_id',$key),array($value=>'gp_name'))){
                     $b = false;
                 }
             }
         }
         if(!empty($gAttr) && is_array($gAttr)){
             foreach($gAttr as $key=>$value) {
-                if(!$sql->update('g_attr',new Where('ga_id',$key),array('columnName'=>'ga_value','value'=>$value))){
+                if(!$sql->update('g_attr',new Where('ga_id',$key),array($value=>'ga_value'))){
                     $b = false;
                 }
             }
@@ -468,14 +468,14 @@ class Goods
 
         if(!empty($gtAttr) && is_array($gtAttr)){
             foreach($gtAttr as $key=>$value) {
-                if(!$sql->update('gt_attr',new Where('gta_id',$key),array('columnName'=>'gta_name','value'=>$value))){
+                if(!$sql->update('gt_attr',new Where('gta_id',$key),array($value=>'gta_name'))){
                     $b = false;
                 }
             }
         }
         if(!empty($gtPrice) && is_array($gtPrice)){
             foreach($gtPrice as $key=>$value) {
-                if(!$sql->update('gt_price',new Where('gtp_id',$key),array('columnName'=>'gtp_name','value'=>$value))){
+                if(!$sql->update('gt_price',new Where('gtp_id',$key),array($value=>'gtp_name'))){
                     $b = false;
                 }
             }

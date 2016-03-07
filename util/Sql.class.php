@@ -233,9 +233,9 @@ class Sql
      *
      * @param $table  string 表名
      *
-     * @param $where Where 条件,必须是二维数组，子数组条件必须 columnName，type ，value，可选logic，mark
+     * @param $where Where 条件,参考Where类
      *
-     * @param $values array 需要修改的字段必须是二维数组，子数组条件必须 columnName，value,可选 type默认string
+     * @param $values array 需要修改的字段 数组，子数组条件必须 columnName，value, type或者关联数组KEY为值,VALUE为字段名
      *
      * @return bool 成功返回true，失败返回false
      *
@@ -244,24 +244,26 @@ class Sql
         $set = "";
         $type="";
         $arges=array();
-        foreach($values as $value){
+        foreach($values as $key=>$value){
             if(is_array($value)){
-                $set .=" `{$value['columnName']}` =? ,";
-                if(!empty($value['type'])){
-                    $type .=substr($value['type'],0,1);
-                }else{
-                    $type .='s';
+                $set .= " `{$value['columnName']}` =? ,";
+                if (!empty($value['type'])) {
+                    $type .= substr($value['type'], 0, 1);
+                } else {
+                    $type .= 's';
                 }
-                array_push($arges,$value['value']);
+                array_push($arges, $value['value']);
             }else{
-                $set .=" `{$values['columnName']}` =? ,";
-                if(!empty($values['type'])){
-                    $type .=substr($values['type'],0,1);
+                if(isset($values['columnName'])) {
+                    $set .= " `{$values['columnName']}` =? ,";
+                    $type .= substr($values['type'], 0, 1);
+                    array_push($arges, $values['value']);
+                    break;
                 }else{
-                    $type .='s';
+                    $type .= 's';
+                    $set .=$value.' =? ,';
+                    array_push($arges, $key);
                 }
-                array_push($arges,$values['value']);
-                break;
             }
         }
         $type .= $where->getPrepType();

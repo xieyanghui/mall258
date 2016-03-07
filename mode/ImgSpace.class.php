@@ -1,0 +1,73 @@
+<?php
+/**
+ * Created by PhpStorm.
+ * User: PC-SHITING
+ * Date: 2016/3/7
+ * Time: 19:13
+ */
+class ImgSpace{
+    private $sql =null;
+    private function getSql(){
+        if(empty($this->sql)){
+            $this->sql = new Sql();
+        }
+        return $this->sql;
+    }
+
+    public function getImgSpace($a_id){
+        $sql = $this->getSql();
+        return $sql->selectData('admin_img_space_v',array('ais_id','ais_name','ais_img_url','ais_time','ait_id'),new Where('a_id',$a_id,'int'));
+    }
+    public function getImgType($a_id){
+        $sql = $this->getSql();
+        $where = new Where('a_id',$a_id,'int');
+        $where->setWhere('a_id',0,'int','OR');
+        return $sql->selectData('admin_img_type',array('ait_id','ait_name'),$where);
+    }
+    public function deleteImgSpace($ais_id,$a_id){
+        $sql = $this->getSql();
+        $where = new Where('ais_id',$ais_id,'int');
+        $where ->setWhere('a_id',$a_id,'int');
+        return $sql->delete('admin_img_space',$where);
+    }
+    public function deleteImgType($ait_id,$a_id){
+        $sql = $this->getSql();
+        if($ait_id<4){return false;}
+        $where = new Where('ait_id',$ait_id,'int');
+        $where ->setWhere('a_id',$a_id,'int');
+        if($sql->update('admin_img_space',$where,array('columnName'=>'ait_id','type'=>'int','value'=>'1'))){
+            return $sql->delete('admin_img_type',$where);
+        }
+        return false;
+
+    }
+
+    public function addImgType($ait_name,$a_id){
+        $sql = $this->getSql();
+        return $sql->insert('admin_img_type',array('ait_name','a_id'=>'int'),array($ait_name,$a_id));
+    }
+    public function addImgSpace($ais_name,$a_id,$ais_img_url,$ait_id){
+        $sql = $this->getSql();
+        return $sql->insert('admin_img_space',array('ais_name','a_id'=>'int','ais_img_url','ait_id'=>'int'),array($ais_name,$a_id,$ais_img_url,$ait_id));
+    }
+
+    public function updateImgSpace($ais_id,$ais_name,$ais_img_url,$ait_id){
+        $data =array();
+        if(!empty($ais_name)){
+            $data[$ais_name] ='ais_name';
+        }
+        if(!empty($ais_img_url)){
+            $data[$ais_img_url] ='ais_img_url';
+        }
+        if(!empty($ait_id)){
+            array_push($data,array('columnName'=>'ait_id','type'=>'int','value'=>$ait_id));
+        }
+        $sql = $this->getSql();
+        return $sql->update('admin_img_space',new Where('ais_id',$ais_id,'int'),$data);
+    }
+
+    public function updateImgType($ait_name,$ait_id){
+        $sql = $this->getSql();
+        return $sql->update('admin_img_type',new Where('ait_id',$ait_id,'int'),array($ait_name=>'ait_name'));
+    }
+}
