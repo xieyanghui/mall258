@@ -18,15 +18,13 @@
 <div id='adminList' class='win'>
     <h1 class="list_head">图片空间</h1>
     <ul>
-        <li class='list_row_head'>
-            <span>登录账号</span>
-            <span>姓名</span>
-            <span>权限级别</span>
-        </li>
-
+        <{section name=index loop=$type}>
+        <li name="<{$type[index]['ait_id']}>"><{$type[index]['ait_name']}></li>
+        <{/section}>
     </ul>
+    <div ></div>
 </div>
-<div class="add_show_button button">增加管理员</div>
+
 <script type="text/javascript">
     $(function () {
         PageSearch('./inc/adminInfo.php');
