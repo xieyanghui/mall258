@@ -5,7 +5,8 @@
  * Date: 2016/2/18
  * Time: 23:02
  */
-
+$auth = "adminAdd";
+include_once ("header.inc.php");
 $sma = new Smartys;
 $admin = new Admin();
 $sma->assign('adminAuth',$admin->getAdminAuth(0,100)['data']);

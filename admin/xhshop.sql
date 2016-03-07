@@ -22,7 +22,7 @@ ALTER TABLE `auth_list` ADD PRIMARY KEY (`al_id`);
 ALTER TABLE `auth_list` ADD UNIQUE(`al_key`);
 ALTER TABLE `auth_list` MODIFY `al_id` INT UNSIGNED AUTO_INCREMENT;
 INSERT INTO `auth_list` (`al_key`,`al_nick`,`al_remark`) VALUES ('report','报表统计','营运状况'),('service','客服管理','管理客服'),('order','订单管理','订单处理'),('goods','商品管理','商品各种操作');
-INSERT INTO `auth_list` (`al_key`,`al_nick`,`al_remark`) VALUES ('log','系统日志','查看系统日志');
+INSERT INTO `auth_list` (`al_key`,`al_nick`,`al_remark`) VALUES ('systemLog','系统日志','查看系统日志');
 INSERT INTO `auth_list` (`al_key`,`al_nick`,`al_remark`) VALUES ('goodsRecommend','推荐商品管理','');
 INSERT INTO `auth_list` (`al_key`,`al_nick`,`al_remark`) VALUES ('admin','管理员管理',''),('adminDelete','删除管理员','超级权限'),('adminAdd','增加管理员',''),('adminUpdate','修改管理员','');
 INSERT INTO `auth_list` (`al_key`,`al_nick`,`al_remark`) VALUES ('adminAuth','管理员权限管理',''),('adminAuthAdd','增加管理员权限',''),('adminAuthUpdate','修改管理员权限',''),('adminAuthDelete','删除管理员权限','');
@@ -79,18 +79,32 @@ CREATE TABLE `admin_login_log`(
 ALTER TABLE `admin_login_log` ADD PRIMARY KEY (`all_id`);
 ALTER TABLE `admin_login_log` MODIFY `all_id` INT UNSIGNED AUTO_INCREMENT;
 
+-- 管理员图片空间类型
+DROP TABLE IF EXISTS `admin_img_type`;
+CREATE TABLE `admin_img_type`(
+	ait_id INT NOT NULL,    -- ID
+	`ait_name` CHAR(40) ,      -- 图片分类
+	`a_id` INT UNSIGNED NOT NULL  -- 用户ID
+)DEFAULT CHARSET = utf8 ENGINE=MyISAM;
+ALTER TABLE `admin_img_type` ADD PRIMARY KEY (`ait_id`);
+ALTER TABLE `admin_img_type` MODIFY `ait_id` INT UNSIGNED AUTO_INCREMENT;
+INSERT INTO `admin_img_type` (`ait_name`,`a_id`) VALUES ('回收站',0),('商品图片',0),('头像图片',0);
 -- 管理员图片空间
-DROP TABLE IF EXISTS `admin_img_scope`;
-CREATE TABLE `admin_img_scope`(
+DROP TABLE IF EXISTS `admin_img_space`;
+CREATE TABLE `admin_img_space`(
   `ais_id` INT NOT NULL,    -- ID
   `ais_name` CHAR(40) ,      -- 图片名
   `a_id` INT UNSIGNED NOT NULL , -- 用户ID
-  `ais_imgurl` VARCHAR(500) NOT NULL ,  -- 图片路径
-  `ais_type` CHAR(20) NOT NULL ,     -- 图片分类
+  `ais_img_url` VARCHAR(500) NOT NULL ,  -- 图片路径
+  `ait_id` INT UNSIGNED NOT NULL ,     -- 图片
   `ais_time` TIMESTAMP DEFAULT NOW()  -- 上传时间
 )DEFAULT CHARSET = utf8 ENGINE=MyISAM;
-ALTER TABLE `admin_img_scope` ADD PRIMARY KEY (`ais_id`);
-ALTER TABLE `admin_img_scope` MODIFY `ais_id` INT UNSIGNED AUTO_INCREMENT;
+ALTER TABLE `admin_img_space` ADD PRIMARY KEY (`ais_id`);
+ALTER TABLE `admin_img_space` MODIFY `ais_id` INT UNSIGNED AUTO_INCREMENT;
+INSERT INTO `admin_img_space` (`ais_name`,`a_id`,`ais_img_url`,`ait_id`) VALUES ('商ss',1,'ddddddddddddddd',1);
+INSERT INTO `admin_img_space` (`ais_name`,`a_id`,`ais_img_url`,`ait_id`) VALUES ('erw',2,'dddwwwwwwwwwwwwdd',1);
+INSERT INTO `admin_img_space` (`ais_name`,`a_id`,`ais_img_url`,`ait_id`) VALUES ('fbgfgb',1,'dddwwwwwty6ytywwwwdd',1);
+
 
 -- 用户
 DROP TABLE IF EXISTS `user`;
@@ -373,9 +387,22 @@ CREATE VIEW `system_log_v` AS
 		`sl_key`,
 		`sl_content`,
 		`sl_date`,
-    system_log.a_id as `a_id`,
+		system_log.a_id as `a_id`,
 		`a_nick`
 	FROM system_log,admin WHERE system_log.a_id = admin.a_id;
+
+
+DROP VIEW IF EXISTS `admin_img_space_v`;
+CREATE VIEW `admin_img_space_v` AS
+	SELECT
+		`ais_id`,
+		`ais_name`,
+		`ais_img_url`,
+		`ais_time`,
+		admin_img_space.ait_id as `ait_id`,
+		admin_img_space.a_id as `a_id`,
+		`ait_name`
+	FROM admin_img_space,admin_img_type WHERE admin_img_space.ait_id = admin_img_type.ait_id;
 
 
 

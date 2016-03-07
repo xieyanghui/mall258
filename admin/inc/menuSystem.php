@@ -5,9 +5,7 @@
  * Date: 2015/11/14
  * Time: 17:45
  */
-if (!isset($_SESSION)) {session_start();}
-if (empty($_SESSION['adminInfo'])) {header("location: ./");exit;}
-include_once($_SERVER['DOCUMENT_ROOT'] . '/util/autoload.php');
+include_once("header.inc.php");
 //管理员管理
 $auth['admin'] = Auth::inAdmin($_SESSION['adminInfo']['a_id'],'admin');
 //系统日志

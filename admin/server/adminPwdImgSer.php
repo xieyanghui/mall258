@@ -1,10 +1,7 @@
 <?php
-if (!isset($_SESSION)) {session_start();};
-if (empty($_SESSION['adminInfo'])) {header("location: ./");exit;}
-header("Content-type:text/html;charset=utf-8");
-include_once($_SERVER['DOCUMENT_ROOT'] . '/util/autoload.php');
-$a_id = $_POST['a_id'];
 
+include_once ("../inc/header.inc.php");
+$a_id = $_POST['a_id'];
 $oldPwd = md5($_POST['oldPwd']);
 $newPwd = md5($_POST['newPwd']);
 $admin = new Admin();

@@ -5,9 +5,8 @@
  * Date: 2015/11/14
  * Time: 19:10
  */
-if (!isset($_SESSION)) {session_start();};
-if (empty($_SESSION['adminInfo'])) {exit('登录超时');}
-include_once($_SERVER['DOCUMENT_ROOT'] . '/util/autoload.php');
+$auth = 'adminAuthUpdate';
+include_once("header.inc.php");
 $admin = new Admin;
 $aa_id = $_GET['name'];
 $row = $admin->queryAdminAuth($aa_id);

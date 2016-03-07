@@ -5,9 +5,8 @@
  * Date: 2015/11/14
  * Time: 19:10
  */
-if (!isset($_SESSION)) { session_start();}
-if (empty($_SESSION['adminInfo'])) { exit('登录超时');}
-include_once($_SERVER['DOCUMENT_ROOT'] . '/util/autoload.php');
+$auth ='systemLog';
+include_once("header.inc.php");
 $log = new SystemLog();
 $columnName = array('sl_key'=>'事件','sl_content'=>'详细内容','a_name'=>'管理员','sl_date'=>'时间');
 $sp = new SearchPage($columnName,$_GET);
