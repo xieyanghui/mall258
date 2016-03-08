@@ -16,7 +16,15 @@ class ImgSpace{
 
     public function getImgSpace($a_id){
         $sql = $this->getSql();
-        return $sql->selectData('admin_img_space_v',array('ais_id','ais_name','ais_img_url','ais_time','ait_id'),new Where('a_id',$a_id,'int'));
+        $where = new Where('a_id',$a_id,'int');
+        $where->setWhere('a_id',0,'int','OR');
+        $data = $sql->selectData('admin_img_type',array('ait_id','ait_name'),$where);
+        foreach($data as $key =>$value){
+            $where = new Where('a_id',$a_id,'int');
+            $where->setWhere('ait_id',$value['ait_id'],'int');
+            $data[$key]['value'] = $sql->selectData('admin_img_space',array('ais_id','ais_name','ais_img_url','ais_time'),$where);
+        }
+        return $data;
     }
     public function getImgType($a_id){
         $sql = $this->getSql();

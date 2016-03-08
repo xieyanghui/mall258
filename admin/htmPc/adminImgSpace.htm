@@ -1,28 +1,30 @@
 <style type="text/css">
-    #adminList li.list_row > span:first-child ,#adminList li.list_row_head > span:first-child {
-        width: 150px;
-    }
-
-    #adminList li.list_row  > span:nth-child(2) ,#adminList li.list_row_head  > span:nth-child(2){
-        width: 150px;
-    }
-
-    #adminList li.list_row >span:nth-child(3) , #adminList li.list_row_head >span:nth-child(3){
-        width: 140px;
-    }
-    #adminList{
+    #img_space{
         margin-top: 10px;
         float: left;
+        width: 800px;
     }
 </style>
-<div id='adminList' class='win'>
+<div id='img_space' class='win'>
     <h1 class="list_head">图片空间</h1>
-    <ul>
-        <{section name=index loop=$type}>
-        <li name="<{$type[index]['ait_id']}>"><{$type[index]['ait_name']}></li>
+    <ul class="img_class_ul">
+        <{section name=index loop=$space}>
+        <li class="img_class_li" name="img<{$space[index]['ait_id']}>"><{$space[index]['ait_name']}></li>
         <{/section}>
     </ul>
-    <div ></div>
+    <div class="">
+        <{section name=index loop=$space}>
+        <div name="img<{$space[index]['ait_id']}>">
+            <{section name=ind loop=$space[index]['value']}>
+                <div>
+                    <div><img src="<{$space[index]['value'][ind]['ais_img_url']}>?imageView2/5/w/100/h/100"></div>
+                    <div><span><{$space[index]['value'][ind]['ais_name']}></span></div>
+                    <div>时间:<{$space[index]['value'][ind]['ais_time']}></div>
+                </div>
+            <{/section}>
+        </div>
+        <{/section}>
+    </div>
 </div>
 
 <script type="text/javascript">
