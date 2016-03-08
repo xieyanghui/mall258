@@ -1,35 +1,252 @@
 <style type="text/css">
-    #adminList li.list_row > span:first-child ,#adminList li.list_row_head > span:first-child {
-        width: 150px;
-    }
-
-    #adminList li.list_row  > span:nth-child(2) ,#adminList li.list_row_head  > span:nth-child(2){
-        width: 150px;
-    }
-
-    #adminList li.list_row >span:nth-child(3) , #adminList li.list_row_head >span:nth-child(3){
-        width: 140px;
-    }
-    #adminList{
-        margin-top: 10px;
+    #img_space{
+        margin-top:10px;
+        width: 800px;
         float: left;
     }
+    .img_type_ul{
+        width: 800px;
+        height: 30px;
+        background-color: #80E5F0;
+        font-size: 18px;
+        line-height: 30px;
+        overflow: hidden;
+    }
+    .img_type_li{
+        display: block;
+        position: relative;
+        float: left;
+        height: 28px;
+        width: 70px;
+        margin: 0 5px;
+        text-align: center;
+    }
+    .img_type_li_click{
+        background-color: #FFFFFF;
+        cursor: pointer;
+    }
+    .img_type_li:hover{
+        background-color: #FFFFFF;
+        cursor: pointer;
+        color: #50D1DE;
+    }
+    .img_type_li[name='img1']{
+        float: right;
+    }
+    .img_type_li>input{
+        width: 60px;
+        margin: 1px auto;
+    }
+    .img_type_add{
+        font-size: 35px;
+    }
+    .img_type_delete ,.img_type_update{
+        top:0;
+        width:10px;
+        height: 10px;
+        z-index: 100;
+        position: absolute;
+        line-height: 1;
+        display: none;
+    }
+    .img_type_delete{
+        right: 0;
+        color: red;
+    }
+    .img_type_update{
+        left: 0;
+        color: #2b542c;
+    }
+    .img_type_delete:hover{
+        background-color: #9B410E;
+    }
+    .img_type_update:hover{
+        background-color: #4cae4c;
+    }
+
+
+    .img_con{
+        height: 600px;
+        width: 800px;
+        overflow: hidden;
+    }
+    .img_con_list{
+        height: 600px;
+        width: 800px;
+        overflow-y: auto;
+        overflow-x: hidden;
+        display: none;
+        padding-bottom:5px ;
+    }
+    .img_con_con{
+        margin: 5px 0 0 5px;
+        border: 1px solid #07A1B1;
+        width: 110px;
+        height: 150px;
+        overflow: hidden;
+        float: left;
+    }
+    .img_con_con_img{
+        margin: 4px auto;
+        width: 100px;
+        height: 100px;
+    }
+    .img_con_con_name{
+        margin:3px auto;
+        width: 100px;
+        border: 1px solid #50D1DE;
+    }
+    .img_con_con_name >input{
+        outline:none;
+        width: 100px;
+        height: 18px;
+        border: hidden;
+    }
+    .img_con_con_time {
+        width: 100px;
+        text-align: center;
+        margin: 3px auto;
+    }
+    .img_con_con_bar{
+        float: left;
+        height: 4px;
+        top: 2px;
+        width: 0;
+        background-color: #2aabd2;
+    }
 </style>
-<div id='adminList' class='win'>
+<div id='img_space' class='win'>
     <h1 class="list_head">图片空间</h1>
-    <ul>
-        <{section name=index loop=$type}>
-        <li name="<{$type[index]['ait_id']}>"><{$type[index]['ait_name']}></li>
+    <ul class="img_type_ul">
+        <{section name=index loop=$space}>
+        <li class="img_type_li" name="img<{$space[index]['ait_id']}>"><{$space[index]['ait_name']}><div class="img_type_update">✎</div><div class="img_type_delete">×</div></li>
         <{/section}>
+        <li class="img_type_add img_type_li">+</li>
     </ul>
-    <div ></div>
+    <div class="img_con">
+        <{section name=index loop=$space}>
+        <div class="img_con_list" name="img<{$space[index]['ait_id']}>" >
+            <{section name=ind loop=$space[index]['value']}>
+            <div class="img_con_con" name="imgs<{$space[index]['value'][ind]['ais_id']}>">
+                <div class="img_con_con_img"><img src="<{$space[index]['value'][ind]['ais_img_url']}>?imageView2/5/w/100/h/100"> </div>
+                <div class="img_con_con_name"><input type="text" value="<{$space[index]['value'][ind]['ais_name']}>" ></div>
+                <div class="img_con_con_time"><{$space[index]['value'][ind]['ais_time']|date_format:"%y-%m-%d %H:%M"}></div>
+            </div>
+            <{/section}>
+        </div>
+        <{/section}>
+    </div>
 </div>
+<div id = 'img_add_button' class="add_show_button button">上传图片</div>
 
 <script type="text/javascript">
     $(function () {
-        PageSearch('./inc/adminInfo.php');
-        CRUD.add('./inc/adminAdd.php',500);
-        CRUD.update('./inc/adminUpdate.php',500);
-        CRUD.delete('./server/adminDeleteSer.php','./inc/adminInfo.php','确定要删除吗?','删除之之后很严重哦');
+        $('.img_con_con_img>img').error(function(){
+            $(this).attr('src','http://7xkkh3.com1.z0.glb.clouddn.com/imgerror.jpg?imageView2/5/w/100/h/100');
+        });
+        $('.img_type_li').mouseout(function(){
+            $(this).children('div').hide();
+        });
+        $('.img_type_li').mousemove(function(){
+            $(this).children('div').show();
+        });
+        $('.img_type_delete').click(function(e){
+
+        });
+        $('.img_type_update').click(function(e){
+            var type = $(this).parent();
+            type.html("<input type='text' value='"+type.+"' class='form_div'>");
+          //  $(this).before("<li class='img_type_li'> <input type='text' class='form_div'></li>");
+            updateType(type.find('input'));
+            e.stopPropagation();
+        });
+        $('.img_type_li').eq(1).addClass('img_type_li_click');
+        $('.img_con_list').eq(1).show();
+        var updateType = function(imgType,fun){
+            imgType.focus();
+            imgType.blur(function() {
+                var $slfe = $(this);
+                var b = true;
+                $(this).parent().siblings().map(function () {
+                    if ($slfe.val() == $(this).html()) {
+                        toast(false, '重复了');
+                        b = false;
+                    }
+                });
+                if (b) {
+                    fun();
+                }
+            });
+        }
+        $('.img_type_li').click(function(){
+            if($(this).hasClass('img_type_add')){
+                $(this).before("<li class='img_type_li'> <input type='text' class='form_div'></li>");
+                updateType($(this).prev().find('input'),function(){
+                    $.getJSON('./server/adminImgTypeAddSer.php', {'ait_name': $(this).val()}, function (data) {
+                        toast(data.status, data.megs);
+                        if (data.status) {
+                            $slfe1.parent().html($slfe1.val());
+
+                        } else {
+                            $slfe1.parent().remove();
+                        }
+                    });
+                });
+//                $(this).prev().find('input').focus();
+//                $(this).prev().find('input').blur(function(){
+//                    var $slfe = $(this);
+//                    var b = true;
+//                    $(this).parent().siblings().map(function(){
+//                       if($slfe.val() == $(this).html()){
+//                           toast(false,'重复了');
+//                           b = false;
+//                       }
+//                    });
+//                    if(b){
+//                        $.getJSON('./server/adminImgTypeAddSer.php',{'ait_name':$(this).val()},function(data){
+//                            toast(data.status,data.megs);
+//                            if(data.status){
+//                                $slfe1.parent().html($slfe1.val());
+//
+//                            }else{
+//                                $slfe1.parent().remove();
+//                            }
+//                        });
+//                    }
+//              });
+            }else{
+                $(this).addClass('img_type_li_click');
+                $(this).siblings().removeClass('img_type_li_click');
+                $(".img_con_list[name='"+ $(this).attr('name')+"']").show().siblings().hide();
+            }
+
+
+        });
+
+    });
+    $(function(){
+        //上传
+        var up =  getUpload();
+        up.browse_button = "img_add_button";
+       up['init'].UploadProgress = function(up,file){
+           $(".img_con_list >div[name='"+file.id+"']").find('div.img_con_con_bar').css('width',file.percent+"%");
+        };
+        up['init'].BeforeUpload = function(up,file){
+            var name =  file.name;
+            name = name.substr(0,name.lastIndexOf('.'));
+            $('.img_con_list:visible').prepend("<div class ='img_con_con' name = '"+file.id+"'><div class='img_con_con_img'></div><div class='img_con_con_name'><input type='text' value='"+name+"'></div><div class='img_con_con_time'><div class='img_con_con_bar'></div></div></div>");
+        }
+        up['init'].FileUploaded = function (up, file, info) {
+            var div = $(".img_con_list >div[name='"+file.id+"']");
+            var domain = up.getOption('domain');
+            var res = JSON.parse(info);
+            div.children('.img_con_con_img').append("<img src='"+domain + "/" + res.key + "?imageView2/5/w/100/h/100"+"'>");
+            var ait_id = div.parent().attr('name').substr(3);
+            $.getJSON('./server/adminImgSpaceAddSer.php',{'ais_name':file.name.substr(0,file.name.lastIndexOf('.')),'ais_img_url':domain + "/" + res.key,'ait_id':ait_id},function(data){
+
+            });
+
+        };
+        var uploader = Qiniu.uploader(up);
     });
 </script>

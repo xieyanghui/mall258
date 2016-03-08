@@ -5,6 +5,7 @@
  * Date: 2015/11/14
  * Time: 19:10
  */
+$auth='adminAdd';
 include_once("header.inc.php");
 $admin = new Admin;
 $a_id = $_GET['name'];

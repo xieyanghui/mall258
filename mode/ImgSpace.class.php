@@ -16,7 +16,16 @@ class ImgSpace{
 
     public function getImgSpace($a_id){
         $sql = $this->getSql();
-        return $sql->selectData('admin_img_space_v',array('ais_id','ais_name','ais_img_url','ais_time','ait_id'),new Where('a_id',$a_id,'int'));
+        $where = new Where('a_id',$a_id,'int');
+        $where->setWhere('a_id',0,'int','OR');
+        $where->setWhereEnd("ORDER BY `ait_id`  ");
+        $data = $sql->selectData('admin_img_type',array('ait_id','ait_name'),$where);
+        foreach($data as $key=>$value){
+            $where = new Where('a_id',$a_id,'int');
+            $where->setWhere('ait_id',$value['ait_id'],'int');
+            $data[$key]['value'] = $sql->selectData('admin_img_space',array('ais_id','ais_name','ais_img_url','ais_time'),$where);
+        }
+        return $data;
     }
     public function getImgType($a_id){
         $sql = $this->getSql();
@@ -43,8 +52,14 @@ class ImgSpace{
     }
 
     public function addImgType($ait_name,$a_id){
+        if(empty($ait_name)){return false;}
         $sql = $this->getSql();
-        return $sql->insert('admin_img_type',array('ait_name','a_id'=>'int'),array($ait_name,$a_id));
+        $where = new Where('a_id',$a_id,'int');
+        $where->setWhere('ait_name',$ait_name);
+        if(empty($sql->selectLine('admin_img_type','ait_id',$where))){
+            return $sql->insert('admin_img_type',array('ait_name','a_id'=>'int'),array($ait_name,$a_id));
+        }
+        return false;
     }
     public function addImgSpace($ais_name,$a_id,$ais_img_url,$ait_id){
         $sql = $this->getSql();

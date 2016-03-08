@@ -1,10 +1,10 @@
 
 /**
-* 吐司
-* sru bool值 true为成功 false 为失败
-* meg string 消息
-* time 吐司时间 默认2秒
-* */
+ * 吐司
+ * sru bool值 true为成功 false 为失败
+ * meg string 消息
+ * time 吐司时间 默认2秒
+ * */
 function toast(sru, meg, time) {
     var time = time || 2000;
     if ($('#toast').length < 1) {
@@ -24,10 +24,10 @@ function toast(sru, meg, time) {
 }
 
 /**
-* 初始化弹出窗口
-* thisWidth int 需要弹出窗口的宽度
-* top   string  弹出窗口的高度；
-* */
+ * 初始化弹出窗口
+ * thisWidth int 需要弹出窗口的宽度
+ * top   string  弹出窗口的高度；
+ * */
 function showWinInit(thisWidth,top) {
     var top  =top || 200;
     var thisWidth = thisWidth || 200;
@@ -37,11 +37,11 @@ function showWinInit(thisWidth,top) {
     $('.show_win').css("left", ($(window).width() / 2 - (thisWidth/2)) + "px");
 }
 /**
-* 消息对话框
-* title string  标题
-* mage  string  详细
-* fun   function  按确定之后执行的方法
-* */
+ * 消息对话框
+ * title string  标题
+ * mage  string  详细
+ * fun   function  按确定之后执行的方法
+ * */
 function showdielogue(title ,mage ,fun ){
     if ($('#showdielogue').length < 1) {
         $('body').append("<div id = 'showdielogue'><span></span><div></div>" +"<div><div class ='button'>取消</div><div class ='button'>确定</div></div></div>");
@@ -171,7 +171,11 @@ function getUpload(){
             }
         }
     };
-    return upload;
+    //function f(){};
+    //f.prototype=upload;
+    var u ={};
+    $.extend(u,upload);
+    return u;
 }
 
 function PageSearch(page_url){
@@ -200,7 +204,6 @@ function PageSearch(page_url){
     //    }
     //});
     //排序
-   // $("li.list_row_head > span").unbind();
     $("li.list_row_head > span").click(function () {
         var sortLine = $('#list_form').children("input[name='sortLine']");
         var sort = $('#list_form').children("input[name='sort']");
@@ -217,7 +220,7 @@ function PageSearch(page_url){
         load();
     });
     //列表搜索
-   // $("#list_search").unbind();
+    // $("#list_search").unbind();
     $("#list_search").click(function () {
         if($('#search_value').val() !=""){
             $('#list_form').children("input[name='page']").val('0');
@@ -273,8 +276,14 @@ var CRUD = {
     },
     update:function(url,width,top){
         $('.list_row').click(function(){
-            $('#CRUD').load(url+'?name='+$(this).children('span.delete').attr('value'),function(){
-                Resize.resizeAdd(width,top);
+            $('#CRUD').load(url+'?name='+$(this).children('span.delete').attr('value'),function(data){
+                try{
+                    var j = JSON.parse(data);
+                    toast(j.status, j.megs);
+                }catch(error){
+                    $('#CRUD').html(data);
+                    Resize.resizeAdd(width,top);
+                }
             });
         });
     },
