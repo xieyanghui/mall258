@@ -18,6 +18,8 @@ if($sp->isSearch()){
 }
 
 $sma = new Smartys;
+$sma->assign('myOptions',$columnName);
+$sma->assign('mySelect',$sp->getSearchLine());
 $sma->assign('page', $sp->getPages($data['count']));
 $sma->assign('row' ,$data['data']);
 $sma->display('systemLog.htm');
