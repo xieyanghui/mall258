@@ -126,7 +126,6 @@
         position: relative;
         float: left;
         padding-bottom: 5px;
-        display: none;
     }
     .img_con_util >div{
         float: left;
@@ -345,10 +344,14 @@
         });
 
         //删除图片
-        $('.img_con').on('click','img_con_delete ',function(e){
+        $('.img_con').on('click','.img_con_delete ',function(e){
             var slfe = $(this).parent().parent();
-            if(slfe.children(".img_con_con[select='1']").)
-            $.getJSON('./server/adminImgSpaceDeleteSer.php',{'ais_id':$(this).parent().parent().attr('name').substr(4),'ais_name':$(this).val()},function(data){
+            if(slfe.children(".img_con_con[select='1']").length ==0){return;}
+            var ais_id= [];
+            slfe.children(".img_con_con[select='1']").map(function(){
+                 ais_id.push($(this).attr('name').substr(4));
+            });
+            $.getJSON('./server/adminImgSpaceDeleteSer.php',{'ais_id':ais_id,'ait_id':slfe.attr('name').substr(3)},function(data){
                 toast(data.status,data.megs);
                 if(!data.status){
                     slfe.val(con_name_temp);
@@ -358,7 +361,7 @@
         });
 
         //移动图片
-        $('.img_con').on('click','img_con_move',function(e){
+        $('.img_con').on('click','.img_con_move',function(e){
             if(con_name_temp == $(this).val()){return;}
             var slfe = $(this);
             $.getJSON('./server/adminImgSpaceUpdateSer.php',{'ais_id':$(this).parent().parent().attr('name').substr(4),'ais_name':$(this).val()},function(data){
@@ -371,28 +374,16 @@
         });
 
         //取消已选
-        $('.img_con').on('click','img_con_cancel',function(e){
-            if(con_name_temp == $(this).val()){return;}
-            var slfe = $(this);
-            $.getJSON('./server/adminImgSpaceUpdateSer.php',{'ais_id':$(this).parent().parent().attr('name').substr(4),'ais_name':$(this).val()},function(data){
-                toast(data.status,data.megs);
-                if(!data.status){
-                    slfe.val(con_name_temp);
-                }
-            });
+        $('.img_con').on('click','.img_con_cancel',function(e){
+            $(this).parent().siblings('.img_con_con').attr('select','0');
+            $(this).parent().siblings('.img_con_con').children('.img_con_con_click').hide();
             e.stopPropagation();
         });
 
         //全选图片
-        $('.img_con').on('click','img_con_select',function(e){
-            if(con_name_temp == $(this).val()){return;}
-            var slfe = $(this);
-            $.getJSON('./server/adminImgSpaceUpdateSer.php',{'ais_id':$(this).parent().parent().attr('name').substr(4),'ais_name':$(this).val()},function(data){
-                toast(data.status,data.megs);
-                if(!data.status){
-                    slfe.val(con_name_temp);
-                }
-            });
+        $('.img_con').on('click','.img_con_select',function(e){
+            $(this).parent().siblings('.img_con_con').attr('select','1');
+            $(this).parent().siblings('.img_con_con').children('.img_con_con_click').show();
             e.stopPropagation();
         });
 

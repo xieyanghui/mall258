@@ -305,7 +305,9 @@ class Goods
         $sql = $this->getSql(); 
         if(empty($sortLine)){$sortLine = "gt_id";}
         if(empty($sort)){$sort = "asc";}
-        $where =new Where($name['searchLine'],$name['key'],'string','AND','LIKE');
+        $where =new Where('gt_number',$name['key'],'string','OR','LIKE');
+        $where->setWhere('gt_name',$name['key'],'string','OR','LIKE');
+        $where->setWhere('gt_remark',$name['key'],'string','OR','LIKE');
         $where->setWhere('gt_status','1','int');
         $count = $sql->selectLine('goods_type',"COUNT(*) as count",$where);
         $where->setWhereEnd("ORDER BY `$sortLine` $sort   limit $start,$sum");

@@ -8,7 +8,7 @@
 $auth ='systemLog';
 include_once("header.inc.php");
 $log = new SystemLog();
-$columnName = array('sl_key'=>'事件','sl_content'=>'详细内容','a_name'=>'管理员','sl_date'=>'时间');
+$columnName = array('sl_key'=>'事件','sl_content'=>'详细内容','a_nick'=>'管理员','sl_date'=>'时间');
 $sp = new SearchPage($columnName,$_GET);
 $data = array();
 if($sp->isSearch()){

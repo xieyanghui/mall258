@@ -35,8 +35,19 @@ class ImgSpace{
     }
     public function deleteImgSpace($ais_id,$a_id){
         $sql = $this->getSql();
-        $where = new Where('ais_id',$ais_id,'int');
-        $where ->setWhere('a_id',$a_id,'int');
+        $where = new Where('a_id',$a_id,'int');
+        if(is_array($ais_id)){
+            foreach($ais_id as $id){
+                $where->setWheres('img','ais_id',$id,'int','OR');
+                $row = $sql->selectLine('admin_img_space','ais_img_url',new Where('ais_id',$id,'int'));
+                Qiniu::deleteImg($row['ais_img_url']);
+            }
+
+            $where->setWheresLogic('img','AND');
+        }else{
+            $where ->setWhere('ais_id',$ais_id,'int');
+        }
+
         return $sql->delete('admin_img_space',$where);
     }
     public function deleteImgType($ait_id,$a_id){
@@ -67,7 +78,18 @@ class ImgSpace{
         $sql = $this->getSql();
         return $sql->insert('admin_img_space',array('ais_name','a_id'=>'int','ais_img_url','ait_id'=>'int'),array($ais_name,$a_id,$ais_img_url,$ait_id));
     }
-
+    public function moveImgSpace($ais_id,$ait_id){
+        $sql = $this->getSql();
+        $where = new Where();
+        if(is_array($ais_id)){
+            foreach($ais_id as $id){
+                $where->setWhere('ais_id',$id,'int','OR');
+            }
+        }else{
+            $where ->setWhere('ais_id',$ais_id,'int');
+        }
+        return $sql->update('admin_img_space',$where,array($ait_id =>'ait_id'));
+    }
     public function updateImgSpace($ais_id,$ais_name,$ais_img_url,$ait_id){
         $data =array();
         if(!empty($ais_name)){
