@@ -6,10 +6,10 @@
  * Time: 22:09
  */
 include_once ("../inc/header.inc.php");
-$ait_id = $_POST['ait_id'];
-!empty($_POST['ait_name'])?$ait_name = $_POST['ait_name']:$ait_name = null;
+$ait_id = $_GET['ait_id'];
+!empty($_GET['ait_name'])?$ait_name = $_GET['ait_name']:$ait_name = null;
 $img = new ImgSpace();
-if($img->updateImgType($ait_name,$ait_id)){
+if($img->updateImgType($ait_name,$ait_id,$_SESSION['adminInfo'])){
     exit(json_encode(array("status" => TRUE, "megs" => "更新成功！！")));
 }
 exit(json_encode(array("status" => FALSE, "megs" => "更新失败！！")));

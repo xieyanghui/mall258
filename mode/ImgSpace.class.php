@@ -41,7 +41,9 @@ class ImgSpace{
     }
     public function deleteImgType($ait_id,$a_id){
         $sql = $this->getSql();
-        if($ait_id<4){return false;}
+        $where = new Where('ait_id',$ait_id,'int');
+        $where->setWhere('a_id',0,'int');
+        if($sql->selectLine('admin_img_type','ait_id',$where)){return false;}
         $where = new Where('ait_id',$ait_id,'int');
         $where ->setWhere('a_id',$a_id,'int');
         if($sql->update('admin_img_space',$where,array('columnName'=>'ait_id','type'=>'int','value'=>'1'))){
@@ -83,6 +85,9 @@ class ImgSpace{
 
     public function updateImgType($ait_name,$ait_id){
         $sql = $this->getSql();
+        $where = new Where('ait_id',$ait_id,'int');
+        $where->setWhere('a_id',0,'int');
+        if($sql->selectLine('admin_img_type','ait_id',$where)){return false;}
         return $sql->update('admin_img_type',new Where('ait_id',$ait_id,'int'),array($ait_name=>'ait_name'));
     }
 }

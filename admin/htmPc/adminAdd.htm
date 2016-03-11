@@ -84,7 +84,6 @@
         //上传头像
         var up = getUpload();
         up.browse_button = "imgUp";
-        //up.container = "adminHeadImg";
         up['init'].UploadProgress = function(up,file){
             $("#bar").css("width",file.percent+"%");
         };

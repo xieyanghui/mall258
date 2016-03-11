@@ -4,6 +4,7 @@
         width: 800px;
         float: left;
     }
+
     .img_type_ul{
         width: 800px;
         height: 30px;
@@ -18,7 +19,7 @@
         float: left;
         height: 28px;
         width: 70px;
-        margin: 0 5px;
+        margin: 2px 5px 0;
         text-align: center;
     }
     .img_type_li_click{
@@ -35,6 +36,7 @@
     }
     .img_type_li>input{
         width: 60px;
+        border: hidden;
         margin: 1px auto;
     }
     .img_type_add{
@@ -80,11 +82,15 @@
     }
     .img_con_con{
         margin: 5px 0 0 5px;
-        border: 1px solid #07A1B1;
+        border: 1px solid #50D1DE;
         width: 110px;
         height: 150px;
         overflow: hidden;
         float: left;
+        position: relative;
+    }
+    .img_con_con:hover{
+        cursor: pointer;
     }
     .img_con_con_img{
         margin: 4px auto;
@@ -114,6 +120,47 @@
         width: 0;
         background-color: #2aabd2;
     }
+    .img_con_util{
+        width: 100%;
+        height: 20px;
+        position: relative;
+        float: left;
+        padding-bottom: 5px;
+        display: none;
+    }
+    .img_con_util >div{
+        float: left;
+        width: 40px;
+        height: 20px;
+        line-height: 20px;
+        margin: 5px;
+        text-align: center;
+        background-color: #BCEDF2;
+    }
+    .img_con_util >div:hover{
+        cursor: pointer;
+        background-color: #80E5F0;
+    }
+    .img_con_con_mouse{
+        position: absolute;
+        top:0;
+        left: 0;
+        width: 100%;
+        height: 110px;
+        background-color: #BCEDF2;
+        opacity: 0.5;
+        display: none;
+    }
+    .img_con_con_click{
+        position: absolute;
+        top:0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: #80E5F0;
+        opacity: 0.5;
+        display: none;
+    }
 </style>
 <div id='img_space' class='win'>
     <h1 class="list_head">图片空间</h1>
@@ -126,8 +173,10 @@
     <div class="img_con">
         <{section name=index loop=$space}>
         <div class="img_con_list" name="img<{$space[index]['ait_id']}>" >
+            <div class="img_con_util"><div class="img_con_delete">删除</div><div class="img_con_move">移动</div><div class="img_con_select">全选</div><div class="img_con_cancel">取消</div></div>
             <{section name=ind loop=$space[index]['value']}>
             <div class="img_con_con" name="imgs<{$space[index]['value'][ind]['ais_id']}>">
+                <div class="img_con_con_mouse"></div><div class="img_con_con_click"></div>
                 <div class="img_con_con_img"><img src="<{$space[index]['value'][ind]['ais_img_url']}>?imageView2/5/w/100/h/100"> </div>
                 <div class="img_con_con_name"><input type="text" value="<{$space[index]['value'][ind]['ais_name']}>" ></div>
                 <div class="img_con_con_time"><{$space[index]['value'][ind]['ais_time']|date_format:"%y-%m-%d %H:%M"}></div>
@@ -138,104 +187,236 @@
     </div>
 </div>
 <div id = 'img_add_button' class="add_show_button button">上传图片</div>
-
+<input type="hidden" name="isUpload" value="no" >
 <script type="text/javascript">
     $(function () {
+        //默认显示第一个
+        $('.img_type_li').eq(1).addClass('img_type_li_click');
+        $('.img_con_list').eq(1).show();
+
+        //图片错误提示
         $('.img_con_con_img>img').error(function(){
             $(this).attr('src','http://7xkkh3.com1.z0.glb.clouddn.com/imgerror.jpg?imageView2/5/w/100/h/100');
         });
-        $('.img_type_li').mouseout(function(){
+        //
+        $('.img_type_ul').on('mouseout','.img_type_li',function(){
             $(this).children('div').hide();
         });
-        $('.img_type_li').mousemove(function(){
+        $('.img_type_ul').on('mousemove','.img_type_li',function(){
+            if($(this).attr('name')=='img1'){return;}
             $(this).children('div').show();
         });
-        $('.img_type_delete').click(function(e){
 
-        });
-        $('.img_type_update').click(function(e){
+        //删除分类
+        $('.img_type_ul').on('click','.img_type_delete',function(e){
             var type = $(this).parent();
-            type.html("<input type='text' value='"+type.+"' class='form_div'>");
-          //  $(this).before("<li class='img_type_li'> <input type='text' class='form_div'></li>");
-            updateType(type.find('input'));
+            $.getJSON('./server/adminImgTypeDeleteSer.php',{'ait_id':$(this).parent().attr('name').substr(3)},function(data){
+                toast(data.status, data.megs);
+                if (data.status){
+                    $('.img_type_li').eq(1).addClass('img_type_li_click');
+                    $('.img_con_list').eq(1).show();
+                    $(".img_con_list[name='"+type.attr('name')+"']").remove();
+                    type.remove();
+                }
+            });
             e.stopPropagation();
         });
-        $('.img_type_li').eq(1).addClass('img_type_li_click');
-        $('.img_con_list').eq(1).show();
-        var updateType = function(imgType,fun){
+
+        //修改分类名称
+        $('.img_type_ul').on('click','.img_type_update',function(e){
+            var type = $(this).parent();
+            type.children('div').remove();
+            var yuan = type.html();
+            type.html("<input type='text' value='"+type.html()+"' class='form_div'>");
+            typeVerify(type.find('input'),function(value){
+                if(value == yuan){
+                    type.html(yuan+"<div class='img_type_update'>✎</div><div class='img_type_delete'>×</div>");
+                    return;
+                }
+                $.getJSON('./server/adminImgTypeUpdateSer.php', {'ait_name': value,'ait_id':type.attr('name').substr(3)}, function (data) {
+                    toast(data.status, data.megs);
+                    if (data.status) {
+                        type.html(value);
+                    } else {
+                        type.html(yuan);
+                    }
+                    type.append("<div class='img_type_update'>✎</div><div class='img_type_delete'>×</div>");
+                });
+            });
+            e.stopPropagation();
+        });
+
+        //验证分类名
+        var typeVerify = function(imgType,fun){
             imgType.focus();
             imgType.blur(function() {
                 var $slfe = $(this);
                 var b = true;
                 $(this).parent().siblings().map(function () {
-                    if ($slfe.val() == $(this).html()) {
+                    var clo = $(this).clone();
+                    clo.children('div').remove();
+
+                    if ($slfe.val() == clo.html()) {
                         toast(false, '重复了');
                         b = false;
                     }
                 });
                 if (b) {
-                    fun();
+                    fun($slfe.val());
                 }
             });
         }
-        $('.img_type_li').click(function(){
+
+        //选择分类,与增加分类
+        $('.img_type_ul').on('click','.img_type_li',function(){
+            if($("input[name='isUpload']").val() != 'no'){return;}
             if($(this).hasClass('img_type_add')){
                 $(this).before("<li class='img_type_li'> <input type='text' class='form_div'></li>");
-                updateType($(this).prev().find('input'),function(){
-                    $.getJSON('./server/adminImgTypeAddSer.php', {'ait_name': $(this).val()}, function (data) {
+                var type = $(this).prev();
+                typeVerify($(this).prev().find('input'),function(value){
+                    $.getJSON('./server/adminImgTypeAddSer.php', {'ait_name': value}, function (data) {
                         toast(data.status, data.megs);
                         if (data.status) {
-                            $slfe1.parent().html($slfe1.val());
+                            type.attr('name','img'+data.id);
+                            type.html(value+"<div class='img_type_update'>✎</div><div class='img_type_delete'>×</div>");
+                            $('.img_con').append(" <div class='img_con_list' name='img"+data.id+"'>" +
+                                    "<div class='img_con_util'><div class='img_con_delete'>删除</div><div class='img_con_move'>移动</div><div class='img_con_select'>全选</div><div class='img_con_cancel'>取消</div></div>" +
+                                    "</div>");
+
+                            type.addClass('img_type_li_click');
+                            type.siblings().removeClass('img_type_li_click');
+                            $(".img_con_list[name='"+ type.attr('name')+"']").show().siblings().hide();
 
                         } else {
-                            $slfe1.parent().remove();
+                            type.remove();
                         }
                     });
                 });
-//                $(this).prev().find('input').focus();
-//                $(this).prev().find('input').blur(function(){
-//                    var $slfe = $(this);
-//                    var b = true;
-//                    $(this).parent().siblings().map(function(){
-//                       if($slfe.val() == $(this).html()){
-//                           toast(false,'重复了');
-//                           b = false;
-//                       }
-//                    });
-//                    if(b){
-//                        $.getJSON('./server/adminImgTypeAddSer.php',{'ait_name':$(this).val()},function(data){
-//                            toast(data.status,data.megs);
-//                            if(data.status){
-//                                $slfe1.parent().html($slfe1.val());
-//
-//                            }else{
-//                                $slfe1.parent().remove();
-//                            }
-//                        });
-//                    }
-//              });
+
+
+
             }else{
+                //选择分类
                 $(this).addClass('img_type_li_click');
                 $(this).siblings().removeClass('img_type_li_click');
                 $(".img_con_list[name='"+ $(this).attr('name')+"']").show().siblings().hide();
             }
 
 
+
+
+        });
+
+        $('.img_con').on('mouseout','.img_con_con',function(){
+            $(this).children('.img_con_con_mouse').hide();
+        });
+        $('.img_con').on('mousemove','.img_con_con',function(){
+            $(this).children('.img_con_con_mouse').show();
+        });
+        $('.img_con').on('click','.img_con_con',function(){
+            if($(this).children('.img_con_con_click').is(':visible')){
+                $(this).children('.img_con_con_click').hide();
+                $(this).attr("select",'0');
+            }else{
+                $(this).children('.img_con_con_click').show();
+                $(this).attr("select",'1');
+            }
+            if(!$(this).siblings('.img_con_util').is(':visible')){
+                $(this).siblings('.img_con_util').show();
+            }
+
+        });
+        //更新图片信息
+        var con_name_temp;
+        $('.img_con').on('click','.img_con_con_name',function(e){
+            con_name_temp  = $(this).children('input').val();
+            e.stopPropagation();
+        });
+        $('.img_con').on('blur','input',function(e){
+            if(con_name_temp == $(this).val()){return;}
+            var slfe = $(this);
+            $.getJSON('./server/adminImgSpaceUpdateSer.php',{'ais_id':$(this).parent().parent().attr('name').substr(4),'ais_name':$(this).val()},function(data){
+                toast(data.status,data.megs);
+                if(!data.status){
+                    slfe.val(con_name_temp);
+                }
+            });
+            e.stopPropagation();
+        });
+
+        //删除图片
+        $('.img_con').on('click','img_con_delete ',function(e){
+            var slfe = $(this).parent().parent();
+            if(slfe.children(".img_con_con[select='1']").)
+            $.getJSON('./server/adminImgSpaceDeleteSer.php',{'ais_id':$(this).parent().parent().attr('name').substr(4),'ais_name':$(this).val()},function(data){
+                toast(data.status,data.megs);
+                if(!data.status){
+                    slfe.val(con_name_temp);
+                }
+            });
+            e.stopPropagation();
+        });
+
+        //移动图片
+        $('.img_con').on('click','img_con_move',function(e){
+            if(con_name_temp == $(this).val()){return;}
+            var slfe = $(this);
+            $.getJSON('./server/adminImgSpaceUpdateSer.php',{'ais_id':$(this).parent().parent().attr('name').substr(4),'ais_name':$(this).val()},function(data){
+                toast(data.status,data.megs);
+                if(!data.status){
+                    slfe.val(con_name_temp);
+                }
+            });
+            e.stopPropagation();
+        });
+
+        //取消已选
+        $('.img_con').on('click','img_con_cancel',function(e){
+            if(con_name_temp == $(this).val()){return;}
+            var slfe = $(this);
+            $.getJSON('./server/adminImgSpaceUpdateSer.php',{'ais_id':$(this).parent().parent().attr('name').substr(4),'ais_name':$(this).val()},function(data){
+                toast(data.status,data.megs);
+                if(!data.status){
+                    slfe.val(con_name_temp);
+                }
+            });
+            e.stopPropagation();
+        });
+
+        //全选图片
+        $('.img_con').on('click','img_con_select',function(e){
+            if(con_name_temp == $(this).val()){return;}
+            var slfe = $(this);
+            $.getJSON('./server/adminImgSpaceUpdateSer.php',{'ais_id':$(this).parent().parent().attr('name').substr(4),'ais_name':$(this).val()},function(data){
+                toast(data.status,data.megs);
+                if(!data.status){
+                    slfe.val(con_name_temp);
+                }
+            });
+            e.stopPropagation();
         });
 
     });
+
     $(function(){
         //上传
         var up =  getUpload();
         up.browse_button = "img_add_button";
+        up.multi_selection =true;
        up['init'].UploadProgress = function(up,file){
            $(".img_con_list >div[name='"+file.id+"']").find('div.img_con_con_bar').css('width',file.percent+"%");
+        };
+        up['init'].FilesAdded = function(up,file){
+            $("input[name='isUpload']").val('yse');
         };
         up['init'].BeforeUpload = function(up,file){
             var name =  file.name;
             name = name.substr(0,name.lastIndexOf('.'));
-            $('.img_con_list:visible').prepend("<div class ='img_con_con' name = '"+file.id+"'><div class='img_con_con_img'></div><div class='img_con_con_name'><input type='text' value='"+name+"'></div><div class='img_con_con_time'><div class='img_con_con_bar'></div></div></div>");
-        }
+            $('.img_con_list:visible>div.img_con_util').after("<div class ='img_con_con' name = '"+file.id+"'><div class='img_con_con_mouse'></div><div class='img_con_con_click'></div><div class='img_con_con_img'></div><div class='img_con_con_name'><input type='text' value='"+name+"'></div><div class='img_con_con_time'><div class='img_con_con_bar'></div></div></div>");
+        };
+        up['init'].UploadComplete = function(){
+            $("input[name='isUpload']").val('no');
+        };
         up['init'].FileUploaded = function (up, file, info) {
             var div = $(".img_con_list >div[name='"+file.id+"']");
             var domain = up.getOption('domain');
@@ -243,7 +424,11 @@
             div.children('.img_con_con_img').append("<img src='"+domain + "/" + res.key + "?imageView2/5/w/100/h/100"+"'>");
             var ait_id = div.parent().attr('name').substr(3);
             $.getJSON('./server/adminImgSpaceAddSer.php',{'ais_name':file.name.substr(0,file.name.lastIndexOf('.')),'ais_img_url':domain + "/" + res.key,'ait_id':ait_id},function(data){
-
+                toast(data.status,data.megs);
+                if(data.status){
+                    div.children('.img_con_con_time').html("刚刚");
+                    div.attr('name','imgs'+data.id);
+                }
             });
 
         };

@@ -7,7 +7,7 @@
  */
 include_once ("../inc/header.inc.php");
 $img = new ImgSpace();
-if($img->deleteImgType($_POST['ait_id'],$_SESSION['adminInfo']['a_id'])){
+if($img->deleteImgType($_GET['ait_id'],$_SESSION['adminInfo']['a_id'])){
     exit(json_encode(array("status" => TRUE, "megs" => "删除成功！！")));
 }
 exit(json_encode(array("status" => FALSE, "megs" => "删除失败！！")));
