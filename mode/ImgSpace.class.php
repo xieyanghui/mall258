@@ -40,7 +40,10 @@ class ImgSpace{
             foreach($ais_id as $id){
                 $where->setWheres('img','ais_id',$id,'int','OR');
                 $row = $sql->selectLine('admin_img_space','ais_img_url',new Where('ais_id',$id,'int'));
-                Qiniu::deleteImg($row['ais_img_url']);
+                $res = Qiniu::deleteImg($row['ais_img_url']);
+                if(!empty($res)){
+
+                };
             }
 
             $where->setWheresLogic('img','AND');
@@ -88,7 +91,7 @@ class ImgSpace{
         }else{
             $where ->setWhere('ais_id',$ais_id,'int');
         }
-        return $sql->update('admin_img_space',$where,array($ait_id =>'ait_id'));
+        return $sql->update('admin_img_space',$where,array($ait_id =>'ait_id',date("Y-m-d H:i:s")=>'ais_time'));
     }
     public function updateImgSpace($ais_id,$ais_name,$ais_img_url,$ait_id){
         $data =array();

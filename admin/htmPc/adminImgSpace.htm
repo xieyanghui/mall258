@@ -312,6 +312,8 @@
         $('.img_con').on('mousemove','.img_con_con',function(){
             $(this).children('.img_con_con_mouse').show();
         });
+
+        //选择图片
         $('.img_con').on('click','.img_con_con',function(){
             if($(this).children('.img_con_con_click').is(':visible')){
                 $(this).children('.img_con_con_click').hide();
@@ -320,12 +322,8 @@
                 $(this).children('.img_con_con_click').show();
                 $(this).attr("select",'1');
             }
-            if(!$(this).siblings('.img_con_util').is(':visible')){
-                $(this).siblings('.img_con_util').show();
-            }
-
         });
-        //更新图片信息
+        //修改图片信息
         var con_name_temp;
         $('.img_con').on('click','.img_con_con_name',function(e){
             con_name_temp  = $(this).children('input').val();
@@ -348,13 +346,18 @@
             var slfe = $(this).parent().parent();
             if(slfe.children(".img_con_con[select='1']").length ==0){return;}
             var ais_id= [];
+            var ait_id = slfe.attr('name').substr(3);
             slfe.children(".img_con_con[select='1']").map(function(){
                  ais_id.push($(this).attr('name').substr(4));
             });
-            $.getJSON('./server/adminImgSpaceDeleteSer.php',{'ais_id':ais_id,'ait_id':slfe.attr('name').substr(3)},function(data){
+            $.getJSON('./server/adminImgSpaceDeleteSer.php',{'ais_id':ais_id,'ait_id':ait_id},function(data){
                 toast(data.status,data.megs);
-                if(!data.status){
-                    slfe.val(con_name_temp);
+                if(data.status){
+                    if(ait_id == 1){
+                        slfe.children(".img_con_con[select='1']").remove();
+                    }else{
+                        slfe.children(".img_con_con[select='1']").insertAfter($(".img_con_list[name='img1'] >.img_con_util"));
+                    }
                 }
             });
             e.stopPropagation();

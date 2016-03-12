@@ -231,7 +231,8 @@ final class BucketManager
      *
      * @param $operations     资源管理操作数组
      *
-     * @return array 每个资源的处理情况，结果类似：
+     * @return array 每个资源的处理情况
+     * ，结果类似：
      *              [
      *                   { "code" => <HttpCode int>, "data" => <Data> },
      *                   { "code" => <HttpCode int> },

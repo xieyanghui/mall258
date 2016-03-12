@@ -10,7 +10,6 @@ $img = new ImgSpace();
 
 if($_GET['ait_id'] ==1){
     if($img->deleteImgSpace($_GET['ais_id'],$_SESSION['adminInfo']['a_id'])){
-
         exit(json_encode(array("status" => TRUE, "megs" => "删除成功！！")));
     }
 }else{

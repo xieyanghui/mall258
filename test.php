@@ -5,15 +5,16 @@
  * Date: 2016/1/22
  * Time: 5:06
  */
-require_once($_SERVER['DOCUMENT_ROOT'] . '/util/autoload.php');
+//require_once($_SERVER['DOCUMENT_ROOT'] . '/util/autoload.php');
 header("Content-Type:text/html;charset=utf-8");
 //$sql = new Sql();
 //echo $sql->executeid("INSERT INTO `authList`(al_key,al_nick,al_remark) VALUES ('aaaa','aaaa','aaaaa')");
 //$admin = "xieyanghui' or 'foo' = 'foo' -- ";
 
-
+//date_default_timezone_set('Asia/Shanghai');
 //$pwd = "";
-$sql = new Sql();
+//$sql = new Sql();
+echo date('Y-m-d H:i:s');
 //print_r($sql->queryLine("SELECT * FROM `adminInfo` WHERE a_name='{$admin}' AND a_pwd = '{$pwd}'"));
 //echo mysql_real_escape_string("...\"\"");
 //$sql->insert("authList",array('al_key'=>'s','al_nick'=>'s','al_remark'=>'s'),array(array("111w",'aaaas','gggg'),array("111e",'aaaas','gggg'),array("111t",'aaaas','gggg')));
@@ -23,12 +24,12 @@ $sql = new Sql();
 //$wh->setWhere('gta_name','品牌');
 //echo $wh;
 //print_r($sql->select('gt_attr',"*",$wh));
-$admin = new Admin();
-$img = new ImgSpace();
+//$admin = new Admin();
+//$img = new ImgSpace();
 //echo $img->addImgType('从前的',2);
 //$img->updateImgSpace(1,'从前dd','sdfsdfsdf',3);
 //$img->updateImgSpace(2,'从aaaaadd','sdqqqqqqqqqqqqdfsdf',4);
-print_r($img->getImgType(3));
+//print_r($img->getImgType(3));
 //print_r($img->getImgSpace(1));
 //print_r($admin->getAdmin(0,4));
 //$admin->deleteAdmin(2,1);
