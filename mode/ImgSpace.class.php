@@ -95,6 +95,9 @@ class ImgSpace{
     }
     public function updateImgSpace($ais_id,$ais_name,$ais_img_url,$ait_id){
         $data =array();
+        if(!empty($ais_id) && is_array($ais_id)){
+           return $this->moveImgSpace($ais_id,$ait_id);
+        }
         if(!empty($ais_name)){
             $data[$ais_name] ='ais_name';
         }
@@ -105,6 +108,7 @@ class ImgSpace{
             array_push($data,array('columnName'=>'ait_id','type'=>'int','value'=>$ait_id));
         }
         $sql = $this->getSql();
+        if(empty($data)){return false;}
         return $sql->update('admin_img_space',new Where('ais_id',$ais_id,'int'),$data);
     }
 

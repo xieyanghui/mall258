@@ -129,10 +129,11 @@
     }
     .img_con_util >div{
         float: left;
-        width: 40px;
+        width: 60px;
         height: 20px;
         line-height: 20px;
         margin: 5px;
+        position: relative;
         text-align: center;
         background-color: #BCEDF2;
     }
@@ -160,6 +161,17 @@
         opacity: 0.5;
         display: none;
     }
+    .img_con_move_ul{
+        position: absolute;
+        z-index: 101;
+        background-color: #BCEDF2;
+        text-align: left;
+        width: 100%;
+        display: none;
+    }
+    .img_con_move_li:hover{
+        background-color: #80E5F0;
+    }
 </style>
 <div id='img_space' class='win'>
     <h1 class="list_head">图片空间</h1>
@@ -172,7 +184,18 @@
     <div class="img_con">
         <{section name=index loop=$space}>
         <div class="img_con_list" name="img<{$space[index]['ait_id']}>" >
-            <div class="img_con_util"><div class="img_con_delete">删除</div><div class="img_con_move">移动</div><div class="img_con_select">全选</div><div class="img_con_cancel">取消</div></div>
+            <div class="img_con_util">
+                <{if $space[index]['ait_id'] eq 1}>
+                <div class="img_con_delete">彻底删除</div>
+                <div class="img_con_move">还原到</div>
+                <{else}>
+                <div class="img_con_delete">删除</div>
+                <div class="img_con_move">移动到</div>
+                <{/if}>
+
+                <div class="img_con_select">全选</div>
+                <div class="img_con_cancel">取消</div>
+            </div>
             <{section name=ind loop=$space[index]['value']}>
             <div class="img_con_con" name="imgs<{$space[index]['value'][ind]['ais_id']}>">
                 <div class="img_con_con_mouse"></div><div class="img_con_con_click"></div>
@@ -278,10 +301,10 @@
                         if (data.status) {
                             type.attr('name','img'+data.id);
                             type.html(value+"<div class='img_type_update'>✎</div><div class='img_type_delete'>×</div>");
-                            $('.img_con').append(" <div class='img_con_list' name='img"+data.id+"'>" +
-                                    "<div class='img_con_util'><div class='img_con_delete'>删除</div><div class='img_con_move'>移动</div><div class='img_con_select'>全选</div><div class='img_con_cancel'>取消</div></div>" +
-                                    "</div>");
-
+                            var icl = $('.img_con_list').first().clone();
+                            icl.children(".img_con_con").remove();
+                            icl.attr("name",'img'+data.id);
+                            $('.img_con').append(icl);
                             type.addClass('img_type_li_click');
                             type.siblings().removeClass('img_type_li_click');
                             $(".img_con_list[name='"+ type.attr('name')+"']").show().siblings().hide();
@@ -356,6 +379,8 @@
                     if(ait_id == 1){
                         slfe.children(".img_con_con[select='1']").remove();
                     }else{
+                        slfe.children(".img_con_con[select='1']").children('.img_con_con_click').hide();
+                        slfe.children(".img_con_con[select='1']").children('.img_con_con_time').html("刚刚");
                         slfe.children(".img_con_con[select='1']").insertAfter($(".img_con_list[name='img1'] >.img_con_util"));
                     }
                 }
@@ -364,13 +389,43 @@
         });
 
         //移动图片
-        $('.img_con').on('click','.img_con_move',function(e){
-            if(con_name_temp == $(this).val()){return;}
-            var slfe = $(this);
-            $.getJSON('./server/adminImgSpaceUpdateSer.php',{'ais_id':$(this).parent().parent().attr('name').substr(4),'ais_name':$(this).val()},function(data){
+        $('.img_con').on('mousemove','.img_con_move',function(e){
+            var slfe = $(this).parent().parent();
+            var ls = $(this).find('li').length;
+            var lists = slfe.siblings('.img_con_list').length;
+            var mul;
+            if(( ls != lists -1 && slfe.attr("name") != "img1") || (slfe.attr("name") == "img1" && ls !=lists)){
+                mul = $("<ul class='img_con_move_ul'></ul>");
+                slfe.siblings('.img_con_list').map(function(){
+                    var name = $(this).attr('name');
+                    if(name == "img1"){return;}
+                    var htm = $(".img_type_li[name='"+name+"']").clone();
+                    htm.children().remove('div');
+                    htm = htm.html();
+                     mul.append("<li class='img_con_move_li' name='"+$(this).attr('name')+"'>"+htm+"</li>");
+                });
+                $(this).append(mul);
+            }
+            $(this).children('ul.img_con_move_ul').show();
+            e.stopPropagation();
+        });
+        $('.img_con').on('mouseout','.img_con_move',function(e){
+            $(this).children('ul.img_con_move_ul').hide();
+            e.stopPropagation();
+        });
+        $('.img_con').on('click','.img_con_move_li',function(e){
+            var con = $(this).parents('.img_con_list').children(".img_con_con[select='1']");
+            var ais_id= [];
+            var ait_id = $(this).attr('name').substr(3);
+            con.map(function(){
+                ais_id.push($(this).attr('name').substr(4));
+            });
+            $.getJSON('./server/adminImgSpaceUpdateSer.php',{'ais_id':ais_id,'ait_id':ait_id},function(data){
                 toast(data.status,data.megs);
-                if(!data.status){
-                    slfe.val(con_name_temp);
+                if(data.status){
+                    con.children('.img_con_con_click').hide();
+                    con.children('.img_con_con_time').html("刚刚");
+                    con.insertAfter($(".img_con_list[name='img"+ait_id+"'] >.img_con_util"));
                 }
             });
             e.stopPropagation();
