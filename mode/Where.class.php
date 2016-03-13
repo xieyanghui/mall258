@@ -109,7 +109,6 @@ class Where{
         foreach($this->where as $key=>$value){
             if(!empty($value[0]) && is_array($value[0]) ){
                 $whs = "";
-                print_r($value);
                 foreach($value as $k =>$v){
                     if($k ==='logic'){continue;}
                     $whs .="{$v['logic']}  `{$v['columnName']}` {$v['mark']} ?  ";

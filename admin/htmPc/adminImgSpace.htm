@@ -221,10 +221,10 @@
             $(this).attr('src','http://7xkkh3.com1.z0.glb.clouddn.com/imgerror.jpg?imageView2/5/w/100/h/100');
         });
         //
-        $('.img_type_ul').on('mouseout','.img_type_li',function(){
+        $('.img_type_ul').on('mouseleave','.img_type_li',function(){
             $(this).children('div').hide();
         });
-        $('.img_type_ul').on('mousemove','.img_type_li',function(){
+        $('.img_type_ul').on('mouseenter','.img_type_li',function(){
             if($(this).attr('name')=='img1'){return;}
             $(this).children('div').show();
         });
@@ -237,8 +237,11 @@
                 if (data.status){
                     $('.img_type_li').eq(1).addClass('img_type_li_click');
                     $('.img_con_list').eq(1).show();
+                   var con = $(".img_con_list[name='"+type.attr('name')+"'] >.img_con_con");
+                    con.children('.img_con_con_click').hide();
+                    con.children('.img_con_con_time').html("刚刚");
+                    con.insertAfter($(".img_con_list[name='img1'] >.img_con_util"));
                     $(".img_con_list[name='"+type.attr('name')+"']").remove();
-                    type.remove();
                 }
             });
             e.stopPropagation();
@@ -301,7 +304,7 @@
                         if (data.status) {
                             type.attr('name','img'+data.id);
                             type.html(value+"<div class='img_type_update'>✎</div><div class='img_type_delete'>×</div>");
-                            var icl = $('.img_con_list').first().clone();
+                            var icl = $('.img_con_list').last().clone();
                             icl.children(".img_con_con").remove();
                             icl.attr("name",'img'+data.id);
                             $('.img_con').append(icl);
@@ -329,10 +332,10 @@
 
         });
 
-        $('.img_con').on('mouseout','.img_con_con',function(){
+        $('.img_con').on('mouseleave','.img_con_con',function(){
             $(this).children('.img_con_con_mouse').hide();
         });
-        $('.img_con').on('mousemove','.img_con_con',function(){
+        $('.img_con').on('mouseenter','.img_con_con',function(e){
             $(this).children('.img_con_con_mouse').show();
         });
 
@@ -389,13 +392,12 @@
         });
 
         //移动图片
-        $('.img_con').on('mousemove','.img_con_move',function(e){
+        $('.img_con').on('mouseenter','.img_con_move',function(e){
             var slfe = $(this).parent().parent();
             var ls = $(this).find('li').length;
             var lists = slfe.siblings('.img_con_list').length;
-            var mul;
             if(( ls != lists -1 && slfe.attr("name") != "img1") || (slfe.attr("name") == "img1" && ls !=lists)){
-                mul = $("<ul class='img_con_move_ul'></ul>");
+                var mul = $("<ul class='img_con_move_ul'></ul>");
                 slfe.siblings('.img_con_list').map(function(){
                     var name = $(this).attr('name');
                     if(name == "img1"){return;}
@@ -409,7 +411,7 @@
             $(this).children('ul.img_con_move_ul').show();
             e.stopPropagation();
         });
-        $('.img_con').on('mouseout','.img_con_move',function(e){
+        $('.img_con').on('mouseleave','.img_con_move',function(e){
             $(this).children('ul.img_con_move_ul').hide();
             e.stopPropagation();
         });
@@ -452,13 +454,18 @@
         var up =  getUpload();
         up.browse_button = "img_add_button";
         up.multi_selection =true;
-       up['init'].UploadProgress = function(up,file){
+        up['init'].UploadProgress = function(up,file){
            $(".img_con_list >div[name='"+file.id+"']").find('div.img_con_con_bar').css('width',file.percent+"%");
         };
-        up['init'].FilesAdded = function(up,file){
+        up['init'].FilesAdded = function(ups,file){
+            if($('.img_con_list:visible').attr('name')== 'img1'){
+                ups.stop();
+                toast(true,'回收站不能上传');
+            }
             $("input[name='isUpload']").val('yse');
         };
         up['init'].BeforeUpload = function(up,file){
+            if($('.img_con_list:visible').attr('name')== 'img1'){ return;}
             var name =  file.name;
             name = name.substr(0,name.lastIndexOf('.'));
             $('.img_con_list:visible>div.img_con_util').after("<div class ='img_con_con' name = '"+file.id+"'><div class='img_con_con_mouse'></div><div class='img_con_con_click'></div><div class='img_con_con_img'></div><div class='img_con_con_name'><input type='text' value='"+name+"'></div><div class='img_con_con_time'><div class='img_con_con_bar'></div></div></div>");

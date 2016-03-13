@@ -42,10 +42,8 @@ class ImgSpace{
                 $row = $sql->selectLine('admin_img_space','ais_img_url',new Where('ais_id',$id,'int'));
                 $res = Qiniu::deleteImg($row['ais_img_url']);
                 if(!empty($res)){
-
                 };
             }
-
             $where->setWheresLogic('img','AND');
         }else{
             $where ->setWhere('ais_id',$ais_id,'int');

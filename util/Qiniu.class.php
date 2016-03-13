@@ -14,7 +14,6 @@ class Qiniu
      */
 
     static public function deleteImg($url){
-        echo substr($url,strrpos($url,'/')+1);
         $auth = new Qiniu\Auth(Config::QINIU_AK, Config::QINIU_SK);
         $bucketMgr = new Qiniu\Storage\BucketManager($auth);
         return $bucketMgr->delete(Config::QINIU_SCOPE,substr($url,strrpos($url,'/')+1));
