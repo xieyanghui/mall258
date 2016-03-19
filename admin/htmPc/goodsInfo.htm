@@ -21,7 +21,9 @@
         margin-top: 10px;
         float: left;
     }
-
+    .test{
+        float: left;
+    }
     #goodsAddShow{
         width: 200px;
         float: left;
@@ -55,11 +57,20 @@
 </div>
 <{/if}>
 <div class="add_show_button button">增加商品</div>
+<div class="test button" >aaa</div>
 <script type="text/javascript">
     $(function () {
         PageSearch('./inc/goodsInfo.php');
         CRUD.add('./inc/goodsAdd.php',500);
         CRUD.update('./inc/goodsUpdate.php',500);
         CRUD.delete('./server/goodsDeleteSer.php','./inc/goodsInfo.php','确定要删除吗?','删除之之后很严重哦');
+    });
+    $(function(){
+        $('.test').click(function(){
+            $.get('./inc/goodsAdd2.php',{'g_id':1},function(data){
+                $('#CRUD').html(data);
+                Resize.resizeAdd(1200,100);
+            });
+        });
     });
 </script>
