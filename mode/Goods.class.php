@@ -119,9 +119,9 @@ class Goods
     public function queryGoodsPrice($gId){
         $sql = $this->getSql();
         $where = new Where('g_id',$gId);
-        $price =  $sql->selectData('g_price_v',array('gp_id','gp_name','gtp_name'),$where);
+        $price =  $sql->selectData('g_price_v',array('gp_id','gp_name','gtp_name','gtp_id'),$where);
         $data =array();
-        foreach ($price as $value){
+        foreach ($price as &$value){
             if(empty($data[$value['gtp_name']])){$data[$value['gtp_name']] = array();};
             array_push($data[$value['gtp_name']],$value);
         }

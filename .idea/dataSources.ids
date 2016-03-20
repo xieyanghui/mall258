@@ -1,19 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <component name="dataSourceStorage">
   <data-source name="BBBm99cixwebhosting" uuid="f9d2df33-2bcc-450b-ad85-59447ff12f6f">
-    <database-info product="MySQL" version="5.1.68-community-log" jdbc-version="4.0" driver-name="MySQL Connector Java" driver-version="mysql-connector-java-5.1.35 ( Revision: 5fb9c5849535c13917c2cf9baaece6ef9693ef27 )">
-      <extra-name-characters>#@</extra-name-characters>
-      <identifier-quote-string>`</identifier-quote-string>
-    </database-info>
-    <case-sensitivity plain-identifiers="exact" quoted-identifiers="exact"/>
+    <database-info product="" version="" jdbc-version="" driver-name="" driver-version=""/>
   </data-source>
   <data-source name="mall258" uuid="194b072f-14ac-4858-871a-c31998dc926a">
-    <database-info product="MySQL" version="5.6.26" jdbc-version="4.0" driver-name="MySQL Connector Java" driver-version="mysql-connector-java-5.1.35 ( Revision: 5fb9c5849535c13917c2cf9baaece6ef9693ef27 )">
+    <database-info product="MySQL" version="5.5.5-10.1.10-MariaDB" jdbc-version="4.0" driver-name="MySQL Connector Java" driver-version="mysql-connector-java-5.1.35 ( Revision: 5fb9c5849535c13917c2cf9baaece6ef9693ef27 )">
       <extra-name-characters>#@</extra-name-characters>
       <identifier-quote-string>`</identifier-quote-string>
     </database-info>
     <case-sensitivity plain-identifiers="lower" quoted-identifiers="lower"/>
-    <database-model serializer="dbm" rdbms="MYSQL" format-version="2.4">
+    <database-model serializer="dbm" rdbms="MYSQL" format-version="2.5">
       <schema id="1" name="mall258"/>
       <table id="2" parent="1" name="admin"/>
       <table id="3" parent="1" name="admin_auth"/>
@@ -62,6 +58,7 @@
       <column id="32" parent="2" name="a_id">
         <mandatory>1</mandatory>
         <data-type>int(10) unsigned</data-type>
+        <sequence-identity>1</sequence-identity>
       </column>
       <column id="33" parent="2" name="a_name">
         <mandatory>1</mandatory>
@@ -108,6 +105,7 @@
       <column id="43" parent="3" name="aa_id">
         <mandatory>1</mandatory>
         <data-type>int(10) unsigned</data-type>
+        <sequence-identity>1</sequence-identity>
       </column>
       <column id="44" parent="3" name="aa_nick">
         <mandatory>1</mandatory>
@@ -145,6 +143,7 @@ aa_id</columns>
       <column id="52" parent="5" name="ais_id">
         <mandatory>1</mandatory>
         <data-type>int(10) unsigned</data-type>
+        <sequence-identity>1</sequence-identity>
       </column>
       <column id="53" parent="5" name="ais_name">
         <data-type>char(40)</data-type>
@@ -173,6 +172,7 @@ aa_id</columns>
       <column id="59" parent="6" name="ait_id">
         <mandatory>1</mandatory>
         <data-type>int(10) unsigned</data-type>
+        <sequence-identity>1</sequence-identity>
       </column>
       <column id="60" parent="6" name="ait_name">
         <data-type>char(40)</data-type>
@@ -188,6 +188,7 @@ aa_id</columns>
       <column id="63" parent="7" name="all_id">
         <mandatory>1</mandatory>
         <data-type>int(10) unsigned</data-type>
+        <sequence-identity>1</sequence-identity>
       </column>
       <column id="64" parent="7" name="a_id">
         <mandatory>1</mandatory>
@@ -209,6 +210,7 @@ aa_id</columns>
       <column id="68" parent="8" name="al_id">
         <mandatory>1</mandatory>
         <data-type>int(10) unsigned</data-type>
+        <sequence-identity>1</sequence-identity>
       </column>
       <column id="69" parent="8" name="al_key">
         <mandatory>1</mandatory>
@@ -237,6 +239,7 @@ aa_id</columns>
       <column id="75" parent="9" name="c_id">
         <mandatory>1</mandatory>
         <data-type>int(10) unsigned</data-type>
+        <sequence-identity>1</sequence-identity>
       </column>
       <column id="76" parent="9" name="u_id">
         <mandatory>1</mandatory>
@@ -258,6 +261,7 @@ aa_id</columns>
       <column id="80" parent="10" name="c_id">
         <mandatory>1</mandatory>
         <data-type>int(10) unsigned</data-type>
+        <sequence-identity>1</sequence-identity>
       </column>
       <column id="81" parent="10" name="u_id">
         <mandatory>1</mandatory>
@@ -274,6 +278,7 @@ aa_id</columns>
       <column id="84" parent="11" name="ga_id">
         <mandatory>1</mandatory>
         <data-type>int(10) unsigned</data-type>
+        <sequence-identity>1</sequence-identity>
       </column>
       <column id="85" parent="11" name="g_id">
         <mandatory>1</mandatory>
@@ -293,6 +298,7 @@ aa_id</columns>
       <column id="89" parent="12" name="gp_id">
         <mandatory>1</mandatory>
         <data-type>int(10) unsigned</data-type>
+        <sequence-identity>1</sequence-identity>
       </column>
       <column id="90" parent="12" name="g_id">
         <mandatory>1</mandatory>
@@ -313,6 +319,7 @@ aa_id</columns>
       <column id="94" parent="13" name="gpi_id">
         <mandatory>1</mandatory>
         <data-type>int(10) unsigned</data-type>
+        <sequence-identity>1</sequence-identity>
       </column>
       <column id="95" parent="13" name="g_id">
         <mandatory>1</mandatory>
@@ -349,6 +356,7 @@ gp_id</columns>
       <column id="103" parent="15" name="g_id">
         <mandatory>1</mandatory>
         <data-type>int(10) unsigned</data-type>
+        <sequence-identity>1</sequence-identity>
       </column>
       <column id="104" parent="15" name="g_number">
         <mandatory>1</mandatory>
@@ -366,7 +374,7 @@ gp_id</columns>
         <mandatory>1</mandatory>
         <data-type>float(8,2)</data-type>
       </column>
-      <column id="108" parent="15" name="g_keywords">
+      <column id="108" parent="15" name="g_keywoeds">
         <data-type>varchar(200)</data-type>
       </column>
       <column id="109" parent="15" name="g_description">
@@ -406,6 +414,7 @@ g_number</columns>
       <column id="117" parent="16" name="gt_id">
         <mandatory>1</mandatory>
         <data-type>int(10) unsigned</data-type>
+        <sequence-identity>1</sequence-identity>
       </column>
       <column id="118" parent="16" name="gt_number">
         <mandatory>1</mandatory>
@@ -441,6 +450,7 @@ gt_number</columns>
       <column id="125" parent="17" name="gta_id">
         <mandatory>1</mandatory>
         <data-type>int(10) unsigned</data-type>
+        <sequence-identity>1</sequence-identity>
       </column>
       <column id="126" parent="17" name="gt_id">
         <mandatory>1</mandatory>
@@ -457,6 +467,7 @@ gt_number</columns>
       <column id="129" parent="18" name="gtp_id">
         <mandatory>1</mandatory>
         <data-type>int(10) unsigned</data-type>
+        <sequence-identity>1</sequence-identity>
       </column>
       <column id="130" parent="18" name="gt_id">
         <mandatory>1</mandatory>
@@ -473,6 +484,7 @@ gt_number</columns>
       <column id="133" parent="19" name="o_id">
         <mandatory>1</mandatory>
         <data-type>int(10) unsigned</data-type>
+        <sequence-identity>1</sequence-identity>
       </column>
       <column id="134" parent="19" name="u_id">
         <mandatory>1</mandatory>
@@ -508,6 +520,7 @@ gt_number</columns>
       <column id="141" parent="20" name="og_id">
         <mandatory>1</mandatory>
         <data-type>int(10) unsigned</data-type>
+        <sequence-identity>1</sequence-identity>
       </column>
       <column id="142" parent="20" name="o_id">
         <mandatory>1</mandatory>
@@ -524,6 +537,7 @@ gt_number</columns>
       <column id="145" parent="21" name="sl_id">
         <mandatory>1</mandatory>
         <data-type>int(10) unsigned</data-type>
+        <sequence-identity>1</sequence-identity>
       </column>
       <column id="146" parent="21" name="a_id">
         <mandatory>1</mandatory>
@@ -549,6 +563,7 @@ gt_number</columns>
       <column id="151" parent="22" name="u_id">
         <mandatory>1</mandatory>
         <data-type>int(10) unsigned</data-type>
+        <sequence-identity>1</sequence-identity>
       </column>
       <column id="152" parent="22" name="u_name">
         <mandatory>1</mandatory>
@@ -601,6 +616,7 @@ u_phone</columns>
       <column id="164" parent="23" name="add_id">
         <mandatory>1</mandatory>
         <data-type>int(10) unsigned</data-type>
+        <sequence-identity>1</sequence-identity>
       </column>
       <column id="165" parent="23" name="u_id">
         <data-type>int(11)</data-type>
