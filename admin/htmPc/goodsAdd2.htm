@@ -22,7 +22,7 @@
     }
     .goods_price{
         float: left;
-        width: 400px;
+        width: 410px;
     }
     .goods_all{
         float: right;
@@ -141,14 +141,6 @@
             <{/foreach}>
             <div class="goods_price_con_info" id="goods_price_con_info_parents">
                 <div class="goods_price_con_list">
-                    <div class="goods_price_con_prop" gp_id="2" >
-                        <div class="goods_td goods_price_con_prop_name"></div>
-                        <div class="goods_td goods_price_con_prop_value"></div>
-                    </div>
-                    <div class="goods_price_con_prop" gp_id="5">
-                        <div class="goods_td goods_price_con_prop_name"></div>
-                        <div class="goods_td goods_price_con_prop_value"></div>
-                    </div>
                 </div>
                 <div class="goods_price_con_sum">
                     <div class="goods_td">数量</div>
@@ -184,6 +176,7 @@
                     gp_ids.push($(this).attr('gp_id'));
                     prop = prop.children(".goods_price_con_prop[gp_id='"+$(this).attr('gp_id')+"']").parent();
                 });
+                alert(prop.length);
                 if(prop.length ==0){
                     var a = $('#goods_price_con_info_parents').clone();
                     for(var gp_id in gp_ids){
@@ -191,7 +184,8 @@
                         var gp_name = gp_li.html();
                         var gtp_name = gp_li.parent().siblings('.goods_price_head').html();
                         a.children('.goods_price_con_list').append(" <div class='goods_price_con_prop' gp_id='"+gp_ids[gp_id]+"'><div class='goods_td goods_price_con_prop_name'>"+gtp_name+"</div> <div class='goods_td goods_price_con_prop_value'>"+gp_name+"</div> </div>");
-
+                        a.appendTo($('.goods_price'));
+                        a.show();
                     }
                 }
             }else{
