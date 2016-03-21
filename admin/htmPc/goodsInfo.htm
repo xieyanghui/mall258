@@ -12,7 +12,6 @@
     #goodsList li.list_row  > span:nth-child(4) ,#goodsList li.list_row_head  > span:nth-child(4){
         width: 100px;
     }
-    }
     #goodsList li.list_row  > span:nth-child(5) ,#goodsList li.list_row_head  > span:nth-child(5){
         width: 200px;
     }
@@ -67,7 +66,7 @@
     });
     $(function(){
         $('.test').click(function(){
-            $.get('./inc/goodsAdd2.php',{'g_id':1},function(data){
+            $.post('./inc/goodsAdd2.php',{'g_id':1,'g_price':1888.22,'g_img':"aaaaaaaaaa"},function(data){
                 $('#CRUD').html(data);
                 Resize.resizeAdd(1200,100);
             });

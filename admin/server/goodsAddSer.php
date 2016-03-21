@@ -13,7 +13,7 @@ foreach ($_POST as $key => $value) {
     if (strstr($key, "attr") && !empty($value)) {
         $g['attr'][$value] = substr($key, 4);
     } elseif (strstr($key, "price") && !empty($value) && is_array($value)) {
-        foreach($value as $v){
+        foreach ($value as $v) {
             $g['price'][$v] = substr($key, 5);
         }
     }

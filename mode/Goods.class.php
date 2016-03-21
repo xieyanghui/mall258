@@ -122,8 +122,15 @@ class Goods
         $price =  $sql->selectData('g_price_v',array('gp_id','gp_name','gtp_name','gtp_id'),$where);
         $data =array();
         foreach ($price as &$value){
-            if(empty($data[$value['gtp_name']])){$data[$value['gtp_name']] = array();};
-            array_push($data[$value['gtp_name']],$value);
+            $va = $value['gtp_id'];
+            if(empty($data[$va])){
+                $data[$va]['gp_value'] = array();
+                $data[$va]['gtp_id'] = $value['gtp_id'];
+                $data[$va]['gtp_name'] = $value['gtp_name'];
+            };
+            unset($value['gtp_name']);
+            unset($value['gtp_id']);
+            array_push($data[$va]['gp_value'],$value);
         }
         return $data;
     }
@@ -143,7 +150,7 @@ class Goods
         $columns = array();
         $values = array();
         foreach($goods as $key=>$value){
-            if(is_array($value)){break;}
+            if(is_array($value) || empty($value)){break;}
             $columns[$key] = $this->isNumber($key,true);
             array_push($values,$value);
         }
@@ -362,8 +369,7 @@ class Goods
         $columns = array();
         $values = array();
         foreach($goodsType as $key=>$value){
-            if(is_array($value)){break;}
-            if(empty($value)){break;}
+            if(is_array($value) || empty($value)){break;}
             $columns[$key] = $this->isNumber($key,true);
             array_push($values,$value);
         }

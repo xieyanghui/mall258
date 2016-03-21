@@ -173,7 +173,7 @@
     function succ(data) {
         toast(data.status, data.megs);
         if(data.status){
-            $('#CRUD').load('./inc/goodsAdd2.php',{'g_id':data.g_id},function(){
+            $('#CRUD').load('./inc/goodsAdd2.php',{'g_id':data.g_id,'g_price':$("input[name='g_price']").val(),'g_img':$("input[name='img']").val()},function(){
                 Resize.resizeAdd(1200,50);
             });
         }
