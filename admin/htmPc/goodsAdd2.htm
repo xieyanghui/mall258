@@ -75,32 +75,26 @@
         border: 1px solid #50D1DE;
         padding: 2px 0 0 2px;
     }
-    .goods_price_con_info >div{
-        float: left;
-        margin: 0 2px 2px 0;
-        border: 1px solid #50D1DE;
-        overflow: hidden;
-        height: 50px;
-    }
     .goods_price_con_info >div.goods_price_con_list{
         width: 236px;
         border: hidden;
         height:auto;
         margin: 0;
+        float: left;
     }
     .goods_price_con_prop{
         float: left;
         width: 43px;
-        height: 50px;
         border: 1px solid #50D1DE;
-        margin: 0 5px 5px 0;
+        margin: 0 2px 2px 0;
         overflow: hidden;
+        border-bottom-style: hidden;
     }
     .goods_td{
         width: 100%;
-        height: 25px;
+        height: 16px;
         text-align: center;
-        line-height: 25px;
+        line-height: 16px;
         border-bottom: 1px solid #50D1DE;
     }
     .goods_price_con_prop_select{
@@ -111,19 +105,67 @@
     }
     .goods_price_con_sum{
         width: 40px;
+        float: right;
     }
     .numbers{
-        width: 40px;
+        border-style: hidden;
+        outline:none;
+        width: 100%;
     }
     .goods_price_con_price{
-        width: 40px;
+        width: 50px;
+        float: right;
     }
     .goods_price_con_img{
-        height: 50px;
-        width: 50px;
+        height: 33px;
+        width: 33px;
+        float: right;
+        border: 1px solid #50D1DE;
     }
     #goods_price_default{
         display: block;
+    }
+    #allEdit{
+        width: 770px;
+        height: 600px;
+    }
+    #goods_price_default>.goods_price_con_list{
+        line-height: 35px;
+        text-align: center;
+        color: #333333;
+        font-size: 18px;
+        background-color: #eeeeee ;
+    }
+    .goods_price_con_util{
+        float: right;
+    }
+    #select_img{
+        position: absolute;
+        z-index: 2000;
+        width: 150px;
+        height: 110px;
+        border: 1px solid #50D1DE;
+        background-color: #E0F8FB;
+        display: none;
+    }
+    #select_img >div{
+        width: 100px;
+        font-size: 20px;
+        margin: 10px auto;
+    }
+    #upload_img{
+    }
+    #space_img{
+        width: 100px;
+        font-size: 20px;
+    }
+    .progress{
+        height: 100%;
+        background-color: #1e88e5;
+    }
+    .goods_price_imgs{
+        width: 33px;
+        height: 33px;
     }
 </style>
 <form action="./server/goodsAdd2Ser.php" method="post" id="goodsAdd2Form">
@@ -146,58 +188,79 @@
                 <div class="goods_price_con_list">
                     默认价格
                 </div>
-                <div class="goods_price_con_sum">
-                    <div class="goods_td">数量</div>
-                    <div class="goods_td"></div>
+                <div class="goods_price_con_img goods_price_con_prop">
+                    <img class="preview_img" src="<{$g_img}>?imageView2/5/w/75/h/75" />
                 </div>
-                <div class="goods_price_con_price">
+                <div class="goods_price_con_price goods_price_con_prop">
                     <div class="goods_td">价格</div>
                     <div class="goods_td"><{$g_price}></div>
                 </div>
-                <div class="goods_price_con_img">
-                    <img src="<{$g_img}>?imageView2/5/w/75/h/75" />
-                </div>
             </div>
+
+            <!--模板-->
             <div class="goods_price_con_info" id="goods_price_con_info_parents">
                 <div class="goods_price_con_list">
                 </div>
-                <div class="goods_price_con_sum">
-                    <div class="goods_td">数量</div>
-                    <div class="goods_td"><input class="numbers" type="text" name="sum" ></div>
+                <div class="goods_price_con_util goods_price_con_prop">
+                    <div class="goods_td">提交</div>
+                    <div class="goods_td">清空</div>
                 </div>
-                <div class="goods_price_con_price">
+                <div class="goods_price_con_img goods_price_con_prop select_img" >
+                    <img class="preview_img goods_price_imgs" />
+                </div>
+                <div class="goods_price_con_price goods_price_con_prop">
                     <div class="goods_td">价格</div>
-                    <div class="goods_td"><input class="numbers" type="text" name="sum" ></div>
+                    <div class="goods_td"><input class="numbers" min="0" type="number" name="price" value="0" ></div>
                 </div>
-                <div class="goods_price_con_img">
+                <div class="goods_price_con_sum goods_price_con_prop">
+                    <div class="goods_td">数量</div>
+                    <div class="goods_td"><input class="numbers" min="0" type="number" name="sum" value="0"></div>
                 </div>
+
             </div>
         </div>
+
+
         <div class="win_column goods_all">
             <div class ="win_column_head">商品详细介绍</div>
+            <div id="allEdit"></div>
         </div>
     </div>
 </form>
 <script>
+    $(function(){
+        var editor = new wangEditor('allEdit');
+        editor.create();
+    });
     $(function (){
+
+        var listWidth = function (list) {
+            var wid = 0;
+            var bor = 2;
+            list.siblings().each(function(){wid +=$(this).width(); bor +=4;});
+            var lw = list.parent().width()-wid-bor;
+            list.css('width',lw);
+
+        }
+
+//        选择价格属性
         $('.goods_price_con_li').click(function(){
-            if(!$(this).hasClass('goods_price_con_li_click')){
+            if(!$(this).hasClass('goods_price_con_li_click')){ //判断是取消还是选定
                 $(this).addClass('goods_price_con_li_click');
                 $(this).siblings().removeClass('goods_price_con_li_click');
                 $(".goods_price_con_prop[gp_id='"+$(this).attr('gp_id')+"']").addClass('goods_price_con_prop_select');
-
                 var gp_ids = [];
                 var prop = $('.goods_price_con_list');
-                $('.goods_price_con_li_click').map(function(){
+                $('.goods_price_con_li_click').map(function(){//获取已选定的价格属性
+                   // return $(this).attr('gp_id');
                     gp_ids.push($(this).attr('gp_id'));
                     prop = prop.children(".goods_price_con_prop[gp_id='"+$(this).attr('gp_id')+"']").parent();
                 });
                 var gp_create = false;
-                $('.goods_price_con_info').each(function(){
+                $('.goods_price_con_info').each(function(){//判断价格方案是否已存在
                     var gp = $(this).find('.goods_price_con_prop');
                     var gps =  gp.map(function(){return $(this).attr('gp_id'); }).get();
                     if(gps[0] != null){
-
                         var c = true;
                         for(var i in gp_ids ){
                             if($.inArray(gp_ids[i],gps) == -1){
@@ -212,6 +275,7 @@
                     }
                 });
                 if(!gp_create){
+                    //不存在的价格方案就创建
                     if($('#goods_price_con_info_add').length ==0){
                         var a = $('#goods_price_con_info_parents').clone();
                         for(var gp_id in gp_ids){
@@ -223,8 +287,10 @@
                             a.attr('id','goods_price_con_info_add');
                             a.appendTo($('.goods_price'));
                             a.show();
+                            listWidth(a.children('.goods_price_con_list'));
                         }
                     }else{
+                        //修改或增加价格属性
                         var gtp_id = $(this).parent().siblings('.goods_price_head').attr('gtp_id');
                         var gtp_name = $(this).parent().siblings('.goods_price_head').html();
                         var self = $(this);
@@ -243,27 +309,17 @@
 
                 }
             }else{
+                //取消选定的属性
                 $(this).removeClass('goods_price_con_li_click');
                 $(".goods_price_con_prop[gp_id='"+$(this).attr('gp_id')+"']").removeClass('goods_price_con_prop_select');
             }
 
         });
+
+        listWidth( $('#goods_price_default >.goods_price_con_list'));
     });
     $(function(){
         //上传头像
-        var up = getUpload();
-        up.browse_button = "imgUp";
-        //up.container = "adminHeadImg";
-        up['init'].UploadProgress = function(up,file){
-            $("#bar").css("width",file.percent+"%");
-        };
-        up['init'].FileUploaded = function (up, file, info) {
-            var domain = up.getOption('domain');
-            var res = JSON.parse(info);
-            $("#adminHeadImg>img").attr("src", domain + "/" + res.key + "?imageView2/5/w/75/h/75");
-            $("#adminHeadImg>input[name='img']").val(domain + "/" + res.key);
-            $("#bar").css("background-color","#50D1DE");
-        };
-        var uploader = Qiniu.uploader(up);
+
     });
 </script>

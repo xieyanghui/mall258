@@ -135,7 +135,7 @@ class Sql
      *
      * @param $table  string 表名
      *
-     * @param $column array|string 列名集合
+     * @param $column 列名集合,数组字符串都可以
      *
      * @param $where Where 条件必须是二维数组，子数组条件必须 columnName，type ，value，可选logic，mark
      *

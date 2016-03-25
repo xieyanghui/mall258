@@ -458,3 +458,10 @@ input.list_form_div{
     float: left;
     margin: 10px 20px;
 }
+/*图片预览框*/
+#preview_img{
+    width: 500px;
+    height: 500px;
+    position: absolute;
+    z-index: 1000;
+}

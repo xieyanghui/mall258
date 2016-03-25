@@ -171,8 +171,12 @@ function getUpload(){
             }
         }
     };
-    //function f(){};
-    //f.prototype=upload;
+   // function f(){};
+  //   f.prototype=upload;
+  // //  return new upload.constructor;
+  //   var f1 = new f();
+  //   f1.init = upload.init;
+  //   return f1;
     var u ={};
     $.extend(u,upload);
     return u;
@@ -300,3 +304,103 @@ var CRUD = {
         });
     }
 };
+
+
+
+//
+$('body').click(function(){
+    if($('#select_img').length >0){
+        $('#select_img').hide();
+    }
+});
+
+/**
+ * 上传或去图库选择图片
+ * progress 属性配置 默认进度条元素选择 默认本身
+ * previwe 属性配置 预览图元素 默认本身
+ * space_type 属性配置 空间属性ID 默认商品图片
+ * multi  属性配置  是否多选
+ * */
+$('body').on('click','.select_img',function(e){
+    if($('#select_img').length ==0){
+        $("body").append("<div id='select_img'><div id='upload_img' class='button'>上传图片</div><div id = 'space_img' class='button'>空间选择</div></div>");
+    }
+    $('#select_img').css('top',e.clientY -($('#select_img').height()/2)+$(document).scrollTop());
+    $('#select_img').css('left',e.clientX -($('#select_img').width()/2));
+    if(typeof(uploader) =='object'){
+        uploader.destroy();
+    }
+    var up = getUpload();
+    var progress =$(this).attr('progress');// 默认进度条
+    var previwe = $(this).attr('previwe');//预览图
+    var space_type = $(this).attr('space_type');//空间类型
+    if(typeof(space_type) =='undefined' || space_type ==""){
+        space_type =null;
+    }
+    if(typeof(progress) =='undefined' || progress ==""){
+        progress = $("<div class='progress'></div>");
+        progress.appendTo($(this));
+    }else{ progress =$(progress);}
+    if(typeof(previwe) =='undefined' || previwe ==""){
+        previwe =$(this).children('img');
+    }else{ previwe =$(previwe); }
+    //是否多选
+    if(typeof ($(this).attr('multi')) !='undefined'){
+        up.multi_selection =true;
+    }
+    up.browse_button = "upload_img";
+    up['init'].UploadProgress = function(up,file){
+        progress.css("width",file.percent+"%");
+    };
+    up['init'].FileUploaded = function (up, file, info) {
+        var domain = up.getOption('domain');
+        var res = JSON.parse(info);
+        var w = previwe.parent().width();
+        var h = previwe.parent().height();
+        previwe.attr("src", domain + "/" + res.key + "?imageView2/5/w/"+w+"/h/"+h);
+        $.getJSON('./server/adminImgSpaceAddSer.php',{'ais_img_url':domain + "/" + res.key,'ais_name':file.name.substr(0,file.name.lastIndexOf('.')),'ait_id':space_type},function(data){
+        });
+        previwe.attr("img_url",domain + "/" + res.key);
+        progress.remove();
+    };
+    uploader = Qiniu.uploader(up);
+    $('#select_img').show();
+    e.stopPropagation();
+});
+
+//图库选择图片
+$('body').on('click','#space_img',function(e){
+    if($("#img_space_div").length ==0){
+        $('body').append("<div id='img_space_div'></div>");
+        $("#img_space_div").load('./inc/adminImgSpace.php?select=true');
+    }
+});
+
+//图片预览
+$('body').on('mouseenter','.preview_img',function(e){
+    $(this).attr('leave','false');
+    var self = $(this);
+    setTimeout(function(){
+        if(self.attr('leave') =='false'){
+            var ss = typeof (self.attr('preview')) !='undefined'? $(self.attr('preview')):self; //图片来源默认本身
+
+            if($('#preview_img').length ==0){
+                $("body").append("<div id='preview_img'><img /></div>");
+            }
+            var src = typeof (ss.attr('src')) !='undefined'? ss.attr('src'):"";
+            src = src.indexOf('?')!= -1 ?src.substr(0,src.lastIndexOf('?')): src;
+            var off = self.offset();
+            $('#preview_img').css('left',off.left+self.width());
+            $('#preview_img').css('top',off.top);
+            var width = typeof (self.attr('preview_width')) !='undefined'?self.attr('preview_width'):$('#preview_img').width(); //图片来源默认本身
+            var height = typeof (self.attr('preview_height')) !='undefined'?self.attr('preview_height'):$('#preview_img').height(); //图片来源默认本身
+            $('#preview_img >img').attr('src',src+"?imageMogr2/thumbnail/"+parseInt(width)+"x"+parseInt(height));
+
+            $('#preview_img').show();
+        }
+    },1000);
+});
+$('body').on('mouseleave','.preview_img',function(e){
+    $(this).attr('leave','true');
+    $('#preview_img').hide();
+});
