@@ -114,6 +114,7 @@
     }
     .numbers{
         width: 40px;
+        font-size: 9px;
     }
     .goods_price_con_price{
         width: 40px;
@@ -163,11 +164,11 @@
                 </div>
                 <div class="goods_price_con_sum">
                     <div class="goods_td">数量</div>
-                    <div class="goods_td"><input class="numbers" type="text" name="sum" ></div>
+                    <div class="goods_td"><input class="numbers" type="number" min="0" name="sum" value="0" ></div>
                 </div>
                 <div class="goods_price_con_price">
                     <div class="goods_td">价格</div>
-                    <div class="goods_td"><input class="numbers" type="text" name="sum" ></div>
+                    <div class="goods_td"><input class="numbers" type="number" name="sum" ></div>
                 </div>
                 <div class="goods_price_con_img">
                 </div>
@@ -185,7 +186,6 @@
                 $(this).addClass('goods_price_con_li_click');
                 $(this).siblings().removeClass('goods_price_con_li_click');
                 $(".goods_price_con_prop[gp_id='"+$(this).attr('gp_id')+"']").addClass('goods_price_con_prop_select');
-
                 var gp_ids = [];
                 var prop = $('.goods_price_con_list');
                 $('.goods_price_con_li_click').map(function(){
@@ -196,20 +196,24 @@
                 $('.goods_price_con_info').each(function(){
                     var gp = $(this).find('.goods_price_con_prop');
                     var gps =  gp.map(function(){return $(this).attr('gp_id'); }).get();
-                    if(gps[0] != null){
-
-                        var c = true;
-                        for(var i in gp_ids ){
-                            if($.inArray(gp_ids[i],gps) == -1){
-                                c = false;
-                                break;
-                            }
-                        }
-                        if(c){
-                            gp_create = true;
-                            return false;
-                        }
+                    if(gps.sort().toString() == gp_ids.sort().toString()){
+                        gp_create =true;
+                        return false;
                     }
+//                    if(gps[0] != null){
+//
+//                        var c = true;
+//                        for(var i in gp_ids ){
+//                            if($.inArray(gp_ids[i],gps) == -1){
+//                                c = false;
+//                                break;
+//                            }
+//                        }
+//                        if(c){
+//                            gp_create = true;
+//                            return false;
+//                        }
+//                    }
                 });
                 if(!gp_create){
                     if($('#goods_price_con_info_add').length ==0){
@@ -244,7 +248,13 @@
                 }
             }else{
                 $(this).removeClass('goods_price_con_li_click');
-                $(".goods_price_con_prop[gp_id='"+$(this).attr('gp_id')+"']").removeClass('goods_price_con_prop_select');
+               // $(".goods_price_con_prop[gp_id='"+$(this).attr('gp_id')+"']").removeClass('goods_price_con_prop_select');
+
+                $("#goods_price_con_info_add>.goods_price_con_list>.goods_price_con_prop[gp_id='"+$(this).attr('gp_id')+"']").remove();
+                if($("#goods_price_con_info_add>.goods_price_con_list>.goods_price_con_prop").length ==0){
+                    $("#goods_price_con_info_add").remove();
+                }
+
             }
 
         });
