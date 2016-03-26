@@ -3,7 +3,7 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <link rel="stylesheet" type="text/css" href="<{$HTTP_HOST}>/css/main.css"/>
-    <script src="http://cdn.staticfile.org/jquery/2.1.1/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+    <link rel="stylesheet" type="text/css" href="<{$HTTP_HOST}>/js/wangEdit/css/wangEditor.min.css"/>
     <style>
         body {
             background-color: #E0F8FB;
@@ -142,6 +142,12 @@
 <div class= "backdrop"></div>
 <div id = 'CRUD'></div>
 </body>
+<script src="http://cdn.staticfile.org/jquery/2.1.1/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript" src="<{$HTTP_HOST}>/js/plupload/plupload.full.min.js"></script>
+<script type="text/javascript" src="<{$HTTP_HOST}>/js/qiniujs/qiniu.min.js"></script>
+<script src="<{$HTTP_HOST}>/js/main.js" type="text/javascript" charset="utf-8"></script>
+<script src="<{$HTTP_HOST}>/js/inCheck.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript" src="<{$HTTP_HOST}>/js/wangEdit/js/wangEditor.min.js"></script>
 <script>
     $(function () {
         $(".top_menus >li").click(function () {
@@ -153,9 +159,4 @@
         });
     });
 </script>
-
-<script type="text/javascript" src="<{$HTTP_HOST}>/js/plupload/plupload.full.min.js"></script>
-<script type="text/javascript" src="<{$HTTP_HOST}>/js/qiniujs/qiniu.min.js"></script>
-<script src="<{$HTTP_HOST}>/js/main.js" type="text/javascript" charset="utf-8"></script>
-<script src="<{$HTTP_HOST}>/js/inCheck.js" type="text/javascript" charset="utf-8"></script>
 </html>

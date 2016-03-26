@@ -5,6 +5,7 @@
  * Date: 2016/1/30
  * Time: 14:56
  */
+//
 class Where{
     private $where =array(); //条件集合
     private $end = "";        //条件后面的语句
@@ -55,9 +56,7 @@ class Where{
      * 设置子条件
      * @param $key string  组key
      * @param $columnName string 列名
-     *
      * @param $value string 值
-     *
      * @param $type string 列类型,默认string
      * @param $logic string 逻辑,默认AND
      * @param $mark string 操作符,默认'='
@@ -87,6 +86,7 @@ class Where{
             throw new Exception("缺少参数!");
         }
     }
+
 
     public function setWheresLogic($key,$logic){
         if(!empty($this->where[$key][0] )){

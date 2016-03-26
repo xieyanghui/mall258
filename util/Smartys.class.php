@@ -38,6 +38,6 @@ class Smartys extends Smarty
         $this->left_delimiter = '<{';
         $this->right_delimiter = '}>';
         $this->assign("HTTP_HOST", 'http://' . $_SERVER['HTTP_HOST']);
-        $this->assign("HTTP_FILE",  strrchr($_SERVER['PHP_SELF'],"/"));
+        $this->assign("HTTP_FILE", substr($_SERVER['PHP_SELF'],strrpos($_SERVER['PHP_SELF'],"/")+1,strrpos($_SERVER['PHP_SELF'],".")-1));
     }
 }

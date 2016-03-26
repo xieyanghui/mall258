@@ -1,7 +1,801 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <component name="dataSourceStorage">
   <data-source name="BBBm99cixwebhosting" uuid="f9d2df33-2bcc-450b-ad85-59447ff12f6f">
-    <database-info product="" version="" jdbc-version="" driver-name="" driver-version=""/>
+    <database-info product="MySQL" version="5.1.68-community-log" jdbc-version="4.0" driver-name="MySQL Connector Java" driver-version="mysql-connector-java-5.1.35 ( Revision: 5fb9c5849535c13917c2cf9baaece6ef9693ef27 )">
+      <extra-name-characters>#@</extra-name-characters>
+      <identifier-quote-string>`</identifier-quote-string>
+    </database-info>
+    <case-sensitivity plain-identifiers="exact" quoted-identifiers="exact"/>
+    <database-model serializer="dbm" rdbms="MYSQL" format-version="2.5">
+      <schema id="1" name="BBBm99c_xiehui"/>
+      <table id="2" parent="1" name="admin"/>
+      <table id="3" parent="1" name="admin_auth"/>
+      <table id="4" parent="1" name="admin_auth_list"/>
+      <table id="5" parent="1" name="admin_img_scope"/>
+      <table id="6" parent="1" name="admin_login_log"/>
+      <table id="7" parent="1" name="auth_list"/>
+      <table id="8" parent="1" name="cart"/>
+      <table id="9" parent="1" name="collect"/>
+      <table id="10" parent="1" name="g_attr"/>
+      <table id="11" parent="1" name="g_price"/>
+      <table id="12" parent="1" name="g_price_info"/>
+      <table id="13" parent="1" name="g_price_list"/>
+      <table id="14" parent="1" name="goods"/>
+      <table id="15" parent="1" name="goods_type"/>
+      <table id="16" parent="1" name="gt_attr"/>
+      <table id="17" parent="1" name="gt_price"/>
+      <table id="18" parent="1" name="order"/>
+      <table id="19" parent="1" name="order_goods"/>
+      <table id="20" parent="1" name="system_log"/>
+      <table id="21" parent="1" name="user"/>
+      <table id="22" parent="1" name="user_ship_address"/>
+      <table id="23" parent="1" name="web_info"/>
+      <view id="24" parent="1" name="admin_auth_v">
+        <comment>VIEW</comment>
+      </view>
+      <view id="25" parent="1" name="admin_info_v">
+        <comment>VIEW</comment>
+      </view>
+      <view id="26" parent="1" name="g_attr_v">
+        <comment>VIEW</comment>
+      </view>
+      <view id="27" parent="1" name="g_price_v">
+        <comment>VIEW</comment>
+      </view>
+      <view id="28" parent="1" name="goods_info_v">
+        <comment>VIEW</comment>
+      </view>
+      <view id="29" parent="1" name="system_log_v">
+        <comment>VIEW</comment>
+      </view>
+      <column id="30" parent="2" name="a_id">
+        <mandatory>1</mandatory>
+        <data-type>int(10) unsigned</data-type>
+        <sequence-identity>1</sequence-identity>
+      </column>
+      <column id="31" parent="2" name="a_name">
+        <mandatory>1</mandatory>
+        <data-type>char(20)</data-type>
+      </column>
+      <column id="32" parent="2" name="a_pwd">
+        <mandatory>1</mandatory>
+        <data-type>char(32)</data-type>
+      </column>
+      <column id="33" parent="2" name="a_reg">
+        <mandatory>1</mandatory>
+        <data-type>timestamp</data-type>
+        <default-expression>&apos;CURRENT_TIMESTAMP&apos;</default-expression>
+      </column>
+      <column id="34" parent="2" name="a_img">
+        <data-type>varchar(200)</data-type>
+      </column>
+      <column id="35" parent="2" name="a_nick">
+        <data-type>char(20)</data-type>
+      </column>
+      <column id="36" parent="2" name="a_status">
+        <mandatory>1</mandatory>
+        <data-type>tinyint(4)</data-type>
+        <default-expression>&apos;1&apos;</default-expression>
+      </column>
+      <column id="37" parent="2" name="aa_id">
+        <mandatory>1</mandatory>
+        <data-type>int(10) unsigned</data-type>
+        <default-expression>&apos;2&apos;</default-expression>
+      </column>
+      <index id="38" parent="2" name="a_name">
+        <columns>a_name</columns>
+        <desc-columns></desc-columns>
+        <unique>1</unique>
+      </index>
+      <key id="39" parent="2" name="a_name">
+        <columns>a_name</columns>
+        <underlying-index>a_name</underlying-index>
+      </key>
+      <key id="40" parent="2" name="PRIMARY">
+        <columns>a_id</columns>
+        <primary>1</primary>
+      </key>
+      <column id="41" parent="3" name="aa_id">
+        <mandatory>1</mandatory>
+        <data-type>int(10) unsigned</data-type>
+        <sequence-identity>1</sequence-identity>
+      </column>
+      <column id="42" parent="3" name="aa_nick">
+        <mandatory>1</mandatory>
+        <data-type>char(20)</data-type>
+      </column>
+      <column id="43" parent="3" name="aa_remark">
+        <data-type>varchar(50)</data-type>
+      </column>
+      <index id="44" parent="3" name="aa_nick">
+        <columns>aa_nick</columns>
+        <desc-columns></desc-columns>
+        <unique>1</unique>
+      </index>
+      <key id="45" parent="3" name="aa_nick">
+        <columns>aa_nick</columns>
+        <underlying-index>aa_nick</underlying-index>
+      </key>
+      <key id="46" parent="3" name="PRIMARY">
+        <columns>aa_id</columns>
+        <primary>1</primary>
+      </key>
+      <column id="47" parent="4" name="al_id">
+        <mandatory>1</mandatory>
+        <data-type>int(10) unsigned</data-type>
+      </column>
+      <column id="48" parent="4" name="aa_id">
+        <mandatory>1</mandatory>
+        <data-type>int(10) unsigned</data-type>
+      </column>
+      <key id="49" parent="4" name="PRIMARY">
+        <columns>al_id
+aa_id</columns>
+        <primary>1</primary>
+      </key>
+      <column id="50" parent="5" name="ais_id">
+        <mandatory>1</mandatory>
+        <data-type>int(10) unsigned</data-type>
+        <sequence-identity>1</sequence-identity>
+      </column>
+      <column id="51" parent="5" name="ais_name">
+        <data-type>char(40)</data-type>
+      </column>
+      <column id="52" parent="5" name="a_id">
+        <mandatory>1</mandatory>
+        <data-type>int(10) unsigned</data-type>
+      </column>
+      <column id="53" parent="5" name="ais_imgurl">
+        <mandatory>1</mandatory>
+        <data-type>varchar(500)</data-type>
+      </column>
+      <column id="54" parent="5" name="ais_type">
+        <mandatory>1</mandatory>
+        <data-type>char(20)</data-type>
+      </column>
+      <column id="55" parent="5" name="ais_time">
+        <mandatory>1</mandatory>
+        <data-type>timestamp</data-type>
+        <default-expression>&apos;CURRENT_TIMESTAMP&apos;</default-expression>
+      </column>
+      <key id="56" parent="5" name="PRIMARY">
+        <columns>ais_id</columns>
+        <primary>1</primary>
+      </key>
+      <column id="57" parent="6" name="all_id">
+        <mandatory>1</mandatory>
+        <data-type>int(10) unsigned</data-type>
+        <sequence-identity>1</sequence-identity>
+      </column>
+      <column id="58" parent="6" name="a_id">
+        <mandatory>1</mandatory>
+        <data-type>int(10) unsigned</data-type>
+      </column>
+      <column id="59" parent="6" name="ip">
+        <mandatory>1</mandatory>
+        <data-type>char(16)</data-type>
+      </column>
+      <column id="60" parent="6" name="date">
+        <mandatory>1</mandatory>
+        <data-type>timestamp</data-type>
+        <default-expression>&apos;CURRENT_TIMESTAMP&apos;</default-expression>
+      </column>
+      <key id="61" parent="6" name="PRIMARY">
+        <columns>all_id</columns>
+        <primary>1</primary>
+      </key>
+      <column id="62" parent="7" name="al_id">
+        <mandatory>1</mandatory>
+        <data-type>int(10) unsigned</data-type>
+        <sequence-identity>1</sequence-identity>
+      </column>
+      <column id="63" parent="7" name="al_key">
+        <mandatory>1</mandatory>
+        <data-type>char(20)</data-type>
+      </column>
+      <column id="64" parent="7" name="al_nick">
+        <mandatory>1</mandatory>
+        <data-type>char(20)</data-type>
+      </column>
+      <column id="65" parent="7" name="al_remark">
+        <data-type>varchar(50)</data-type>
+      </column>
+      <index id="66" parent="7" name="al_key">
+        <columns>al_key</columns>
+        <desc-columns></desc-columns>
+        <unique>1</unique>
+      </index>
+      <key id="67" parent="7" name="al_key">
+        <columns>al_key</columns>
+        <underlying-index>al_key</underlying-index>
+      </key>
+      <key id="68" parent="7" name="PRIMARY">
+        <columns>al_id</columns>
+        <primary>1</primary>
+      </key>
+      <column id="69" parent="8" name="c_id">
+        <mandatory>1</mandatory>
+        <data-type>int(10) unsigned</data-type>
+        <sequence-identity>1</sequence-identity>
+      </column>
+      <column id="70" parent="8" name="u_id">
+        <mandatory>1</mandatory>
+        <data-type>int(10) unsigned</data-type>
+      </column>
+      <column id="71" parent="8" name="gps_id">
+        <mandatory>1</mandatory>
+        <data-type>int(10) unsigned</data-type>
+      </column>
+      <column id="72" parent="8" name="c_sum">
+        <mandatory>1</mandatory>
+        <data-type>int(10) unsigned</data-type>
+        <default-expression>&apos;1&apos;</default-expression>
+      </column>
+      <key id="73" parent="8" name="PRIMARY">
+        <columns>c_id</columns>
+        <primary>1</primary>
+      </key>
+      <column id="74" parent="9" name="c_id">
+        <mandatory>1</mandatory>
+        <data-type>int(10) unsigned</data-type>
+        <sequence-identity>1</sequence-identity>
+      </column>
+      <column id="75" parent="9" name="u_id">
+        <mandatory>1</mandatory>
+        <data-type>int(10) unsigned</data-type>
+      </column>
+      <column id="76" parent="9" name="g_id">
+        <mandatory>1</mandatory>
+        <data-type>int(10) unsigned</data-type>
+      </column>
+      <key id="77" parent="9" name="PRIMARY">
+        <columns>c_id</columns>
+        <primary>1</primary>
+      </key>
+      <column id="78" parent="10" name="ga_id">
+        <mandatory>1</mandatory>
+        <data-type>int(10) unsigned</data-type>
+        <sequence-identity>1</sequence-identity>
+      </column>
+      <column id="79" parent="10" name="g_id">
+        <mandatory>1</mandatory>
+        <data-type>int(10) unsigned</data-type>
+      </column>
+      <column id="80" parent="10" name="gta_id">
+        <mandatory>1</mandatory>
+        <data-type>int(10) unsigned</data-type>
+      </column>
+      <column id="81" parent="10" name="ga_value">
+        <data-type>char(20)</data-type>
+      </column>
+      <key id="82" parent="10" name="PRIMARY">
+        <columns>ga_id</columns>
+        <primary>1</primary>
+      </key>
+      <column id="83" parent="11" name="gp_id">
+        <mandatory>1</mandatory>
+        <data-type>int(10) unsigned</data-type>
+        <sequence-identity>1</sequence-identity>
+      </column>
+      <column id="84" parent="11" name="g_id">
+        <mandatory>1</mandatory>
+        <data-type>int(10) unsigned</data-type>
+      </column>
+      <column id="85" parent="11" name="gtp_id">
+        <mandatory>1</mandatory>
+        <data-type>int(10) unsigned</data-type>
+      </column>
+      <column id="86" parent="11" name="gp_name">
+        <mandatory>1</mandatory>
+        <data-type>char(20)</data-type>
+      </column>
+      <key id="87" parent="11" name="PRIMARY">
+        <columns>gp_id</columns>
+        <primary>1</primary>
+      </key>
+      <column id="88" parent="12" name="gpi_id">
+        <mandatory>1</mandatory>
+        <data-type>int(10) unsigned</data-type>
+        <sequence-identity>1</sequence-identity>
+      </column>
+      <column id="89" parent="12" name="g_id">
+        <mandatory>1</mandatory>
+        <data-type>int(10) unsigned</data-type>
+      </column>
+      <column id="90" parent="12" name="gpi_img">
+        <data-type>varchar(200)</data-type>
+      </column>
+      <column id="91" parent="12" name="gpi_sum">
+        <mandatory>1</mandatory>
+        <data-type>int(10) unsigned</data-type>
+        <default-expression>&apos;0&apos;</default-expression>
+      </column>
+      <column id="92" parent="12" name="gpi_price">
+        <data-type>float(8,2)</data-type>
+      </column>
+      <key id="93" parent="12" name="PRIMARY">
+        <columns>gpi_id</columns>
+        <primary>1</primary>
+      </key>
+      <column id="94" parent="13" name="gpi_id">
+        <mandatory>1</mandatory>
+        <data-type>int(10) unsigned</data-type>
+      </column>
+      <column id="95" parent="13" name="gp_id">
+        <mandatory>1</mandatory>
+        <data-type>int(10) unsigned</data-type>
+      </column>
+      <key id="96" parent="13" name="PRIMARY">
+        <columns>gpi_id
+gp_id</columns>
+        <primary>1</primary>
+      </key>
+      <column id="97" parent="14" name="g_id">
+        <mandatory>1</mandatory>
+        <data-type>int(10) unsigned</data-type>
+        <sequence-identity>1</sequence-identity>
+      </column>
+      <column id="98" parent="14" name="g_number">
+        <mandatory>1</mandatory>
+        <data-type>char(10)</data-type>
+      </column>
+      <column id="99" parent="14" name="g_name">
+        <mandatory>1</mandatory>
+        <data-type>varchar(100)</data-type>
+      </column>
+      <column id="100" parent="14" name="gt_id">
+        <mandatory>1</mandatory>
+        <data-type>int(10) unsigned</data-type>
+      </column>
+      <column id="101" parent="14" name="g_price">
+        <mandatory>1</mandatory>
+        <data-type>float(8,2)</data-type>
+      </column>
+      <column id="102" parent="14" name="g_keywords">
+        <data-type>varchar(200)</data-type>
+      </column>
+      <column id="103" parent="14" name="g_description">
+        <data-type>varchar(200)</data-type>
+      </column>
+      <column id="104" parent="14" name="g_img">
+        <data-type>varchar(300)</data-type>
+      </column>
+      <column id="105" parent="14" name="g_reg">
+        <mandatory>1</mandatory>
+        <data-type>timestamp</data-type>
+        <default-expression>&apos;CURRENT_TIMESTAMP&apos;</default-expression>
+      </column>
+      <column id="106" parent="14" name="g_status">
+        <mandatory>1</mandatory>
+        <data-type>tinyint(4)</data-type>
+        <default-expression>&apos;1&apos;</default-expression>
+      </column>
+      <column id="107" parent="14" name="g_text">
+        <data-type>text</data-type>
+      </column>
+      <index id="108" parent="14" name="g_name">
+        <columns>g_name
+g_number</columns>
+        <desc-columns></desc-columns>
+        <unique>1</unique>
+      </index>
+      <key id="109" parent="14" name="g_name">
+        <columns>g_name
+g_number</columns>
+        <underlying-index>g_name</underlying-index>
+      </key>
+      <key id="110" parent="14" name="PRIMARY">
+        <columns>g_id</columns>
+        <primary>1</primary>
+      </key>
+      <column id="111" parent="15" name="gt_id">
+        <mandatory>1</mandatory>
+        <data-type>int(10) unsigned</data-type>
+        <sequence-identity>1</sequence-identity>
+      </column>
+      <column id="112" parent="15" name="gt_number">
+        <mandatory>1</mandatory>
+        <data-type>char(5)</data-type>
+      </column>
+      <column id="113" parent="15" name="gt_name">
+        <mandatory>1</mandatory>
+        <data-type>char(20)</data-type>
+      </column>
+      <column id="114" parent="15" name="gt_remark">
+        <data-type>char(60)</data-type>
+      </column>
+      <column id="115" parent="15" name="gt_status">
+        <mandatory>1</mandatory>
+        <data-type>tinyint(4)</data-type>
+        <default-expression>&apos;1&apos;</default-expression>
+      </column>
+      <index id="116" parent="15" name="gt_name">
+        <columns>gt_name
+gt_number</columns>
+        <desc-columns></desc-columns>
+        <unique>1</unique>
+      </index>
+      <key id="117" parent="15" name="gt_name">
+        <columns>gt_name
+gt_number</columns>
+        <underlying-index>gt_name</underlying-index>
+      </key>
+      <key id="118" parent="15" name="PRIMARY">
+        <columns>gt_id</columns>
+        <primary>1</primary>
+      </key>
+      <column id="119" parent="16" name="gta_id">
+        <mandatory>1</mandatory>
+        <data-type>int(10) unsigned</data-type>
+        <sequence-identity>1</sequence-identity>
+      </column>
+      <column id="120" parent="16" name="gt_id">
+        <mandatory>1</mandatory>
+        <data-type>int(10) unsigned</data-type>
+      </column>
+      <column id="121" parent="16" name="gta_name">
+        <mandatory>1</mandatory>
+        <data-type>char(20)</data-type>
+      </column>
+      <key id="122" parent="16" name="PRIMARY">
+        <columns>gta_id</columns>
+        <primary>1</primary>
+      </key>
+      <column id="123" parent="17" name="gtp_id">
+        <mandatory>1</mandatory>
+        <data-type>int(10) unsigned</data-type>
+        <sequence-identity>1</sequence-identity>
+      </column>
+      <column id="124" parent="17" name="gt_id">
+        <mandatory>1</mandatory>
+        <data-type>int(10) unsigned</data-type>
+      </column>
+      <column id="125" parent="17" name="gtp_name">
+        <mandatory>1</mandatory>
+        <data-type>char(20)</data-type>
+      </column>
+      <key id="126" parent="17" name="PRIMARY">
+        <columns>gtp_id</columns>
+        <primary>1</primary>
+      </key>
+      <column id="127" parent="18" name="o_id">
+        <mandatory>1</mandatory>
+        <data-type>int(10) unsigned</data-type>
+        <sequence-identity>1</sequence-identity>
+      </column>
+      <column id="128" parent="18" name="u_id">
+        <mandatory>1</mandatory>
+        <data-type>int(10) unsigned</data-type>
+      </column>
+      <column id="129" parent="18" name="o_number">
+        <mandatory>1</mandatory>
+        <data-type>char(20)</data-type>
+      </column>
+      <column id="130" parent="18" name="o_regtime">
+        <mandatory>1</mandatory>
+        <data-type>timestamp</data-type>
+        <default-expression>&apos;CURRENT_TIMESTAMP&apos;</default-expression>
+      </column>
+      <column id="131" parent="18" name="o_status">
+        <mandatory>1</mandatory>
+        <data-type>tinyint(4)</data-type>
+        <default-expression>&apos;1&apos;</default-expression>
+      </column>
+      <index id="132" parent="18" name="o_number">
+        <columns>o_number</columns>
+        <desc-columns></desc-columns>
+        <unique>1</unique>
+      </index>
+      <key id="133" parent="18" name="o_number">
+        <columns>o_number</columns>
+        <underlying-index>o_number</underlying-index>
+      </key>
+      <key id="134" parent="18" name="PRIMARY">
+        <columns>o_id</columns>
+        <primary>1</primary>
+      </key>
+      <column id="135" parent="19" name="og_id">
+        <mandatory>1</mandatory>
+        <data-type>int(10) unsigned</data-type>
+        <sequence-identity>1</sequence-identity>
+      </column>
+      <column id="136" parent="19" name="o_id">
+        <mandatory>1</mandatory>
+        <data-type>int(10) unsigned</data-type>
+      </column>
+      <column id="137" parent="19" name="gps_id">
+        <mandatory>1</mandatory>
+        <data-type>int(10) unsigned</data-type>
+      </column>
+      <key id="138" parent="19" name="PRIMARY">
+        <columns>og_id</columns>
+        <primary>1</primary>
+      </key>
+      <column id="139" parent="20" name="sl_id">
+        <mandatory>1</mandatory>
+        <data-type>int(10) unsigned</data-type>
+        <sequence-identity>1</sequence-identity>
+      </column>
+      <column id="140" parent="20" name="a_id">
+        <mandatory>1</mandatory>
+        <data-type>int(10) unsigned</data-type>
+      </column>
+      <column id="141" parent="20" name="sl_key">
+        <mandatory>1</mandatory>
+        <data-type>char(20)</data-type>
+      </column>
+      <column id="142" parent="20" name="sl_content">
+        <mandatory>1</mandatory>
+        <data-type>varchar(200)</data-type>
+      </column>
+      <column id="143" parent="20" name="sl_date">
+        <mandatory>1</mandatory>
+        <data-type>timestamp</data-type>
+        <default-expression>&apos;CURRENT_TIMESTAMP&apos;</default-expression>
+      </column>
+      <key id="144" parent="20" name="PRIMARY">
+        <columns>sl_id</columns>
+        <primary>1</primary>
+      </key>
+      <column id="145" parent="21" name="u_id">
+        <mandatory>1</mandatory>
+        <data-type>int(10) unsigned</data-type>
+        <sequence-identity>1</sequence-identity>
+      </column>
+      <column id="146" parent="21" name="u_name">
+        <mandatory>1</mandatory>
+        <data-type>char(20)</data-type>
+      </column>
+      <column id="147" parent="21" name="u_pwd">
+        <mandatory>1</mandatory>
+        <data-type>char(32)</data-type>
+      </column>
+      <column id="148" parent="21" name="u_nick">
+        <data-type>char(20)</data-type>
+      </column>
+      <column id="149" parent="21" name="u_phone">
+        <data-type>char(11)</data-type>
+      </column>
+      <column id="150" parent="21" name="u_email">
+        <data-type>char(40)</data-type>
+      </column>
+      <column id="151" parent="21" name="u_address">
+        <data-type>char(12)</data-type>
+      </column>
+      <column id="152" parent="21" name="u_reg">
+        <mandatory>1</mandatory>
+        <data-type>timestamp</data-type>
+        <default-expression>&apos;CURRENT_TIMESTAMP&apos;</default-expression>
+      </column>
+      <column id="153" parent="21" name="u_status">
+        <mandatory>1</mandatory>
+        <data-type>tinyint(4)</data-type>
+        <default-expression>&apos;1&apos;</default-expression>
+      </column>
+      <column id="154" parent="21" name="u_img">
+        <data-type>varchar(400)</data-type>
+      </column>
+      <index id="155" parent="21" name="u_name">
+        <columns>u_name
+u_phone</columns>
+        <desc-columns></desc-columns>
+        <unique>1</unique>
+      </index>
+      <key id="156" parent="21" name="PRIMARY">
+        <columns>u_id</columns>
+        <primary>1</primary>
+      </key>
+      <key id="157" parent="21" name="u_name">
+        <columns>u_name
+u_phone</columns>
+        <underlying-index>u_name</underlying-index>
+      </key>
+      <column id="158" parent="22" name="add_id">
+        <mandatory>1</mandatory>
+        <data-type>int(10) unsigned</data-type>
+        <sequence-identity>1</sequence-identity>
+      </column>
+      <column id="159" parent="22" name="u_id">
+        <data-type>int(11)</data-type>
+      </column>
+      <column id="160" parent="22" name="add_number">
+        <mandatory>1</mandatory>
+        <data-type>char(12)</data-type>
+      </column>
+      <column id="161" parent="22" name="add_consignee">
+        <mandatory>1</mandatory>
+        <data-type>char(12)</data-type>
+      </column>
+      <column id="162" parent="22" name="add_phone">
+        <mandatory>1</mandatory>
+        <data-type>char(15)</data-type>
+      </column>
+      <key id="163" parent="22" name="PRIMARY">
+        <columns>add_id</columns>
+        <primary>1</primary>
+      </key>
+      <column id="164" parent="23" name="key">
+        <mandatory>1</mandatory>
+        <data-type>char(20)</data-type>
+      </column>
+      <column id="165" parent="23" name="title">
+        <mandatory>1</mandatory>
+        <data-type>char(100)</data-type>
+      </column>
+      <column id="166" parent="23" name="keywords">
+        <mandatory>1</mandatory>
+        <data-type>char(200)</data-type>
+      </column>
+      <column id="167" parent="23" name="description">
+        <mandatory>1</mandatory>
+        <data-type>char(200)</data-type>
+      </column>
+      <key id="168" parent="23" name="PRIMARY">
+        <columns>key</columns>
+        <primary>1</primary>
+      </key>
+      <column id="169" parent="24" name="aa_id">
+        <mandatory>1</mandatory>
+        <data-type>int(10) unsigned</data-type>
+        <default-expression>&apos;0&apos;</default-expression>
+      </column>
+      <column id="170" parent="24" name="al_id">
+        <mandatory>1</mandatory>
+        <data-type>int(10) unsigned</data-type>
+        <default-expression>&apos;0&apos;</default-expression>
+      </column>
+      <column id="171" parent="24" name="aa_nick">
+        <mandatory>1</mandatory>
+        <data-type>char(20)</data-type>
+      </column>
+      <column id="172" parent="24" name="al_key">
+        <mandatory>1</mandatory>
+        <data-type>char(20)</data-type>
+      </column>
+      <column id="173" parent="24" name="al_nick">
+        <mandatory>1</mandatory>
+        <data-type>char(20)</data-type>
+      </column>
+      <column id="174" parent="25" name="a_id">
+        <mandatory>1</mandatory>
+        <data-type>int(10) unsigned</data-type>
+        <default-expression>&apos;0&apos;</default-expression>
+      </column>
+      <column id="175" parent="25" name="a_name">
+        <mandatory>1</mandatory>
+        <data-type>char(20)</data-type>
+      </column>
+      <column id="176" parent="25" name="a_reg">
+        <mandatory>1</mandatory>
+        <data-type>timestamp</data-type>
+        <default-expression>&apos;0000-00-00 00:00:00&apos;</default-expression>
+      </column>
+      <column id="177" parent="25" name="aa_id">
+        <mandatory>1</mandatory>
+        <data-type>int(10) unsigned</data-type>
+        <default-expression>&apos;2&apos;</default-expression>
+      </column>
+      <column id="178" parent="25" name="aa_nick">
+        <mandatory>1</mandatory>
+        <data-type>char(20)</data-type>
+      </column>
+      <column id="179" parent="25" name="a_img">
+        <data-type>varchar(200)</data-type>
+      </column>
+      <column id="180" parent="25" name="a_status">
+        <mandatory>1</mandatory>
+        <data-type>tinyint(4)</data-type>
+        <default-expression>&apos;1&apos;</default-expression>
+      </column>
+      <column id="181" parent="25" name="a_nick">
+        <data-type>char(20)</data-type>
+      </column>
+      <column id="182" parent="26" name="ga_id">
+        <mandatory>1</mandatory>
+        <data-type>int(10) unsigned</data-type>
+        <default-expression>&apos;0&apos;</default-expression>
+      </column>
+      <column id="183" parent="26" name="g_id">
+        <mandatory>1</mandatory>
+        <data-type>int(10) unsigned</data-type>
+      </column>
+      <column id="184" parent="26" name="gt_id">
+        <mandatory>1</mandatory>
+        <data-type>int(10) unsigned</data-type>
+      </column>
+      <column id="185" parent="26" name="gta_name">
+        <mandatory>1</mandatory>
+        <data-type>char(20)</data-type>
+      </column>
+      <column id="186" parent="26" name="ga_value">
+        <data-type>char(20)</data-type>
+      </column>
+      <column id="187" parent="26" name="gta_id">
+        <mandatory>1</mandatory>
+        <data-type>int(10) unsigned</data-type>
+      </column>
+      <column id="188" parent="27" name="g_id">
+        <mandatory>1</mandatory>
+        <data-type>int(10) unsigned</data-type>
+      </column>
+      <column id="189" parent="27" name="gp_id">
+        <mandatory>1</mandatory>
+        <data-type>int(10) unsigned</data-type>
+        <default-expression>&apos;0&apos;</default-expression>
+      </column>
+      <column id="190" parent="27" name="gtp_id">
+        <mandatory>1</mandatory>
+        <data-type>int(10) unsigned</data-type>
+      </column>
+      <column id="191" parent="27" name="gp_name">
+        <mandatory>1</mandatory>
+        <data-type>char(20)</data-type>
+      </column>
+      <column id="192" parent="27" name="gtp_name">
+        <mandatory>1</mandatory>
+        <data-type>char(20)</data-type>
+      </column>
+      <column id="193" parent="28" name="g_id">
+        <mandatory>1</mandatory>
+        <data-type>int(10) unsigned</data-type>
+        <default-expression>&apos;0&apos;</default-expression>
+      </column>
+      <column id="194" parent="28" name="g_number">
+        <mandatory>1</mandatory>
+        <data-type>char(10)</data-type>
+      </column>
+      <column id="195" parent="28" name="g_name">
+        <mandatory>1</mandatory>
+        <data-type>varchar(100)</data-type>
+      </column>
+      <column id="196" parent="28" name="gt_name">
+        <mandatory>1</mandatory>
+        <data-type>char(20)</data-type>
+      </column>
+      <column id="197" parent="28" name="g_price">
+        <mandatory>1</mandatory>
+        <data-type>float(8,2)</data-type>
+      </column>
+      <column id="198" parent="28" name="g_reg">
+        <mandatory>1</mandatory>
+        <data-type>timestamp</data-type>
+        <default-expression>&apos;0000-00-00 00:00:00&apos;</default-expression>
+      </column>
+      <column id="199" parent="28" name="g_status">
+        <mandatory>1</mandatory>
+        <data-type>tinyint(4)</data-type>
+        <default-expression>&apos;1&apos;</default-expression>
+      </column>
+      <column id="200" parent="28" name="gt_id">
+        <mandatory>1</mandatory>
+        <data-type>int(10) unsigned</data-type>
+      </column>
+      <column id="201" parent="29" name="sl_id">
+        <mandatory>1</mandatory>
+        <data-type>int(10) unsigned</data-type>
+        <default-expression>&apos;0&apos;</default-expression>
+      </column>
+      <column id="202" parent="29" name="sl_key">
+        <mandatory>1</mandatory>
+        <data-type>char(20)</data-type>
+      </column>
+      <column id="203" parent="29" name="sl_content">
+        <mandatory>1</mandatory>
+        <data-type>varchar(200)</data-type>
+      </column>
+      <column id="204" parent="29" name="sl_date">
+        <mandatory>1</mandatory>
+        <data-type>timestamp</data-type>
+        <default-expression>&apos;0000-00-00 00:00:00&apos;</default-expression>
+      </column>
+      <column id="205" parent="29" name="a_id">
+        <mandatory>1</mandatory>
+        <data-type>int(10) unsigned</data-type>
+      </column>
+      <column id="206" parent="29" name="a_nick">
+        <data-type>char(20)</data-type>
+      </column>
+    </database-model>
   </data-source>
   <data-source name="mall258" uuid="194b072f-14ac-4858-871a-c31998dc926a">
     <database-info product="" version="" jdbc-version="" driver-name="" driver-version=""/>
