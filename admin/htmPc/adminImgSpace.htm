@@ -179,6 +179,9 @@
 </style>
 <{/if}>
 <div id='img_space' class='win'>
+    <{if $select}>
+    <div class="show_win_close">×</div>
+    <{/if}>
     <h1 class="list_head">图片空间</h1>
     <ul class="img_type_ul">
         <{section name=index loop=$space}>
@@ -251,6 +254,7 @@
         $('#img_space').css('z-index','999');
         $('#img_space').css('left','300px');
         $('#img_space').css('top','100px');
+
     });
 
     $('.img_type_ul').on('click','.img_type_li',function(){
@@ -262,14 +266,11 @@
 
 
     //选择图片
-    $('.img_con').on('click','.img_con_con',function(){
-        if($(this).children('.img_con_con_click').is(':visible')){
-            $(this).children('.img_con_con_click').hide();
-            $(this).attr("select",'0');
-        }else{
-            $(this).children('.img_con_con_click').show();
-            $(this).attr("select",'1');
-        }
+    $('.img_con').on('dblclick','.img_con_con',function(){
+        var src = $(this).find('img').first().attr('src');
+        src = src.substr(0,src.lastIndexOf('?'));
+        selectSpace(src);
+        $('#img_space').hide();
     });
 </script>
 <{else}>

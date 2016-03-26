@@ -99,6 +99,7 @@ div.win {
     /*border-radius: 15px;*/
     border: 2px solid #50D1DE;
     overflow: hidden;
+    position: relative;
 }
 /*主窗口标题*/
 h1.win_head{
@@ -318,6 +319,7 @@ h1.list_head{
     display: block;
     background-color: #50D1DE;
     text-align: center;
+    width: 100%;
     line-height: 40px;
     font-size: 30px;
     font-weight: bold;

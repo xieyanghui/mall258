@@ -202,15 +202,15 @@
                 <div class="goods_price_con_list">
                 </div>
                 <div class="goods_price_con_util goods_price_con_prop">
-                    <div class="goods_td">提交</div>
-                    <div class="goods_td">清空</div>
+                    <div class="goods_td i_submit">提交</div>
+                    <div class="goods_td i_cancel">取消</div>
                 </div>
                 <div class="goods_price_con_img goods_price_con_prop select_img" >
-                    <img class="preview_img goods_price_imgs" />
+                    <img img_url="" class="preview_img goods_price_imgs" />
                 </div>
                 <div class="goods_price_con_price goods_price_con_prop">
                     <div class="goods_td">价格</div>
-                    <div class="goods_td"><input class="numbers" min="0" type="number" name="price" value="0" ></div>
+                    <div class="goods_td"><input class="numbers" min="0" type="number" name="price" value="<{$g_price}>" ></div>
                 </div>
                 <div class="goods_price_con_sum goods_price_con_prop">
                     <div class="goods_td">数量</div>
@@ -219,8 +219,6 @@
 
             </div>
         </div>
-
-
         <div class="win_column goods_all">
             <div class ="win_column_head">商品详细介绍</div>
             <div id="allEdit"></div>
@@ -233,7 +231,21 @@
         editor.create();
     });
     $(function (){
+        $('.goods_price').on('click','.i_cancel',function(){
+            $(this).parents('.goods_price_con_info').remove();
+            $('.goods_price_con_li').removeClass('goods_price_con_li_click');
+        });
+        $('.goods_price').on('click','.i_submit',function(){
+            var data={};
+            data.g_id = $("input[name='g_id']").val();
+            data.gpi_img =$(this).parents('.goods_price_con_info').find('img[img_url]').attr('img_url');
+            data.gpi_sum = $(this).parents('.goods_price_con_info').find('input[name="sum"]').val();
+            data.gpi_price = $(this).parents('.goods_price_con_info').find('input[name="price"]').val();
+            data.gp_ids = $(this).parents('.goods_price_con_info').find('.goods_price_con_prop').map(function(){return $(this).attr('gp_id');}).get();
+            $.post("./server/goodsAdd2Ser.php",data,function(){
 
+            });
+        });
         var listWidth = function (list) {
             var wid = 0;
             var bor = 2;
@@ -317,9 +329,5 @@
         });
 
         listWidth( $('#goods_price_default >.goods_price_con_list'));
-    });
-    $(function(){
-        //上传头像
-
     });
 </script>
