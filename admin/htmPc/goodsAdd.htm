@@ -128,7 +128,7 @@
         </div>
         <div class="win_row">
             <label class ="win_row_head">商品默认价格</label>
-            <div class ="win_row_input"><input tabindex="4" type="text" name="g_price" class="form_div"/></div>
+            <div class ="win_row_input"><input tabindex="4" type="number" name="g_price" class="form_div"/></div>
         </div>
 
         <div class ="win_row_auto">
@@ -222,19 +222,19 @@
         $.checks.checkform($('#goodsAddForm'),{
             "async": {'success': succ,'beforeSend':function(){
                 $('.input_label_value').first().val($('#gt_number').html()+$('.input_label_value').first().val());
-            }}
-//            "a_name": {
-//                "name": "登录名",
-//                "check": ["noSpechars", {"isLength": [4, 20]}, {"isAjax": ["/server/iskeySer.php"]}]
-//            },
-//            "a_nick": {
-//                "name": "姓名",
-//                "check": [{"isLength": [2, 20]}]
-//            },
-//            "a_pwd": {
-//                "name": "密码",
-//                "check": [{"isLength": [6, 20]}]
-//            }
+            }},
+            "g_number": {
+                "name": "商品编号",
+                "check": ["noSpechars", {"isLength": [5,5]}, {"isAjax": ["/server/iskeySer.php"]}]
+            },
+            "g_name": {
+                "name": "商品名称",
+                "check": [{"isLength": [2, 20]}]
+            },
+            "a_pwd": {
+                "name": "密码",
+                "check": [{"isLength": [6, 20]}]
+            }
         });
 
     });

@@ -36,10 +36,19 @@ class Goods
      */
     public function isNumber($columnName,$type=false)
     {
-        $columnNames = array('g_id','g_price','gt_id','gp_id','gta_id','gtap_id','gpi_id','gpi_sum','gpi_price');
-        if (in_array($columnName , $columnNames)){
+        $columnInt = array('g_id','gt_id','gp_id','gta_id','gtap_id','gpi_id','gpi_sum');
+        $columnFloat = array('g_price','gpi_price');
+
+        if (in_array($columnName , $columnInt)){
             if($type){
                 return 'int';
+            }
+            return true;
+        }
+
+        if (in_array($columnName , $columnFloat)){
+            if($type){
+                return 'double';
             }
             return true;
         }
@@ -116,6 +125,14 @@ class Goods
         $goods['price'] = $price;
         return $goods;
     }
+
+    /**
+ * 查询商品价格的详细信息
+ *
+ * @param $gId int 商品ID
+ *
+ * @return array 商品价格详细资料
+ */
     public function queryGoodsPrice($gId){
         $sql = $this->getSql();
         $where = new Where('g_id',$gId);
@@ -134,6 +151,7 @@ class Goods
         }
         return $data;
     }
+
     /**
      * 增加商品
      *
@@ -178,7 +196,7 @@ class Goods
         $data = array();
         $b = true;
         foreach($goods as $key=>$value){
-            if(is_array($value) && $key =='g_id'){break;}
+            if(is_array($value) && $key =='g_id'){continue;}
             array_push($data,array('columnName'=>$key,'value'=>$value,'type'=>$this->isNumber($key,true)));
         }
         if(!empty($data)){
@@ -337,6 +355,7 @@ class Goods
         $row['attr'] = $sql->selectData('gt_attr',array('gta_id','gta_name'),$where);
         return $row;
     }
+
     public function queryGoodsTypeInfo($gtId){
         $sql = $this->getSql(); 
         $where = new Where('gt_id',$gtId);
@@ -382,9 +401,9 @@ class Goods
     }
 
     /**
-     * 修改商品
+     * 修改商品类型
      *
-     * @param $goodsType array 商品详情
+     * @param $goodsType array 商品类型详情
      *
      * @param $aId int 管理员ID
      *
@@ -491,6 +510,17 @@ class Goods
         return $b;
     }
 
+    /**
+     * 删除商品类型
+     *
+     * @param $gtId int 商品类型ID
+     *
+     * @param $aId int 管理员ID
+     *
+     * @param $meg string 日志消息
+     *
+     * @return boolean 成功返回true,失败返回false
+     */
     public function deleteGoodsType($gtId,$aId,$meg){
         $sql = $this->getSql(); 
         if($sql->update('goods_type',new Where('gt_id',$gtId,'int'),array('columnName'=>'gt_status','value'=>'2','type'=>'int'))){
@@ -498,7 +528,58 @@ class Goods
         }
     }
 
-
+    public function addGoodsPrice($gpi,$gp_ids){
+        $sql = $this->getSql();
+        $columns = array();
+        $values = array();
+        $gpi_id = 0;
+        foreach($gpi as $key=>$value){
+            if(is_array($value) || empty($value)){continue;}
+            $columns[$key] = $this->isNumber($key,true);
+            array_push($values,$value);
+        }
+       if($gpi_id = $sql->insert('g_price_info',$columns,$values)){
+           $data = array();
+           foreach ($gp_ids as $val){
+               array_push($data,array($gpi_id,$val));
+           }
+           if(!empty($data)){
+                if(!$sql->insert('g_price_list',array('gpi_id'=>'int','gp_id'=>'int'),$data)){
+                    return false;
+                }
+           }
+            return $gpi_id;
+       }
+        return false;
+    }
+    public function updateGoodsPrice($gpi,$gp_ids){
+        $sql = $this->getSql();
+        $where = new Where('gpi_id',$gpi['gpi_id']);
+        $data = array();
+        foreach($gpi as $key=>$value){
+            if(is_array($value) || empty($value) || $value == 'gpi_id'){continue;}
+            array_push($data,array('columnName'=>$key,'value'=>$value,'type'=>$this->isNumber($key,true)));
+        }
+        if(!empty($data) && $sql->update('g_price_info',$where,$data) && !empty($gp_ids) && $sql->delete('g_price_list',$where)){
+            $data = array();
+            foreach ($gp_ids as $val){
+                array_push($data,array($gpi['gpi_id'],$val));
+            }
+            if(!empty($data)){
+                return $sql->insert('g_price_list',array('gpi_id'=>'int','gp_id'=>'int'),$data);
+            }
+            return true;
+        }
+        return false;
+    }
+    public function deleteGoodsPrice($gpi_id){
+        $sql = $this->getSql();
+        $where = new Where('gpi_id',$gpi_id);
+        if($sql->delete('g_price_list',$where)){
+            return $sql->delete('g_price_info',$where);
+        }
+        return false;
+    }
 
 
 

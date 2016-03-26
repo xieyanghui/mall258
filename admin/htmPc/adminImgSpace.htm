@@ -434,7 +434,8 @@
                     }else{
                         slfe.children(".img_con_con[select='1']").children('.img_con_con_click').hide();
                         slfe.children(".img_con_con[select='1']").children('.img_con_con_time').html("刚刚");
-                        slfe.children(".img_con_con[select='1']").insertAfter($(".img_con_list[name='img1'] >.img_con_util"));
+                       // slfe.children(".img_con_con[select='1']")
+                        slfe.children(".img_con_con[select='1']").attr('select','0').insertAfter($(".img_con_list[name='img1'] >.img_con_util"));
                     }
                 }
             });
@@ -478,6 +479,7 @@
                 if(data.status){
                     con.children('.img_con_con_click').hide();
                     con.children('.img_con_con_time').html("刚刚");
+                    con.attr('select','0');
                     con.insertAfter($(".img_con_list[name='img"+ait_id+"'] >.img_con_util"));
                 }
             });

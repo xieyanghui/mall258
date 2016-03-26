@@ -44,7 +44,7 @@
     }
     .goods_price_con{
         border: 1px solid #50D1DE;
-        margin: 7px 0 10px 5px;
+        margin: 5px 0 5px 5px;
         padding: 3px 0 0 3px;
         width: 300px;
         float: left;
@@ -89,6 +89,7 @@
         margin: 0 2px 2px 0;
         overflow: hidden;
         border-bottom-style: hidden;
+        background-color: #ffffff;
     }
     .goods_td{
         width: 100%;
@@ -99,6 +100,9 @@
     }
     .goods_price_con_prop_select{
         border-bottom: 1px solid red;
+    }
+    .goods_price_con_info_select{
+        background-color: #50D1DE;
     }
     .goods_price_con_prop_name{
 
@@ -113,7 +117,7 @@
         width: 100%;
     }
     .goods_price_con_price{
-        width: 50px;
+        width: 57px;
         float: right;
     }
     .goods_price_con_img{
@@ -159,13 +163,8 @@
         width: 100px;
         font-size: 20px;
     }
-    .progress{
-        height: 100%;
-        background-color: #1e88e5;
-    }
-    .goods_price_imgs{
-        width: 33px;
-        height: 33px;
+    #goods_price_con_info_parents{
+        display: none;
     }
 </style>
 <form action="./server/goodsAdd2Ser.php" method="post" id="goodsAdd2Form">
@@ -175,8 +174,8 @@
         <div class="win_column goods_price">
             <div class ="win_column_head">商品详细价格</div>
             <{foreach $gp as $value}>
-            <div class='goods_price_li'>
-                <label class='goods_price_head' gtp_id ="<{$value['gtp_id']}>"><{$value['gtp_name']}></label>
+            <div class='goods_price_li' gtp_id ="<{$value['gtp_id']}>">
+                <label class='goods_price_head'><{$value['gtp_name']}></label>
                 <div class='goods_price_con'>
                     <{foreach $value['gp_value'] as $v}>
                     <div class='goods_price_con_li' gp_id="<{$v['gp_id']}> "><{$v['gp_name']}></div>
@@ -198,11 +197,11 @@
             </div>
 
             <!--模板-->
-            <div class="goods_price_con_info" id="goods_price_con_info_parents">
+            <div id="goods_price_con_info_parents">
                 <div class="goods_price_con_list">
                 </div>
                 <div class="goods_price_con_util goods_price_con_prop">
-                    <div class="goods_td i_submit">提交</div>
+                    <div class="goods_td i_submit" url="goodsPriceAddSer.php">提交</div>
                     <div class="goods_td i_cancel">取消</div>
                 </div>
                 <div class="goods_price_con_img goods_price_con_prop select_img" >
@@ -210,11 +209,11 @@
                 </div>
                 <div class="goods_price_con_price goods_price_con_prop">
                     <div class="goods_td">价格</div>
-                    <div class="goods_td"><input class="numbers" min="0" type="number" name="price" value="<{$g_price}>" ></div>
+                    <div class="goods_td goods_price_input"><input class="numbers" min="0" type="number" name="price" value="<{$g_price}>" ></div>
                 </div>
                 <div class="goods_price_con_sum goods_price_con_prop">
                     <div class="goods_td">数量</div>
-                    <div class="goods_td"><input class="numbers" min="0" type="number" name="sum" value="0"></div>
+                    <div class="goods_td goods_sum_input"><input class="numbers" min="0" type="number" name="sum" value="0"></div>
                 </div>
 
             </div>
@@ -231,20 +230,83 @@
         editor.create();
     });
     $(function (){
+        var cancel = function(self){
+            self.find('.i_cancel').addClass('i_delete').removeClass('i_cancel').html('删除');
+            self.find('.i_submit').addClass('i_update').removeClass('i_submit').html('修改').attr('url','goodsPriceUpdateSer.php');
+            self.find('.goods_price_input').html(self.find('.goods_price_input >input').val());
+            self.find('.goods_sum_input').html(self.find('.goods_sum_input >input').val());
+            self.find('.goods_price_con_img').removeClass('select_img');
+            self.removeClass('goods_price_con_info_select');
+        }
+        //取消
         $('.goods_price').on('click','.i_cancel',function(){
-            $(this).parents('.goods_price_con_info').remove();
+            if($(this).parents('#goods_price_con_info_add').length ==1){
+                $(this).parents('.goods_price_con_info').hide();
+                $('.goods_price_con_li').removeClass('goods_price_con_li_click');
+            }else{
+                cancel($(this).parents('.goods_price_con_info'));
+            }
+
+        });
+        //修改
+        $('.goods_price').on('click','.i_update',function(){
+            if($('#goods_price_con_info_add').length >0){
+                if(typeof ($('#goods_price_con_info_add').attr('gpi_id')) == 'undefined'){
+                    $('#goods_price_con_info_add').remove();
+                }else{
+                    $('#goods_price_con_info_add').find('i_submit').trigger('click');
+                    $('#goods_price_con_info_add').attr('id','gpi'+$('#goods_price_con_info_add').attr('gpi_id'));
+                }
+            }
+            var sum = $('#goods_price_con_info_parents .goods_sum_input>input').clone();
+            var price = $('#goods_price_con_info_parents .goods_price_input>input').clone();
+            var self = $(this).parents('.goods_price_con_info');
+
+            self.attr('id','goods_price_con_info_add');
+            self.addClass('goods_price_con_info_select');
+            $('.goods_price_con_li').removeClass('goods_price_con_li_click');
+            self.find('.goods_price_con_prop').each(function(){
+                $('.goods_price_con_li[gp_id="'+$(this).attr('gp_id')+'"]').addClass('goods_price_con_li_click');
+            });
+            sum.val(self.find('.goods_sum_input').html());
+            self.find('.goods_sum_input').html(sum);
+            price.val(self.find('.goods_price_input').html());
+            self.find('.goods_price_input').html(price);
+            self.find('.goods_price_con_img').addClass('select_img');
+            $(this).addClass("i_submit").removeClass('i_update').html('提交');
+            self.find('.i_delete').addClass('i_cancel').removeClass('i_delete').html('取消');
+        });
+        //删除
+        $('.goods_price').on('click','.i_delete',function(){
+            var self = $(this).parents('.goods_price_con_info');
+            $.post('./server/goodsPriceDeleteSer.php',{'gpi_id':$(this).parents('.goods_price_con_info').attr('gpi_id')},function(data){
+                toast(data.status,data.megs);
+                if(data.status){
+                    self.remove();
+                }
+            },'json');
+
             $('.goods_price_con_li').removeClass('goods_price_con_li_click');
         });
+        //提交
         $('.goods_price').on('click','.i_submit',function(){
-            var data={};
+            var data={},self = $(this).parents('.goods_price_con_info');
+            if(typeof (self.attr('gpi_id')) !='undefined'){
+                data.gpi_id = self.attr('gpi_id');
+            }
             data.g_id = $("input[name='g_id']").val();
-            data.gpi_img =$(this).parents('.goods_price_con_info').find('img[img_url]').attr('img_url');
-            data.gpi_sum = $(this).parents('.goods_price_con_info').find('input[name="sum"]').val();
-            data.gpi_price = $(this).parents('.goods_price_con_info').find('input[name="price"]').val();
-            data.gp_ids = $(this).parents('.goods_price_con_info').find('.goods_price_con_prop').map(function(){return $(this).attr('gp_id');}).get();
-            $.post("./server/goodsAdd2Ser.php",data,function(){
+            data.gpi_img =self.find('img[img_url]').attr('img_url');
+            data.gpi_sum = self.find('input[name="sum"]').val();
+            data.gpi_price = self.find('input[name="price"]').val();
+            data.gp_ids = self.find('.goods_price_con_prop').map(function(){return $(this).attr('gp_id');}).get();
 
-            });
+            $.post("./server/"+$(this).attr('url'),data,function(d){
+                toast(d.status,d.megs);
+                self.attr('id','gpi'+d.gpi_id);
+                self.attr('gpi_id',d.gpi_id);
+                $('.goods_price_con_li').removeClass('goods_price_con_li_click');
+                cancel(self);
+            },'json');
         });
         var listWidth = function (list) {
             var wid = 0;
@@ -255,77 +317,59 @@
 
         }
 
-//        选择价格属性
+        //选择价格属性
         $('.goods_price_con_li').click(function(){
+            $('.goods_price_con_info').removeClass('goods_price_con_info_select');
             if(!$(this).hasClass('goods_price_con_li_click')){ //判断是取消还是选定
                 $(this).addClass('goods_price_con_li_click');
                 $(this).siblings().removeClass('goods_price_con_li_click');
-                $(".goods_price_con_prop[gp_id='"+$(this).attr('gp_id')+"']").addClass('goods_price_con_prop_select');
-                var gp_ids = [];
-                var prop = $('.goods_price_con_list');
-                $('.goods_price_con_li_click').map(function(){//获取已选定的价格属性
-                   // return $(this).attr('gp_id');
-                    gp_ids.push($(this).attr('gp_id'));
-                    prop = prop.children(".goods_price_con_prop[gp_id='"+$(this).attr('gp_id')+"']").parent();
-                });
-                var gp_create = false;
-                $('.goods_price_con_info').each(function(){//判断价格方案是否已存在
-                    var gp = $(this).find('.goods_price_con_prop');
-                    var gps =  gp.map(function(){return $(this).attr('gp_id'); }).get();
-                    if(gps[0] != null){
-                        var c = true;
-                        for(var i in gp_ids ){
-                            if($.inArray(gp_ids[i],gps) == -1){
-                                c = false;
-                                break;
-                            }
-                        }
-                        if(c){
-                            gp_create = true;
-                            return false;
-                        }
-                    }
-                });
-                if(!gp_create){
-                    //不存在的价格方案就创建
-                    if($('#goods_price_con_info_add').length ==0){
-                        var a = $('#goods_price_con_info_parents').clone();
-                        for(var gp_id in gp_ids){
-                            var gp_li = $(".goods_price_con_li[gp_id='"+gp_ids[gp_id]+"']");
-                            var gp_name = gp_li.html();
-                            var gtp_id = gp_li.parent().siblings('.goods_price_head').attr('gtp_id');
-                            var gtp_name = gp_li.parent().siblings('.goods_price_head').html();
-                            a.children('.goods_price_con_list').append(" <div class='goods_price_con_prop' gtp_id='"+gtp_id+"' gp_id='"+gp_ids[gp_id]+"'><div class='goods_td goods_price_con_prop_name'>"+gtp_name+"</div> <div class='goods_td goods_price_con_prop_value'>"+gp_name+"</div> </div>");
-                            a.attr('id','goods_price_con_info_add');
-                            a.appendTo($('.goods_price'));
-                            a.show();
-                            listWidth(a.children('.goods_price_con_list'));
-                        }
-                    }else{
-                        //修改或增加价格属性
-                        var gtp_id = $(this).parent().siblings('.goods_price_head').attr('gtp_id');
-                        var gtp_name = $(this).parent().siblings('.goods_price_head').html();
-                        var self = $(this);
-                        var b = true;
-                        $('#goods_price_con_info_add>.goods_price_con_list>.goods_price_con_prop').each(function(){
-                            if(gtp_id ==$(this).attr('gtp_id')){
-                                b = false;
-                                $(this).attr('gp_id',self.attr('gp_id'));
-                                $(this).children('.goods_price_con_prop_value').html(self.html());
-                            }
-                        });
-                        if(b){
-                            $('#goods_price_con_info_add>.goods_price_con_list').append(" <div class='goods_price_con_prop' gtp_id='"+gtp_id+"' gp_id='"+$(this).attr('gp_id')+"'><div class='goods_td goods_price_con_prop_name'>"+gtp_name+"</div> <div class='goods_td goods_price_con_prop_value'>"+$(this).html()+"</div> </div>");
-                        }
-                    }
-
-                }
-            }else{
+                var gtp_id = $(this).parents('goods_price_li').attr('gtp_id');
+                $(".goods_price_con_info  >.goods_price_con_list >.goods_price_con_prop[gtp_id='"+gtp_id+"'] >.goods_price_con_prop_value").removeClass('goods_price_con_prop_select');
+                $(".goods_price_con_info  >.goods_price_con_list >.goods_price_con_prop[gp_id='"+$(this).attr('gp_id')+"'] >.goods_price_con_prop_value").addClass('goods_price_con_prop_select');
+                 }else{
                 //取消选定的属性
                 $(this).removeClass('goods_price_con_li_click');
-                $(".goods_price_con_prop[gp_id='"+$(this).attr('gp_id')+"']").removeClass('goods_price_con_prop_select');
+                $(".goods_price_con_info  >.goods_price_con_list >.goods_price_con_prop[gp_id='"+$(this).attr('gp_id')+"'] >.goods_price_con_prop_value").removeClass('goods_price_con_prop_select');
+                //goods_price_con_prop_value
+//                $("#goods_price_con_info_add  >.goods_price_con_list >.goods_price_con_prop[gp_id='"+$(this).attr('gp_id')+"']").remove();
+//                if($("#goods_price_con_info_add  >.goods_price_con_list >.goods_price_con_prop").length == 0){
+//                    $("#goods_price_con_info_add").remove();
+//                }
             }
+            //获取已选定的价格属性
+            var gp_ids  = $('.goods_price_con_li_click').map(function(){return $(this).attr('gp_id');}).get();
+            //判断价格方案是否已存在
+            var gp_create = true;
+            $('.goods_price_con_info:visible').each(function(){
+                var gps =  $(this).find('.goods_price_con_prop').map(function(){return $(this).attr('gp_id'); }).get();
+                if(gps.sort().join("") == gp_ids.sort().join("")){
+                    $("#goods_price_con_info_add").hide();
+                    $(this).addClass('goods_price_con_info_select');
+                    gp_create = false;
+                }
+            });
+            if(gp_create){
 
+                var a = $("#goods_price_con_info_add");
+                a.addClass('goods_price_con_info_select');
+                //不存在的价格方案就创建
+                if(a.length ==0){
+                    a = $('#goods_price_con_info_parents').clone();
+                    a.attr('id','goods_price_con_info_add');
+                    a.addClass('goods_price_con_info');
+                    a.appendTo($('.goods_price'));
+                }
+                a.find('.goods_price_con_list >div').remove();
+                for(var gp_id in gp_ids){
+                    var gp_li = $(".goods_price_con_li[gp_id='"+gp_ids[gp_id]+"']");
+                    var gp_name = gp_li.html();
+                    var gtp_id = gp_li.parents('.goods_price_li').attr('gtp_id');
+                    var gtp_name = gp_li.parent().siblings('.goods_price_head').html();
+                    a.children('.goods_price_con_list').append(" <div class='goods_price_con_prop' gtp_id='"+gtp_id+"' gp_id='"+gp_ids[gp_id]+"'><div class='goods_td goods_price_con_prop_name'>"+gtp_name+"</div> <div class='goods_td goods_price_con_prop_value'>"+gp_name+"</div> </div>");
+                }
+                a.show();
+                listWidth(a.children('.goods_price_con_list'));
+            }
         });
 
         listWidth( $('#goods_price_default >.goods_price_con_list'));
