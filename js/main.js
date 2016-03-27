@@ -305,7 +305,16 @@ var CRUD = {
     }
 };
 
-
+function getRandomString(len) {
+    len = len || 32;
+    var $chars = 'ABCDEFGHJKMNPQRSTWXYZabcdefhijkmnprstwxyz2345678'; // 默认去掉了容易混淆的字符oOLl,9gq,Vv,Uu,I1
+    var maxPos = $chars.length;
+    var pwd = '';
+    for (i = 0; i < len; i++) {
+        pwd += $chars.charAt(Math.floor(Math.random() * maxPos));
+    }
+    return pwd;
+}
 
 //
 $('body').click(function(){
@@ -313,7 +322,6 @@ $('body').click(function(){
         $('#select_img').hide();
     }
 });
-var preview = null;
 /**
  * 上传或去图库选择图片
  * progress 属性配置 默认进度条元素选择 默认本身
@@ -322,6 +330,7 @@ var preview = null;
  * multi  属性配置  是否多选
  * */
 $('body').on('click','.select_img',function(e){
+    var self = $(this);
     if($('#select_img').length ==0){
         $("body").append("<div id='select_img'><div id='upload_img' class='button'>上传图片</div><div id = 'space_img' class='button'>空间选择</div></div>");
     }
@@ -332,8 +341,12 @@ $('body').on('click','.select_img',function(e){
     }
     var up = getUpload();
     var progress =$(this).attr('progress');// 默认进度条
-    preview = $(this).attr('preview');//预览图
     var space_type = $(this).attr('space_type');//空间类型
+    var preview = $(this).attr('preview');//预览图
+    //空间选择时回调
+    $(this).attr('space_img',getRandomString());
+    $('#select_img').attr('space_img',$(this).attr('space_img'));
+
     if(typeof(space_type) =='undefined' || space_type ==""){
         space_type =null;
     }
@@ -343,7 +356,12 @@ $('body').on('click','.select_img',function(e){
     }else{ progress =$(progress);}
     if(typeof(preview) =='undefined' || preview ==""){
         preview =$(this).children('img');
-    }else{ preview =$(preview); }
+    }else{
+        preview =$(preview);
+    }
+    preview.attr('img_link',getRandomString());
+    $('#select_img').attr('img_link',preview.attr('img_link'));
+
     //是否多选
     if(typeof ($(this).attr('multi')) !='undefined'){
         up.multi_selection =true;
@@ -353,15 +371,20 @@ $('body').on('click','.select_img',function(e){
         progress.css("width",file.percent+"%");
     };
     up['init'].FileUploaded = function (up, file, info) {
+        progress.remove();
         var domain = up.getOption('domain');
         var res = JSON.parse(info);
-        var w = preview.parent().width();
-        var h = preview.parent().height();
-        preview.attr("src", domain + "/" + res.key + "?imageView2/5/w/"+w+"/h/"+h);
         $.getJSON('./server/adminImgSpaceAddSer.php',{'ais_img_url':domain + "/" + res.key,'ais_name':file.name.substr(0,file.name.lastIndexOf('.')),'ait_id':space_type},function(data){
         });
-        preview.attr("img_url",domain + "/" + res.key);
-        progress.remove();
+        if(!(typeof (self.attr('callback'))=='undefined' || self.attr('callback') == "")){
+            self.attr('img_url',domain + "/" + res.key);
+            self.trigger(self.attr('callback'));
+        }else{
+            preview.attr("img_url",domain + "/" + res.key);
+            var w = preview.parent().width();
+            var h = preview.parent().height();
+            preview.attr("src", domain + "/" + res.key + "?imageView2/5/w/"+w+"/h/"+h);
+        }
     };
     uploader = Qiniu.uploader(up);
     $('#select_img').show();
@@ -370,20 +393,17 @@ $('body').on('click','.select_img',function(e){
 
 //图库选择图片
 $('body').on('click','#space_img',function(e){
-    if($("#img_space").length ==0){
+    var img_link = $(this).parent().attr('img_link');
+    var space_img = $(this).parent().attr('space_img');
+    if($("#img_space_div").length ==0){
         $('body').append("<div id='img_space_div'></div>");
-        $("#img_space_div").load('./inc/adminImgSpace.php?select=true');
+        $("#img_space_div").load('./inc/adminImgSpace.php?select=true&img_link='+img_link+'&space_img='+space_img);
     }else{
-        $("#img_space").remove();
+        $("#img_space_div input[name='img_link']").val(img_link);
+        $("#img_space_div input[name='space_img']").val(space_img);
+        $("#img_space_div").show();
     }
 });
-function selectSpace(src){
-    var w = preview.parent().width();
-    var h = preview.parent().height();
-    preview.attr('img_url',src);
-    preview.attr('src',src+"?imageView2/5/w/"+w+"/h/"+h);
-
-}
 
 //图片预览
 $('body').on('mouseenter','.preview_img',function(e){
@@ -414,6 +434,3 @@ $('body').on('mouseleave','.preview_img',function(e){
     $('#preview_img').hide();
 });
 
-$('body').on('click','.show_win_close',function(e){
-    $(this).parents('.win').hide();
-});

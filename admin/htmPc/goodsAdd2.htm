@@ -1,16 +1,19 @@
 <style type="text/css">
+    /*商品详细资料*/
     #goodsAdd2{
         position: absolute;
         z-index: 100;
         width: 1200px;
         overflow: hidden;
     }
+    /*列样式*/
     .win_column{
         margin-top: -20px;
         border: solid 1px #50D1DE;
         height: 600px;
         overflow: auto;
     }
+    /*列样式下的标题*/
     .win_column_head{
         background-color: #80E5F0;
         text-align: center;
@@ -20,18 +23,21 @@
         font-weight: bold;
         font-size: 25px;
     }
+
+    /*价格列*/
     .goods_price{
         float: left;
         width: 410px;
     }
-    .goods_all{
-        float: right;
-        width: 780px;
-    }
+
+
+    /*价格列下的主行*/
     .goods_price_li{
         width: 100%;
         overflow: hidden;
     }
+
+    /*价格属性标题*/
     .goods_price_head{
         width: 80px;
         text-align: right;
@@ -42,6 +48,7 @@
         height: 50px;
         line-height: 50px;
     }
+    /*价格属性内容*/
     .goods_price_con{
         border: 1px solid #50D1DE;
         margin: 5px 0 5px 5px;
@@ -49,6 +56,7 @@
         width: 300px;
         float: left;
     }
+    /*价格属性*/
     .goods_price_con_li{
         width: 70px;
         height: 30px;
@@ -67,6 +75,7 @@
         color:red;
     }
 
+    /*价格值行*/
     .goods_price_con_info{
         display: none;
         width: 380px;
@@ -75,6 +84,7 @@
         border: 1px solid #50D1DE;
         padding: 2px 0 0 2px;
     }
+    /*价格值*/
     .goods_price_con_info >div.goods_price_con_list{
         width: 236px;
         border: hidden;
@@ -82,6 +92,7 @@
         margin: 0;
         float: left;
     }
+    /*价格值列*/
     .goods_price_con_prop{
         float: left;
         width: 43px;
@@ -91,6 +102,7 @@
         border-bottom-style: hidden;
         background-color: #ffffff;
     }
+    /*价格值单元格*/
     .goods_td{
         width: 100%;
         height: 16px;
@@ -98,40 +110,45 @@
         line-height: 16px;
         border-bottom: 1px solid #50D1DE;
     }
+    /*价格值选中状态*/
     .goods_price_con_prop_select{
         border-bottom: 1px solid red;
     }
+    /*价格值行匹配状态*/
     .goods_price_con_info_select{
         background-color: #50D1DE;
     }
+
     .goods_price_con_prop_name{
 
     }
+    /*商品数量*/
     .goods_price_con_sum{
         width: 40px;
         float: right;
     }
-    .numbers{
+    /*数字*/
+    input.numbers{
         border-style: hidden;
         outline:none;
         width: 100%;
     }
+    /*商品价格*/
     .goods_price_con_price{
         width: 57px;
         float: right;
     }
+
+    /*商品路径*/
     .goods_price_con_img{
         height: 33px;
         width: 33px;
         float: right;
         border: 1px solid #50D1DE;
     }
+    /*默认商品属性*/
     #goods_price_default{
         display: block;
-    }
-    #allEdit{
-        width: 770px;
-        height: 600px;
     }
     #goods_price_default>.goods_price_con_list{
         line-height: 35px;
@@ -140,37 +157,34 @@
         font-size: 18px;
         background-color: #eeeeee ;
     }
+    /*CRUD工具*/
     .goods_price_con_util{
         float: right;
     }
-    #select_img{
-        position: absolute;
-        z-index: 2000;
-        width: 150px;
-        height: 110px;
-        border: 1px solid #50D1DE;
-        background-color: #E0F8FB;
-        display: none;
-    }
-    #select_img >div{
-        width: 100px;
-        font-size: 20px;
-        margin: 10px auto;
-    }
-    #upload_img{
-    }
-    #space_img{
-        width: 100px;
-        font-size: 20px;
-    }
+    /*模板*/
     #goods_price_con_info_parents{
         display: none;
+    }
+
+    /*详细资料列*/
+    .goods_all{
+        float: right;
+        width: 780px;
+        position: relative;
+        overflow-x: hidden;
+    }
+
+    #allEdit{
+        width: 100%;
+        height:560px;
     }
 </style>
 <form action="./server/goodsAdd2Ser.php" method="post" id="goodsAdd2Form">
     <div id='goodsAdd2' class='win show_win'>
         <input type="hidden" name="g_id" id="g_id" value="<{$g_id}>" />
         <h1 class="win_head">添加商品详细资料 <div class="show_win_close">×</div></h1>
+
+        <!--商品价格CRUD-->
         <div class="win_column goods_price">
             <div class ="win_column_head">商品详细价格</div>
             <{foreach $gp as $value}>
@@ -218,6 +232,8 @@
 
             </div>
         </div>
+
+        <!--商品详细资料-->
         <div class="win_column goods_all">
             <div class ="win_column_head">商品详细介绍</div>
             <div id="allEdit"></div>
@@ -227,7 +243,40 @@
 <script>
     $(function(){
         var editor = new wangEditor('allEdit');
+        editor.config.menus=[
+            'bold',
+            'underline',
+            'italic',
+            'strikethrough',
+            'eraser',
+            'forecolor',
+            'bgcolor',
+            'fontfamily',
+            'fontsize',
+            'head',
+            'unorderlist',
+            'orderlist',
+            'alignleft',
+            'aligncenter',
+            'alignright',
+            'link',
+            'unlink',
+            'table',
+            'undo',
+            'location',
+            'img'
+        ];
+        editor.config.mapAk="FB48626872cb58590f33faf85ea639fd";
         editor.create();
+        var img_button = $('.wangeditor-menu-img-picture').parent();
+        img_button.unbind('click').addClass('select_img').attr('callback','imgCall');
+        img_button.bind('imgCall',function(){
+
+        });
+        $('.show_win_close').click(function(){
+            alert('yyyy');
+            editor.destroy();
+        });
     });
     $(function (){
         var cancel = function(self){
@@ -237,6 +286,14 @@
             self.find('.goods_sum_input').html(self.find('.goods_sum_input >input').val());
             self.find('.goods_price_con_img').removeClass('select_img');
             self.removeClass('goods_price_con_info_select');
+        }
+        var listWidth = function (list) {
+            var wid = 0;
+            var bor = 2;
+            list.siblings().each(function(){wid +=$(this).width(); bor +=4;});
+            var lw = list.parent().width()-wid-bor;
+            list.css('width',lw);
+
         }
         //取消
         $('.goods_price').on('click','.i_cancel',function(){
@@ -308,14 +365,6 @@
                 cancel(self);
             },'json');
         });
-        var listWidth = function (list) {
-            var wid = 0;
-            var bor = 2;
-            list.siblings().each(function(){wid +=$(this).width(); bor +=4;});
-            var lw = list.parent().width()-wid-bor;
-            list.css('width',lw);
-
-        }
 
         //选择价格属性
         $('.goods_price_con_li').click(function(){

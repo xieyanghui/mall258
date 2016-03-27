@@ -10,7 +10,6 @@
         height: 30px;
         background-color: #80E5F0;
         font-size: 18px;
-        line-height: 30px;
         overflow: hidden;
     }
     .img_type_li{
@@ -21,6 +20,7 @@
         width: 70px;
         margin: 2px 5px 0;
         text-align: center;
+        line-height: 30px;
     }
     .img_type_li_click{
         background-color: #FFFFFF;
@@ -175,12 +175,20 @@
 </style>
 <{if $select}>
 <style type="text/css">
-
+    #img_space{
+        position: absolute;
+        top: 50px;
+        left: 400px;
+        float: left;
+        z-index:999;
+    }
 </style>
 <{/if}>
 <div id='img_space' class='win'>
     <{if $select}>
     <div class="show_win_close">×</div>
+    <input type="hidden" name="img_link" value="<{$img_link}>">
+    <input type="hidden" name="space_img" value="<{$space_img}>">
     <{/if}>
     <h1 class="list_head">图片空间</h1>
     <ul class="img_type_ul">
@@ -249,14 +257,9 @@
 </script>
 <{if $select }>
 <script type="text/javascript">
-    $(function () {
-        $('#img_space').css('position','absolute');
-        $('#img_space').css('z-index','999');
-        $('#img_space').css('left','300px');
-        $('#img_space').css('top','100px');
-
+    $('#img_space_div').on('click','.show_win_close',function(e){
+        $('#img_space_div').hide();
     });
-
     $('.img_type_ul').on('click','.img_type_li',function(){
         //选择分类
         $(this).addClass('img_type_li_click');
@@ -269,8 +272,18 @@
     $('.img_con').on('dblclick','.img_con_con',function(){
         var src = $(this).find('img').first().attr('src');
         src = src.substr(0,src.lastIndexOf('?'));
-        selectSpace(src);
-        $('#img_space').hide();
+        var self = $(".select_img[space_img='"+$('#img_space').find("input[name='space_img']").val()+"']");
+        var preview =$("img[img_link='"+$('#img_space').find("input[name='img_link']").val()+"']");
+        if(!(typeof (self.attr('callback')) == 'undefined' || self.attr('callback') == "")){
+            self.attr('img_url',src);
+            self.trigger(self.attr('callback'));
+        }else{
+            preview.attr("img_url",src);
+            var w = preview.parent().width();
+            var h = preview.parent().height();
+            preview.attr("src", src + "?imageView2/5/w/"+w+"/h/"+h);
+        }
+        $('#img_space_div').hide();
     });
 </script>
 <{else}>

@@ -11,6 +11,9 @@
 </div>
 <script>
     $("#menus >ul >li").click(function () {
+        if($(this).attr('href') == './inc/adminImgSpace.php'){
+            $("#img_space_div").remove();
+        }
         $("#contents").load($(this).attr('href'));
     });
 </script>
