@@ -177,6 +177,13 @@
     #allEdit{
         width: 100%;
         height:560px;
+        overflow-x: hidden;
+    }
+
+    .win_column_util{
+        clear: left;
+        width: 100%;
+        height: 100px;
     }
 </style>
 <form action="./server/goodsAdd2Ser.php" method="post" id="goodsAdd2Form">
@@ -238,8 +245,13 @@
             <div class ="win_column_head">商品详细介绍</div>
             <div id="allEdit"></div>
         </div>
+        <div class = "win_column_util">
+            <div class ='button'>取消</div>
+            <div class="button submit_add">提交</div>
+        </div>
     </div>
 </form>
+
 <script>
     $(function(){
         var editor = new wangEditor('allEdit');
@@ -269,13 +281,24 @@
         editor.config.mapAk="FB48626872cb58590f33faf85ea639fd";
         editor.create();
         var img_button = $('.wangeditor-menu-img-picture').parent();
+        editor.$txt.html("");
         img_button.unbind('click').addClass('select_img').attr('callback','imgCall');
         img_button.bind('imgCall',function(){
-
+            editor.$txt.append("<img src='"+$(this).attr('img_url')+"?imageMogr2/thumbnail/680x'/>");
         });
-        $('.show_win_close').click(function(){
-            alert('yyyy');
-            editor.destroy();
+        $('.submit_add').click(function(){
+            if($('#goods_price_con_info_add').length != 0 && $('#goods_price_con_info_add').is(':visible')){
+                $('#goods_price_con_info_add').find('.i_submit').trigger("click");
+            }
+            var html = editor.$txt.html();
+            html = filterXSS(html);
+            $.post('./server/goodsTextAUSer.php',{'g_id':$("input[name='g_id']").val(),'g_text':html},function(data) {
+                toast(data.status,data.megs);
+                if(data.status){
+                    $('#CRUD').html("");
+                    $('.backdrop').hide();
+                }
+            },'json');
         });
     });
     $(function (){

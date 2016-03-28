@@ -38,13 +38,20 @@ class Goods
     {
         $columnInt = array('g_id','gt_id','gp_id','gta_id','gtap_id','gpi_id','gpi_sum');
         $columnFloat = array('g_price','gpi_price');
-
+        $columnBlob = array('g_text');
         if (in_array($columnName , $columnInt)){
             if($type){
                 return 'int';
             }
             return true;
         }
+
+//        if (in_array($columnName , $columnBlob)){
+//            if($type){
+//                return 'int';
+//            }
+//            return true;
+//        }
 
         if (in_array($columnName , $columnFloat)){
             if($type){
@@ -200,7 +207,7 @@ class Goods
             array_push($data,array('columnName'=>$key,'value'=>$value,'type'=>$this->isNumber($key,true)));
         }
         if(!empty($data)){
-            if(!$sql->update('goods_type',new Where('gt_id',$goods['g_id']),$data)){
+            if(!$sql->update('goods',new Where('g_id',$goods['g_id']),$data)){
                 $b = false;
             }
         }

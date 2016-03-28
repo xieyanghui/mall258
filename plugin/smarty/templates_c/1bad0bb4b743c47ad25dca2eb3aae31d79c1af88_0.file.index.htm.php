@@ -1,7 +1,7 @@
-<?php /* Smarty version 3.1.27, created on 2016-03-18 20:30:43
+<?php /* Smarty version 3.1.27, created on 2016-03-28 23:06:51
          compiled from "G:\xampp\mall258.com\admin\htmPc\index.htm" */ ?>
 <?php
-/*%%SmartyHeaderCode:2216956ebf4f335d133_83917793%%*/
+/*%%SmartyHeaderCode:149656f9488b6c8514_21761327%%*/
 if(!defined('SMARTY_DIR')) exit('no direct access allowed');
 $_valid = $_smarty_tpl->decodeProperties(array (
   'file_dependency' => 
@@ -9,24 +9,24 @@ $_valid = $_smarty_tpl->decodeProperties(array (
     '1bad0bb4b743c47ad25dca2eb3aae31d79c1af88' => 
     array (
       0 => 'G:\\xampp\\mall258.com\\admin\\htmPc\\index.htm',
-      1 => 1457270169,
+      1 => 1459177568,
       2 => 'file',
     ),
   ),
-  'nocache_hash' => '2216956ebf4f335d133_83917793',
+  'nocache_hash' => '149656f9488b6c8514_21761327',
   'variables' => 
   array (
     'HTTP_HOST' => 0,
   ),
   'has_nocache_code' => false,
   'version' => '3.1.27',
-  'unifunc' => 'content_56ebf4f359f3c2_38831779',
+  'unifunc' => 'content_56f9488b6ff021_00289965',
 ),false);
 /*/%%SmartyHeaderCode%%*/
-if ($_valid && !is_callable('content_56ebf4f359f3c2_38831779')) {
-function content_56ebf4f359f3c2_38831779 ($_smarty_tpl) {
+if ($_valid && !is_callable('content_56f9488b6ff021_00289965')) {
+function content_56f9488b6ff021_00289965 ($_smarty_tpl) {
 
-$_smarty_tpl->properties['nocache_hash'] = '2216956ebf4f335d133_83917793';
+$_smarty_tpl->properties['nocache_hash'] = '149656f9488b6c8514_21761327';
 ?>
 <!DOCTYPE html>
 <html>
