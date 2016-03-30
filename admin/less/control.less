@@ -1,0 +1,99 @@
+@import "config";
+body {
+  background-color: @one_color;
+}
+#tops {
+  width: 100%;
+  overflow: hidden;
+  background-color: @four_color;
+  position: fixed;
+  top: 0;
+  z-index: 10;
+  .top_left{
+    height: 50px;
+    display: block;
+    float: left;
+    li{
+      float: left;
+      font-weight: bold;
+      height: 50px;
+      line-height: 50px;
+      margin-left: 5px;
+    }
+  }
+  .top_menus {
+    overflow: hidden;
+    display: block;
+    float: right;
+    .top_menu {
+      margin: 0 20px;
+      width: 150px;
+      height: 50px;
+      line-height: 50px;
+      float: right;
+      text-align: center;
+      font-size: 22px;
+      font-weight: bold;
+      display: block;
+      position: relative;
+      background-color: @four_color;
+    }
+    li.top_menu:hover {
+      background-color: @five_color;
+      cursor: pointer;
+    }
+    .menuClick {
+      &:extend(.top_menu);
+      background-color: #07A1B1;
+      cursor: pointer;
+    }
+  }
+}
+
+.con {
+  position: relative;
+  top: 50px;
+}
+
+#menus {
+  position: fixed;
+  top: 50px;
+  z-index: 10;
+}
+
+#contents {
+  position: relative;
+  left: 250px;
+  top: 50px;
+  overflow: hidden;
+}
+
+#menus > ul > li {
+  height: 40px;
+  width: 200px;
+  line-height: 40px;
+  text-align: center;
+  font-size: 24px;
+  margin: 10px 25px;
+  cursor: pointer;
+  background-color: #BCEDF2;
+}
+
+#menus > ul > li:hover {
+  background-color: #50D1DE;
+}
+.admin_head_s {
+  width: 50px;
+  height: 50px;
+  border-radius: 25px;
+}
+.backdrop{
+  top:0;
+  position: fixed;
+  background-color: #000000;
+  opacity: 0.3;
+  z-index: 20;
+}
+#con{
+  float: left;
+}

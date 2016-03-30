@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <link rel="stylesheet" type="text/css" href="<{$HTTP_HOST}>/css/main.css"/>
+    <link rel="stylesheet" type="text/css" href="./css/main.min.css"/>
     <title>后台管理</title>
     <style type="text/css">
         body{
@@ -28,13 +28,13 @@
     <form id="login_form" method="post" action="<{$HTTP_HOST}>/admin/server/adminLoginSer.php">
         <div id="login_win" class="win">
             <h1 class="win_head">后台管理系统</h1>
-            <div class="win_row"><label class='win_row_head' for="a_name">账号：</label><div class="win_row_input"><input id="a_name"  type="text" name="a_name" class="form_div"/></div></div>
+            <div class="win_row win_row_one"><label class='win_row_head' for="a_name">账号：</label><div class="win_row_input"><input id="a_name"  type="text" name="a_name" class="form_div"/></div></div>
             <div class="win_row"><label class='win_row_head' for="a_pwd">密码：</label><div class="win_row_input"><input id="a_pwd" type="password" name="a_pwd" class="form_div"/></div></div>
             <!--<div class="win_row validateRow"><label class = 'win_row_head' for="validate">验证码：</label><div class="win_row_input" ><input type ="text" id ="validate" name ="validate" class= "validate form_div "/></div>-->
                 <!--<div><img id="validateImg" src="<{$HTTP_HOST}>/server/validateSer.php?name=adminLoginCheck" /></div>-->
                 <!--<div id="validateMeg"></div>-->
             <!--</div>-->
-            <div class="win_row"><div class="submit button">登录</div></div>
+            <div class="win_row"><div class="submit center_button">登录</div></div>
         </div>
     </form>
 </body>
@@ -72,9 +72,19 @@
 
         $.checks.checkform($("#login_form"), {
             "async": {'success': succ},
-            "validate": {"name": "验证码",'location':'validateMeg', "check": ["noNULL"]},
-            "a_name": {"name": "用户名", "check": ["noSpechars", {"isLength": [6, 15]}]},
-            "a_pwd": {"name": "密码", "mags": {"success": "ok"}, "check": ["noSpechars", {"isLength": [6, 15]}]}
+            "validate": {
+                "name": "验证码",
+                'location':'validateMeg',
+                "check": ["noNULL"]
+            },
+            "a_name": {
+                "name": "用户名",
+                "check": ["noSpechars", {"isLength": [6, 15]}]
+            },
+            "a_pwd": {
+                "name": "密码",
+                "mags": {"success": "ok"},
+                "check": ["noSpechars", {"isLength": [6, 15]}]}
         });
     });
 </script>

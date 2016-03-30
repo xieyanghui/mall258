@@ -1,0 +1,479 @@
+@import "config";
+body,div,ul,li,label{
+  font: normal 12px '宋体';
+  margin: 0;
+  padding: 0;
+}
+ul{
+  list-style: none;
+}
+a {
+  text-decoration: none;
+  color: #333333;
+}
+a:hover {
+  color: red;
+  cursor: pointer;
+}
+
+/*对话框*/
+#dialogue {
+  z-index: 1001;
+  display: none;
+  position: fixed;
+  width: 300px;
+  /*border-radius: 10px;*/
+  background-color: @one_color;
+  top: 200px;
+  overflow: hidden;
+  border: @border_one;
+  span{
+    width: 100%;
+    height: 40px;
+    display: block;
+    background-color: #50D1DE;
+    line-height: 40px;
+    font-size: 30px;
+    font-weight: bold;
+    overflow: hidden;
+  }
+  div:nth-child(2){
+    height: 60px;
+    padding: 5px;
+  }
+  div:nth-child(3){
+    div{
+      float: left;
+      margin: 10px 0 10px 50px;
+    }
+  }
+}
+
+/*吐司*/
+.toast() {
+  z-index: 1001;
+  display: none;
+  position: absolute;
+  width: 200px;
+  height: 20px;
+  line-height: 20px;
+  text-align: center;
+  /*border-radius: 10px;*/
+  top: 40px;
+}
+/*吐司错误*/
+.toasterr {
+  .toast();
+  background-color: #FFCCCC;
+  border: 1px solid #FF0033;
+}
+/*吐司成功*/
+.toastsuc {
+  .toast();
+  background-color: #E0F8FB;
+  border: 1px solid #50D1DE;
+}
+
+
+/*主窗口*/
+div.win {
+  background-color: #FFFFFF;
+  border: @border_one;
+  overflow: hidden;
+  position: relative;
+  /*主窗口标题*/
+  h1.win_head{
+    width: 100%;
+    height: 40px;
+    display: block;
+    background-color: @four_color;
+    text-align: center;
+    line-height: 40px;
+    font-size: 30px;
+    font-weight: bold;
+    overflow: hidden;
+    margin: 0;
+  }
+  /*主窗口的固定首行样式*/
+  div.win_row_one {
+    margin-top: 20px;
+  }
+  /*主窗口的固定行样式*/
+  div.win_row {
+    height: 50px;
+    overflow: hidden;
+
+    /*主窗口的固定行里input样式*/
+    div.win_row_input{
+      margin-left: 5px;
+      position: relative;
+      float: left;
+      overflow: hidden;
+      input.validate {
+        width: 60px;
+        margin-right: 5px;
+      }
+      /*输入框样式*/
+      .form_div{
+        display: block;
+        padding: 5px;
+        border: @border_one;
+        outline:none;
+        width: 150px;
+
+      }
+    }
+  }
+
+}
+
+
+
+/*主窗口的自动增长行样式*/
+div.win_row_auto {
+  overflow: hidden;
+  margin-bottom: 20px;
+
+}
+
+/*主窗口的自动增长行里的con样式*/
+div.win_row_con{
+  border: @border_one;
+  margin: 0 5px;
+  padding: 3px;
+  float: left;
+}
+/*主窗口里行里的lable */
+label.win_row_head {
+  width: 120px;
+  text-align: right;
+  float: left;
+  color: #07A1B1;
+  font-size: 18px;
+  font-weight: 500;
+  display: block;
+  height: 30px;
+  line-height: 30px;
+}
+label.row_con_head{
+  width: 80px;
+  text-align: right;
+  float: left;
+  color: #07A1B1;
+  font-size: 13px;
+  display: block;
+  height: 30px;
+  line-height: 30px;
+}
+
+/*配合inCheck.js 验证成功样式*/
+.checksu {
+  display: block;
+  clear: left;
+  font: 12px "微软雅黑";
+  color: #00ff00;
+}
+/*配合inCheck.js 验证失败样式*/
+.checker {
+  display: block;
+  clear: left;
+  font: 12px "微软雅黑";
+  color: #FF0000;
+}
+
+
+/*弹出窗口的关闭按钮*/
+div.show_win_close {
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 40px;
+  height: 40px;
+  text-align: center;
+  line-height: 40px;
+  font-size: 30px;
+  font-weight: bold;
+  color: red;
+}
+/*弹出窗口的关闭按钮*/
+div.show_win_close:hover {
+  background-color: #E0F8FB;
+  cursor: pointer;
+}
+
+
+/*按钮*/
+.button {
+  /*border-radius: 10px;*/
+  width: 75px;
+  height: 35px;
+  text-align: center;
+  font-size: 25px;
+  font-weight: bold;
+  background-color: #50D1DE;
+  line-height: 40px;
+}
+.button:hover ,.center_button:hover{
+  cursor: pointer;
+  background-color: #07A1B1;
+}
+//按钮居中
+.center_button{
+  &:extend(.button);
+  display: block;
+  margin: 0 auto;
+}
+div#adminHeadImg{
+  float: left;
+}
+div#imgUp {
+  float: left;
+  width: 80px;
+  height: 30px;
+  margin: 20px 10px ;
+  line-height: 30px;
+  font-size: 15px;
+}
+.uploadImg{
+  float: left;
+}
+.bars{
+  position: relative;
+  clear: both;
+  margin: 0 5px;
+  width: 90px;
+  height: 3px;
+}
+#bar{
+  width: 0;
+  height: 100%;
+  background-color: #07A1B1;
+}
+
+/*列表删除框样式*/
+li.list_row >span.delete{
+  width: 28px;
+  height: 28px;
+  color : red;
+  float: left;
+  display: block;
+  text-align: center;
+  line-height: 28px;
+  font-size: 25px;
+  font-weight: bold;
+}
+li.list_row >span.delete:hover{
+  cursor: pointer;
+  background-color: #a94442;
+}
+
+/*列表单元格样式*/
+li.list_row>span {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  display: block;
+  float: left;
+  height: 28px;
+  border: @border_one;
+  line-height: 28px;
+  font-size: 18px;
+}
+div#addAdmin > div {
+  width: 400px;
+}
+/*列表样式*/
+li.list_row{
+  overflow: hidden;
+}
+.list_row_hover{
+  background-color: #BCEDF2;
+}
+li.list_row_odd{
+  background-color:#E0F8FB;
+}
+li.list_row_even{
+  background-color: #fff;
+}
+/*列表列名样式*/
+li.list_row_head {
+  text-align: center;
+  background-color: #80E5F0;
+  overflow: hidden;
+  height: 30px;
+  line-height: 30px;
+  font-weight: bold;
+}
+li.list_row_head >span{
+  font-size: 20px;
+  display: block;
+  float: left;
+
+}
+
+///*列表主标题样式*/
+//h1.list_head{
+//  height: 40px;
+//  display: block;
+//  background-color: #50D1DE;
+//  text-align: center;
+//  width: 100%;
+//  line-height: 40px;
+//  font-size: 30px;
+//  font-weight: bold;
+//  overflow: hidden;
+//}
+/*列表子搜索*/
+li.list_row_search{
+  margin: 4px;
+  height: 40px;
+  line-height: 40px;
+  overflow: hidden;
+
+}
+li.list_row_search >*{
+  float: left;
+  margin: 5px;
+}
+
+
+/*列表搜索框样式*/
+#search_value{
+  width: 100px;
+}
+/*列表搜索框列名选择样式*/
+#search_select{
+  width:85px;
+  height: 28px;
+}
+/*列表搜索按钮样式*/
+#list_search{
+  height: 30px;
+  width: 60px;
+  line-height: 30px;
+  font-size: 14px;
+}
+/*列表取消搜索按钮样式*/
+#search_delete{
+  width: 28px;
+  height: 28px;
+  color : red;
+  float: left;
+  display: block;
+  text-align: center;
+  line-height: 28px;
+  font-size: 25px;
+  font-weight: bold;
+  border: 1px solid #50D1DE;
+}
+#search_delete:hover{
+  background-color: #50D1DE;
+  cursor: pointer;
+}
+/*每页显示多少行*/
+span.list_row_sum{
+  display: inline-block;
+  line-height: 30px;
+  text-align: center;
+  height: 30px;
+  width: 20px;
+  margin-left: 0;
+  margin-right: 0;
+}
+span.list_row_sumOn,span.list_row_sum:hover{
+  text-decoration:underline;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+/*列表分页行*/
+.list_row_page{
+  overflow: hidden;
+  height:30px;
+  margin: 5px;
+}
+.list_row_page>div{
+  float: left;
+  margin-left: 10px;
+}
+/*上下页按钮*/
+.pageButton{
+  height: 30px;
+  width: 60px;
+  line-height: 30px;
+  font-size: 14px;
+}
+/*上下页失效*/
+.pageOff{
+  background-color:#ABADB3;
+  text-align: center;
+  font-weight: bold;
+}
+/*数字选择页*/
+.pageNumber{
+  width: 25px;
+  height: 25px;
+  line-height: 25px;
+  text-align: center;
+  border-radius: 25px;
+  margin-top: 5px;
+}
+.pageOn,.pageNumber:hover{
+  background-color: #BCEDF2;
+  font-weight: bold;
+  cursor: pointer;
+}
+div.con_list_input ,div.con_list_add{
+  display: block;
+  float: left;
+  width: 60px;
+  height: 25px;
+  padding-left:5px ;
+  overflow: hidden;
+  margin: 0 3px 3px 0 ;
+  border: 1px solid #50D1DE;
+  line-height: 25px;
+}
+
+div.con_list_add{
+  font-size: 30px;
+  font-weight: bold;
+  text-align: center;
+  background-color: #EEEEEE;
+}
+input.list_form_div{
+  border-style: hidden;
+  outline:none;
+}
+
+.add_show_button{
+  width: 200px;
+  float: left;
+  margin: 10px 20px;
+}
+/*图片预览框*/
+#preview_img{
+  width: 500px;
+  height: 500px;
+  position: absolute;
+  z-index: 1000;
+}
+/*选择图片*/
+#select_img{
+  position: absolute;
+  z-index: 2000;
+  width: 150px;
+  height: 110px;
+  border: 1px solid #50D1DE;
+  background-color: #E0F8FB;
+  display: none;
+}
+#select_img >div{
+  width: 100px;
+  font-size: 20px;
+  margin: 10px auto;
+}
+#space_img{
+  width: 100px;
+  font-size: 20px;
+}

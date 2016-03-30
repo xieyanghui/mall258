@@ -24,7 +24,7 @@ ALTER TABLE `auth_list` MODIFY `al_id` INT UNSIGNED AUTO_INCREMENT;
 INSERT INTO `auth_list` (`al_key`,`al_nick`,`al_remark`) VALUES ('report','报表统计','营运状况'),('service','客服管理','管理客服'),('order','订单管理','订单处理'),('goods','商品管理','商品各种操作');
 INSERT INTO `auth_list` (`al_key`,`al_nick`,`al_remark`) VALUES ('systemLog','系统日志','查看系统日志');
 INSERT INTO `auth_list` (`al_key`,`al_nick`,`al_remark`) VALUES ('goodsRecommend','推荐商品管理','');
-INSERT INTO `auth_list` (`al_key`,`al_nick`,`al_remark`) VALUES ('admin','管理员管理',''),('adminDelete','删除管理员','超级权限'),('adminAdd','增加管理员',''),('adminUpdate','修改管理员','');
+INSERT INTO `auth_list` (`al_key`,`al_nick`,`al_remark`) VALUES ('adminInfo','管理员管理',''),('adminDelete','删除管理员','超级权限'),('adminAdd','增加管理员',''),('adminUpdate','修改管理员','');
 INSERT INTO `auth_list` (`al_key`,`al_nick`,`al_remark`) VALUES ('adminAuth','管理员权限管理',''),('adminAuthAdd','增加管理员权限',''),('adminAuthUpdate','修改管理员权限',''),('adminAuthDelete','删除管理员权限','');
 INSERT INTO `auth_list` (`al_key`,`al_nick`,`al_remark`) VALUES ('goodsType','商品类型管理',null),('goodsTypeAdd','增加商品类型',''),('goodsTypeUpdate','修改商品类型',''),('goodsTypeDelete','删除商品类型','');
 INSERT INTO `auth_list` (`al_key`,`al_nick`,`al_remark`) VALUES ('goodsInfo','商品管理',''),('goodsAdd','增加商品',''),('goodsUpdate','修改商品',''),('goodsDelete','删除商品','');
