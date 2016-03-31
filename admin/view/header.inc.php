@@ -12,4 +12,23 @@ include_once('../autoload.php');
 if(!empty($auth)){
     if(!Auth::inAdmin($_SESSION['adminInfo']['a_id'],$auth)){exit(json_encode(array('status'=>false,'megs'=>'权限不够')));}
 }
+//new Filter(true);
+if(!isset($_SERVER['HTTP_REFERER'])){
+    $s = substr($_SERVER['PHP_SELF'],strrpos($_SERVER['PHP_SELF'],"/")+1,strrpos($_SERVER['PHP_SELF'],".")-strrpos($_SERVER['PHP_SELF'],"/")-1);
+    $f = gui($s,Config::$tree,null);
+    exit($f);
+
+}
+function gui($s,$arr,$ss){
+    foreach ($arr as $key=>$value){
+        echo $s.'   key  '.$key ."----value  ".$value."<br>";
+        if( $s ==$value){
+            return $ss;
+        }
+        if(is_array($value)){
+            return gui($s,$value,$key);
+        }
+    }
+}
+
 
