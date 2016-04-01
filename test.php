@@ -1,3 +1,9 @@
+<form>
+    <input name ="aa[]" value="aa" type="text">
+    <input name ="aa[]" value="bbbs" type="text">
+    <input type="submit">
+</form>
+
 <?php
 /**
  * Created by PhpStorm.

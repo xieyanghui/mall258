@@ -6,7 +6,6 @@
  * Time: 23:02
  */
 class SearchPage{
-    private $columnName =array();
     private $get = array();
     private $page = 0;   //当前第几页
     private $pageRow = 10; //每页几行
@@ -14,16 +13,15 @@ class SearchPage{
     private $sort = "";  //排序方法
     private $sortLine = null;//排序的列
     private $searchLine = null;//搜索关键列
-    public function __construct($columnName,$get)
+    public function __construct($get)
     {
-        $this->columnName = $columnName;
         $this->get = $get;
         if(!empty($get['page'])){
             $this->page = (int)$_GET['page'];
         }
         if(!empty($get['sort'])){
             $this->sort = $get['sort'];
-            $this->sortLine = $this->tropeKey($get['sortLine']);
+            $this->sortLine = $get['sortLine'];
         }
         if(!empty($get['pageRow'])){
             $this->pageRow = (int)$get['pageRow'];
@@ -32,22 +30,6 @@ class SearchPage{
             $this->search = $get['search'];
             $this->searchLine = $get['searchLine'];
         }
-    }
-    private function tropeKey($column){
-        foreach($this->columnName as $key=>$value){
-            if($column == $value){
-                return $key;
-            }
-        }
-        return '';
-    }
-    private function tropeColumn($Line){
-        foreach($this->columnName as $key=>$value){
-            if($Line == $key){
-                return $value;
-            }
-        }
-        return "";
     }
     public function isSearch(){
         if($this->search != null){
@@ -83,7 +65,7 @@ class SearchPage{
             $page['search']  = array('searchLine'=>$this->searchLine,'key'=>$this->search);
         }
         if($this->sort != null){
-            $page['sort']  = array('sortLine'=>$this->tropeColumn($this->sortLine),'key'=>$this->sort);
+            $page['sort']  = array('sortLine'=>$this->sortLine,'key'=>$this->sort);
         }
         if($page['countPages'] < $page['pages']){  //当总页数小于显示的页数
             $page['pages'] = $page['countPages'];

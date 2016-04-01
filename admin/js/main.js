@@ -211,14 +211,14 @@ function PageSearch(page_url){
     $("li.list_row_head > span").click(function () {
         var sortLine = $('#list_form').children("input[name='sortLine']");
         var sort = $('#list_form').children("input[name='sort']");
-        if(sortLine.val() == $(this).html()){
+        if(sortLine.val() == $(this).attr('name')){
             if(sort.val() == "DESC"){
                 sort.val("ASC");
             }else{
                 sort.val("DESC");
             }
         }else{
-            sortLine.val($(this).html());
+            sortLine.val($(this).attr('name'));
             sort.val("DESC");
         }
         load();
@@ -433,8 +433,19 @@ $('body').on('mouseleave','.preview_img',function(e){
     $(this).attr('leave','true');
     $('#preview_img').hide();
 });
-$('body').on('click','.left_menu',function(){
-    alert($(this).attr('href'));
-    $("#contents").load($(this).attr('href'));
-});
 
+
+$('body').on('click','.left_menu',function(){
+    if($('#con').attr('href') ==""){
+        history.pushState({foo:'bar'},"",$(this).attr('href'));
+    }
+    $('#loading_back').show(100);
+    $("#contents").load($(this).attr('href'),function(){
+        $('#loading_back').hide();
+    });
+});
+$(window).resize(function(){
+    $('#load_back').width($(document).width());
+    $('#load_back').height($(document).height());
+
+});

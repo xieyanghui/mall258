@@ -14,23 +14,15 @@
         <li><{$admin['a_nick']}>欢迎您</li>
     </ul>
     <ul class = 'top_menus'>
-        <li class='top_menu' href="<{$HTTP_HOST}>/server/exitSer.php">安全退出</li>
-
-        <li class='top_menu' href="<{$HTTP_MODEL}>/view/menuSystem.php">系统设置</li>
-
-        <li class='top_menu' href="11">消息中心</li>
-
-        <{if $auth['report'] }><li class='top_menu' href="11">报表统计</li> <{/if}>
-
-        <{if $auth['order'] }>  <li class='top_menu' href="11">订单管理</li> <{/if}>
-
-        <{if $auth['service'] }>  <li class='top_menu' href="11">在线客服</li> <{/if}>
-
-        <{if $auth['goods'] }>  <li class='top_menu' href="<{$HTTP_MODEL}>/view/menuGoods.php">商品管理</li> <{/if}>
+        <{foreach $c as $menu}>
+            <li class='top_menu' href="<{$menu['pre_url']|default:$HTTP_MODEL}><{$menu['url']}>"><{$menu['name']}></li>
+        <{/foreach}>
     </ul>
 </div>
-<div id="con"></div>
-<div id = 'CRUD'></div>
+
+<div id="con" href="<{$sub_page}>" args="<{$sub_args}>"></div>
+<div id = 'CRUD' ></div>
+<div id="loading_back"><div class="loading_img"><img src="http://7xkkh3.com1.z0.glb.clouddn.com/o_1af6m10bl1e5k1tfgv7d7hk56il.gif"/></div>></div>
 </body>
 <script src="http://cdn.staticfile.org/jquery/2.1.1/jquery.min.js" type="text/javascript" charset="utf-8"></script>
 <script type="text/javascript" src="<{$HTTP_HOST}>/js/plupload/plupload.full.min.js"></script>
@@ -41,12 +33,30 @@
 <script type="text/javascript" src="<{$HTTP_HOST}>/js/xss.js" ></script>
 <script>
     $(function () {
-        $(".top_menus >li").click(function () {
+        $(".top_menu").click(function () {
+            if($('#con').attr('href') ==""){
+                history.pushState({foo:'bar'},"",$(this).attr('href'));
+            }
             $(this).addClass('menuClick');
-            $(this).siblings().removeClass('menuClick');
-            $(this).siblings().addClass('menu');
-            $('#con').load($(this).attr('href'));
+            $(this).siblings().removeClass('menuClick').addClass('menu');
+            $('#loading_back').show(100);
+            $('#con').load($(this).attr('href'),function(data){
+                $('#loading_back').hide();
+            });
         });
+        if($('#con').attr('href') !=null){
+            var href = $('#con').attr('href');
+            var args = $('#con').attr('args');
+            $('.top_menu').each(function(){
+                if($(this).attr('href').indexOf(href) >0){
+                    $('#con').attr('href',"").attr('args',"");
+                    $(this).attr('href',$(this).attr('href')+args);
+                    $(this).trigger('click');
+                }
+            },function(){
+            });
+        }
+
     });
 </script>
 </html>

@@ -7,18 +7,26 @@
  */
 include_once("header.inc.php");
 $goods = new Goods();
-$columnName = array('g_number'=>'商品编号','g_name'=>'商品名','gt_name'=>'所属类型','g_status'=>'状态','g_reg'=>'添加时间');
-$sp = new SearchPage($columnName,$_GET);
+$table = array(
+    'search'=>true,
+    'column'=>array(
+        array('name'=>'商品编号','key'=>'g_number','width'=>"150"),
+        array('name'=>'商品名','key'=>'g_name','width'=>"200"),
+        array('name'=>'所属类型','key'=>'gt_name','width'=>"150"),
+        array('name'=>'状态','key'=>'g_status','noSearch'=>true,'width'=>"80"),
+        array('name'=>'添加时间','key'=>'g_reg','noSearch'=>true,'width'=>"150")
+    )
+);
+$sp = new SearchPage($_GET);
+
 $data = array();
 if($sp->isSearch()){
     $data = call_user_func_array(array($goods,'searchGoods'),$sp->getParam());
 }else{
     $data = call_user_func_array(array($goods,'getGoods'),$sp->getParam());//  获取列表
 }
-
 $sma = new Smartys;
-$sma->assign('myOptions',$columnName);
-$sma->assign('mySelect',$sp->getSearchLine());
+$sma->assign('table',$table);
 $sma->assign('page', $sp->getPages($data['count']));
-$sma->assign('row' ,$data['data']);
-$sma->display('goodsInfo.htm');
+$sma->assign('data' ,$data['data']);
+$sma->display('winTable.tpl');
