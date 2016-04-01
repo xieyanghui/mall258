@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectTasksOptions">
     <TaskOptions isEnabled="true">
-      <option name="arguments" value="--clean-CSS --no-color $FileName$" />
+      <option name="arguments" value="-x --no-color $FileName$" />
       <option name="checkSyntaxErrors" value="false" />
       <option name="description" value="Compiles .less files into .css files" />
       <option name="exitCodeBehavior" value="ERROR" />
@@ -20,8 +20,8 @@
         </array>
       </option>
       <option name="outputFromStdout" value="true" />
-      <option name="program" value="$USER_HOME$/AppData/Roaming/npm/lessc.cmd" />
-      <option name="scopeName" value="admin" />
+      <option name="program" value="lessc" />
+      <option name="scopeName" value="Project Files" />
       <option name="trackOnlyRoot" value="true" />
       <option name="workingDir" value="$FileDir$" />
       <envs />

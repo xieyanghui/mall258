@@ -9,6 +9,7 @@ include_once("header.inc.php");
 $goods = new Goods();
 $table = array(
     'search'=>true,
+    'id'=>'g_id',
     'column'=>array(
         array('name'=>'商品编号','key'=>'g_number','width'=>"150"),
         array('name'=>'商品名','key'=>'g_name','width'=>"200"),
@@ -18,7 +19,9 @@ $table = array(
     )
 );
 $sp = new SearchPage($_GET);
-
+$add = array('label'=>'增加商品','url'=>'view/goodsAU.php');
+$delete="server/goodsDeleteSer.php";
+$update="server/goodsAU.php";
 $data = array();
 if($sp->isSearch()){
     $data = call_user_func_array(array($goods,'searchGoods'),$sp->getParam());
@@ -27,6 +30,9 @@ if($sp->isSearch()){
 }
 $sma = new Smartys;
 $sma->assign('table',$table);
+$sma->assign('add',$add);
+$sma->assign('delete',$delete);
+$sma->assign('update',$update);
 $sma->assign('page', $sp->getPages($data['count']));
 $sma->assign('data' ,$data['data']);
 $sma->display('winTable.tpl');

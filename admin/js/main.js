@@ -42,25 +42,25 @@ function toast(sru, meg, time) {
  * mage  string  详细
  * fun   function  按确定之后执行的方法
  * */
-function showdielogue(title ,mage ,fun ){
+function showdielogue(fun,title  ,mage  ){
     if ($('#showdielogue').length < 1) {
         $('body').append("<div id = 'showdielogue'><span></span><div></div>" +"<div><div class ='button'>取消</div><div class ='button'>确定</div></div></div>");
     }
-    $("#showdielogue >span").html(title);
-    $("#showdielogue >div:first").html(""+mage);
+    $("#showdielogue >span").html(title |"确定要删除吗");
+    $("#showdielogue >div:first").html(mage| "删除后后果自负");
     $('#showdielogue').css("left", ($(window).width() / 2 - 200) + "px");
     $("#showdielogue").show();
-    $("#showdielogue >div >div.button").unbind();
-    $("#showdielogue >div >div.button").click(function(){
-        if($(this).html() == "确定"){
-            $("#showdielogue").hide();
-            fun();
-        }else{
-            $("#showdielogue").hide();
-        }
-    });
-}
+    $('#showdielogue >div >div.button').bind('clee',fun);
 
+}
+$('body').on('click','#showdielogue >div >div.button',function(){
+    if($(this).html() == "确定"){
+        $("#showdielogue").hide();
+        $(this).trigger('clee');
+    }else{
+        $("#showdielogue").hide();
+    }
+});
 //页面刷新
 var Resize = (function() {
     var resizeFuns = [];
@@ -201,12 +201,7 @@ function PageSearch(page_url){
             $(this).addClass("list_row_sumOn");
         }
     });
-    //
-    //$('#search_select >option').map(function(){
-    //    if($(this).html() ==$('#list_form').children("input[name='searchLine']").val()){
-    //        $(this).parent().val($(this).html());
-    //    }
-    //});
+
     //排序
     $("li.list_row_head > span").click(function () {
         var sortLine = $('#list_form').children("input[name='sortLine']");
@@ -224,7 +219,6 @@ function PageSearch(page_url){
         load();
     });
     //列表搜索
-    // $("#list_search").unbind();
     $("#list_search").click(function () {
         if($('#search_value').val() !=""){
             $('#list_form').children("input[name='page']").val('0');
@@ -264,46 +258,7 @@ function PageSearch(page_url){
     });
 }
 
-var CRUD = {
-    add:function(url,width,top){
-        $('.add_show_button').click(function(){
-            $.get(url,function(data){
-                try{
-                    var j = JSON.parse(data);
-                    toast(j.status, j.megs);
-                }catch(error){
-                    $('#CRUD').html(data);
-                    Resize.resizeAdd(width,top);
-                }
-            });
-        });
-    },
-    update:function(url,width,top){
-        $('.list_row').click(function(){
-            $('#CRUD').load(url+'?name='+$(this).children('span.delete').attr('value'),function(data){
-                try{
-                    var j = JSON.parse(data);
-                    toast(j.status, j.megs);
-                }catch(error){
-                    $('#CRUD').html(data);
-                    Resize.resizeAdd(width,top);
-                }
-            });
-        });
-    },
-    delete:function(url,loal_url,title,megs){
-        $('.list_row > span.delete').click(function(e){
-            var self = $(this);
-            showdielogue(title,megs,function(){
-                $.getJSON(url+"?name="+self.attr('value'),function(data){
-                    toast(data.status,data.megs);
-                    $('#contents').load(loal_url,$('#list_form').serialize());
-                });
-            });
-            e.stopPropagation();
-        });
-    }
-};
+
 
 function getRandomString(len) {
     len = len || 32;

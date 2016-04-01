@@ -1,9 +1,4 @@
 <style type="text/css">
-
-    #goodsList{
-        margin-top: 10px;
-        float: left;
-    }
     .test{
         float: left;
     }
@@ -19,23 +14,13 @@
             <{/foreach}>
         </li>
         <{foreach $data as $row}>
-            <li class='list_row' >
+            <li class='list_row' name="<{$row[$table['id']]}>">
             <{foreach $table['column'] as $c1}>
                 <span title="<{$row[$c1['key']]}>"  style="width:<{$c1['width']|default:'100'}>px"><{$row[$c1['key']]}></span>
             <{/foreach}>
             <span class="list_delete" >×</span>
         </li>
         <{/foreach}>
-        <!--<{section name=index loop=$row}>-->
-        <!--<li class='list_row'>-->
-            <!--<span title="<{$row[index]['g_number']}>"><{$row[index]['g_number']}></span>-->
-            <!--<span title="<{$row[index]['g_name']}>"><{$row[index]['g_name']}></span>-->
-            <!--<span title="<{$row[index]['gt_name']}>"><{$row[index]['gt_name']}></span>-->
-            <!--<span title="<{$row[index]['g_status']}>"><{$row[index]['g_status']}></span>-->
-            <!--<span title="<{$row[index]['g_reg']}>"><{$row[index]['g_reg']}></span>-->
-            <!--<span class="delete" value="<{$row[index]['g_id']}>">×</span>-->
-        <!--</li>-->
-        <!--<{/section}>-->
 
         <!--分页搜索-->
         <form id = 'list_form'>
@@ -78,13 +63,64 @@
     </ul>
 </div>
 <{/if}>
-<div class="add_show_button button">增加商品</div>
+    <{if  $add }>  <div class="add_show_button button" href="<{$add['url']}>"><{$add['label']}></div> <{/if}>
 <div class="test button" >aaa</div>
 <script type="text/javascript">
+    var CRUD = {
+        add:function(url,width,top){
+            $('.add_button').click(function(){
+                $.get(url,function(data){
+                    try{
+                        var j = JSON.parse(data);
+                        toast(j.status, j.megs);
+                    }catch(error){
+                        $('#CRUD').html(data);
+                        Resize.resizeAdd(width,top);
+                    }
+                });
+            });
+        },
+        update:function(url,width,top){
+            $('.list_row').click(function(){
+                $('#CRUD').load(url+'?name='+$(this).children('span.delete').attr('value'),function(data){
+                    try{
+                        var j = JSON.parse(data);
+                        toast(j.status, j.megs);
+                    }catch(error){
+                        $('#CRUD').html(data);
+                        Resize.resizeAdd(width,top);
+                    }
+                });
+            });
+        },
+        delete:function(url,loal_url,title,megs){
+            $('.list_row > span.delete').click(function(e){
+                var self = $(this);
+                showdielogue(title,megs,function(){
+                    $.getJSON(url+"?name="+self.attr('value'),function(data){
+                        toast(data.status,data.megs);
+                        $('#contents').load(loal_url,$('#list_form').serialize());
+                    });
+                });
+                e.stopPropagation();
+            });
+        }
+    };
+
     $(function () {
         PageSearch(document.URL);
-        CRUD.add('./inc/goodsAdd.php',500);
-        CRUD.update('./inc/goodsUpdate.php',500);
+        $('.add_show_button').click(function(){
+            $('#loading_back').show(100);
+            $('#contents').load("<{$HTTP_MODEL}>".$(this).attr('href'),function(){
+                $('#loading_back').hide();
+            });
+        });
+        $('.list_row').click(function(){
+            $('#loading_back').show(100);
+            $('#contents').load(url+'?id='+$(this).attr('name'),function(data){
+                $('#loading_back').hide();
+            });
+        });
         CRUD.delete('./server/goodsDeleteSer.php','./inc/goodsInfo.php','确定要删除吗?','删除之之后很严重哦');
     });
     $(function(){

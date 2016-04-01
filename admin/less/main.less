@@ -1,6 +1,6 @@
 @import "config";
 body,div,ul,li,label{
-  font: normal 12px '宋体';
+  font-size: 12px ;
   margin: 0;
   padding: 0;
 }
@@ -15,6 +15,7 @@ a:hover {
   color: red;
   cursor: pointer;
 }
+
 //加载中的背景
 #loading_back{
   position: fixed;
@@ -47,7 +48,7 @@ a:hover {
     width: 100%;
     height: 40px;
     display: block;
-    background-color: #50D1DE;
+    background-color: @four_color;
     line-height: 40px;
     font-size: 30px;
     font-weight: bold;
@@ -93,7 +94,7 @@ a:hover {
 
 /*主窗口*/
 .win {
-  background-color: #FFFFFF;
+  background-color: #fff;
   border: @border_one;
   overflow: hidden;
   position: relative;
@@ -167,19 +168,9 @@ label.win_row_head {
   width: 120px;
   text-align: right;
   float: left;
-  color: #07A1B1;
+  color: @five_color;
   font-size: 18px;
   font-weight: 500;
-  display: block;
-  height: 30px;
-  line-height: 30px;
-}
-label.row_con_head{
-  width: 80px;
-  text-align: right;
-  float: left;
-  color: #07A1B1;
-  font-size: 13px;
   display: block;
   height: 30px;
   line-height: 30px;
@@ -216,7 +207,7 @@ div.show_win_close {
 }
 /*弹出窗口的关闭按钮*/
 div.show_win_close:hover {
-  background-color: #E0F8FB;
+  background-color: @one_color;
   cursor: pointer;
 }
 
@@ -229,12 +220,12 @@ div.show_win_close:hover {
   text-align: center;
   font-size: 25px;
   font-weight: bold;
-  background-color: #50D1DE;
+  background-color: @four_color;
   line-height: 40px;
 }
 .button:hover ,.center_button:hover{
   cursor: pointer;
-  background-color: #07A1B1;
+  background-color: @five_color;
 }
 //按钮居中
 .center_button{
@@ -266,7 +257,7 @@ div#imgUp {
 #bar{
   width: 0;
   height: 100%;
-  background-color: #07A1B1;
+  background-color: @five_color;
 }
 
 /*列表删除框样式*/
@@ -306,10 +297,10 @@ li.list_row{
   overflow: hidden;
 }
 .list_row_hover{
-  background-color: #BCEDF2;
+  background-color: @two_color;
 }
 li.list_row_odd{
-  background-color:#E0F8FB;
+  background-color:@one_color;
 }
 li.list_row_even{
   background-color: #fff;
@@ -317,7 +308,7 @@ li.list_row_even{
 /*列表列名样式*/
 li.list_row_head {
   text-align: center;
-  background-color: #80E5F0;
+  background-color: @three_color;
   overflow: hidden;
   height: 30px;
   line-height: 30px;
@@ -383,10 +374,10 @@ li.list_row_search >*{
   line-height: 28px;
   font-size: 25px;
   font-weight: bold;
-  border: 1px solid #50D1DE;
+  border: 1px solid @four_color;
 }
 #search_delete:hover{
-  background-color: #50D1DE;
+  background-color: @four_color;
   cursor: pointer;
 }
 /*每页显示多少行*/
@@ -438,7 +429,7 @@ span.list_row_sumOn,span.list_row_sum:hover{
   margin-top: 5px;
 }
 .pageOn,.pageNumber:hover{
-  background-color: #BCEDF2;
+  background-color: @two_color;
   font-weight: bold;
   cursor: pointer;
 }
@@ -450,7 +441,7 @@ div.con_list_input ,div.con_list_add{
   padding-left:5px ;
   overflow: hidden;
   margin: 0 3px 3px 0 ;
-  border: 1px solid #50D1DE;
+  border: 1px solid @four_color;
   line-height: 25px;
 }
 
@@ -483,8 +474,8 @@ input.list_form_div{
   z-index: 2000;
   width: 150px;
   height: 110px;
-  border: 1px solid #50D1DE;
-  background-color: #E0F8FB;
+  border: 1px solid @four_color;
+  background-color: @one_color;
   display: none;
 }
 #select_img >div{
