@@ -1,0 +1,13 @@
+.x {
+  .m(red)                                    {case-1: darkred}
+  .m(blue)                                   {case-2: darkblue}
+  .m(@x) when (iscolor(@x))  {default-color: @x}
+  .m('foo')                                  {case-1: I am 'foo'}
+  .m('bar')                                  {case-2: I am 'bar'}
+  .m(@x) when (isstring(@x)) and (default()) {default-string: and I am the default}
+
+  &:blue  {.m(blue)}
+  &-green {.m(green)}
+  &-foo   {.m('foo')}
+  &-baz   {.m('baz')}
+}

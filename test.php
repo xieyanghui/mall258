@@ -1,8 +1,4 @@
-<form>
-    <input name ="aa[]" value="aa" type="text">
-    <input name ="aa[]" value="bbbs" type="text">
-    <input type="submit">
-</form>
+
 
 <?php
 /**
@@ -69,3 +65,6 @@ echo date('Y-m-d H:i:s');
 //print_r($goods->searchGoods(array('searchLine'=>'g_name','key'=>'一'),0,6));
 //print_r($goods->queryGoodsType(1));
 //echo dirname($_SERVER['DOCUMENT_ROOT']);
+$a = array('aaa'=>"bb",'cc'=>'dd');
+echo $a['aaa'];
+echo $a;

@@ -10,7 +10,7 @@ array_push($goods,array('name'=>'图片空间','url'=>"/view/adminImgSpace.php")
 $a_id = $_SESSION['adminInfo']['a_id'];
 $menus = array();
 foreach ($goods as $value){
-    if(empty($value['auth'])|| Auth::inAdmin($a_id,$value['auth'] )){
+    if(empty($value['auth'])|| AdminAuth::inAdmin($a_id,$value['auth'] )){
         array_push($menus,$value);
     }
 }

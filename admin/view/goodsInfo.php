@@ -19,9 +19,9 @@ $table = array(
     )
 );
 $sp = new SearchPage($_GET);
-$add = array('label'=>'增加商品','url'=>'view/goodsAU.php');
-$delete="server/goodsDeleteSer.php";
-$update="server/goodsAU.php";
+$add = array('label'=>'增加商品','url'=>'/view/goodsAU.php');
+$delete="/server/goodsDeleteSer.php";
+$update="/server/goodsAU.php";
 $data = array();
 if($sp->isSearch()){
     $data = call_user_func_array(array($goods,'searchGoods'),$sp->getParam());

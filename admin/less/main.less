@@ -32,42 +32,48 @@ a:hover {
     height: 150px;
   }
 }
-
 /*对话框*/
 #dialogue {
-  z-index: 1001;
+  z-index:1001;
   display: none;
+  width:300px;
   position: fixed;
-  width: 300px;
   /*border-radius: 10px;*/
   background-color: @one_color;
   top: 200px;
   overflow: hidden;
   border: @border_one;
-  span{
+  .dia_title {
+    margin: 0;
+    padding: 0 10px;
     width: 100%;
     height: 40px;
     display: block;
     background-color: @four_color;
     line-height: 40px;
-    font-size: 30px;
+    font-size: 25px;
     font-weight: bold;
     overflow: hidden;
   }
-  div:nth-child(2){
-    height: 60px;
-    padding: 5px;
+  .dia_megs{
+    height: 80px;
+    padding: 10px 10px;
+    font-size: 16px;
   }
-  div:nth-child(3){
-    div{
-      float: left;
-      margin: 10px 0 10px 50px;
-    }
+  .dia_no{
+    float: left;
+    margin: 15px 30px;
+
+  }
+  .dia_ok{
+    float: right;
+    margin: 15px 30px;
+
   }
 }
 
 /*吐司*/
-.toast() {
+.toast {
   z-index: 1001;
   display: none;
   position: absolute;
@@ -75,12 +81,11 @@ a:hover {
   height: 20px;
   line-height: 20px;
   text-align: center;
-  /*border-radius: 10px;*/
   top: 40px;
 }
 /*吐司错误*/
 .toasterr {
-  .toast();
+  &:extend(.toast);
   background-color: #FFCCCC;
   border: 1px solid #FF0033;
 }
@@ -214,25 +219,32 @@ div.show_win_close:hover {
 
 /*按钮*/
 .button {
+
   /*border-radius: 10px;*/
-  width: 75px;
+  //width: 75px;
   height: 35px;
   text-align: center;
   font-size: 25px;
   font-weight: bold;
+  display: block;
   background-color: @four_color;
   line-height: 40px;
 }
-.button:hover ,.center_button:hover{
+.button:hover {
   cursor: pointer;
   background-color: @five_color;
 }
 //按钮居中
 .center_button{
   &:extend(.button);
-  display: block;
   margin: 0 auto;
 }
+.add_button{
+  &:extend(.button);
+  float: left;
+  margin: 10px 0 0 10px;
+}
+
 div#adminHeadImg{
   float: left;
 }

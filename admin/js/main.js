@@ -42,25 +42,33 @@ function toast(sru, meg, time) {
  * mage  string  详细
  * fun   function  按确定之后执行的方法
  * */
-function showdielogue(fun,title  ,mage  ){
-    if ($('#showdielogue').length < 1) {
-        $('body').append("<div id = 'showdielogue'><span></span><div></div>" +"<div><div class ='button'>取消</div><div class ='button'>确定</div></div></div>");
+function dialogue(fun,title  ,mage  ){
+    if ($('#dialogue').length < 1) {
+        $('body').append("<div id = 'dialogue'><h6 class='dia_title'></h6><div class='dia_megs'></div><div class ='dia_no button'>取消</div><div class ='dia_ok button'>确定</div></div>");
+        $('#dialogue > .dia_no').click(function(){
+            $("#dialogue").hide();
+        });
+        $('#dialogue > .dia_ok').click(function(){
+            $("#dialogue").hide();
+            $(this).trigger('trig');
+        });
     }
-    $("#showdielogue >span").html(title |"确定要删除吗");
-    $("#showdielogue >div:first").html(mage| "删除后后果自负");
-    $('#showdielogue').css("left", ($(window).width() / 2 - 200) + "px");
-    $("#showdielogue").show();
-    $('#showdielogue >div >div.button').bind('clee',fun);
-
+    $("#dialogue >h6").html(title ||"确定要删除吗");
+    $("#dialogue >div:first").html(mage || "删除后后果自负");
+    $('#dialogue').css("left", ($(window).width() / 2 - 200) + "px");
+    $("#dialogue").show();
+    $('#dialogue >div.dia_ok').unbind('trig').bind('trig',fun);
 }
-$('body').on('click','#showdielogue >div >div.button',function(){
-    if($(this).html() == "确定"){
-        $("#showdielogue").hide();
-        $(this).trigger('clee');
-    }else{
-        $("#showdielogue").hide();
+/*加载画面*/
+var loading = {
+    start:function(){
+        $('#loading_back').show(100);
+    },
+    end:function(){
+        $('#loading_back').hide();
     }
-});
+};
+
 //页面刷新
 var Resize = (function() {
     var resizeFuns = [];
@@ -388,15 +396,16 @@ $('body').on('mouseleave','.preview_img',function(e){
     $(this).attr('leave','true');
     $('#preview_img').hide();
 });
-
-
 $('body').on('click','.left_menu',function(){
-    if($('#con').attr('href') ==""){
-        history.pushState({foo:'bar'},"",$(this).attr('href'));
+    if($('#contents').attr('href') !=""){
+        history.replaceState({foo:'bar'},"aaa",$(this).attr('href'));
+    }else{
+        history.pushState({foo:'bar'},"aaa",$(this).attr('href'));
     }
-    $('#loading_back').show(100);
+   loading.start();
     $("#contents").load($(this).attr('href'),function(){
-        $('#loading_back').hide();
+        $('#contents').attr('href',"").attr('args',"");
+        loading.end();
     });
 });
 $(window).resize(function(){
@@ -404,3 +413,18 @@ $(window).resize(function(){
     $('#load_back').height($(document).height());
 
 });
+window.addEventListener('popstate', function() {
+    var url = document.location.toString();
+    var self= null;
+
+    if(url.substr(url.lastIndexOf('/')+1,4) =='menu'){
+        self=  $('#con');
+    }else{
+        self =  $('#contents');
+    }
+    loading.start();
+    self.load(url,function(){
+        loading.end();
+    });
+});
+

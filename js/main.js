@@ -42,13 +42,13 @@ function showWinInit(width,top) {
  * mage  string  详细
  * fun   function  按确定之后执行的方法
  * */
-function showdielogue(title ,mage ,fun ){
-    if ($('#showdielogue').length < 1) {
-        $('body').append("<div id = 'showdielogue'><span></span><div></div>" +"<div><div class ='button'>取消</div><div class ='button'>确定</div></div></div>");
+function dialogue(title ,mage ,fun ){
+    if ($('#dialogue').length < 1) {
+        $('body').append("<div id = 'dialogue'><span></span><div></div>" +"<div><div class ='button'>取消</div><div class ='button'>确定</div></div></div>");
     }
-    $("#showdielogue >span").html(title);
-    $("#showdielogue >div:first").html(""+mage);
-    $('#showdielogue').css("left", ($(window).width() / 2 - 200) + "px");
+    $("#dialogue >span").html(title);
+    $("#dialogue >div:first").html(""+mage);
+    $('#dialogue').css("left", ($(window).width() / 2 - 200) + "px");
     $("#showdielogue").show();
     $("#showdielogue >div >div.button").unbind();
     $("#showdielogue >div >div.button").click(function(){

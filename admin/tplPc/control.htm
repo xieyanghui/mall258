@@ -24,7 +24,7 @@
 <div id = 'CRUD' ></div>
 <div id="loading_back"><div class="loading_img"><img src="http://7xkkh3.com1.z0.glb.clouddn.com/o_1af6m10bl1e5k1tfgv7d7hk56il.gif"/></div>></div>
 </body>
-<script src="http://cdn.staticfile.org/jquery/2.1.1/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="//apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js" type="text/javascript" charset="utf-8"></script>
 <script type="text/javascript" src="<{$HTTP_HOST}>/js/plupload/plupload.full.min.js"></script>
 <script type="text/javascript" src="<{$HTTP_HOST}>/js/qiniujs/qiniu.min.js"></script>
 <script src="<{$HTTP_MODEL}>/js/main.js" type="text/javascript" charset="utf-8"></script>
@@ -34,14 +34,17 @@
 <script>
     $(function () {
         $(".top_menu").click(function () {
-            if($('#con').attr('href') ==""){
-                history.pushState({foo:'bar'},"",$(this).attr('href'));
+            if($('#con').attr('href') !=""){
+                history.replaceState({foo:'bar'},"aaa",$(this).attr('href'));
+            }else{
+                history.pushState({foo:'bar'},"aaa",$(this).attr('href'));
             }
+            $('#con').attr('href',"").attr('args',"");
             $(this).addClass('menuClick');
             $(this).siblings().removeClass('menuClick').addClass('menu');
-            $('#loading_back').show(100);
+            loading.start();
             $('#con').load($(this).attr('href'),function(data){
-                $('#loading_back').hide();
+                loading.end();
             });
         });
         if($('#con').attr('href') !=null){
@@ -49,11 +52,9 @@
             var args = $('#con').attr('args');
             $('.top_menu').each(function(){
                 if($(this).attr('href').indexOf(href) >0){
-                    $('#con').attr('href',"").attr('args',"");
                     $(this).attr('href',$(this).attr('href')+args);
                     $(this).trigger('click');
                 }
-            },function(){
             });
         }
 

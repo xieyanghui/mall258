@@ -7,8 +7,7 @@ spl_autoload_register(function ($classname) {
         require_once( $_SERVER['DOCUMENT_ROOT'].$model.'/lib/' . $classname . '.class.php');
     } elseif (is_file($_SERVER['DOCUMENT_ROOT'].$model.'/model/' . $classname . '.class.php')) {
         require_once($_SERVER['DOCUMENT_ROOT'] .$model. '/model/' . $classname . '.class.php');
-    }
-    if (is_file($_SERVER['DOCUMENT_ROOT'].'/public/config/' . $classname . '.class.php')) {
+    }elseif (is_file($_SERVER['DOCUMENT_ROOT'].'/public/config/' . $classname . '.class.php')) {
         require_once($_SERVER['DOCUMENT_ROOT'].'/public/config/' . $classname . '.class.php');
     }elseif (is_file($_SERVER['DOCUMENT_ROOT'].'/public/lib/' . $classname . '.class.php')) {
         require_once( $_SERVER['DOCUMENT_ROOT'].'/public/lib/' . $classname . '.class.php');

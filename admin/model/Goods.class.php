@@ -1,5 +1,5 @@
 <?php
-include_once($_SERVER['DOCUMENT_ROOT'] . '/util/autoload.php');
+include_once($_SERVER['DOCUMENT_ROOT'] . '/public/autoload.php');
 
 /*
  * 商品
@@ -80,7 +80,7 @@ class Goods
      */
     public function getGoods($start, $sum ,$sortLine ='g_id', $sort = "asc"){
         $sql = $this->getSql(); 
-        $where = new Where();
+        $where = new Where('g_status','0','int','AND','<>');
         if(empty($sortLine)){$sortLine = "g_id";}
         if(empty($sort)){$sort = "asc";}
         $count = $sql->selectLine('goods_info_v',"COUNT(*) as count",$where);
@@ -109,6 +109,7 @@ class Goods
         if(empty($sortLine)){$sortLine = "g_id";}
         if(empty($sort)){$sort = "asc";}
         $where =new Where($name['searchLine'],$name['key'],'string','AND','LIKE');
+        $where->setWhere('g_status','0','int','AND','<>');
         $count = $sql->selectLine('goods_info_v',"COUNT(*) as count",$where);
         $where->setWhereEnd("ORDER BY `$sortLine` $sort   limit $start,$sum");
         $data = $sql->selectData('goods_info_v',array('g_id','g_number','g_name','gt_name','g_price','g_reg','g_status'),$where);
@@ -225,6 +226,10 @@ class Goods
         return $b;
     }
 
+    public function deleteGoods($gId){
+        $sql = $this->getSql();
+        return $sql->update('goods',new Where('g_id',$gId,'int'),array('columnName'=>'g_status','type'=>'int','value'=>'0'));
+    }
     /**
      * 增加商品属性,价格
      *

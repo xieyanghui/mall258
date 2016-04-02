@@ -1,9 +1,3 @@
-<style type="text/css">
-    .test{
-        float: left;
-    }
-
-</style>
 <{if $page['count'] ge 1 || $page['search'] ne "" }>
 <div class='win'>
     <h1 class="win_head"><{$table['title']|default:'列表'}></h1>
@@ -14,11 +8,13 @@
             <{/foreach}>
         </li>
         <{foreach $data as $row}>
-            <li class='list_row' name="<{$row[$table['id']]}>">
+        <li class='list_row' name="<{$row[$table['id']]}>">
             <{foreach $table['column'] as $c1}>
                 <span title="<{$row[$c1['key']]}>"  style="width:<{$c1['width']|default:'100'}>px"><{$row[$c1['key']]}></span>
             <{/foreach}>
+            <{if $delete }>
             <span class="list_delete" >×</span>
+            <{/if}>
         </li>
         <{/foreach}>
 
@@ -44,7 +40,7 @@
         <{/if}>
         <li class="list_row_search">
             <input type="text" id="search_value" class="form_div" placeholder="搜索关键字" value="<{$page['search']['key']}>">
-            <{if $table['search'] }>
+            <{if !empty($table['search']) }>
             <select id="search_select" class="form_div">
                 <{foreach $table['column'] as $c2 }>
                     <{if !$c2['noSearch'] }>
@@ -63,71 +59,47 @@
     </ul>
 </div>
 <{/if}>
-    <{if  $add }>  <div class="add_show_button button" href="<{$add['url']}>"><{$add['label']}></div> <{/if}>
-<div class="test button" >aaa</div>
+
+<!--增加-->
+<{if  $add }>
+<div class="add_button button" href="<{$add['url']}>"><{$add['label']}></div>
+<{/if}>
+<!--删除-->
+<{if $delete }>
 <script type="text/javascript">
-    var CRUD = {
-        add:function(url,width,top){
-            $('.add_button').click(function(){
-                $.get(url,function(data){
-                    try{
-                        var j = JSON.parse(data);
-                        toast(j.status, j.megs);
-                    }catch(error){
-                        $('#CRUD').html(data);
-                        Resize.resizeAdd(width,top);
-                    }
-                });
+    $('.list_row > span.list_delete').click(function(e){
+        var self = $(this);
+        dialogue(function(){
+            $.getJSON("<{$HTTP_MODEL}><{$delete}>?id="+self.parents('.list_row').attr('name'),function(data){
+                toast(data.status,data.megs);
+                $('#contents').load(document.URL,$('#list_form').serialize());
             });
-        },
-        update:function(url,width,top){
-            $('.list_row').click(function(){
-                $('#CRUD').load(url+'?name='+$(this).children('span.delete').attr('value'),function(data){
-                    try{
-                        var j = JSON.parse(data);
-                        toast(j.status, j.megs);
-                    }catch(error){
-                        $('#CRUD').html(data);
-                        Resize.resizeAdd(width,top);
-                    }
-                });
-            });
-        },
-        delete:function(url,loal_url,title,megs){
-            $('.list_row > span.delete').click(function(e){
-                var self = $(this);
-                showdielogue(title,megs,function(){
-                    $.getJSON(url+"?name="+self.attr('value'),function(data){
-                        toast(data.status,data.megs);
-                        $('#contents').load(loal_url,$('#list_form').serialize());
-                    });
-                });
-                e.stopPropagation();
-            });
-        }
-    };
+        });
+        e.stopPropagation();
+    });
+</script>
+<{/if}>
+
+<!--更新-->
+<{if $update}>
+<script type="text/javascript">
+    $('.list_row').click(function(){
+        loading.start();
+        $('#contents').load('<{$HTTP_MODEL}><{$update}>?id='+$(this).parents('.list_row').attr('name'),function(){
+            loading.end();
+        });
+    });
+</script>
+<{/if}>
+<script type="text/javascript">
 
     $(function () {
         PageSearch(document.URL);
-        $('.add_show_button').click(function(){
-            $('#loading_back').show(100);
-            $('#contents').load("<{$HTTP_MODEL}>".$(this).attr('href'),function(){
-                $('#loading_back').hide();
-            });
-        });
-        $('.list_row').click(function(){
-            $('#loading_back').show(100);
-            $('#contents').load(url+'?id='+$(this).attr('name'),function(data){
-                $('#loading_back').hide();
-            });
-        });
-        CRUD.delete('./server/goodsDeleteSer.php','./inc/goodsInfo.php','确定要删除吗?','删除之之后很严重哦');
-    });
-    $(function(){
-        $('.test').click(function(){
-            $.post('./inc/goodsAdd2.php',{'g_id':1,'g_price':1888.22,'g_img':"aaaaaaaaaa"},function(data){
-                $('#CRUD').html(data);
-                Resize.resizeAdd(1200,100);
+        $('.add_button').click(function(){
+           loading.start();
+            history.pushState({foo:'bar'},"aaa",$(this).attr('href'));
+            $('#contents').load("<{$HTTP_MODEL}>"+$(this).attr('href'),function(){
+                loading.end();
             });
         });
     });

@@ -7,16 +7,29 @@
  */
 include_once("header.inc.php");
 $goods = new Goods();
-$columnName = array('gt_number'=>'编号','gt_name'=>'商品类型名称','gt_remark'=>'备注');
-$sp = new SearchPage($columnName,$_GET);
+$table = array(
+    'id'=>'gt_id',
+    'column'=>array(
+        array('name'=>'编号','key'=>'gt_number','width'=>"150"),
+        array('name'=>'商品类型名称','key'=>'gt_name','width'=>"200"),
+        array('name'=>'备注','key'=>'gt_remark','width'=>"150")
+    )
+);
+$sp = new SearchPage($_GET);
+$add = array('label'=>'增加商品类型','url'=>'/view/goodsTypeAU.php');
+$delete="/server/goodsTypeDeleteSer.php";
+$update="/view/goodsTypeAU.php";
 $data = array();
 if($sp->isSearch()){
     $data = call_user_func_array(array($goods,'searchGoodsType'),$sp->getParam());
 }else{
-    $data = call_user_func_array(array($goods,'getGoodsType'),$sp->getParam());//  获取全部管理员列表
+    $data = call_user_func_array(array($goods,'getGoodsType'),$sp->getParam());//  获取列表
 }
-
 $sma = new Smartys;
+$sma->assign('table',$table);
+$sma->assign('add',$add);
+$sma->assign('delete',$delete);
+$sma->assign('update',$update);
 $sma->assign('page', $sp->getPages($data['count']));
-$sma->assign('row' ,$data['data']);
-$sma->display('goodsType.htm');
+$sma->assign('data' ,$data['data']);
+$sma->display('winTable.tpl');

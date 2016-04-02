@@ -1,10 +1,4 @@
 <style type="text/css">
-    #goodsAdd{
-        position: absolute;
-        z-index: 100;
-        width: 500px;
-        overflow: hidden;
-    }
     .select_div{
         width: 65px;
         height: 30px;
@@ -105,9 +99,9 @@
     }
 </style>
 <form action="./server/goodsAddSer.php" method="post" id="goodsAddForm">
-    <div id='goodsAdd' class='win show_win'>
+    <div id='goodsAdd' class='win'>
         <input type="hidden" name="gt_id" id="gt_id" />
-        <h1 class="win_head">添加商品基本资料 <div class="show_win_close">×</div></h1>
+        <h1 class="win_head">商品基本资料</h1>
         <div class="win_row">
             <label class ="win_row_head">商品类型</label>
             <div class ="win_row_input"><div class="select_div">请选择类型</div>

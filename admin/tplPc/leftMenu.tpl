@@ -13,7 +13,6 @@
         var args = $('#contents').attr('args');
         $('.left_menu').each(function(){
             if($(this).attr('href').indexOf(href) >0){
-                $('#contents').attr('href',"").attr('args',"");
                 $(this).attr('href',$(this).attr('href')+args);
                 $(this).trigger('click');
             }
