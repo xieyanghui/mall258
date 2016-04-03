@@ -32,4 +32,4 @@ $sma->assign('delete',$delete);
 $sma->assign('update',$update);
 $sma->assign('page', $sp->getPages($data['count']));
 $sma->assign('data' ,$data['data']);
-$sma->display('winTable.tpl');
+$sma->ds('winTable.tpl');

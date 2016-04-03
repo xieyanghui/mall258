@@ -28,6 +28,7 @@
             <input type="hidden" name="pageRow" value="<{$page['pageRow']}>" />
         </form>
         <{if $page['count'] ge $page['pageRow']+1}>
+        <!--分页-->
         <li class="list_row_page">
             <div class="  pageButton  <{if $page['page'] ge 1}>button<{else}> pageOff <{/if}>">上一页</div>
             <{section name=loop loop=$page['pages']}>
@@ -38,12 +39,13 @@
             <div class=" pageButton <{if $page['page']+1 lt $page['countPages']}>  button<{else}> pageOff <{/if}>">下一页</div>
         </li>
         <{/if}>
+        <!--搜索-->
         <li class="list_row_search">
             <input type="text" id="search_value" class="form_div" placeholder="搜索关键字" value="<{$page['search']['key']}>">
             <{if !empty($table['search']) }>
             <select id="search_select" class="form_div">
                 <{foreach $table['column'] as $c2 }>
-                    <{if !$c2['noSearch'] }>
+                    <{if empty($c2['noSearch']) || !$c2['noSearch'] }>
                     <option value="<{$c2['key']}>"><{$c2['name']}></option>
                     <{/if}>
                 <{/foreach}>
@@ -62,45 +64,41 @@
 
 <!--增加-->
 <{if  $add }>
-<div class="add_button button" href="<{$add['url']}>"><{$add['label']}></div>
+<div class="add_button button ajax_menu" href="<{$HTTP_MODEL}><{$add['url']}>"><{$add['label']}></div>
 <{/if}>
 <!--删除-->
 <{if $delete }>
 <script type="text/javascript">
-    $('.list_row > span.list_delete').click(function(e){
-        var self = $(this);
-        dialogue(function(){
-            $.getJSON("<{$HTTP_MODEL}><{$delete}>?id="+self.parents('.list_row').attr('name'),function(data){
-                toast(data.status,data.megs);
-                $('#contents').load(document.URL,$('#list_form').serialize());
+    function delete_list(){
+        $('.list_row > span.list_delete').click(function(e){
+            var self = $(this);
+            dialogue(function(){
+                $.getJSON("<{$HTTP_MODEL}><{$delete}>?id="+self.parents('.list_row').attr('name'),function(data){
+                    toast(data.status,data.megs);
+                    $('#contents').load(document.URL,$('#list_form').serialize());
+                });
             });
+            e.stopPropagation();
         });
-        e.stopPropagation();
-    });
+    }
 </script>
 <{/if}>
-
 <!--更新-->
 <{if $update}>
 <script type="text/javascript">
-    $('.list_row').click(function(){
-        loading.start();
-        $('#contents').load('<{$HTTP_MODEL}><{$update}>?id='+$(this).parents('.list_row').attr('name'),function(){
-            loading.end();
+    function update_list(){
+        $('.list_row').each(function(){
+            $(this).attr('href','<{$HTTP_MODEL}><{$update}>?id='+$(this).attr('name'));
+            $(this).addClass('ajax_menu');
         });
-    });
+    }
+
 </script>
 <{/if}>
 <script type="text/javascript">
-
-    $(function () {
+    $(function(){
         PageSearch(document.URL);
-        $('.add_button').click(function(){
-           loading.start();
-            history.pushState({foo:'bar'},"aaa",$(this).attr('href'));
-            $('#contents').load("<{$HTTP_MODEL}>"+$(this).attr('href'),function(){
-                loading.end();
-            });
-        });
+        update_list();
+        delete_list();
     });
 </script>

@@ -21,7 +21,7 @@ $table = array(
 $sp = new SearchPage($_GET);
 $add = array('label'=>'增加商品','url'=>'/view/goodsAU.php');
 $delete="/server/goodsDeleteSer.php";
-$update="/server/goodsAU.php";
+$update="/view/goodsAU.php";
 $data = array();
 if($sp->isSearch()){
     $data = call_user_func_array(array($goods,'searchGoods'),$sp->getParam());
@@ -35,4 +35,5 @@ $sma->assign('delete',$delete);
 $sma->assign('update',$update);
 $sma->assign('page', $sp->getPages($data['count']));
 $sma->assign('data' ,$data['data']);
-$sma->display('winTable.tpl');
+$sma->ds('winTable.tpl');
+

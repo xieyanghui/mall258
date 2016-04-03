@@ -131,16 +131,18 @@ div.win_row {
   /*主窗口的固定行里input样式*/
   div.win_row_input{
     margin-left: 5px;
-    position: relative;
     float: left;
-    overflow: hidden;
     input.validate {
       width: 60px;
       margin-right: 5px;
     }
-
+  }
+  div.win_row_select{
+    margin-left: 5px;
+    float: left;
   }
 }
+
 .win_center{
    &:extend(.win);
   float: inherit;
@@ -167,6 +169,17 @@ div.win_row_con{
   margin: 0 5px;
   padding: 3px;
   float: left;
+  .upload_img_div{
+    float: left;
+  }
+  .upload_img_button{
+    float: left;
+    width: 80px;
+    height: 30px;
+    margin: 20px 10px ;
+    line-height: 30px;
+    font-size: 15px;
+  }
 }
 /*主窗口里行里的lable */
 label.win_row_head {
@@ -196,41 +209,20 @@ label.win_row_head {
   color: #FF0000;
 }
 
-
-/*弹出窗口的关闭按钮*/
-div.show_win_close {
-  position: absolute;
-  right: 0;
-  top: 0;
-  width: 40px;
-  height: 40px;
-  text-align: center;
-  line-height: 40px;
-  font-size: 30px;
-  font-weight: bold;
-  color: red;
-}
-/*弹出窗口的关闭按钮*/
-div.show_win_close:hover {
-  background-color: @one_color;
-  cursor: pointer;
-}
-
-
 /*按钮*/
 .button {
-
   /*border-radius: 10px;*/
   //width: 75px;
   height: 35px;
   text-align: center;
   font-size: 25px;
   font-weight: bold;
-  display: block;
   background-color: @four_color;
   line-height: 40px;
+  padding: 0 5px;
+
 }
-.button:hover {
+.button:hover,.center_button:hover,.add_button:hover{
   cursor: pointer;
   background-color: @five_color;
 }
@@ -245,17 +237,10 @@ div.show_win_close:hover {
   margin: 10px 0 0 10px;
 }
 
-div#adminHeadImg{
+.upload_img_div{
   float: left;
 }
-div#imgUp {
-  float: left;
-  width: 80px;
-  height: 30px;
-  margin: 20px 10px ;
-  line-height: 30px;
-  font-size: 15px;
-}
+
 .uploadImg{
   float: left;
 }

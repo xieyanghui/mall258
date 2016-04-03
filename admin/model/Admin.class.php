@@ -1,5 +1,5 @@
 <?php
-include_once($_SERVER['DOCUMENT_ROOT'] . "/util/autoload.php");
+include_once($_SERVER['DOCUMENT_ROOT'] . "/public/autoload.php");
 
 /*
  *   管理员信息

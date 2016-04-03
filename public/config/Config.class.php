@@ -40,7 +40,9 @@ class Config{
             'menuGoods'=>array(
                 'goodsType',
                 'goodsInfo',
-                'goodsRecommend'
+                'goodsRecommend',
+                'goodsAU',
+                'goodsTypeAU'
             )
         )
     );

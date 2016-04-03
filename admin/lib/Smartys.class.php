@@ -18,6 +18,22 @@ class Smartys extends Smarty
         $this->assign('sub_args',!empty($GLOBALS['sub_args']) && $GLOBALS['sub_args'] !='?'?$GLOBALS['sub_args']:false);
         $this->assign("HTTP_HOST", 'http://' . $_SERVER['HTTP_HOST']);
         $this->assign("HTTP_MODEL", 'http://' . $_SERVER['HTTP_HOST'].Config::ADMIN_DIR);
-        $this->assign("HTTP_FILE", substr($_SERVER['PHP_SELF'],strrpos($_SERVER['PHP_SELF'],"/")+1,strrpos($_SERVER['PHP_SELF'],".")-1));
+        $this->assign("HTTP_FILE", substr($_SERVER['PHP_SELF'],strrpos($_SERVER['PHP_SELF'],"/")+1,strrpos($_SERVER['PHP_SELF'],".")-strrpos($_SERVER['PHP_SELF'],"/")-1));
+    }
+
+    function ds($tpl){
+        if(!empty($GLOBALS['content'])){
+            $this->assign('contents',$GLOBALS['content']);
+            $GLOBALS['content'] = $this->fetch($tpl);
+            $GLOBALS['parent'] = gui($GLOBALS['parent']);
+            include_once($GLOBALS['parent'].'.php');
+        }elseif(!isset($_SERVER['HTTP_REFERER'])){
+            $GLOBALS['parent'] = gui($this->tpl_vars['HTTP_FILE']);
+            $GLOBALS['content'] = $this->fetch($tpl);
+            include_once ($GLOBALS['parent'].".php");
+        }else{
+            $this->display($tpl);
+        }
+
     }
 }

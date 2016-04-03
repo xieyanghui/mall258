@@ -1,7 +1,6 @@
 <?php
 if (!isset($_SESSION)) {session_start();}
-include_once($_SERVER['DOCUMENT_ROOT'] . '/util/autoload.php');
-header("Content-Type:text/html;charset=utf-8");
+include_once($_SERVER['DOCUMENT_ROOT'].'/public/autoload.php');
 
 //if(strtolower($_SESSION['adminLoginCheck']) != strtolower($_POST['validate'])){exit(json_encode(array("status" => FALSE, "megs" => '验证码错误')));}
 

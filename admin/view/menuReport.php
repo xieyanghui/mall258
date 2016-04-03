@@ -23,4 +23,3 @@ if(!empty($content)){
 }else{
     $sma->display('leftMenu.tpl');
 }
-

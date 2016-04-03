@@ -1,7 +1,7 @@
 <?php
 include_once("header.inc.php");
 $sma = new Smartys;
-
+$goods =array();
 $goods[] = array('auth'=>'goodsType','name'=>'商品类型管理','url'=>"/view/goodsType.php");
 $goods[] = array('auth'=>'goodsInfo','name'=>'商品管理','url'=>"/view/goodsInfo.php");
 $goods[] = array('auth'=>'goodsRecommend','name'=>'商品类型管理','url'=>"/view/goodsRecommend.php");
@@ -13,4 +13,5 @@ foreach ($goods as $value){
     }
 }
 $sma->assign("menus",$menus);
-$sma->display('leftMenu.tpl');
+$sma->ds('leftMenu.tpl');
+

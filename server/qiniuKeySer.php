@@ -2,7 +2,7 @@
 if (!isset($_SESSION)) {session_start();};
 header("Content-type:text/html;charset=utf-8");
 if (empty($_SESSION['adminInfo']) && empty($_SESSION['userInfo'])) { exit("未登录");}
-include_once($_SERVER['DOCUMENT_ROOT'] . '/util/autoload.php');
+include_once($_SERVER['DOCUMENT_ROOT'] . '/public/autoload.php');
 $putPolicy['scope'] = Config::QINIU_SCOPE;
 $putPolicy['deadline'] =time()+3600;
 $put = json_encode($putPolicy);

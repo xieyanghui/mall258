@@ -59,6 +59,8 @@ function dialogue(fun,title  ,mage  ){
     $("#dialogue").show();
     $('#dialogue >div.dia_ok').unbind('trig').bind('trig',fun);
 }
+
+
 /*加载画面*/
 var loading = {
     start:function(){
@@ -185,6 +187,7 @@ function getUpload(){
   //   var f1 = new f();
   //   f1.init = upload.init;
   //   return f1;
+    
     var u ={};
     $.extend(u,upload);
     return u;
@@ -353,14 +356,13 @@ $('body').on('click','.select_img',function(e){
     $('#select_img').show();
     e.stopPropagation();
 });
-
 //图库选择图片
 $('body').on('click','#space_img',function(e){
     var img_link = $(this).parent().attr('img_link');
     var space_img = $(this).parent().attr('space_img');
     if($("#img_space_div").length ==0){
         $('body').append("<div id='img_space_div'></div>");
-        $("#img_space_div").load('./inc/adminImgSpace.php?select=true&img_link='+img_link+'&space_img='+space_img);
+        $("#img_space_div").load('./adminImgSpace.php?select=true&img_link='+img_link+'&space_img='+space_img);
     }else{
         $("#img_space_div input[name='img_link']").val(img_link);
         $("#img_space_div input[name='space_img']").val(space_img);
@@ -396,17 +398,23 @@ $('body').on('mouseleave','.preview_img',function(e){
     $(this).attr('leave','true');
     $('#preview_img').hide();
 });
-$('body').on('click','.left_menu',function(){
-    if($('#contents').attr('href') !=""){
-        history.replaceState({foo:'bar'},"aaa",$(this).attr('href'));
+
+$('body').on('click',".ajax_menu",function(){
+    var url = $(this).attr('href');
+    history.pushState({foo:'bar'},"aaa",$(this).attr('href'));
+    var self;
+    if(url.substr(url.lastIndexOf('/')+1,4) =='menu'){
+        self=  $('#con');
     }else{
-        history.pushState({foo:'bar'},"aaa",$(this).attr('href'));
+        self =  $('#contents');
     }
-   loading.start();
-    $("#contents").load($(this).attr('href'),function(){
-        $('#contents').attr('href',"").attr('args',"");
+    loading.start();
+    self.load(url,function(){
         loading.end();
     });
+});
+$('body').on('click','.submit',function () {
+    $(this).parents("form").submit();
 });
 $(window).resize(function(){
     $('#load_back').width($(document).width());
@@ -416,7 +424,6 @@ $(window).resize(function(){
 window.addEventListener('popstate', function() {
     var url = document.location.toString();
     var self= null;
-
     if(url.substr(url.lastIndexOf('/')+1,4) =='menu'){
         self=  $('#con');
     }else{

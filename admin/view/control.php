@@ -16,5 +16,6 @@ foreach ($c as $value) {
 }
 $sma->assign('admin', $_SESSION['adminInfo']);
 $sma->assign('c', $c);
+$sma->assign('con',!empty($GLOBALS['content'])?$GLOBALS['content']:null);
 $sma->display('control.htm');
 

@@ -10,6 +10,6 @@ header("Content-type:text/html;charset=utf-8");
 if (empty($_SESSION['adminInfo'])) {exit(json_encode(array('status'=>false,'megs'=>'登录超时')));}
 include_once($_SERVER['DOCUMENT_ROOT'].'/public/autoload.php');
 if(!empty($auth)){
-    if(!Auth::inAdmin($_SESSION['adminInfo']['a_id'],$auth)){exit(json_encode(array('status'=>false,'megs'=>'权限不够')));}
+    if(!AdminAuth::inAdmin($_SESSION['adminInfo']['a_id'],$auth)){exit(json_encode(array('status'=>false,'megs'=>'权限不够')));}
 }
 new Filter(true);
