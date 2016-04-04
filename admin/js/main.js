@@ -22,20 +22,6 @@ function toast(sru, meg, time) {
         }, time);
     });
 }
-//
-// /**
-//  * 初始化弹出窗口
-//  * width int 需要弹出窗口的宽度
-//  * top   string  弹出窗口的高度；
-//  * */
-// function showWinInit(width,top) {
-//     var top  =top || 200;
-//     var width = width || 200;
-//     $(".backdrop").css("width", $(window).width() + "px");
-//     $(".backdrop").css("height", $(window).height() + "px");
-//     $('.show_win').css("top", top+'px');
-//     $('.show_win').css("left", ($(window).width() / 2 - (width/2)) + "px");
-// }
 /**
  * 消息对话框
  * title string  标题

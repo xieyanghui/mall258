@@ -1,0 +1,121 @@
+@import "config";
+#goodsAU{
+  .win_column{
+    position: relative;
+    float: left;
+    overflow: hidden;
+  }
+  .g_cancel{
+    float: left;
+    margin: 20px 150px;
+  }
+  .g_submit{
+    float: right;
+    margin: 20px 150px;
+  }
+  .select_div{
+    width: 65px;
+    height: 30px;
+    border: 1px solid #50D1DE;
+    text-align: center;
+    line-height: 30px;
+    background-color: #EEEEEE;
+  }
+  .select_div_bottom{
+    border-bottom: hidden;
+  }
+  .select_ul{
+    display: none;
+    position: absolute;
+    z-index: 1000;
+    overflow: hidden;
+    border-top: 1px solid #50D1DE;
+    border-left: 1px solid #50D1DE;
+    background-color: #FFFFFF;
+
+  }
+  .select_li{
+    width: 65px;
+    height: 30px;
+    border-bottom: 1px solid #50D1DE;
+    border-right: 1px solid #50D1DE;
+    text-align: center;
+    line-height: 30px;
+    background-color: #EEEEEE;
+    float: left;
+  }
+  .select_li:hover{
+    background-color: #50D1DE;
+    cursor: pointer;
+  }
+
+  .row_con_head{
+    width: 50px;
+    text-align: right;
+    float: left;
+    font-size: 14px ;
+    color: @five_color;
+  }
+  .goods_attr_list{
+    height: 30px;
+    line-height: 30px;
+    border: 1px solid #50D1DE;
+    margin: 0 2px 2px 0;
+    width: 145px;
+    float: left;
+    overflow: hidden;
+  }
+  .goods_attr_list>label{
+    width: 70px;
+    float: right;
+  }
+  .goods_price_list >div.win_row_con{
+    width:230px;
+    margin-bottom: 3px;
+  }
+  div.input_label{
+    border: 1px solid #50D1DE;
+    padding-left: 5px;
+    width: 120px;
+    height: 30px;
+    line-height: 30px;
+    overflow: hidden;
+    display: block;
+  }
+  label#gt_number{
+    width: 40px;
+    float: left;
+    text-align: right;
+    display: block;
+  }
+  input.input_label_value{
+    width:40px;
+    border: hidden;
+    outline:none;
+  }
+  div.goods_attr_list>input{
+    width:60px;
+    display: block;
+    padding: 5px;
+    height: 18px;
+    border: hidden;
+    outline:none;
+    float: right;
+  }
+  .attr_price{
+    width: 300px;
+  }
+  textarea.con_textarea{
+    display: block;
+    outline:none;
+    border: 1px solid #50D1DE;
+    margin: 2px 5px;
+    padding: 3px;
+    float: left;
+    max-width: 150px;
+    width: 150px;
+  }
+  .con_list_add:hover{
+    cursor: pointer;
+  }
+}

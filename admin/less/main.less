@@ -126,8 +126,8 @@ div.win_row_one {
 }
 /*主窗口的固定行样式*/
 div.win_row {
+  clear: both;
   height: 50px;
-  overflow: hidden;
   /*主窗口的固定行里input样式*/
   div.win_row_input{
     margin-left: 5px;
@@ -153,7 +153,7 @@ div.win_row {
   padding: 5px;
   border: @border_one;
   outline:none;
-  width: 150px;
+  width: 120px;
 }
 
 /*主窗口的自动增长行样式*/
@@ -222,7 +222,7 @@ label.win_row_head {
   padding: 0 5px;
 
 }
-.button:hover,.center_button:hover,.add_button:hover{
+[class*='button']:hover{
   cursor: pointer;
   background-color: @five_color;
 }
@@ -285,9 +285,6 @@ li.list_row>span {
   border: @border_one;
   line-height: 28px;
   font-size: 18px;
-}
-div#addAdmin > div {
-  width: 400px;
 }
 /*列表样式*/
 li.list_row{
@@ -431,9 +428,8 @@ span.list_row_sumOn,span.list_row_sum:hover{
   cursor: pointer;
 }
 div.con_list_input ,div.con_list_add{
-  display: block;
   float: left;
-  width: 60px;
+  width: 66px;
   height: 25px;
   padding-left:5px ;
   overflow: hidden;
@@ -451,12 +447,6 @@ div.con_list_add{
 input.list_form_div{
   border-style: hidden;
   outline:none;
-}
-
-.add_show_button{
-  width: 200px;
-  float: left;
-  margin: 10px 20px;
 }
 /*图片预览框*/
 #preview_img{
@@ -483,4 +473,7 @@ input.list_form_div{
 #space_img{
   width: 100px;
   font-size: 20px;
+}
+[id$='template']{
+  display: none;
 }

@@ -5,7 +5,7 @@
  * Date: 2016/2/27
  * Time: 21:31
  */
-include_once($_SERVER['DOCUMENT_ROOT'] . "/util/autoload.php");
+include_once($_SERVER['DOCUMENT_ROOT'] . "/public/autoload.php");
 class SystemLog{
     public static function addSystemLog($aId,$key,$content){
         $sql = new Sql();

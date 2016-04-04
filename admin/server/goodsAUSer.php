@@ -1,6 +1,6 @@
 <?php
 $auth = "goodsAdd";
-include_once ("../inc/header.inc.php");
+include_once ("./header.inc.php");
 $goods = new Goods();
 $g['g_number'] = $_POST['g_number'];
 $g['gt_id'] = $_POST['gt_id'];

@@ -162,7 +162,7 @@ CREATE TABLE `goods`(
 	`g_number` CHAR(10) NOT NULL, -- 编号
 	`g_name` VARCHAR(100) NOT NULL, -- 商品名
 	`gt_id` INT UNSIGNED NOT NULL,  -- 商品类型ID
-	`g_price` float(8,2) NOT NULL,   -- 价格
+	`g_price` DECIMAL(8,2) NOT NULL,   -- 价格
 	`g_keywords` VARCHAR(200) ,      -- 商品关键字SEO
 	`g_description` VARCHAR(200),     -- 商品描述SEO
 	`g_img` VARCHAR(300),              -- 商品图片
@@ -240,7 +240,7 @@ CREATE TABLE  `g_price_info`(
   `g_id` INT UNSIGNED NOT NULL,  -- 商品ID
   `gpi_img` VARCHAR(200) ,   -- 图片
   `gpi_sum` INT UNSIGNED NOT NULL DEFAULT 0,  -- 数量
-  `gpi_price` float(8,2)   -- 价格
+  `gpi_price` DECIMAL(8,2)   -- 价格
 )DEFAULT CHARSET =utf8 ENGINE=MyISAM;
 ALTER TABLE `g_price_info` ADD PRIMARY KEY (`gpi_id`);
 ALTER TABLE `g_price_info` MODIFY `gpi_id` INT UNSIGNED AUTO_INCREMENT;

@@ -124,11 +124,17 @@ class Goods
      * @return array 商品详细资料
     */
     public function queryGoods($gId){
-        $sql = $this->getSql(); 
+        $sql = $this->getSql();
         $where = new Where('g_id',$gId);
         $goods = $sql->selectLine('goods_info_v',array('g_id','g_number','g_name','gt_name','g_price','g_reg','g_status','gt_id'),$where);
-        $attr = $sql->selectData('g_attr_v',array('ga_id','ga_value','gta_name','gta_id'),$where);
-        $price = $sql->selectData('g_price_v',array('gp_id','gp_name','gtp_name','gtp_id'),$where);
+        $g_id = $goods['g_id'];
+        $sqls = "SELECT gta_id ,gta_name,(SELECT ga_value FROM g_attr WHERE g_attr.gta_id = gt_attr.gta_id AND g_id={$g_id}) AS ga_value,(SELECT ga_id FROM g_attr WHERE g_attr.gta_id = gt_attr.gta_id AND g_id={$g_id}) AS ga_id FROM gt_attr WHERE gt_id =".$goods['gt_id'];
+        $attr = $sql->queryData($sqls);
+
+        $price = $sql->selectData('gt_price',array('gtp_id','gtp_name'),new Where('gt_id',$goods['gt_id'],'int'));
+        foreach ($price as &$value){
+            $value['val'] = $sql->selectData('g_price',array('gp_id','gp_name'),new Where('gtp_id',$value['gtp_id'],'int'));
+        }   
         $goods['attr'] =$attr;
         $goods['price'] = $price;
         return $goods;
