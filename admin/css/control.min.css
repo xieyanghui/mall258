@@ -1,2 +1,13 @@
-extend ' .top_menu' has no matches
-body{background-color:#E0F8FB}#tops{width:100%;overflow:hidden;background-color:#50D1DE;position:relative;top:0;z-index:10}#tops .top_left{height:50px;display:block;float:left}#tops .top_left li{float:left;font-weight:700;height:50px;line-height:50px;margin-left:5px}#tops .top_menus{overflow:hidden;display:block;float:right}#tops .top_menus .top_menu{margin:0 20px;width:150px;height:50px;line-height:50px;float:right;text-align:center;font-size:22px;font-weight:700;display:block;position:relative;background-color:#50D1DE}#tops .top_menus li.top_menu:hover{background-color:#07A1B1;cursor:pointer}#tops .top_menus .menuClick{background-color:#07A1B1;cursor:pointer}.con{position:relative;overflow:hidden}#menus{position:relative;float:left}#contents{position:relative;float:left;overflow:hidden}#menus>ul>li{height:40px;width:200px;line-height:40px;text-align:center;font-size:24px;margin:10px 25px;cursor:pointer;background-color:#BCEDF2}#menus>ul>li:hover{background-color:#50D1DE}.admin_head_s{width:50px;height:50px;border-radius:25px}.backdrop{top:0;position:fixed;background-color:#000;opacity:.3;z-index:20}#con{float:left}
+body{background-color:#e0f8fb}
+#tops{width:100%;overflow:hidden;background-color:#50d1de;position:relative;top:0;z-index:10}#tops .top_left{height:50px;display:block;float:left}#tops .top_left li{float:left;font-weight:bold;height:50px;line-height:50px;margin-left:5px}
+#tops .top_menus{overflow:hidden;display:block;float:right}#tops .top_menus .top_menu{margin:0 20px;width:150px;height:50px;line-height:50px;float:right;text-align:center;font-size:22px;font-weight:bold;display:block;position:relative;background-color:#50d1de}
+#tops .top_menus li.top_menu:hover{background-color:#07a1b1;cursor:pointer}
+#tops .top_menus .menuClick{background-color:#07a1b1;cursor:pointer}
+.con{position:relative;overflow:hidden}
+#menus{position:relative;float:left}
+#contents{position:relative;float:left;overflow:hidden}
+#menus>ul>li{height:40px;width:200px;line-height:40px;text-align:center;font-size:24px;margin:10px 25px;cursor:pointer;background-color:#bcedf2}
+#menus>ul>li:hover{background-color:#50d1de}
+.admin_head_s{width:50px;height:50px;border-radius:25px}
+.backdrop{top:0;position:fixed;background-color:#000;opacity:.3;z-index:20}
+#con{float:left}

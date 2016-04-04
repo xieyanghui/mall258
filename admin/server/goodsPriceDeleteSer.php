@@ -7,7 +7,7 @@
  */
 $auth = "goodsAdd";
 include_once ("./header.inc.php");
-$gpi_id = !empty($_POST['g_id'])?$_POST['g_id']:null;
+$gpi_id = !empty($_POST['gpi_id'])?$_POST['gpi_id']:null;
 $goods = new Goods();
 $arr = array("status" => FALSE, "megs" => "删除失败！！");
 if($goods->deleteGoodsPrice($gpi_id)){
