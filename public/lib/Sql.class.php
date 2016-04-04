@@ -159,7 +159,7 @@ class Sql
         $conn = $this->getConn();
         $sqlStmt = $conn->stmt_init();
         $sqlStmt->prepare($str);
-        //echo $str;
+       // echo $str;
         if($where->getPrepType() ==""){
             $sqlStmt->execute();
         }else{
@@ -176,6 +176,7 @@ class Sql
         $md = $sqlStmt->result_metadata();
         $params = array();
         while($field = $md->fetch_field()) {
+          //  print_r($field);
             $params[] = &$result[$field->name];
         }
         call_user_func_array(array($sqlStmt,'bind_result'),$params);
