@@ -1,6 +1,6 @@
 <?php
 $auth = "adminAuthUpdate";
-include_once ("../inc/header.inc.php");
+include_once ("./header.inc.php");
 $aa_id = $_POST['aa_id'];
 $aa_nick = $_POST['aa_nick'];
 $aa_remark = $_POST['aa_remark'];

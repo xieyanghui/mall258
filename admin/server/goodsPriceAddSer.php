@@ -6,7 +6,7 @@
  * Time: 21:22
  */
 $auth = "goodsAdd";
-include_once ("../inc/header.inc.php");
+include_once ("./header.inc.php");
 $gpi['g_id'] = !empty($_POST['g_id'])?$_POST['g_id']:null;
 $gpi['gpi_img'] = !empty($_POST['gpi_img'])?$_POST['gpi_img']:null;
 $gpi['gpi_sum'] = !empty($_POST['gpi_sum'])?$_POST['gpi_sum']:null;

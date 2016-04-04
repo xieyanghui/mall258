@@ -1,6 +1,6 @@
 <?php
 $auth = "goodsTypeUpdate";
-include_once ("../inc/header.inc.php");
+include_once ("./header.inc.php");
 $gt['gt_id'] = $_POST['gt_id'];
 !empty($_POST['gt_name'])?$gt['gt_name'] =$_POST['gt_name']:null;
 !empty($_POST['gt_remark'])?$gt['gt_remark'] =$_POST['gt_remark']:null;

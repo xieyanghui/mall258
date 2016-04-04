@@ -191,7 +191,7 @@
 
 //根据消息KEY 判断是否为用户自定义消息
                 "getIsProp": function (x) {
-                    if (this.mags[x])return true;
+                    if(this.mags[x])return true;
                     return false;
                 },
 
@@ -252,13 +252,17 @@
                         //是否异步提交
                         if (verifys.hasOwnProperty("async")) {
                             var suc = verifys['async']['success'] || null;
-                            var bs = verifys['async']['beforeSend'] || null;
+                            if(verifys['async']['beforeSend'] != null){
+                               if(verifys['async']['beforeSend']() == false){
+                                   return false;
+                               }
+                            }
                             $.ajax({
                                 url: from.attr('action'),
                                 data: from.serialize(),
                                 type: "POST",
+                                global: false,
                                 dataType: "json",
-                                beforeSend: bs,
                                 success: suc
                             });
                             return false;

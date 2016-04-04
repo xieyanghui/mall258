@@ -5,7 +5,7 @@
  * Date: 2016/3/7
  * Time: 22:08
  */
-include_once ("../inc/header.inc.php");
+include_once ("./header.inc.php");
 $img = new ImgSpace();
 
 if($_GET['ait_id'] ==1){

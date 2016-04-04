@@ -6,7 +6,7 @@
  * Time: 21:22
  */
 $auth = "goodsAdd";
-include_once ("../inc/header.inc.php");
+include_once ("./header.inc.php");
 $gpi_id = !empty($_POST['g_id'])?$_POST['g_id']:null;
 $goods = new Goods();
 $arr = array("status" => FALSE, "megs" => "删除失败！！");

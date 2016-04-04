@@ -125,22 +125,24 @@ class Goods
     */
     public function queryGoods($gId){
         $sql = $this->getSql();
-        $where = new Where('g_id',$gId);
-        $goods = $sql->selectLine('goods_info_v',array('g_id','g_number','g_name','gt_name','g_price','g_reg','g_status','gt_id'),$where);
+        $where = new Where('g_id',$gId,'int');
+        $goods = $sql->selectLine('goods_info_v',array('g_id','g_number','g_name','g_keywords','g_description','gt_name','g_img','g_price','g_reg','g_status','gt_id'),$where);
         $g_id = $goods['g_id'];
         $sqls = "SELECT gta_id ,gta_name,(SELECT ga_value FROM g_attr WHERE g_attr.gta_id = gt_attr.gta_id AND g_id={$g_id}) AS ga_value,(SELECT ga_id FROM g_attr WHERE g_attr.gta_id = gt_attr.gta_id AND g_id={$g_id}) AS ga_id FROM gt_attr WHERE gt_id =".$goods['gt_id'];
         $attr = $sql->queryData($sqls);
 
         $price = $sql->selectData('gt_price',array('gtp_id','gtp_name'),new Where('gt_id',$goods['gt_id'],'int'));
         foreach ($price as &$value){
-            $value['val'] = $sql->selectData('g_price',array('gp_id','gp_name'),new Where('gtp_id',$value['gtp_id'],'int'));
+            $where = new Where('gtp_id',$value['gtp_id'],'int');
+            $where->setWhere('g_id',$gId,'int');
+            $value['val'] = $sql->selectData('g_price',array('gp_id','gp_name'),$where);
         }   
         $goods['attr'] =$attr;
         $goods['price'] = $price;
         return $goods;
     }
 
-    /**
+ /**
  * 查询商品价格的详细信息
  *
  * @param $gId int 商品ID
@@ -150,7 +152,19 @@ class Goods
     public function queryGoodsPrice($gId){
         $sql = $this->getSql();
         $where = new Where('g_id',$gId);
+        $goods = $sql->selectLine('goods',array('g_text','g_img','g_price'),$where);
         $price =  $sql->selectData('g_price_v',array('gp_id','gp_name','gtp_name','gtp_id'),$where);
+        $price_info =  $sql->selectData('g_price_info',array('gpi_id','gpi_img','gpi_sum','gpi_price'),$where);
+        foreach ($price_info as &$value){
+            $ppl =  $sql->selectData('g_price_list',array('gp_id'),new Where('gpi_id',$value['gpi_id'],'int'));
+            foreach ($ppl as $v){
+                foreach ($price as $v1){
+                    if($v['gp_id'] == $v1['gp_id']){
+                        $value['gpl'][$v['gp_id']] =$v1;
+                    }
+                }
+            }
+        }
         $data =array();
         foreach ($price as &$value){
             $va = $value['gtp_id'];
@@ -163,8 +177,13 @@ class Goods
             unset($value['gtp_id']);
             array_push($data[$va]['gp_value'],$value);
         }
-        return $data;
+        $goods['data'] = $data;
+        $goods['price_info'] = $price_info;
+        return $goods;
+
     }
+
+
 
     /**
      * 增加商品
@@ -182,17 +201,18 @@ class Goods
         $columns = array();
         $values = array();
         foreach($goods as $key=>$value){
-            if(is_array($value) || empty($value)){break;}
+            if(is_array($value) || empty($value)){continue;}
             $columns[$key] = $this->isNumber($key,true);
             array_push($values,$value);
         }
         if($gId = $sql->insert('goods',$columns,$values)){
-            $this->addGoodsAttrPrice($goods['attr'],$goods['price'],$gId);
+            $this->aUAttrPrice($goods['attr'],$goods['a_price'],$goods['u_price'],$gId);
             SystemLog::addSystemLog($aId,'增加商品',$meg);
             return $gId;
         }
         return false;
     }
+
 
     /**
      * 修改商品
@@ -210,7 +230,7 @@ class Goods
         $data = array();
         $b = true;
         foreach($goods as $key=>$value){
-            if(is_array($value) && $key =='g_id'){continue;}
+            if(is_array($value) || $key =='g_id'){continue;}
             array_push($data,array('columnName'=>$key,'value'=>$value,'type'=>$this->isNumber($key,true)));
         }
         if(!empty($data)){
@@ -218,89 +238,65 @@ class Goods
                 $b = false;
             }
         }
-        if(!empty($goods['aAttr']) ||!empty($goods['aPrice'])){
-            if($this->addGoodsAttrPrice($goods['aAttr'],$goods['aPrice'],$goods['gt_id'])){
-                $b = false;
-            }
+        if(!$this->aUAttrPrice($goods['attr'],$goods['a_price'],$goods['u_price'],$goods['g_id'])){
+            $b = false;
         }
-        if(!empty($goods['uAttr']) ||!empty($goods['uPrice'])){
-            if($this->updateGoodsAttrPrice($goods['uAttr'],$goods['uPrice'])){
-                $b = false;
-            }
-        }
-        SystemLog::addSystemLog($aId,'更新商品类型',$meg);
+        SystemLog::addSystemLog($aId,'更新商品',$meg);
         return $b;
     }
+
 
     public function deleteGoods($gId){
         $sql = $this->getSql();
         return $sql->update('goods',new Where('g_id',$gId,'int'),array('columnName'=>'g_status','type'=>'int','value'=>'0'));
     }
+    
     /**
-     * 增加商品属性,价格
+     * 增加或修改商品属性,价格
      *
-     * @param $gAttr array 商品属性 关联数组 key为属性值,value为类型属性ID
+     * @param $attr array 商品属性 关联数组 key为属性值,value为类型属性ID
      *
-     * @param $gPrice array 商品价格属性 关联数组 key为属性值,value为类型属性ID
+     * @param $aPrice array 商品价格属性 关联数组 key为属性值,value为类型属性ID
+     * @param $uPrice array 需要修改商品价格属性 关联数组 key为属性值,value为类型属性ID
      *
      * @param $gId int 商品ID
      *
      * @return boolean 成功返回true,失败返回false
      */
-    public function addGoodsAttrPrice($gAttr,$gPrice,$gId){
+    public function aUAttrPrice($attr,$aPrice,$uPrice,$gId){
         $sql = $this->getSql();
         $b = true;
-        if(!empty($gAttr) && is_array($gAttr)){
+        if(!empty($attr) && is_array($attr)){
             $data = array();
-            foreach($gAttr as $key=>$value) {
-                array_push($data, array($gId, $value, $key));
+            foreach($attr as $key=>$value) {
+                array_push($data, array($gId,$key ,$value ));
             }
+            $sql->delete('g_attr',new Where('g_id',$gId,'int'));
            if(!$sql->insert('g_attr',array('g_id'=>'int','gta_id'=>'int','ga_value'),$data)){
                $b = false;
            }
         }
-        if(!empty($gPrice) && is_array($gPrice)){
+        if(!empty($aPrice) && is_array($aPrice)){
             $data = array();
-            foreach($gPrice as $key=>$value) {
-                array_push($data, array($gId, $value, $key));
+            foreach($aPrice as $key=>$value) {
+                foreach ($value as $v){
+                    if(empty($v)){continue;}
+                    array_push($data, array($gId, $key, $v));
+                }
             }
             if(!$sql->insert('g_price',array('g_id'=>'int','gtp_id'=>'int','gp_name'),$data)){
                 $b = false;
             }
         }
-        return $b;
-    }
-
-    /**
-     * 修改商品属性,价格
-     *
-     * @param $gAttr array 商品属性 关联数组 key为属性ID,value为属性值
-     *
-     * @param $gPrice array 商品价格属性 关联数组 key为价格属性ID,value为价格属性值
-     *
-     * @return boolean 成功返回true,失败返回false
-     */
-    public function updateGoodsAttrPrice($gAttr,$gPrice){
-        $sql = $this->getSql();
-        $b = true;
-        if(!empty($gPrice) && is_array($gPrice)){
-            foreach($gPrice as $key=>$value) {
-                if(!$sql->update('g_price',new Where('gp_id',$key),array($value=>'gp_name'))){
-                    $b = false;
-                }
+        if(!empty($uPrice) && is_array($uPrice)){
+            $data = array();
+            foreach($uPrice as $key=>$value) {
+                $sql->update('g_price',new Where('gp_id',$key,'int'),array($value=>'gp_name'));
             }
         }
-        if(!empty($gAttr) && is_array($gAttr)){
-            foreach($gAttr as $key=>$value) {
-                if(!$sql->update('g_attr',new Where('ga_id',$key),array($value=>'ga_value'))){
-                    $b = false;
-                }
-            }
-        }
+
         return $b;
     }
-
-
 
 
 

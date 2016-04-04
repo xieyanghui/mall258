@@ -11,7 +11,7 @@ a {
   text-decoration: none;
   color: #333333;
 }
-a:hover {
+a:hover  {
   color: red;
   cursor: pointer;
 }
@@ -229,7 +229,23 @@ label.win_row_head {
 //按钮居中
 .center_button{
   &:extend(.button);
+  overflow: hidden;
+  width: 80px;
   margin: 0 auto;
+}
+//按钮居左
+.left_button{
+  &:extend(.button);
+  overflow: hidden;
+  float: left;
+  margin: 10px 20%;
+}
+//按钮居右
+.right_button{
+  &:extend(.button);
+  overflow: hidden;
+  float: right;
+  margin: 10px 20%;
 }
 .add_button{
   &:extend(.button);
@@ -313,6 +329,24 @@ li.list_row_head >span{
   display: block;
   float: left;
 
+}
+/*弹出窗口的关闭按钮*/
+div.show_win_close {
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 40px;
+  height: 40px;
+  text-align: center;
+  line-height: 40px;
+  font-size: 30px;
+  font-weight: bold;
+  color: red;
+}
+/*弹出窗口的关闭按钮*/
+div.show_win_close:hover {
+  background-color: @one_color;
+  cursor: pointer;
 }
 
 ///*列表主标题样式*/

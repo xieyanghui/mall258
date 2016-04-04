@@ -1,14 +1,13 @@
+
 <style type="text/css">
     /*商品详细资料*/
     #goodsAdd2{
-        position: absolute;
         z-index: 100;
         width: 1200px;
         overflow: hidden;
     }
     /*列样式*/
     .win_column{
-        margin-top: -20px;
         border: solid 1px #50D1DE;
         height: 600px;
         overflow: auto;
@@ -77,7 +76,6 @@
 
     /*价格值行*/
     .goods_price_con_info{
-        display: none;
         width: 380px;
         overflow: hidden;
         margin: 5px auto;
@@ -86,7 +84,7 @@
     }
     /*价格值*/
     .goods_price_con_info >div.goods_price_con_list{
-        width: 236px;
+        width: 189px;
         border: hidden;
         height:auto;
         margin: 0;
@@ -161,11 +159,6 @@
     .goods_price_con_util{
         float: right;
     }
-    /*模板*/
-    #goods_price_con_info_parents{
-        display: none;
-    }
-
     /*详细资料列*/
     .goods_all{
         float: right;
@@ -183,13 +176,12 @@
     .win_column_util{
         clear: left;
         width: 100%;
-        height: 100px;
     }
 </style>
-<form action="./server/goodsAdd2Ser.php" method="post" id="goodsAdd2Form">
-    <div id='goodsAdd2' class='win show_win'>
+<form action="<{$HTTP_MODEL}>/server/goodsAU2Ser.php" method="post" id="goodsAU2Form">
+    <div id='goodsAU2' class='win'>
         <input type="hidden" name="g_id" id="g_id" value="<{$g_id}>" />
-        <h1 class="win_head">添加商品详细资料 <div class="show_win_close">×</div></h1>
+        <h1 class="win_head">商品详细资料</h1>
 
         <!--商品价格CRUD-->
         <div class="win_column goods_price">
@@ -205,20 +197,46 @@
             </div>
             <{/foreach}>
             <div class="goods_price_con_info" id="goods_price_default">
-                <div class="goods_price_con_list">
-                    默认价格
-                </div>
+                <div class="goods_price_con_list">默认价格</div>
                 <div class="goods_price_con_img goods_price_con_prop">
-                    <img class="preview_img" src="<{$g_img}>?imageView2/5/w/75/h/75" />
+                    <img class="preview_img" src="<{$g_img}>?imageView2/5/w/33/h/33" />
                 </div>
                 <div class="goods_price_con_price goods_price_con_prop">
                     <div class="goods_td">价格</div>
                     <div class="goods_td"><{$g_price}></div>
                 </div>
             </div>
-
+            <{if !empty($price_info) }>
+            <{foreach $price_info as $info}>
+            <div id="gpi<{$info['gpi_id']}>" class="goods_price_con_info" gpi_id="<{$info['gpi_id']}>">
+                <div class="goods_price_con_list">
+                    <{foreach $info['gpl'] as $gpl}>
+                    <div class="goods_price_con_prop" gtp_id="<{$gpl['gtp_id']}>" title="<{$gpl['gp_name']}>"  gp_id="<{$gpl['gp_id']}>"   >
+                        <div class='goods_td goods_price_con_prop_name'><{$gpl['gtp_name']}></div>
+                        <div class='goods_td goods_price_con_prop_value'><{$gpl['gp_name']}></div>
+                    </div>
+                    <{/foreach}>
+                </div>
+                <div class="goods_price_con_util goods_price_con_prop">
+                    <div class="goods_td i_update" url="goodsPriceAddSer.php">修改</div>
+                    <div class="goods_td i_delete">删除</div>
+                </div>
+                <div class="goods_price_con_img goods_price_con_prop select_img" >
+                    <img img_url="" src="<{$info['gpi_img']}>?imageView2/5/w/33/h/33" class="preview_img goods_price_imgs" />
+                </div>
+                <div class="goods_price_con_price goods_price_con_prop">
+                    <div class="goods_td">价格</div>
+                    <div class="goods_td goods_price_input"><input class="numbers" min="0" type="number" name="price" value="<{$info['gpi_price']}>" ></div>
+                </div>
+                <div class="goods_price_con_sum goods_price_con_prop">
+                    <div class="goods_td">数量</div>
+                    <div class="goods_td goods_sum_input"><input class="numbers" min="0" type="number" name="sum" value="<{$info['gpi_sum']}>"></div>
+                </div>
+            </div>
+            <{/foreach}>
+            <{/if}>
             <!--模板-->
-            <div id="goods_price_con_info_parents">
+            <div id="goods_price_con_info_template">
                 <div class="goods_price_con_list">
                 </div>
                 <div class="goods_price_con_util goods_price_con_prop">
@@ -236,7 +254,6 @@
                     <div class="goods_td">数量</div>
                     <div class="goods_td goods_sum_input"><input class="numbers" min="0" type="number" name="sum" value="0"></div>
                 </div>
-
             </div>
         </div>
 
@@ -246,8 +263,8 @@
             <div id="allEdit"></div>
         </div>
         <div class = "win_column_util">
-            <div class ='button'>取消</div>
-            <div class="button submit_add">提交</div>
+            <div class ='left_button'>取消</div>
+            <div class="right_button">提交</div>
         </div>
     </div>
 </form>
@@ -338,8 +355,8 @@
                     $('#goods_price_con_info_add').attr('id','gpi'+$('#goods_price_con_info_add').attr('gpi_id'));
                 }
             }
-            var sum = $('#goods_price_con_info_parents .goods_sum_input>input').clone();
-            var price = $('#goods_price_con_info_parents .goods_price_input>input').clone();
+            var sum = $('#goods_price_con_info_template .goods_sum_input>input').clone();
+            var price = $('#goods_price_con_info_template .goods_price_input>input').clone();
             var self = $(this).parents('.goods_price_con_info');
 
             self.attr('id','goods_price_con_info_add');
@@ -380,7 +397,7 @@
             data.gpi_price = self.find('input[name="price"]').val();
             data.gp_ids = self.find('.goods_price_con_prop').map(function(){return $(this).attr('gp_id');}).get();
 
-            $.post("./server/"+$(this).attr('url'),data,function(d){
+            $.post("<{$HTTP_MODEL}>/server/"+$(this).attr('url'),data,function(d){
                 toast(d.status,d.megs);
                 self.attr('id','gpi'+d.gpi_id);
                 self.attr('gpi_id',d.gpi_id);
@@ -426,7 +443,7 @@
                 a.addClass('goods_price_con_info_select');
                 //不存在的价格方案就创建
                 if(a.length ==0){
-                    a = $('#goods_price_con_info_parents').clone();
+                    a = $('#goods_price_con_info_template').clone();
                     a.attr('id','goods_price_con_info_add');
                     a.addClass('goods_price_con_info');
                     a.appendTo($('.goods_price'));
@@ -437,7 +454,7 @@
                     var gp_name = gp_li.html();
                     var gtp_id = gp_li.parents('.goods_price_li').attr('gtp_id');
                     var gtp_name = gp_li.parent().siblings('.goods_price_head').html();
-                    a.children('.goods_price_con_list').append(" <div class='goods_price_con_prop' gtp_id='"+gtp_id+"' gp_id='"+gp_ids[gp_id]+"'><div class='goods_td goods_price_con_prop_name'>"+gtp_name+"</div> <div class='goods_td goods_price_con_prop_value'>"+gp_name+"</div> </div>");
+                    a.children('.goods_price_con_list').append(" <div class='goods_price_con_prop' title='"+gp_name+"' gtp_id='"+gtp_id+"' gp_id='"+gp_ids[gp_id]+"'><div class='goods_td goods_price_con_prop_name'>"+gtp_name+"</div> <div class='goods_td goods_price_con_prop_value'>"+gp_name+"</div> </div>");
                 }
                 a.show();
                 listWidth(a.children('.goods_price_con_list'));

@@ -355,6 +355,9 @@ CREATE VIEW `goods_info_v` AS
 		`gt_name` ,
 		`g_price` ,
 		`g_reg`,
+		`g_img`,
+		`g_keywords`,
+		`g_description`,
 		`g_status`,
 		goods.gt_id as `gt_id`
 	FROM goods,goods_type WHERE goods.gt_id = goods_type.gt_id ;

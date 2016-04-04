@@ -32,7 +32,7 @@ class Smartys extends Smarty
             $GLOBALS['content'] = $this->fetch($tpl);
             include_once ($GLOBALS['parent'].".php");
         }else{
-            $this->display($tpl);
+           $this->display($tpl);
         }
 
     }

@@ -1,6 +1,6 @@
 <?php
 
-include_once ("../inc/header.inc.php");
+include_once ("./header.inc.php");
 $a_id = $_POST['a_id'];
 $oldPwd = md5($_POST['oldPwd']);
 $newPwd = md5($_POST['newPwd']);

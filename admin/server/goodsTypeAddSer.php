@@ -1,6 +1,6 @@
 <?php
 $auth = "goodsTypeAdd";
-include_once ("../inc/header.inc.php");
+include_once ("./header.inc.php");
 $gt['gt_number'] = $_POST['gt_number'];
 $gt['gt_name'] = $_POST['gt_name'];
 $gt['gt_remark'] = $_POST['gt_remark'];

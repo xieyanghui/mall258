@@ -42,6 +42,7 @@ class Config{
                 'goodsInfo',
                 'goodsRecommend',
                 'goodsAU',
+                'goodsAU2',
                 'goodsTypeAU'
             )
         )

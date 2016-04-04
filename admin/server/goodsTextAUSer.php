@@ -6,7 +6,7 @@
  * Time: 23:58
  */
 $auth = "goodsAdd";
-include_once ("../inc/header.inc.php");
+include_once ("./header.inc.php");
 $g['g_id'] = $_POST['g_id'];
 $g['g_text'] = $_POST['g_text'];
 $goods = new Goods();

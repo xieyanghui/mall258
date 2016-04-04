@@ -12,4 +12,5 @@ include_once($_SERVER['DOCUMENT_ROOT'].'/public/autoload.php');
 if(!empty($auth)){
     if(!AdminAuth::inAdmin($_SESSION['adminInfo']['a_id'],$auth)){exit(json_encode(array('status'=>false,'megs'=>'权限不够')));}
 }
+$a_id = $_SESSION['adminInfo']['a_id'];
 new Filter(true);

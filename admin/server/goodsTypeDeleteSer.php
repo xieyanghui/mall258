@@ -1,6 +1,6 @@
 <?php
 $auth = "goodsTypeDelete";
-include_once ("../inc/header.inc.php");
+include_once ("./header.inc.php");
 $goods = new Goods;
 $b = $goods->deleteGoodsType($_GET['name'],$_SESSION['adminInfo']['a_id'],"{$_SESSION['adminInfo']['a_nick']} 删除了ID为{$_GET['name']}的商品类型");
 $arr = array("status" => false, "megs" => "删除失败");

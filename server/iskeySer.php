@@ -1,5 +1,5 @@
 <?php
-include_once($_SERVER['DOCUMENT_ROOT'] . '/util/autoload.php');
+include_once($_SERVER['DOCUMENT_ROOT'] . '/public/autoload.php');
 header("Content-Type:text/json;charset=utf-8");
 $value = $_GET['value'];
 $name = $_GET['name'];

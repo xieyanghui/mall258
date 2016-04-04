@@ -1,6 +1,6 @@
 <?php
 $auth = "adminAuthAdd";
-include_once ("../inc/header.inc.php");
+include_once ("./header.inc.php");
 $aa_nick = $_POST['aa_nick'];
 $aa_remark = $_POST['aa_remark'];
 $al_ids = $_POST['al_id'];

@@ -1,6 +1,6 @@
 <?php
 $auth = "adminUpdate";
-include_once ("../inc/header.inc.php");
+include_once ("./header.inc.php");
 $a['a_id'] = $_POST['a_id'];
 $a['aa_id'] = $_POST['aa_id'];
 $a['a_nick'] = $_POST['a_nick'];
