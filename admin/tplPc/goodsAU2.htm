@@ -263,8 +263,8 @@
             <div id="allEdit"><{$g_text|default:""}></div>
         </div>
         <div class = "win_column_util">
-            <div class ='left_button'>取消</div>
-            <div class="right_button">提交</div>
+            <div class ='left_button history_back'>取消</div>
+            <div class="right_button submit_add">提交</div>
         </div>
     </div>
 </form>
@@ -312,6 +312,7 @@
             $.post('./server/goodsTextAUSer.php',{'g_id':$("input[name='g_id']").val(),'g_text':html},function(data) {
                 toast(data.status,data.megs);
                 if(data.status){
+                    $('#');
                 }
             },'json');
         });

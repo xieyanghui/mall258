@@ -402,6 +402,9 @@ $('body').on('click',".ajax_menu",function(){
 $('body').on('click','.submit',function () {
     $(this).parents("form").submit();
 });
+$('body').on('click','.history_back',function () {
+    history.back();
+});
 $(window).resize(function(){
     $('#load_back').width($(document).width());
     $('#load_back').height($(document).height());
