@@ -27,7 +27,7 @@ INSERT INTO `auth_list` (`al_key`,`al_nick`,`al_remark`) VALUES ('goodsRecommend
 INSERT INTO `auth_list` (`al_key`,`al_nick`,`al_remark`) VALUES ('adminInfo','管理员管理',''),('adminDelete','删除管理员','超级权限'),('adminAdd','增加管理员',''),('adminUpdate','修改管理员','');
 INSERT INTO `auth_list` (`al_key`,`al_nick`,`al_remark`) VALUES ('adminAuth','管理员权限管理',''),('adminAuthAdd','增加管理员权限',''),('adminAuthUpdate','修改管理员权限',''),('adminAuthDelete','删除管理员权限','');
 INSERT INTO `auth_list` (`al_key`,`al_nick`,`al_remark`) VALUES ('goodsType','商品类型管理',null),('goodsTypeAdd','增加商品类型',''),('goodsTypeUpdate','修改商品类型',''),('goodsTypeDelete','删除商品类型','');
-INSERT INTO `auth_list` (`al_key`,`al_nick`,`al_remark`) VALUES ('goodsInfo','商品管理',''),('goodsAdd','增加商品',''),('goodsUpdate','修改商品',''),('goodsDelete','删除商品','');
+INSERT INTO `auth_list` (`al_key`,`al_nick`,`al_remark`) VALUES ('goodsInfo','商品管理',''),('goodsIndex','首页商品管理',''),('goodsAdd','增加商品',''),('goodsUpdate','修改商品',''),('goodsDelete','删除商品','');
 --  连接表
 DROP TABLE IF EXISTS `admin_auth_list`;
 CREATE TABLE `admin_auth_list`(
@@ -317,6 +317,24 @@ CREATE TABLE `web_info`(
 
 ALTER TABLE `web_info` ADD PRIMARY KEY (`key`);
 INSERT INTO `web_info`(`key`,`title`,`keywords`,`description`) VALUES('index','星火数码','手机，相机','599只要599');
+
+
+-- 首页滚动页面
+DROP TABLE IF EXISTS `index_roll`;
+CREATE TABLE `index_roll`(
+	`ir_id` INT  NOT NULL ,   -- ID
+	`ir_name` CHAR (100) NOT NULL,  -- 描述
+	`ir_img` CHAR(200) NOT NULL,   -- 图片路径
+	`ir_start_time` TIMESTAMP ,     -- 开始时间
+	`ir_end_time` TIMESTAMP ,       -- 结束时间
+	`ir_status`  TINYINT DEFAULT 1, -- 是否显示
+	`g_id` INT UNSIGNED NOT NULL    -- 商品ID
+)DEFAULT CHARSET =utf8 ENGINE=MyISAM;
+
+
+ALTER TABLE `index_roll` ADD PRIMARY KEY (`ir_id`);
+ALTER TABLE `index_roll` MODIFY `ir_id` INT UNSIGNED AUTO_INCREMENT;
+
 
 DROP VIEW IF EXISTS `admin_info_v`;
 CREATE VIEW `admin_info_v` AS

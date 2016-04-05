@@ -39,6 +39,8 @@
             <div class=" pageButton <{if $page['page']+1 lt $page['countPages']}>  button<{else}> pageOff <{/if}>">下一页</div>
         </li>
         <{/if}>
+
+        <{if empty($table['noSearch'] )}>
         <!--搜索-->
         <li class="list_row_search">
             <input type="text" id="search_value" class="form_div" placeholder="搜索关键字" value="<{$page['search']['key']}>">
@@ -58,6 +60,7 @@
             <span class="list_row_sum" title="每页显示15行">15</span>
             <span class="list_row_sum" title="每页显示20行">20</span>
         </li>
+        <{/if}>
     </ul>
 </div>
 <{/if}>

@@ -36,7 +36,7 @@ class Goods
      */
     public function isNumber($columnName,$type=false)
     {
-        $columnInt = array('g_id','gt_id','gp_id','gta_id','gtap_id','gpi_id','gpi_sum');
+        $columnInt = array('g_id','gt_id','gp_id','gta_id','gtap_id','gpi_id','gpi_sum','ir_id');
         $columnFloat = array('g_price','gpi_price');
         $columnBlob = array('g_text');
         if (in_array($columnName , $columnInt)){
@@ -599,6 +599,47 @@ class Goods
     }
 
 
+    public function queryIndexRoll($ir_id){
+        $sql = $this->getSql();
+        return $sql->selectLine("SELECT ir_id,ir_name,ir_img,ir_start_time,ir_end_time ,g_name ,index_roll.g_id as g_id FROM index_roll,goods WHERE index_roll.g_id = goods.g_id AND ir_id=".$ir_id);
+
+    }
+    public function getIndexRoll(){
+        $sql = $this->getSql();
+        return $sql->queryData("SELECT ir_id,ir_name,ir_img,ir_start_time,ir_end_time ,g_name ,index_roll.g_id as g_id FROM index_roll,goods WHERE index_roll.g_id = goods.g_id");
+
+    }
+    public function updateIndexRoll($ir){
+        $sql = $this->getSql();
+        $where = new Where('ir_id',$ir['ir_id'],'int');
+        $data = array();
+        foreach($ir as $key=>$value){
+            if($value =='ir_id'){continue;}
+            if($value != null){
+                array_push($data,array('columnName'=>$key,'value'=>$value,'type'=>$this->isNumber($key,true)));
+            }
+        }
+        return $sql->update('index_roll',$where,$data);
+    }
+    public function addIndexRoll($ir){
+        $sql = $this->getSql();
+        $column = array();
+        $values = array();
+        foreach($ir as $key=>$value){
+            if($value != null){
+                $column[$key] = $this->isNumber($key,true);
+                array_push($values,$value);
+            }
+        }
+       return $sql->insert('index_roll',$column,$values);
+
+    }
+    public function deleteIndexRoll($ir_id){
+        $sql = $this->getSql();
+        $where = new Where('ir_id',$ir_id,'int');
+        return $sql->delete('index_roll',$where);
+
+    }
 
 }
 

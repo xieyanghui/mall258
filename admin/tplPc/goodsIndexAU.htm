@@ -1,0 +1,115 @@
+<style type="text/css">
+    #goodsTypeUpdate{
+        position: absolute;
+        z-index: 100;
+        width: 400px;
+        overflow: hidden;
+    }
+    div.con_list_input,div.con_list_add{
+        display: block;
+        float: left;
+        width: 60px;
+        height: 25px;
+        padding-left:5px ;
+        overflow: hidden;
+        margin: 0 3px 3px 0 ;
+        border: 1px solid #50D1DE;
+        line-height: 25px;
+    }
+    div.con_list_add:hover{
+        cursor: pointer;
+    }
+    div.con_list_add{
+        font-size: 30px;
+        font-weight: bold;
+        text-align: center;
+        background-color: #EEEEEE;
+    }
+    input.list_form_div{
+        border-style: hidden;
+        outline:none;
+        width: 50px;
+    }
+    div.con_list_inputOff{
+        background-color: #EEEEEE;
+    }
+    div.gt_attr{
+        width: 210px;
+        padding-bottom: 0;
+        padding-right: 0;
+    }
+
+</style>
+<form action="<{$HTTP_MODEL}>/server/goodsIndexAUSer.php" method="post" id="goodsIndexAUForm">
+    <input type="hidden" name="ir_id" value="<{$ir['ir_id']|default:''}>"/>
+    <div id='goodsIndexAU' class='win'>
+        <h1 class="win_head">首页滚动 </h1>
+        <div class="win_row win_row_one">
+            <label class ="win_row_head">描述</label>
+            <div class ="win_row_input"><input value="<{$ir['ir_name']|default:''}>"  type="text" name="gt_number" class="form_div"/></div>
+        </div>
+        <div class="win_row">
+            <label class ="win_row_head">开始时间</label>
+            <div class ="win_row_input"><input value="<{$ir['ir_id']|default:''}>" tabindex="2" type="text" name="gt_name" class="form_div"/></div>
+        </div>
+        <div class="win_row">
+            <label class ="win_row_head">结束时间</label>
+            <div class ="win_row_input"><input value="<{$row['gt_remark']|default:''}>" tabindex="3" type="text" name="gt_remark" class="form_div"/></div>
+        </div>
+        <div class ="win_row_auto">
+            <label class ="win_row_head" >属性</label>
+            <div class ="gt_attr win_row_con" name ='attr'>
+                <{if !empty($row['attr'])}>
+                <{foreach $row['attr'] as $attr}>
+                <div class=' con_list_input con_list_inputOff' ><input type="text" class="list_form_div" name="uAttr<{$attr['gta_id']}>" value="<{$attr['gta_name']}>" title="<{$attr['gta_name']}>" disabled="disabled"/></div>
+                <{/foreach}>
+                <{/if}>
+                <div class="con_list_add " >+</div>
+            </div>
+        </div>
+        <div class ="win_row_auto">
+            <label class ="win_row_head" >价格属性</label>
+            <div class ="gt_attr win_row_con" name ='price'>
+                <{if !empty($row['price'])}>
+                <{foreach $row['price'] as $price}>
+                <div class='con_list_input con_list_inputOff' ><input type="text" class="list_form_div" name="uPrice<{$price['gtp_id']}>" value="<{$price['gtp_name']}>" title="<{$price['gtp_name']}>" disabled="disabled"/></div>
+                <{/foreach}>
+                <{/if}>
+                <div class="con_list_add" >+</div>
+            </div>
+        </div>
+        <div class="win_row">
+            <div class="left_button history_back">取消</div>
+            <div class="right_button submit">提交</div>
+        </div>
+    </div>
+</form>
+<script>
+    $(function(){
+        //验证
+        var succ = function(data){
+            if(data.status){
+
+            }else{
+
+            }
+        }
+        $.checks.checkform($('#goodsTypeAUForm'),{
+            "async": {'success': succ},
+            "gt_name": {
+                "name": "商品类型名称",
+                "check": [{"isLength": [1, 20]}]
+            }
+        });
+
+        $('div.con_list_add').click(function () {
+            var name = $(this).parent().attr("name");
+            $(this).before("<div class='con_list_input'><input class='list_form_div' type='text' name='"+name+"[]' ></div>");
+            $(this).prev().children('input').focus();
+        });
+        $('div.con_list_input').click(function () {
+            $(this).removeClass("con_list_inputOff");
+            $(this).children('input').removeAttr('disabled');
+        });
+    });
+</script>

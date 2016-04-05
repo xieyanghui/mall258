@@ -45,7 +45,9 @@ class Config{
                 'goodsRecommend',
                 'goodsAU',
                 'goodsAU2',
-                'goodsTypeAU'
+                'goodsTypeAU',
+                'goodsIndex',
+                'goodsIndexAU'
             )
         )
     );
