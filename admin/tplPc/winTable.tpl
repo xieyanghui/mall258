@@ -12,7 +12,7 @@
             <{foreach $table['column'] as $c1}>
                 <span title="<{$row[$c1['key']]}>"  style="width:<{$c1['width']|default:'100'}>px"><{$row[$c1['key']]}></span>
             <{/foreach}>
-            <{if $delete }>
+            <{if !empty($delete) }>
             <span class="list_delete" >×</span>
             <{/if}>
         </li>
@@ -63,13 +63,13 @@
 <{/if}>
 
 <!--增加-->
-<{if  $add }>
+<{if  !empty($add) }>
 <div class="add_button button ajax_menu" href="<{$HTTP_MODEL}><{$add['url']}>"><{$add['label']}></div>
 <{/if}>
 <!--删除-->
-<{if $delete }>
+<{if !empty($delete) }>
 <script type="text/javascript">
-    function delete_list(){
+    $(function(){
         $('.list_row > span.list_delete').click(function(e){
             var self = $(this);
             dialogue(function(){
@@ -80,25 +80,22 @@
             });
             e.stopPropagation();
         });
-    }
+    });
 </script>
 <{/if}>
 <!--更新-->
-<{if $update}>
+<{if !empty($update)}>
 <script type="text/javascript">
-    function update_list(){
+    $(function(){
         $('.list_row').each(function(){
             $(this).attr('href','<{$HTTP_MODEL}><{$update}>?id='+$(this).attr('name'));
             $(this).addClass('ajax_menu');
         });
-    }
-
+    });
 </script>
 <{/if}>
 <script type="text/javascript">
     $(function(){
         PageSearch(document.URL);
-        update_list();
-        delete_list();
     });
 </script>

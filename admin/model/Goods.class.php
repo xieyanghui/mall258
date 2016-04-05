@@ -238,7 +238,10 @@ class Goods
                 $b = false;
             }
         }
-        if(!$this->aUAttrPrice($goods['attr'],$goods['a_price'],$goods['u_price'],$goods['g_id'])){
+        $attr = !empty($goods['attr'])?$goods['attr']:null;
+        $a_price = !empty($goods['a_price'])?$goods['a_price']:null;
+        $u_price = !empty($goods['u_price'])?$goods['u_price']:null;
+        if(!$this->aUAttrPrice($attr ,$a_price,$u_price,$goods['g_id'])){
             $b = false;
         }
         SystemLog::addSystemLog($aId,'更新商品',$meg);

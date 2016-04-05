@@ -17,6 +17,6 @@ if(!empty($_GET['g_id']) && ($g = $goods ->queryGoodsPrice($_GET['g_id'])) != nu
     $sma->assign('g_price',$g['g_price']);
     $sma->assign('g_text',$g['g_text']);
     $sma->assign('price_info',$g['price_info']);
-    //print_r($g);
+   // print_r($g);
     $sma->ds('goodsAU2.htm');
 }

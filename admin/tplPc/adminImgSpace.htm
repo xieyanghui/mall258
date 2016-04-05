@@ -1,5 +1,6 @@
 <style type="text/css">
     #img_space{
+        display: block;
         margin-top:10px;
         width: 800px;
         float: left;
@@ -247,17 +248,15 @@
         $('.img_con').on('mouseleave','.img_con_con',function(){
             $(this).children('.img_con_con_mouse').hide();
         });
-        $('.img_con').on('mouseenter','.img_con_con',function(e){
+        $('.img_con').on('mouseenter','.img_con_con',function(){
             $(this).children('.img_con_con_mouse').show();
         });
-
-
     });
 
 </script>
 <{if $select }>
 <script type="text/javascript">
-    $('#img_space_div').on('click','.show_win_close',function(e){
+    $('#img_space_div').on('click','.show_win_close',function(){
         $('#img_space_div').hide();
     });
     $('.img_type_ul').on('click','.img_type_li',function(){
@@ -292,7 +291,7 @@
         //删除分类
         $('.img_type_ul').on('click','.img_type_delete',function(e){
             var type = $(this).parent();
-            $.getJSON('./server/adminImgTypeDeleteSer.php',{'ait_id':$(this).parent().attr('name').substr(3)},function(data){
+            $.getJSON('<{$HTTP_MODEL}>/server/adminImgTypeDeleteSer.php',{'ait_id':$(this).parent().attr('name').substr(3)},function(data){
                 toast(data.status, data.megs);
                 if (data.status){
                     $('.img_type_li').eq(1).addClass('img_type_li_click');
@@ -318,7 +317,7 @@
                     type.html(yuan+"<div class='img_type_update'>✎</div><div class='img_type_delete'>×</div>");
                     return;
                 }
-                $.getJSON('./server/adminImgTypeUpdateSer.php', {'ait_name': value,'ait_id':type.attr('name').substr(3)}, function (data) {
+                $.getJSON('<{$HTTP_MODEL}>//server/adminImgTypeUpdateSer.php', {'ait_name': value,'ait_id':type.attr('name').substr(3)}, function (data) {
                     toast(data.status, data.megs);
                     if (data.status) {
                         type.html(value);
@@ -359,7 +358,7 @@
                 $(this).before("<li class='img_type_li'> <input type='text' class='form_div'></li>");
                 var type = $(this).prev();
                 typeVerify($(this).prev().find('input'),function(value){
-                    $.getJSON('./server/adminImgTypeAddSer.php', {'ait_name': value}, function (data) {
+                    $.getJSON('<{$HTTP_MODEL}>//server/adminImgTypeAddSer.php', {'ait_name': value}, function (data) {
                         toast(data.status, data.megs);
                         if (data.status) {
                             type.attr('name','img'+data.id);
@@ -421,7 +420,7 @@
         $('.img_con').on('blur','input',function(e){
             if(con_name_temp == $(this).val()){return;}
             var slfe = $(this);
-            $.getJSON('./server/adminImgSpaceUpdateSer.php',{'ais_id':$(this).parent().parent().attr('name').substr(4),'ais_name':$(this).val()},function(data){
+            $.getJSON('<{$HTTP_MODEL}>//server/adminImgSpaceUpdateSer.php',{'ais_id':$(this).parent().parent().attr('name').substr(4),'ais_name':$(this).val()},function(data){
                 toast(data.status,data.megs);
                 if(!data.status){
                     slfe.val(con_name_temp);
@@ -439,7 +438,7 @@
             slfe.children(".img_con_con[select='1']").map(function(){
                 ais_id.push($(this).attr('name').substr(4));
             });
-            $.getJSON('./server/adminImgSpaceDeleteSer.php',{'ais_id':ais_id,'ait_id':ait_id},function(data){
+            $.getJSON('<{$HTTP_MODEL}>//server/adminImgSpaceDeleteSer.php',{'ais_id':ais_id,'ait_id':ait_id},function(data){
                 toast(data.status,data.megs);
                 if(data.status){
                     if(ait_id == 1){
@@ -487,7 +486,7 @@
             con.map(function(){
                 ais_id.push($(this).attr('name').substr(4));
             });
-            $.getJSON('./server/adminImgSpaceUpdateSer.php',{'ais_id':ais_id,'ait_id':ait_id},function(data){
+            $.getJSON('<{$HTTP_MODEL}>//server/adminImgSpaceUpdateSer.php',{'ais_id':ais_id,'ait_id':ait_id},function(data){
                 toast(data.status,data.megs);
                 if(data.status){
                     con.children('.img_con_con_click').hide();
@@ -543,7 +542,7 @@
             var res = JSON.parse(info);
             div.children('.img_con_con_img').append("<img class='preview' src='"+domain + "/" + res.key + "?imageView2/5/w/100/h/100"+"'>");
             var ait_id = div.parent().attr('name').substr(3);
-            $.getJSON('./server/adminImgSpaceAddSer.php',{'ais_name':file.name.substr(0,file.name.lastIndexOf('.')),'ais_img_url':domain + "/" + res.key,'ait_id':ait_id},function(data){
+            $.getJSON('<{$HTTP_MODEL}>//server/adminImgSpaceAddSer.php',{'ais_name':file.name.substr(0,file.name.lastIndexOf('.')),'ais_img_url':domain + "/" + res.key,'ait_id':ait_id},function(data){
                 toast(data.status,data.megs);
                 if(data.status){
                     div.children('.img_con_con_time').html("刚刚");

@@ -4,15 +4,29 @@
     }
     .con_value_input{
         overflow: hidden;
+        width: 180px;
         margin: 3px 0;
     }
+    #adminInfo{
+        width: 400px;
+    }
+    .row_con_head{
+        width: 60px;
+        text-align: right;
+        float: left;
+        font-size: 10px ;
+        color:#07A1B1;
+    }
+    .upload_img_div{
+        width: 75px;
+        height: 75px;
+    }
 </style>
-<form action="./server/adminPwdImgSer.php" method="post" id="adminForm">
+<form action="<{$HTTP_MODEL}>/server/adminPwdImgSer.php" method="post" id="adminForm">
     <input type="hidden" name="a_id" value="<{$row['a_id']}>" />
     <div id='adminInfo' class='win '>
         <h1  class="win_head" >我的信息</h1>
-
-        <div class ="win_row">
+        <div class ="win_row win_row_one">
             <label class ="win_row_head">登录名</label>
             <div  class ="win_row_input"> <input  type="text" name="a_name" class="form_div" disabled="disabled" value="<{$row['a_name']}>" /></div>
         </div>
@@ -37,39 +51,31 @@
             </div>
         </div>
         <div class ="win_row_auto">
-            <label class ="win_row_head" >头像</label>
+            <label class ="win_row_head">头像</label>
             <div class ="win_row_con">
-                <div id="adminHeadImg">
-                    <img src="<{$row['a_img']}>?imageView2/5/w/75/h/75"/>
+                <div class="upload_img_div">
+                    <img class="preview_img select_img" src="<{$row['a_img']}>?imageView2/5/w/75/h/75"/>
                     <input  type="hidden" name="a_img"/>
                 </div>
-                <div class="uploadImg">
-                    <div id="imgUp" class="button">选择图片</div>
-                    <div class="bars"><div id="bar"></div></div>
-                </div>
+                <div class="upload_img_button button select_img" preview=".upload_img_div >img">选择图片</div>
             </div>
         </div>
         <div class ="win_row">
-            <div class="submit button">提交</div>
+            <div class="submit center_button">提交</div>
         </div>
     </div>
 </form>
 <script type="text/javascript">
     $(function(){
-        $('.submit').click(function () {
-            $(this).parents("form").submit();
-        });
-
         function succ(data) {
             toast(data.status, data.megs);
-            $('#contents').load('./inc/adminPwdImg.php');
         }
-
         function bs() {
-            $newPwd = $("#adminForm input[name='newPwd']").val() || null;
-            $oldPwd = $("#adminForm input[name='oldPwd']").val() || null;
-            $verifyPwd = $("#adminForm input[name='verifyPwd']").val() || null;
+            var $newPwd = $("#adminForm input[name='newPwd']").val() || null;
+            var $oldPwd = $("#adminForm input[name='oldPwd']").val() || null;
+            var $verifyPwd = $("#adminForm input[name='verifyPwd']").val() || null;
             if(($newPwd ==null && $oldPwd ==null && $verifyPwd ==null)||($newPwd !=null && $oldPwd !=null && $verifyPwd !=null) ){
+                $('input[name="a_img"]').val($('.upload_img_div >img').attr('img_url'));
                 return true;
             }
             $("#show_pwd_meg").append("<span class='checker'>密码不能为空</span>");
@@ -90,25 +96,5 @@
                 "location":"show_pwd_meg"
             }
         });
-
-
-
-    });
-    $(function(){
-        //上传头像
-        var up = getUpload();
-        up.browse_button = "imgUp";
-        //up.container = "adminHeadImg";
-        up['init'].UploadProgress = function(up,file){
-            $("#bar").css("width",file.percent+"%");
-        };
-        up['init'].FileUploaded = function (up, file, info) {
-            var domain = up.getOption('domain');
-            var res = JSON.parse(info);
-            $("#adminHeadImg>img").attr("src", domain + "/" + res.key + "?imageView2/5/w/75/h/75");
-            $("#adminHeadImg>input[name='a_img']").val(domain + "/" + res.key);
-            $("#bar").css("background-color","#50D1DE");
-        };
-        var uploader = Qiniu.uploader(up);
     });
 </script>

@@ -105,11 +105,12 @@ class Admin
      */
     public function searchAdmin($name,$start, $sum, $sortLine = "a_id", $sort = "asc")
     {
-        $sql = new Sql;
+
         $where =new Where($name['searchLine'],$name['key'],'string','AND','LIKE');
         if(empty($sortLine)){$sortLine = "a_id";}
         if(empty($sort)){$sort = "asc";}
         $where->setWhere('a_status',1);
+        $sql = new Sql;
         $count = $sql->selectLine('admin_info_v',"COUNT(*) as count",$where);
         $where->setWhereEnd("ORDER BY `$sortLine` $sort   limit $start,$sum");
         $data = $sql->selectData('admin_info_v',array('a_id','a_name','a_reg','aa_nick','a_img','a_nick'),$where);
@@ -228,9 +229,9 @@ class Admin
      */
     public function updateAdmins($admin,$aId,$meg)
     {
+        if($admin['a_id'] ==1){return false;}
         $sql = new Sql;
         $values = array();
-        if($admin['a_id'] ==1){return false;}
         foreach($admin as $key=>$value){
             if($key=='a_name' || $key=='a_nick'|| $key=='aa_id'){
                 array_push($values,array('columnName'=>$key,'value'=>$value,'type'=>$this->isNumber($key,true)));
@@ -340,17 +341,22 @@ class Admin
      *
      * @return boolean 成功返回true,失败返回false
      */
-    public  function addAdminAuth($name,$remark,$auth,$aId,$meg){
+    public  function addAdminAuth($aa,$aId,$meg){
         $sql = new Sql;
+        $name = !empty($aa['aa_nick'])?$aa['aa_nick']:"";
+        $remark = !empty($aa['aa_remark'])?$aa['aa_remark']:"";
         $aaId = $sql->insert('admin_auth',array('aa_nick','aa_remark'),array($name,$remark));
         $data= array();
-        foreach((array)$auth as $value){
-            array_push($data,array($aaId,$value));
+        if(!empty($aa['auth']) && is_array($aa['auth'])){
+            echo 'sss';
+            foreach($aa['auth'] as $value){
+                array_push($data,array($aaId,$value));
+            }
+            if($sql->insert('admin_auth_list',array('aa_id'=>'int','al_id'=>'int'),$data)){
+                return SystemLog::addSystemLog($aId,'增加权限组',$meg);
+            }
         }
-        if($sql->insert('admin_auth_list',array('aa_id'=>'int','al_id'=>'int'),$data)){
-            return SystemLog::addSystemLog($aId,'增加权限组',$meg);
-        }
-        return false;
+        return true;
        // $sqls = "INSERT INTO `admin_auth`(`aa_nick` ,`aa_remark`) VALUES ('$name','$remark') ;";
         //$aa_id = $sql->executeid($sqls);
         //$row = $sql->queryLine("SELECT `aa_id` FROM admin_auth WHERE `aa_nick` = '$name';");
@@ -367,13 +373,7 @@ class Admin
     /**
      * 更新权限组
      *
-     * @param $aaId int 权限组ID
-     *
-     * @param $name string 权限组名
-     *
-     * @param $remark string 权限组备注
-     *
-     * @param $auth array 权限ID集合
+     * @param $aa int 权限组
      *
      * @param $aId int 操作者ID
      *
@@ -381,26 +381,26 @@ class Admin
      *
      * @return boolean 成功返回true,失败返回false
      */
-    public function updateAdminAuth($aaId ,$name,$remark,$auth,$aId,$meg){
+    public function updateAdminAuth($aa,$aId,$meg){
         $sql = new Sql;
-        if($aaId ==1 || $aaId ==2){ return false; }
-        $where = new Where('aa_id',$aaId);
+        if($aa['aa_id'] ==1 || $aa['aa_id'] ==2){ return false; }
+        $where = new Where('aa_id',$aa['aa_id']);
         $values = array();
         $b = true;
-        if($name !=null){
-            array_push($values,array('columnName'=>'aa_nick','value'=>$name,'type'=>'string'));
+        if(!empty($aa['aa_nick'])){
+            $values[$aa['aa_nick']]='aa_nick';
         }
-        if($remark !==null){
-            array_push($values,array('columnName'=>'aa_remark','value'=>$remark,'type'=>'string'));
+        if(!empty($aa['aa_remark'])){
+            $values[$aa['aa_remark']] = 'aa_remark';
         }
         if(!empty($values)){
             $b = $sql->update('admin_auth',$where,$values);
         }
-        if(is_array($auth)){
-            if($sql->delete('admin_auth_list',$where) && !empty($auth)){
+        if(!empty($aa['auth']) &&is_array($aa['auth'])){
+            if($sql->delete('admin_auth_list',$where)){
                 $data = array();
-                foreach((array)$auth as $value){
-                    array_push($data,array($aaId,$value));
+                foreach($aa['auth'] as $value){
+                    array_push($data,array($aa['aa_id'],$value));
                 }
                 $b =  $sql->insert('admin_auth_list',array('aa_id'=>'int','al_id'=>'int'),$data);
             }

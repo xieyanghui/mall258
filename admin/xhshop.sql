@@ -35,7 +35,6 @@ CREATE TABLE `admin_auth_list`(
 	`aa_id` INT UNSIGNED NOT NULL   -- 权限ID
 )DEFAULT CHARSET = utf8 ENGINE=MyISAM;
 ALTER TABLE `admin_auth_list` ADD PRIMARY KEY (`al_id`,`aa_id`);
-INSERT INTO `admin_auth_list` (aa_id,al_id) VALUES (1,1),(1,2),(1,3),(1,4),(1,5),(1,6),(1,7),(1,8);
 
 -- 管理员
 DROP TABLE IF EXISTS `admin`;

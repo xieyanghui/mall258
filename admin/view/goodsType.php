@@ -8,6 +8,7 @@
 include_once("header.inc.php");
 $goods = new Goods();
 $table = array(
+    'title'=>'商品类型列表',
     'id'=>'gt_id',
     'column'=>array(
         array('name'=>'编号','key'=>'gt_number','width'=>"150"),

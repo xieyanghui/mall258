@@ -29,6 +29,8 @@ class Config{
         'control'=>array(
             'menuSystem'=>array(
                 'adminInfo',
+                'adminAU',
+                'adminAuthAU',
                 'systemLog',
                 'adminAuth',
                 'adminPwdImg',
