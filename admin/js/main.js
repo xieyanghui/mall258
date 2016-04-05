@@ -399,10 +399,12 @@ $('body').on('click',".ajax_menu",function(){
         loading.end();
     });
 });
+
+
 $('body').on('click','.submit',function () {
     $(this).parents("form").submit();
 });
-$('body').on('click','.history_back',function () {
+$('body').on('click','.history_back',function(){
     history.back();
 });
 $(window).resize(function(){

@@ -1,5 +1,6 @@
 <?php
 // 退出服务
+if (!isset($_SESSION)) {session_start();};
 session_unset();
 require_once($_SERVER['DOCUMENT_ROOT'] . '/public/autoload.php');
 header("Content-Type:text/html;charset=utf-8");

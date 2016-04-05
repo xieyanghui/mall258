@@ -40,58 +40,61 @@
     }
 
 </style>
-<form action="./server/goodsTypeUpdateSer.php" method="post" id="goodsTypeUpdateForm">
-    <input type="hidden" name="gt_id" value="<{$row['gt_id']}>"/>
-    <div id='goodsTypeUpdate' class='win show_win'>
-        <h1 class="win_head">修改商品类型 <div class="show_win_close">×</div></h1>
-        <div class="win_row">
+<form action="<{$HTTP_MODEL}>/server/goodsTypeAUSer.php" method="post" id="goodsTypeAUForm">
+    <input type="hidden" name="gt_id" value="<{$row['gt_id']|default:''}>"/>
+    <div id='goodsTypeAU' class='win'>
+        <h1 class="win_head">商品类型详细 </h1>
+        <div class="win_row win_row_one">
             <label class ="win_row_head">编号</label>
-            <div class ="win_row_input"><input disabled="disabled" value="<{$row['gt_number']}>"  type="text" name="gt_number" class="form_div"/></div>
+            <div class ="win_row_input"><input value="<{$row['gt_number']|default:''}>"  type="text" name="gt_number" class="form_div"/></div>
         </div>
         <div class="win_row">
             <label class ="win_row_head">商品类型名</label>
-            <div class ="win_row_input"><input value="<{$row['gt_name']}>" tabindex="2" type="text" name="gt_name" class="form_div"/></div>
+            <div class ="win_row_input"><input value="<{$row['gt_name']|default:''}>" tabindex="2" type="text" name="gt_name" class="form_div"/></div>
         </div>
         <div class="win_row">
             <label class ="win_row_head">备注</label>
-            <div class ="win_row_input"><input value="<{$row['gt_remark']}>" tabindex="3" type="text" name="gt_remark" class="form_div"/></div>
+            <div class ="win_row_input"><input value="<{$row['gt_remark']|default:''}>" tabindex="3" type="text" name="gt_remark" class="form_div"/></div>
         </div>
         <div class ="win_row_auto">
             <label class ="win_row_head" >属性</label>
             <div class ="gt_attr win_row_con" name ='attr'>
-                <{section name=index loop=$row['attr']}>
-                <div class=' con_list_input con_list_inputOff' ><input type="text" class="list_form_div" name="uAttr<{$row['attr'][index]['gta_id']}>" value="<{$row['attr'][index]['gta_name']}>" title="<{$row['attr'][index]['gta_name']}>" disabled="disabled"/></div>
-                <{/section}>
+                <{if !empty($row['attr'])}>
+                <{foreach $row['attr'] as $attr}>
+                <div class=' con_list_input con_list_inputOff' ><input type="text" class="list_form_div" name="uAttr<{$attr['gta_id']}>" value="<{$attr['gta_name']}>" title="<{$attr['gta_name']}>" disabled="disabled"/></div>
+                <{/foreach}>
+                <{/if}>
                 <div class="con_list_add " >+</div>
             </div>
         </div>
         <div class ="win_row_auto">
             <label class ="win_row_head" >价格属性</label>
             <div class ="gt_attr win_row_con" name ='price'>
-                <{section name=index loop=$row['price']}>
-                <div class='con_list_input con_list_inputOff' ><input type="text" class="list_form_div" name="uPrice<{$row['price'][index]['gtp_id']}>" value="<{$row['price'][index]['gtp_name']}>" title="<{$row['price'][index]['gtp_name']}>" disabled="disabled"/></div>
-                <{/section}>
+                <{if !empty($row['price'])}>
+                <{foreach $row['price'] as $price}>
+                    <div class='con_list_input con_list_inputOff' ><input type="text" class="list_form_div" name="uPrice<{$price['gtp_id']}>" value="<{$price['gtp_name']}>" title="<{$price['gtp_name']}>" disabled="disabled"/></div>
+                <{/foreach}>
+                <{/if}>
                 <div class="con_list_add" >+</div>
             </div>
         </div>
         <div class="win_row">
-            <div class="button cancel">取消</div>
-            <div class="submit button">提交</div>
+            <div class="left_button history_back">取消</div>
+            <div class="right_button submit">提交</div>
         </div>
     </div>
 </form>
 <script>
-    function succ(data) {
-        toast(data.status, data.megs);
-        Resize.resizeF5('./inc/goodsType.php');
-    }
     $(function(){
-        //提交
-        $('.submit').click(function () {
-            $(this).parents("form").submit();
-        });
         //验证
-        $.checks.checkform($('#goodsTypeUpdateForm'),{
+        var succ = function(data){
+            if(data.status){
+
+            }else{
+
+            }
+        }
+        $.checks.checkform($('#goodsTypeAUForm'),{
             "async": {'success': succ},
             "gt_name": {
                 "name": "商品类型名称",

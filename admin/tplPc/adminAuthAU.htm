@@ -1,0 +1,46 @@
+<style type="text/css">
+    .auth_list{
+        width: 300px;
+    }
+</style>
+<form action="<{$HTTP_MODEL}>/server/adminAuthAUSer.php" method="post" id="adminAuthAUForm">
+    <input type="hidden" name="aa_id" value="<{$row['aa_id']|default:''}>" />
+    <div id='adminAuthAU' class='win '>
+        <h1 class="win_head">权限组详细 </h1>
+        <div class="win_row win_row_one">
+            <label class ="win_row_head">权限组名</label>
+            <div class ="win_row_input"><input tabindex="1" value="<{$row['aa_nick']|default:''}>" type="text" name="aa_nick" class="form_div"/></div>
+        </div>
+        <div class="win_row">
+            <label class ="win_row_head">备注</label>
+            <div class ="win_row_input"><input tabindex="2" value="<{$row['aa_remark']|default:''}>" type="text" name="aa_remark" class="form_div"/></div>
+        </div>
+        <div class ="win_row_auto">
+            <label class ="win_row_head" >权限列表</label>
+            <div class ="win_row_con auth_list">
+                <{foreach $authList as $list}>
+                <div >
+                    <label title="<{$list['al_remark']}>" ><input name="al_id[]" tabindex="3" type="checkbox" <{$list['checked']|default:''}> value="<{$list['al_id']}>"/> <{$list['al_nick']}></label>
+
+                </div>
+                <{/foreach}>
+            </div>
+        </div>
+
+        <div class="win_row">
+            <div class="left_button history_back">取消</div>
+            <div class="submit left_button">提交</div>
+        </div>
+    </div>
+</form>
+<script>
+    $(function(){
+        //验证
+        $.checks.checkform($('#adminAuthAUForm'), {
+            "async": {'success': function(data){
+                toast(data.status,data.megs);
+            }}
+        });
+
+    });
+</script>

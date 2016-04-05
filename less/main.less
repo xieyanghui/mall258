@@ -1,0 +1,66 @@
+@import "config";
+body,div,ul,li,label{
+  font-size: 12px ;
+  margin: 0;
+  padding: 0;
+}
+ul{
+  list-style: none;
+}
+a {
+  text-decoration: none;
+  color: #333333;
+}
+a:hover  {
+  color: red;
+  cursor: pointer;
+}
+//顶部
+#top{
+  position: relative;
+  height: 40px;
+  width: 100%;
+  background-color: @two_color;
+  line-height: 40px;
+  .top_util{
+    width: 1200px;
+    margin: 0 auto;
+    text-align: center;
+    .top_left{
+      float: left;
+    }
+    .top_right{
+      float: right;
+      li ,span{
+        float: left;
+      }
+      li{
+        width: 60px;
+        text-align: center;
+      }
+
+    }
+
+    .top_center{
+      display: inline-block;
+      width: 400px;
+      height: 30px;
+      background-color: #fff;
+      margin-top: 5px;
+      border-radius: 15px;
+      padding: 0 15px;
+      overflow: hidden;
+      #search{
+        display: block;
+        outline:none;
+        border: hidden;
+        height: 28px;
+        width: 350px;
+        float: left;
+      }
+      .search_button{
+        float: left;
+      }
+    }
+  }
+}

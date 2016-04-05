@@ -8,6 +8,7 @@
 include_once("header.inc.php");
 $goods = new Goods();
 $table = array(
+    'title'=>'商品列表',
     'search'=>true,
     'id'=>'g_id',
     'column'=>array(

@@ -8,8 +8,18 @@
 $auth ='systemLog';
 include_once("header.inc.php");
 $log = new SystemLog();
-$columnName = array('sl_key'=>'事件','sl_content'=>'详细内容','a_nick'=>'管理员','sl_date'=>'时间');
-$sp = new SearchPage($columnName,$_GET);
+$table = array(
+    'title'=>'系统日记',
+    'id'=>'sl_id',
+    'search'=>true,
+    'column'=>array(
+        array('name'=>'事件','key'=>'sl_key','width'=>"150"),
+        array('name'=>'详细内容','key'=>'sl_content','width'=>"200"),
+        array('name'=>'管理员','key'=>'a_nick','width'=>"200"),
+        array('name'=>'时间','key'=>'sl_date','width'=>"150")
+    )
+);
+$sp = new SearchPage($_GET);
 $data = array();
 if($sp->isSearch()){
     $data = call_user_func_array(array($log,'searchSystemLog'),$sp->getParam());
@@ -18,8 +28,7 @@ if($sp->isSearch()){
 }
 
 $sma = new Smartys;
-$sma->assign('myOptions',$columnName);
-$sma->assign('mySelect',$sp->getSearchLine());
+$sma->assign('table',$table);
 $sma->assign('page', $sp->getPages($data['count']));
-$sma->assign('row' ,$data['data']);
-$sma->display('systemLog.htm');
+$sma->assign('data' ,$data['data']);
+$sma->ds('winTable.tpl');

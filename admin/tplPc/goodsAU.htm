@@ -62,7 +62,6 @@
             </div>
         </div>
 
-
         <div class="win_column">
         <div class ="win_row_auto win_row_one">
             <label class ="win_row_head" >属性</label>
@@ -100,8 +99,8 @@
         </div>
             </div>
         <div class="win_row">
-            <div class="button g_cancel">取消</div>
-            <div class="g_submit button submit">NEXT</div>
+            <div class="left_button history_back">取消</div>
+            <div class="right_button submit">NEXT</div>
         </div>
     </div>
 </form>
@@ -122,9 +121,6 @@
 <script>
 
     $(function(){
-        $('.g_cancel').click(function(){
-            history.back();
-        });
         $('#goodsAU').on('click','.con_list_add',function(){
             var name = $(this).parent().attr("id");
             var price = $('#con_list_input_template').clone();
@@ -133,11 +129,15 @@
             $(this).before(price);
             $(this).prev().children('input').focus();
         });
+
+
         //验证
         var su = function(data){
-            toast(data.status,data.megs);
+            history.pushState({foo:'bar'},"aaa",'<{$HTTP_MODEL}>/view/goodsAU2.php?g_id='+data.g_id);
             if(data.status){
                 $('#contents').load('<{$HTTP_MODEL}>/view/goodsAU2.php?g_id='+data.g_id);
+            }else{
+                toast(data.status,data.megs);
             }
         };
         $.checks.checkform($('#goodsAUForm'),{

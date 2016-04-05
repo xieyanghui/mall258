@@ -19,4 +19,4 @@ if(empty($row['a_img'])){
 
 $sma = new Smartys;
 $sma->assign('row' ,$row);
-$sma->display('adminPwdImg.htm');
+$sma->ds('adminPwdImg.htm');

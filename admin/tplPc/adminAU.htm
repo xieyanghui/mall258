@@ -1,0 +1,86 @@
+<style type="text/css">
+    #adminUpdate{
+        position: absolute;
+        z-index: 100;
+        width: 500px;
+        overflow: hidden;
+    }
+    .win_row_span{
+        display: block;
+        height: 30px;
+        line-height: 30px;
+        font-size: 20px;
+        font-weight: bold;
+    }
+</style>
+<form id="adminAUForm" action="<{$HTTP_MODEL}>/server/adminAUSer.php" method="post">
+    <div id="adminAU" class=" win">
+        <input type="hidden" name="a_id" value="<{$row['a_id']|default:''}>"/>
+        <h1 class="win_head">管理员详细</h1>
+        <{if !empty($row['a_id']) }>
+        <div class="win_row win_row_one">
+            <label class="win_row_head" >编号</label>
+            <div class="win_row_input"><span class="win_row_span" ><{$row['a_id']|default:''}></span></div>
+        </div>
+        <{/if}>
+        <div class="win_row <{if empty($row['a_id'])}> win_row_one <{/if}>">
+            <label class="win_row_head">管理员登录名</label>
+            <div class="win_row_input"><input <{if !empty($row['a_id'])}>disabled  name="name"<{else}>name="a_name" <{/if}> tabindex="1" value="<{$row['a_name']|default:''}>" type="text" name="a_name" class="form_div"/></div>
+        </div>
+        <div class="win_row" >
+            <label class="win_row_head">管理员姓名</label>
+            <div class="win_row_input" > <input name ="a_nick" tabindex="2" type="text" class="form_div" value="<{$row['a_nick']|default:''}>" /></div>
+        </div>
+        <{if empty($row['a_id']) }>
+        <div class="win_row">
+            <label class ="win_row_head">密码</label>
+            <div class ="win_row_input"><input tabindex="3" type="password" name="a_pwd" class="form_div"/></div>
+        </div>
+        <div class ="win_row_auto">
+            <label class ="win_row_head">头像</label>
+            <div class ="win_row_con">
+                <div class="upload_img_div">
+                    <img class="preview_img select_img" src="<{$ADMIN_HEAD_DEFAULT}>?imageView2/5/w/75/h/75"/>
+                    <input  type="hidden" name="a_img"/>
+                </div>
+                <div class="upload_img_button button select_img" preview=".upload_img_div >img">选择图片</div>
+            </div>
+        </div>
+        <{/if}>
+        <div class = "win_row_auto" >
+                <label class="win_row_head">管理员权限</label>
+                <div class="win_row_con">
+                    <{foreach $adminAuth as $auth}>
+                    <label title="<{$auth['aa_remark']}>"><input  name="aa_id"  type="radio" value="<{$auth['aa_id']}>" <{$auth['checked']|default:'' }> /><{$auth['aa_nick']}> </label>
+                    <{/foreach}>
+                </div>
+            </div>
+
+        <div>
+            <div class="left_button history_back">取消</div>
+            <div class="right_button submit">提交</div>
+        </div>
+    </div>
+</form>
+<script type="text/javascript">
+    $(function () {
+        $.checks.checkform($('#adminAUForm'),{
+            "async": {'success': function(data){
+                toast(data.status,data.megs);
+
+            }},
+            "a_name": {
+                "name": "登录名",
+                "check": ["noSpechars", {"isLength": [4, 20]}, {"isAjax": ["/server/iskeySer.php"]}]
+            },
+            "a_nick": {
+                "name": "姓名",
+                "check": [{"isLength": [2, 20]}]
+            },
+            "a_pwd": {
+                "name": "密码",
+                "check": [{"isLength": [6, 20]}]
+            }
+        });
+    });
+</script>

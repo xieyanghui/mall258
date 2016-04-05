@@ -16,7 +16,7 @@ switch ($name) {
         $table = 'admin_auth';
         $where = new Where('aa_nick',$value);
         break;
-    case 'adminAddForm.a_name':
+    case 'adminAUForm.a_name':
         $table = 'admin';
         $where = new Where('a_name',$value);
         break;
