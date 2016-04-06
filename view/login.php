@@ -6,6 +6,10 @@
  * Time: 上午4:39
  */
 include_once ('header.inc.php');
+new Filter(true);
 if(!empty($_SESSION['userInfo'])){
-    exit(json_encode(array()));
+    exit('您已经登录啦');
+}else{
+    $sma = new Smartys;
+    $sma->display('login.htm');
 }
