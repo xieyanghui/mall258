@@ -18,7 +18,8 @@ var define;
         // 全局模式
         factory(window.jQuery);
     }
-})(function($){
+})(
+    function($){
     
     // 验证是否引用jquery
     if (!$ || !$.fn || !$.fn.jquery) {

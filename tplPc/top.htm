@@ -120,7 +120,8 @@
             "async": {'success': function(data){
                 toast(data.status,data.megs);
             }},
-            "l_name": {
+            "u_name": {
+
                 "name": "用户名",
                 "check": ["noSpechars", {"isLength": [4, 20]}, {"isAjax": ["/server/iskeySer.php"]}]
             },

@@ -3,6 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <title>什么 </title>
+    <script src="//apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+    <script>
+        (function(){
+
+        })(function(){
+            alert('aaa');
+            (function(){
+                alert('bbb');
+            })();
+            (function(){
+                if($)alert('vvv');
+            })($);
+        }());
+    </script>
 </head>
 <body>
 
