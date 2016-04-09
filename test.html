@@ -1,24 +1,24 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <title>什么 </title>
-    <script src="//apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js" type="text/javascript" charset="utf-8"></script>
-    <script>
-        (function(){
 
-        })(function(){
-            alert('aaa');
-            (function(){
-                alert('bbb');
-            })();
-            (function(){
-                if($)alert('vvv');
-            })($);
-        }());
+    <script src="//cdn.bootcss.com/require.js/2.1.22/require.min.js" data-main="js/main-1.js" type="text/javascript" charset="utf-8"></script>
+    <script type="text/javascript">
+        function f(){
+            this.aa = '';
+        }
+        var a = new f();
+        alert(typeof a);
+//        window.onload= function(){
+//            require(["jquery","underscore"],function($,_){
+//                $(function(){
+//                    _.each([1,2,3],alert);
+//                })
+//            });
+//        };
     </script>
 </head>
 <body>
-
+<span>body</span>
 </body>
 </html>
