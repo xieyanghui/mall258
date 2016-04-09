@@ -71,7 +71,7 @@
         <div class="float_row">
             <label class="float_row_head" for="rs_pwd">重复密码: </label>
             <div class="float_row_input">
-                <input type="password" name="rs_pwd" id="rs_pwd" class="form_div"/>
+                <input type="password" name="us_pwd" id="rs_pwd" class="form_div"/>
             </div>
         </div>
         <div class="float_row">
@@ -120,17 +120,13 @@
             "async": {'success': function(data){
                 toast(data.status,data.megs);
             }},
-            "l_name": {
+            "u_name": {
                 "name": "用户名",
                 "check": ["noSpechars", {"isLength": [4, 20]}, {"isAjax": ["/server/iskeySer.php"]}]
             },
-            "a_nick": {
-                "name": "姓名",
-                "check": [{"isLength": [2, 20]}]
-            },
-            "a_pwd": {
+            "u_pwd": {
                 "name": "密码",
-                "check": [{"isLength": [6, 20]}]
+                "check": [{"isLength": [2, 20]}]
             }
         });
     });
