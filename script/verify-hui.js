@@ -26,12 +26,12 @@
      * eem  Element  需要验证的元素
      * location Element 消息显示的位置
      * name String  可选参数，表单提示显示的名字
-     * mags object  可选参数，消息集合 可自定义，可直接输出，也可预定义
+     * megs object  可选参数，消息集合 可自定义，可直接输出，也可预定义
      * */
-    var Verify = function (eem, mags, name, location) {
+    var Verify = function (eem, megs, name, location) {
         this.eem = eem;
         this.name = name || "";
-        this.mags = mags || {};
+        this.megs = megs || {};
         this.location = location;
         this.lian = false;  //验证链条 ,true就终止验证
 
@@ -111,31 +111,27 @@
 //字符长度验证
         "length": function (min, /*可选*/max) {
             if (this.lian) { return this; }
-            if(typeof max === 'undefined' ){
-                if(this.eem.val().length <= min ){
-                    this.mags['length'] = this.name + "长度至少要" + min + "位";
+            if(typeof max === 'undefined'){
+                if(this.eem.val().length <min ){//最少长度判断
+                    this.megs['length'] = this.megs['length'] || this.name + "长度至少要" + min + "位";
+                    this.output('length', false);
                 }
-            }
-
-
-            if (this.eem.val().length >= min && this.eem.val().length <= max) {
-                this.output('success', true);
-            } else {
-                if (!this.getProp("length")) {
-                    this.mags['length'] = this.name + "长度为" + min + "到 " + max + "位";
-                    if (max === Infinity) {
-                        this.mags['length'] = this.name + "长度至少要" + min + "位";
-                    }
-                }
+            }else if(min === max && this.eem.val().length !== min){ //固定长度判断
+                this.megs['length'] =this.megs['length'] || this.name + "长度为" + min +"位";
                 this.output('length', false);
+            }else if (this.eem.val().length <min || this.eem.val().length >max){//范围长度判断
+                this.megs['length'] =this.megs['length'] || this.name + "长度为" + min + "到 " + max + "位";
+                this.output('length', false);
+            }else{
+                this.output('length', true);
             }
             return this;
         },
 
 //空验证 只要有验证就会验证noNull 有些的可以为空需要手动调用
         "null": function () {
-            if (this.eem.val() == "") {
-                this.lian =false;
+            if (this.eem.val() === "") {
+                this.lian =true;
             }
             return this;
         },
@@ -150,42 +146,34 @@
             return this;
         },
 //输出消息
-        "output": function (mag, b) {
-            if(this.location ==null){
-                add = this.eem;
-                next = add.next();
-            }else{
-                add = this.location;
-                next = add.children().first();
-            }
-            if (next.length > 0) {
-                if (next.get(0).tagName == "SPAN" && (next.attr('class') == "checksu" ||next.attr('class') == "checker")) {
-                    next.detach();
-                }
-            }
+        "output": function (meg, b) {
+            // if(this.location ==null){
+            //     add = this.eem;
+            //     next = add.next();
+            // }else{
+            //     add = this.location;
+            //     next = add.children().first();
+            // }
+            // if (next.length > 0) {
+            //     if (next.get(0).tagName == "SPAN" && (next.attr('class') == "checksu" ||next.attr('class') == "checker")) {
+            //         next.detach();
+            //     }
+            // }
+            this.location.children("span[name='"+this.eem.attr('name')+"']").remove();
+            var megv  = $("<span name='"+this.eem.attr('name')+"'>" + this.getMeg(meg) + "</span>");
+
             if (b) {
-                if(this.location ==null){
-                    if (this.getProp(mag)) {
-                        add.after("<span class='checksu'>" + this.getMag(mag) + "</span>");
-                    }
-                }else{
-                    if (this.getProp(mag)) {
-                        add.append("<span class='checksu'>" + this.getMag(mag) + "</span>");
-                    }
-                }
+                this.eem.parents('form');
+                this.location.append(megv.addClass('verify_su'));
             } else {
                 this.lian = true;
-                if(this.location ==null){
-                    add.after("<span class='checker'>" + this.getMag(mag) + "</span>");
-                }else{
-                    add.append("<span class='checker'>" + this.getMag(mag) + "</span>");
-                }
+
+                this.location.append(megv.addClass('verify_er'));
             }
         },
 
 //预定义的消息
-        "magsp": {
-            "success": "ok",
+        "megsp": {
             "length": "长度为 到 位",
             "noNull": "不能为空！",
             "email": "格式不对， 列：xx@126.com",
@@ -199,14 +187,15 @@
 
 //根据消息KEY 判断是否为用户自定义消息
         "getProp": function (key) {
-            if(this.mags[key])return true;
+            if(this.megs[key])return true;
             return false;
         },
 
 //根据消息KEY获取消息
-        "getMag": function (key) {
-            if (this.mags[key])return this.mags[key];
-            if (this.magsp[key])return this.name + this.magsp[key];
+        "getMeg": function (key) {
+            if (this.megs[key])return this.megs[key];
+            if (this.megsp[key])return this.name + this.megsp[key];
+            if(key=== 'success') return "";
             return key;
         }
     };
@@ -221,10 +210,12 @@
      * */
     var run = function (el, verify) {
         if (!verify) return;
-        var ver = new Verify(el, verify.mags, verify.name, verify.location);
+        var ver = new Verify(el, verify.megs, verify.name, verify.location);
         var vc = verify["check"];
         if (vc.indexOf("null") === -1) { //如果没有设置null 就先检查noNull
             ver.noNull();
+        }else{
+            ver.null();
         }
         for(var elv in vc){
             if (typeof(vc[elv]) === 'object') {//执行带参数的方法
@@ -275,7 +266,7 @@
                 }else if($(location).length > 1 ){
                     location =  $(location);
                 }else{
-                    location =$('<div class="verifyMegs"></div>');
+                    location =$('<div class="verify_megs"></div>');
                     el.after(location);
                 }
                 verify[es]['location'] = location;
