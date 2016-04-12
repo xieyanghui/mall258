@@ -7,61 +7,21 @@
  */
  abstract class Model implements Iterator{
     protected $model = array(); //数组
-     private $start,$end,;
+
+
     abstract public function save();
-    abstract public function modify();
+    abstract public function set();
     abstract public function read();
     abstract public function remove();
     abstract public function get();
 
-     public function current()
-     {
-         // TODO: Implement current() method.
-     }
+    public function rewind() { reset($this->model); }
 
-     /**
-      * Move forward to next element
-      * @link http://php.net/manual/en/iterator.next.php
-      * @return void Any returned value is ignored.
-      * @since 5.0.0
-      */
-     public function next()
-     {
-         // TODO: Implement next() method.
-     }
+    public function current() { return current($this->model); }
 
-     /**
-      * Return the key of the current element
-      * @link http://php.net/manual/en/iterator.key.php
-      * @return mixed scalar on success, or null on failure.
-      * @since 5.0.0
-      */
-     public function key()
-     {
-         // TODO: Implement key() method.
-     }
+    public function key() { return key($this->model); }
 
-     /**
-      * Checks if current position is valid
-      * @link http://php.net/manual/en/iterator.valid.php
-      * @return boolean The return value will be casted to boolean and then evaluated.
-      * Returns true on success or false on failure.
-      * @since 5.0.0
-      */
-     public function valid()
-     {
-         // TODO: Implement valid() method.
-     }
+    public function next() { return next($this->model); }
 
-     /**
-      * Rewind the Iterator to the first element
-      * @link http://php.net/manual/en/iterator.rewind.php
-      * @return void Any returned value is ignored.
-      * @since 5.0.0
-      */
-     public function rewind()
-     {
-         // TODO: Implement rewind() method.
-     }
-
+    public function valid() { return ( $this->current() !== false ); }
  }

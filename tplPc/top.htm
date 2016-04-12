@@ -112,22 +112,38 @@
 </div>
 <{/if}>
 <script type="text/javascript" charset="utf-8">
-    $(function(){
-        $('.float_div').each(function(){
-            $(this).css('left',$(window).width()/2-$(this).width()/2+'px');
+    window.onload = function(){
+        require(['verify'],function(v){
+            $('.float_div').each(function(){
+                $(this).css('left',$(window).width()/2-$(this).width()/2+'px');
+            });
+
+            v.verifyForm('registerForm',{
+                "u_name": {
+                    "name": "用户名",
+                    "check": ["noSpechars", {"length": [4, 20]}, {"ajax": ["/server/iskeySer.php"]}]
+                }
+            });
+            //$(function(){
+             //   alert('aaa');
+            //});
         });
-        $.checks.checkform($('#registerForm'),{
-            "async": {'success': function(data){
-                toast(data.status,data.megs);
-            }},
-            "u_name": {
-                "name": "用户名",
-                "check": ["noSpechars", {"isLength": [4, 20]}, {"isAjax": ["/server/iskeySer.php"]}]
-            },
-            "u_pwd": {
-                "name": "密码",
-                "check": [{"isLength": [2, 20]}]
-            }
-        });
-    });
+
+
+
+//            $.checks.checkform($('#registerForm'),{
+//                "async": {'success': function(data){
+//                    toast(data.status,data.megs);
+//                }},
+//                "u_name": {
+//                    "name": "用户名",
+//                    "check": ["noSpechars", {"isLength": [4, 20]}, {"isAjax": ["/server/iskeySer.php"]}]
+//                },
+//                "u_pwd": {
+//                    "name": "密码",
+//                    "check": [{"isLength": [2, 20]}]
+//                }
+//            });
+    };
+
 </script>

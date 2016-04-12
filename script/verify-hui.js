@@ -6,7 +6,7 @@
     if (typeof define === 'function') {
         if (define.amd) {
             // AMD模式
-            define('huiCheck', ["jquery"], factory);
+            define('verify', ["jquery"], factory);
         } else if (define.cmd) {
             // CMD模式
             define(function (require, exports, module) {
@@ -14,13 +14,13 @@
             });
         } else {
             // 全局模式
-            factory(window.jQuery);
+            window.verify =factory(window.jQuery);
         }
     } else {
         // 全局模式
-        factory(window.jQuery);
+        window.verify = factory(window.jQuery);
     }
-})(function($){
+})(function(){
     /**
      * 验证单个表单
      * eem  Element  需要验证的元素
@@ -40,36 +40,44 @@
 //电话号码验证
         "phone": function () {
             if (this.lian) { return this;}
-            this.isRegExp(/^1[3578]\d{9}$/, "isPhone");
+            this.regExp(/^1[3578]\d{9}$/, 'phone');
         },
 
 //特殊字符除去中文验证
         "noSczw": function () {
             if (this.lian) {return this;}
-            this.isRegExp(/^[0-9a-zA-Z \u4e00-\u9fa5]+$/, "noSczw");
+            this.regExp(/^[0-9a-zA-Z \u4e00-\u9fa5]+$/, "noSczw");
         },
 //特殊字符验证
         "noSpechars": function () {
             if (this.lian) {return this;}
-            this.isRegExp(/^[\w-]+$/, "noSpechars");
+            this.regExp(/^[\w-]+$/, "noSpechars");
         },
 //货币验证
-        "money":function (){
+        "phone":function (){
             if (this.lian) {return this;}
-            this.isRegExp(/^\d{1,10}(.\d)?\d?$/, "isMoney");
+            this.regExp(/^\d{1,10}(.\d)?\d?$/, "phone");
         },
 //邮件验证
         "email": function () {
             if (this.lian) { return this;}
-            this.isRegExp(/^\w+[\.\w]*\w+@\w+(\.\w{2,4}){1,2}$/, "isEmail");
+            this.regExp(/^\w+[\.\w]*\w+@\w+(\.\w{2,4}){1,2}$/, "email");
         },
 //正则验证
-        "regExp": function ($re, $erMag) {
+        "regExp": function (re, meg) {
             if (this.lian) { return this;}
+            var erMeg = "";
+            var suMeg = "";
+            if(typeof meg ==='string'){
+                erMeg = meg;
+            }else{
+                suMeg = meg['suMeg'];
+                erMeg = meg['erMeg'];
+            }
             if ($re.test(this.eem.val())) {
-                this.output($erMag, true);
+                this.output(erMeg, true);
             } else {
-                this.output($erMag, false);
+                this.output(suMeg, false);
             }
         },
 
@@ -85,14 +93,14 @@
         },
 
 //Ajax 验证  服务器验证 返回 json数据，name名字 ，isNull是否存在
-        "ajax": function ($url) {
+        "ajax": function (url) {
             if (this.lian) {return this;}
-            var $val = this.eem.val();
-            var $name = this.eem.parents("form").attr("id") + "." + this.eem.attr("name");
+            var val = this.eem.val();
+            var name = this.eem.parents("form").attr("id") + "." + this.eem.attr("name");
             var self = this;
-            $.post($url, {name: $name, value: $val}, function (data, status) {
+            $.post(url, {name: name, value: val}, function (data, status) {
                 if (data.isNull) {
-                    self.output('isAjax', false);
+                    self.output('ajax', false);
                 } else {
                     self.output('success', true);
                 }
@@ -127,16 +135,15 @@
 //空验证 只要有验证就会验证noNull 有些的可以为空需要手动调用
         "null": function () {
             if (this.eem.val() == "") {
-                this.output('success', true);
+                this.lian =false;
             }
+            return this;
         },
 //不为空验证  只有没有 null 就会自动调用
         "noNull": function () {
-            if (this.lian) {
-                return this;
-            }
+            if (this.lian) {return this;}
             if (this.eem.val() == "") {
-                this.output('noNULL', false);
+                this.output('noNull', false);
             } else {
                 this.output('success', true);
             }
@@ -144,7 +151,6 @@
         },
 //输出消息
         "output": function (mag, b) {
-            var add,next;
             if(this.location ==null){
                 add = this.eem;
                 next = add.next();
@@ -159,11 +165,11 @@
             }
             if (b) {
                 if(this.location ==null){
-                    if (this.getIsProp(mag)) {
+                    if (this.getProp(mag)) {
                         add.after("<span class='checksu'>" + this.getMag(mag) + "</span>");
                     }
                 }else{
-                    if (this.getIsProp(mag)) {
+                    if (this.getProp(mag)) {
                         add.append("<span class='checksu'>" + this.getMag(mag) + "</span>");
                     }
                 }
@@ -215,62 +221,92 @@
      * */
     var run = function (el, verify) {
         if (!verify) return;
-        var v = new Verify(el, verify.mags, verify.name, verify.location);
+        var ver = new Verify(el, verify.mags, verify.name, verify.location);
         var vc = verify["check"];
         if (vc.indexOf("null") === -1) { //如果没有设置null 就先检查noNull
-            v.noNull();
+            ver.noNull();
         }
-        for (var ii = 0; ii < vc.length; ii++) {
-            if (typeof(vc[ii]) === 'object') {//执行带参数的方法
-                for (var i in vc[ii]) {
-                    if (!Verify.prototype.hasOwnProperty(method)) {
-                        console.log(method + "方法不存在");
-                        return;
-                    }
-                    if (om) {
-                        o[method].apply(o, om);
-                    } else {
-                        o[method]();
+        for(var elv in vc){
+            if (typeof(vc[elv]) === 'object') {//执行带参数的方法
+                for(var elvs in vc[elv]){
+                    if (!Verify.prototype.hasOwnProperty(elvs)) {
+                        console.log(elvs + "方法不存在");
+                        continue;
+                    }else{
+                        ver[elvs].apply(ver,vc[elv][elvs]);
                     }
                 }
-                continue;
+            }else{
+                //不带参数的执行
+                ver[vc[elv]]();
             }
-            vc[ii] === "isNULL" ? isnull = true : applys(v, vc[ii]);
         }
+
     };
+
+    //判断是否是方法
     var isFunction =function( fn ) {
         return !!fn && !fn.nodeName && fn.constructor != String &&
             fn.constructor != RegExp && fn.constructor != Array &&
             /function/i.test( fn + "" );
     };
+    return {
+        /**
+         * 验证form 人口
+         * formId string 需要验证的formID
+         * verify  object 表单元素集合
+         * async object 异步提交,可选参数
+         * location string 默认提示显示的位置,可以为空, 默认是verify内自己设置的如果没有就是元素自己后面
+         * method string 触发方法,默认blur默认可选参数，
+         * */
+        verifyForm:function (formId,verify,async,location ,method) {
+            var form = $('#'+formId);
+            //
+            if(form.length < 1 || $.nodeName(form,'form') || verify == null){console.log('id不存在或不是form');return;}
 
-    /**
-     * 验证form 人口
-     * formId string 需要验证的formID
-     * verify  object 表单元素集合
-     * async object 异步提交,可选参数
-     * location string 默认提示显示的位置,可以为空, 默认是verify内自己设置的如果没有就是元素自己后面
-     * method string 触发方法,默认blur默认可选参数，
-     * */
-    var verifyForm = function (formId,verify,async,location ,method) {
-        var form = $('#'+formId);
-        if(form.length < 1 || $.nodeName(form,'form') || verify == null){console.log('id不存在或不是form');return;}
-        form.submit(function () {//提交时在检查一次
-            var i = 0;
-            for (; i < from.find("input[name]").length; i++) {
-                var eem = $(from.find("input[name]")[i]);
-                run(eem, verifys[eem.attr("name")]);
+            //遍历form表单
+            for(var es in  verify){
+                var el = form.find("input[name='"+es+"']");
+                if(el.length < 1){console.log(es+'该元素不存在于表单里'); continue;}
+                //确定信息要显示的位置，可以是选择器，也可以是相对于元素的选择方法
+                var location = verify[es]['location'] || location || null;
+                if(isFunction(location)){
+                    location = location.apply(el);
+                }else if($(location).length > 1 ){
+                    location =  $(location);
+                }else{
+                    location =$('<div class="verifyMegs"></div>');
+                    el.after(location);
+                }
+                verify[es]['location'] = location;
+
+                //触发回调事件
+                var method = verify[es]['method'] || method || "blur";
+                el[method](function(){   //事件执行
+                    run(el, verify[es]);
+                });
             }
-            if (from.find("span[class='checker']").length > 0) {
-                return false;
-            } else {
+            //提交时验证
+            form.submit(function () {
+                //遍历form表单
+                for (var es in  verify) {
+                    if (el.length < 1) {
+                        console.log(es + '该元素不存在于表单里');
+                        continue;
+                    }
+                    run(el, verify[es]);
+
+                }
+                //如果有错误就不提交
+                if (typeof form.attr('verErr') !== 'undefined' && form.attr('verErr').trim() !== "") {
+                    return false;
+                }
                 //是否异步提交
-                if (verifys.hasOwnProperty("async")) {
-                    var suc = verifys['async']['success'] || null;
-                    if(verifys['async']['beforeSend'] != null){
-                        if(verifys['async']['beforeSend']() == false){
-                            return false;
-                        }
+                if (async) {
+                    var suc = async['success'] || null;
+                    //提交前执行回调
+                    if (typeof async['beforeSend'] !== 'undefined' && async['beforeSend']() === false) {
+                        return false;
                     }
                     $.ajax({
                         url: from.attr('action'),
@@ -284,28 +320,8 @@
                 } else {
                     return true;
                 }
-            }
-        });
-        //遍历form表单
-        for(var es in  verify){
-            var el = form.find("input[name='"+es+"']");
-            if(el.length < 1){console.log(es+'该元素不存在于表单里'); continue;}
-            //确定信息要显示的位置
-            var location = verify[es]['location'] || location ;
-            if(isFunction(location)){
-                location = location.apply(el);
-            }else if($(location).length > 1 ){
-                location =  $(location);
-            }else{
-                location = el.next();
-            }
-            verify[es]['location'] = location;
-            //触发回调事件
-            var method = verify[es]['method'] || method || "blur";
-            el[method](function(){   //事件执行
-                run(el, verify[es]);
+
             });
         }
-    };
-    window.VerifyForm = verifyForm;
+    }
 });

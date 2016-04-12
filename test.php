@@ -16,7 +16,7 @@ header("Content-Type:text/html;charset=utf-8");
 //date_default_timezone_set('Asia/Shanghai');
 //$pwd = "";
 //$sql = new Sql();
-echo date('Y-m-d H:i:s');
+//echo date('Y-m-d H:i:s');
 //print_r($sql->queryLine("SELECT * FROM `adminInfo` WHERE a_name='{$admin}' AND a_pwd = '{$pwd}'"));
 //echo mysql_real_escape_string("...\"\"");
 //$sql->insert("authList",array('al_key'=>'s','al_nick'=>'s','al_remark'=>'s'),array(array("111w",'aaaas','gggg'),array("111e",'aaaas','gggg'),array("111t",'aaaas','gggg')));
@@ -68,6 +68,38 @@ echo date('Y-m-d H:i:s');
 //$a = array('aaa'=>"bb",'cc'=>'dd');
 //echo $a['aaa'];
 //echo $a;
-$a='hello';
-$hello='a';
-echo $$hello;
+//$a='hello';
+//$hello='a';
+//echo $$hello;
+class sample implements Iterator
+
+{
+
+    private $_items = array('aa'=>1,'bb'=>2);
+
+    public function __construct() {
+
+        ;//void
+
+    }
+
+    public function rewind() { reset($this->_items); }
+
+    public function current() { return current($this->_items); }
+
+    public function key() { return key($this->_items); }
+
+    public function next() { return next($this->_items); }
+
+    public function valid() { return ( $this->current() !== false ); }
+
+}
+
+$sa = new sample();
+
+foreach($sa as $key => $val){
+
+    print $key . "=>" .$val;
+
+}
+
