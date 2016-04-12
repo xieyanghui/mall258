@@ -76,7 +76,7 @@
         },
 
 //Ajax 验证  服务器验证 返回 json数据，name名字 ，isNull是否存在
-        "ajax": function (url) {
+        ajax: function (url) {
             var val = this.eem.val();
             var name = this.eem.parents("form").attr("id") + "." + this.eem.attr("name");
             var self = this;
@@ -130,7 +130,9 @@
                 this.location.append(megv.addClass('verify_su'));
                 return true;
             } else {
-                form.attr('ver_err',form.attr('ver_err')+' '+this.eem.attr('name'));
+                if(form.attr('ver_err').indexOf(this.eem.attr('name')) ===-1){
+                    form.attr('ver_err',form.attr('ver_err')+' '+this.eem.attr('name'));
+                }
                 this.location.append(megv.addClass('verify_er'));
                 return false;
             }
@@ -175,36 +177,38 @@
     var run = function (el, verify) {
         if (!verify) return;
         var ver = new Verify(el, verify.megs, verify.name, verify.location);
-        var vc = verify["check"];
-        if (vc.indexOf("null") == -1) { //如果没有设置null 就先检查noNull
-            vc.unshift('noNull');
-        }else{
-            vc.splice(vc.indexOf("null"),1);
-            vc.unshift('null');
-        }
-        for(var elv in vc){
-            alert(vc[elv]);
-            if (typeof(vc[elv]) === 'object') {//执行带参数的方法
-                var b =false;
-                for(var elvs in vc[elv]){
-                    if (!Verify.prototype.hasOwnProperty(elvs)) {
-                        console.log(elvs + "方法不存在");
-                        continue;
-                    }else{
-                        if(!ver[elvs].apply(ver,vc[elv][elvs])){
-                            b=true;
-                            break;
+        el[verify['method']](function(){
+            var vc = verify["check"];
+            if (vc.indexOf("null") == -1) { //如果没有设置null 就先检查noNull
+                vc.unshift('noNull');
+            }else{
+                vc.splice(vc.indexOf("null"),1);
+                vc.unshift('null');
+            }
+            for(var elv in vc){
+                if (typeof(vc[elv]) === 'object') {//执行带参数的方法
+                    var b =false;
+                    for(var elvs in vc[elv]){
+                        if (!Verify.prototype.hasOwnProperty(elvs)) {
+                            console.log(elvs + "方法不存在");
+                            continue;
+                        }else{
+                            if(!ver[elvs].apply(ver,vc[elv][elvs])){
+                                b=true;
+                                break;
+                            }
                         }
                     }
-                }
-                if(b)break;
-            }else{
-                //不带参数的执行
-                if(!ver[vc[elv]]()){
-                    break;
+                    if(b)break;
+                }else{
+                    //不带参数的执行
+                    if(!ver[vc[elv]]()){
+                        break;
+                    }
                 }
             }
-        }
+        });
+
 
     };
 
@@ -245,20 +249,21 @@
                 verify[es]['location'] = location;
 
                 //触发回调事件
-                var method = verify[es]['method'] || method || "blur";
-                el[method](function(){   //事件执行
+                verify[es]['method'] = verify[es]['method'] || method || "blur";
+                //el[method](function(){   //事件执行
                     run(el, verify[es]);
-                });
+               // });
             }
             //提交时验证
             form.submit(function () {
                 //遍历form表单
                 for (var es in  verify) {
+                    var el = form.find("input[name='"+es+"']");
                     if (el.length < 1) {
                         console.log(es + '该元素不存在于表单里');
                         continue;
                     }
-                    run(el, verify[es]);
+                    el.trigger(verify[es]['method']);
                 }
                 //如果有错误就不提交
                 if (typeof form.attr('ver_err') !== 'undefined' && form.attr('ver_err').trim() !== "") {

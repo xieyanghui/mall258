@@ -1,1 +1,22 @@
-body,div,label,li,ul{font-size:12px;margin:0;padding:0}ul{list-style:none}a{text-decoration:none;color:#333}a:hover{color:red;cursor:pointer}#top{position:relative;height:40px;width:100%;background-color:#BCEDF2;line-height:40px}#top .top_util{width:1200px;margin:0 auto;text-align:center}#top .top_util .top_left{float:left}#top .top_util .top_right{float:right}#top .top_util .top_right li,#top .top_util .top_right span{float:left}#top .top_util .top_right li{width:60px;text-align:center}#top .top_util .top_center{display:inline-block;width:400px;height:30px;background-color:#fff;margin-top:5px;border-radius:15px;padding:0 15px;overflow:hidden}#top .top_util .top_center #search{display:block;outline:0;border:hidden;height:28px;width:350px;float:left}#top .top_util .top_center .search_button{float:left}.float_div{position:absolute;overflow:hidden;z-index:999;border:1px solid #50D1DE}.float_div .float_head{width:100%;height:40px;background-color:#50D1DE;text-align:center;line-height:40px;font-size:30px;font-weight:700;overflow:hidden}.float_div .float_head .float_div_close{position:absolute;right:0;top:0;width:40px;height:40px;text-align:center;line-height:40px;font-size:30px;font-weight:700;color:red}.float_div .float_head .float_div_close:hover{background-color:#E0F8FB;cursor:pointer}.float_div .float_row{width:100%;height:60px;line-height:60px;overflow:hidden}.float_div .float_row .float_row_head{float:left;width:120px;color:#07A1B1;text-align:right;font-size:18px}.float_div .float_row .float_row_input{float:left;margin-left:10px;width:300px}.float_div .float_row .float_row_input .form_div{outline:0;border:1px solid #50D1DE;padding:8px;margin-right:5px}.float_div .float_row .float_row_input span{width:100px}#login{display:none}#register{top:150px}.button,.button_center,.button_left,.button_right{height:35px;text-align:center;font-size:25px;font-weight:700;background-color:#50D1DE;line-height:35px;padding:0 8px}[class*=button]:hover{cursor:pointer;background-color:#07A1B1}.button_center{width:80px;margin:0 auto}.button_left{float:left;margin:10px 0 10px 20%}.button_right{float:right;margin:10px 20% 10px 0}
+body,div,ul,li,label{font-size:12px;margin:0;padding:0}
+ul{list-style:none}
+a{text-decoration:none;color:#333}
+a:hover{color:#f00;cursor:pointer}
+#top{position:relative;height:40px;width:100%;background-color:#bcedf2;line-height:40px}#top .top_util{width:1200px;margin:0 auto;text-align:center}#top .top_util .top_left{float:left}
+#top .top_util .top_right{float:right}#top .top_util .top_right li,#top .top_util .top_right span{float:left}
+#top .top_util .top_right li{width:60px;text-align:center}
+#top .top_util .top_center{display:inline-block;width:400px;height:30px;background-color:#fff;margin-top:5px;border-radius:15px;padding:0 15px;overflow:hidden}#top .top_util .top_center #search{display:block;outline:none;border:hidden;height:28px;width:350px;float:left}
+#top .top_util .top_center .search_button{float:left}
+.float_div{position:absolute;overflow:hidden;z-index:99;border:1px solid #50d1de}.float_div .float_head{width:100%;height:40px;background-color:#50d1de;text-align:center;line-height:40px;font-size:30px;font-weight:bold;overflow:hidden}.float_div .float_head .float_div_close{position:absolute;right:0;top:0;width:40px;height:40px;text-align:center;line-height:40px;font-size:30px;font-weight:bold;color:#f00}
+.float_div .float_head .float_div_close:hover{background-color:#e0f8fb;cursor:pointer}
+.float_div .float_row{width:100%;height:60px;line-height:60px;overflow:hidden}.float_div .float_row .float_row_head{float:left;width:120px;color:#07a1b1;text-align:right;font-size:18px}
+.float_div .float_row .float_row_input{float:left;margin-left:10px;width:400px}.float_div .float_row .float_row_input .form_div{outline:none;border:1px solid #50d1de;padding:8px;margin-right:5px}
+#login{display:none}
+#register{top:150px}
+.button,.button_center,.button_left,.button_right{height:35px;text-align:center;font-size:25px;font-weight:bold;background-color:#50d1de;line-height:35px;padding:0 8px}
+[class*='button']:hover{cursor:pointer;background-color:#07a1b1}
+.button_center{width:80px;margin:0 auto}
+.button_left{float:left;margin:10px 0 10px 20%}
+.button_right{float:right;margin:10px 20% 10px 0}
+.verify_megs{float:right;width:200px;height:60px}.verify_megs .verify_er{color:#f00;line-height:14px;display:inline-block}
+.verify_megs .verify_su{line-height:14px;display:inline-block;color:#008000}

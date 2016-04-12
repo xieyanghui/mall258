@@ -70,7 +70,7 @@ a:hover  {
 .float_div{
   position: absolute;
   overflow: hidden;
-  z-index: 999;
+  z-index: 99;
   border: @border_one;
   .float_head{
     width: 100%;
@@ -113,16 +113,12 @@ a:hover  {
     .float_row_input{
       float: left;
       margin-left: 10px;
-      width: 300px;
+      width: 400px;
       .form_div{
         outline: none;
         border: @border_one;
         padding: 8px;
         margin-right: 5px;
-      }
-      span{
-        width: 100px;
-       // word-wrap:break-word; word-break:normal;
       }
     }
   }
@@ -162,4 +158,22 @@ a:hover  {
   &:extend(.button);
   float: right;
   margin: 10px 20% 10px 0;
+}
+
+//验证
+.verify_megs{
+
+  float: right;
+  width: 200px;
+  height: 60px;
+  .verify_er{
+    color: red;
+    line-height: 14px;
+    display: inline-block;
+  }
+  .verify_su{
+    line-height: 14px;
+    display: inline-block;
+    color: green;
+  }
 }

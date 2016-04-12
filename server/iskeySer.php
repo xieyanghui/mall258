@@ -1,16 +1,18 @@
 <?php
 include_once($_SERVER['DOCUMENT_ROOT'] . '/public/autoload.php');
 header("Content-Type:text/json;charset=utf-8");
-$value = $_GET['value'];
-$name = $_GET['name'];
+$value = $_POST['value'];
+$name = $_POST['name'];
 $table= '';
 $where = null;
 switch ($name) {
-    case 'regform.reguserName':
-        $sql = "select * from `userInfo` where `u_name` ='$value'";
+    case 'registerForm.u_name':
+        $table = 'user';
+        $where = new Where('u_name',$value);
         break;
-    case 'regform.email':
-        $sql = "select * from userInfo where email ='$value'";
+    case 'registerForm.u_email':
+        $table = 'user';
+        $where = new Where('u_email',$value);
         break;
     case 'adminAuthAddForm.aa_nick':
         $table = 'admin_auth';

@@ -17,3 +17,11 @@ require.config({
         'verify':['jquery']
     }
 });
+require(['jquery'],function($){
+    $('body').on('click','.submit',function(){
+        if(typeof $(this).attr('callback') !=='undefined'){
+            $(this).trigger($(this).attr('callback'));
+        }
+        $(this).parents('form').submit();
+    });
+});

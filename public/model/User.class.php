@@ -41,6 +41,7 @@ class User extends Model{
     {
         $row = array();
         foreach($arr as $key=>$value){
+            if(empty($value))continue;
             $value =Xss::RemoveXSS($value);
             if($key ==='u_id'){
                 $row['u_id'] = intval($value);

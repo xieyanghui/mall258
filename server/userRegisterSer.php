@@ -6,6 +6,7 @@
  * Time: 0:19
  */
 include_once($_SERVER['DOCUMENT_ROOT'] . '/public/autoload.php');
+header("Content-type:text/html;charset=utf-8");
 $user = new User();
 $user->read($_POST);
 if($user->save()){
