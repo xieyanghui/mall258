@@ -50,8 +50,8 @@ class Where{
             throw new Exception("缺少参数!");
         }
     }
+
     /**
-     *
      * 设置子条件
      * @param $key string  组key
      * @param $columnName string 列名
@@ -86,12 +86,17 @@ class Where{
         }
     }
 
-
+    /**
+     * 设置子条件的逻辑符
+     * @param $key string 组key
+     * @param $logic string 逻辑,默认AND
+     */
     public function setWheresLogic($key,$logic){
         if(!empty($this->where[$key][0] )){
             $this->where[$key]['logic'] = $logic;
         }
     }
+
     /**
      * 设置条件后面句子
      *
@@ -101,6 +106,7 @@ class Where{
         $this->end .= $end;
     }
 
+    //执行转换
     private function run(){
         $where = "";
         $type = "";
@@ -142,19 +148,23 @@ class Where{
             $this->prepValues = $values;
         }
     }
+
+    //获取sql语句
     public function getPrepWhere(){
         if(!$this->isRun){$this->run();}
         return $this->prepWhere.$this->end;
     }
-
+    //获取sql语句的类型
     public function getPrepType(){
         if(!$this->isRun){$this->run();}
         return $this->prepType;
     }
+    //获取sql语句的值
     public function getPrepValues(){
         if(!$this->isRun){$this->run();}
         return $this->prepValues;
     }
+    //获取语句的值参数
     public function getPrepArges(){
         if(!$this->isRun){$this->run();}
         $vs = $this->prepValues;

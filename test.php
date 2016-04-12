@@ -7,7 +7,7 @@
  * Date: 2016/1/22
  * Time: 5:06
  */
-//require_once($_SERVER['DOCUMENT_ROOT'] . '/util/autoload.php');
+require_once($_SERVER['DOCUMENT_ROOT'] . '/public/autoload.php');
 header("Content-Type:text/html;charset=utf-8");
 //$sql = new Sql();
 //echo $sql->executeid("INSERT INTO `authList`(al_key,al_nick,al_remark) VALUES ('aaaa','aaaa','aaaaa')");
@@ -71,35 +71,40 @@ header("Content-Type:text/html;charset=utf-8");
 //$a='hello';
 //$hello='a';
 //echo $$hello;
-class sample implements Iterator
+//class sample implements Iterator
+//
+//{
+//
+//    private $_items = array('aa'=>1,'bb'=>2);
+//
+//    public function __construct() {
+//
+//        ;//void
+//
+//    }
+//
+//    public function rewind() { reset($this->_items); }
+//
+//    public function current() { return current($this->_items); }
+//
+//    public function key() { return key($this->_items); }
+//
+//    public function next() { return next($this->_items); }
+//
+//    public function valid() { return ( $this->current() !== false ); }
+//
+//}
 
-{
+//$sa = new sample();
 
-    private $_items = array('aa'=>1,'bb'=>2);
-
-    public function __construct() {
-
-        ;//void
-
-    }
-
-    public function rewind() { reset($this->_items); }
-
-    public function current() { return current($this->_items); }
-
-    public function key() { return key($this->_items); }
-
-    public function next() { return next($this->_items); }
-
-    public function valid() { return ( $this->current() !== false ); }
-
-}
-
-$sa = new sample();
-
-foreach($sa as $key => $val){
-
-    print $key . "=>" .$val;
-
-}
-
+//foreach($sa as $key => $val){
+//
+//    print $key . "=>" .$val;
+//
+//}
+//$arr = array('a'=>'aa','b'=>'bb','c'=>'bb');
+//$arr[key($arr)]='aaav';
+////$a='aav';
+//
+//print_r($arr);
+echo Xss::RemoveXSS("<script language='javascript'>alert('hello world');</script>");

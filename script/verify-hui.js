@@ -33,142 +33,106 @@
         this.name = name || "";
         this.megs = megs || {};
         this.location = location;
-        this.lian = false;  //验证链条 ,true就终止验证
-
     };
     Verify.prototype = {
 //电话号码验证
-        "phone": function () {
-            if (this.lian) { return this;}
-            this.regExp(/^1[3578]\d{9}$/, 'phone');
+        phone: function () {
+            return this.regExp(/^1[3578]\d{9}$/, 'phone');
         },
 
 //特殊字符除去中文验证
-        "noSczw": function () {
-            if (this.lian) {return this;}
-            this.regExp(/^[0-9a-zA-Z \u4e00-\u9fa5]+$/, "noSczw");
+        noSczw: function () {
+            return this.regExp(/^[0-9a-zA-Z \u4e00-\u9fa5]+$/, "noSczw");
         },
 //特殊字符验证
-        "noSpechars": function () {
-            if (this.lian) {return this;}
-            this.regExp(/^[\w-]+$/, "noSpechars");
+        noSpechars: function () {
+            return this.regExp(/^[\w-]+$/, "noSpechars");
         },
 //货币验证
-        "phone":function (){
-            if (this.lian) {return this;}
-            this.regExp(/^\d{1,10}(.\d)?\d?$/, "phone");
+        money:function (){
+            return this.regExp(/^\d{1,10}(.\d)?\d?$/, "money");
         },
 //邮件验证
-        "email": function () {
-            if (this.lian) { return this;}
-            this.regExp(/^\w+[\.\w]*\w+@\w+(\.\w{2,4}){1,2}$/, "email");
+        email: function () {
+            return this.regExp(/^\w+[\.\w]*\w+@\w+(\.\w{2,4}){1,2}$/, "email");
         },
 //正则验证
-        "regExp": function (re, meg) {
-            if (this.lian) { return this;}
-            var erMeg = "";
-            var suMeg = "";
-            if(typeof meg ==='string'){
-                erMeg = meg;
-            }else{
-                suMeg = meg['suMeg'];
-                erMeg = meg['erMeg'];
-            }
-            if ($re.test(this.eem.val())) {
-                this.output(erMeg, true);
+        regExp: function (re, meg) {
+            if (re.test(this.eem.val())) {
+                return this.output(true);
             } else {
-                this.output(suMeg, false);
+               return this.output(false,meg);
             }
         },
 
 //对比同form下德其他
-        "contrast": function ($v) {
-            if (this.lian) { return this;}
-            var $va = $(this.eem.parents("form").find("input[name='" + $v + "']")).val();
-            if (this.eem.val() == $va) {
-                this.output('success', true);
+        contrast: function (v) {
+            var va = $(this.eem.parents("form").find("input[name='" + v + "']")).val();
+            if (this.eem.val() === va) {
+                return this.output(true);
             } else {
-                this.output('isContrast', false);
+                return this.output(false,'isContrast');
             }
         },
 
 //Ajax 验证  服务器验证 返回 json数据，name名字 ，isNull是否存在
         "ajax": function (url) {
-            if (this.lian) {return this;}
             var val = this.eem.val();
             var name = this.eem.parents("form").attr("id") + "." + this.eem.attr("name");
             var self = this;
             $.post(url, {name: name, value: val}, function (data, status) {
                 if (data.isNull) {
-                    self.output('ajax', false);
+                    self.output(false,'ajax');
                 } else {
-                    self.output('success', true);
+                    self.output(true);
                 }
             });
-
+            return true;
         },
 
 //字符长度验证
         "length": function (min, /*可选*/max) {
-            if (this.lian) { return this; }
             if(typeof max === 'undefined'){
                 if(this.eem.val().length <min ){//最少长度判断
-                    this.megs['length'] = this.megs['length'] || this.name + "长度至少要" + min + "位";
-                    this.output('length', false);
+                    //this.megs['length'] = this.megs['length'] || this.name + "长度至少要" + min + "位";
+                    return this.output(false, this.megs['length'] || this.name + "长度至少要" + min + "位");
                 }
             }else if(min === max && this.eem.val().length !== min){ //固定长度判断
-                this.megs['length'] =this.megs['length'] || this.name + "长度为" + min +"位";
-                this.output('length', false);
+                return this.output(false,this.megs['length'] || this.name + "长度为" + min +"位");
             }else if (this.eem.val().length <min || this.eem.val().length >max){//范围长度判断
-                this.megs['length'] =this.megs['length'] || this.name + "长度为" + min + "到 " + max + "位";
-                this.output('length', false);
+                return this.output(false,this.megs['length'] || this.name + "长度为" + min + "到 " + max + "位");
             }else{
-                this.output('length', true);
+                return this.output(true);
             }
-            return this;
         },
-
 //空验证 只要有验证就会验证noNull 有些的可以为空需要手动调用
         "null": function () {
             if (this.eem.val() === "") {
-                this.lian =true;
+               return this.output(true);
             }
-            return this;
+            return false;
         },
 //不为空验证  只有没有 null 就会自动调用
         "noNull": function () {
-            if (this.lian) {return this;}
             if (this.eem.val() == "") {
-                this.output('noNull', false);
+                return this.output(false,'noNull');
             } else {
-                this.output('success', true);
+                return this.output(true);
             }
-            return this;
         },
 //输出消息
-        "output": function (meg, b) {
-            // if(this.location ==null){
-            //     add = this.eem;
-            //     next = add.next();
-            // }else{
-            //     add = this.location;
-            //     next = add.children().first();
-            // }
-            // if (next.length > 0) {
-            //     if (next.get(0).tagName == "SPAN" && (next.attr('class') == "checksu" ||next.attr('class') == "checker")) {
-            //         next.detach();
-            //     }
-            // }
+        "output": function (b,meg) {
             this.location.children("span[name='"+this.eem.attr('name')+"']").remove();
-            var megv  = $("<span name='"+this.eem.attr('name')+"'>" + this.getMeg(meg) + "</span>");
-
+            var megv  = $("<span name='"+this.eem.attr('name')+"'>" + this.getMeg( meg|| 'success') + "</span>");
+            var form = this.eem.parents('form');
             if (b) {
-                this.eem.parents('form');
+                form.attr('ver_err',form.attr('ver_err').replace(this.eem.attr('name'),''));
                 this.location.append(megv.addClass('verify_su'));
+                return true;
             } else {
-                this.lian = true;
-
+                form.attr('ver_err',form.attr('ver_err')+' '+this.eem.attr('name'));
                 this.location.append(megv.addClass('verify_er'));
+                return false;
             }
         },
 
@@ -212,24 +176,33 @@
         if (!verify) return;
         var ver = new Verify(el, verify.megs, verify.name, verify.location);
         var vc = verify["check"];
-        if (vc.indexOf("null") === -1) { //如果没有设置null 就先检查noNull
-            ver.noNull();
+        if (vc.indexOf("null") == -1) { //如果没有设置null 就先检查noNull
+            vc.unshift('noNull');
         }else{
-            ver.null();
+            vc.splice(vc.indexOf("null"),1);
+            vc.unshift('null');
         }
         for(var elv in vc){
+            alert(vc[elv]);
             if (typeof(vc[elv]) === 'object') {//执行带参数的方法
+                var b =false;
                 for(var elvs in vc[elv]){
                     if (!Verify.prototype.hasOwnProperty(elvs)) {
                         console.log(elvs + "方法不存在");
                         continue;
                     }else{
-                        ver[elvs].apply(ver,vc[elv][elvs]);
+                        if(!ver[elvs].apply(ver,vc[elv][elvs])){
+                            b=true;
+                            break;
+                        }
                     }
                 }
+                if(b)break;
             }else{
                 //不带参数的执行
-                ver[vc[elv]]();
+                if(!ver[vc[elv]]()){
+                    break;
+                }
             }
         }
 
@@ -254,7 +227,7 @@
             var form = $('#'+formId);
             //
             if(form.length < 1 || $.nodeName(form,'form') || verify == null){console.log('id不存在或不是form');return;}
-
+            form.attr('ver_err','');
             //遍历form表单
             for(var es in  verify){
                 var el = form.find("input[name='"+es+"']");
@@ -286,10 +259,9 @@
                         continue;
                     }
                     run(el, verify[es]);
-
                 }
                 //如果有错误就不提交
-                if (typeof form.attr('verErr') !== 'undefined' && form.attr('verErr').trim() !== "") {
+                if (typeof form.attr('ver_err') !== 'undefined' && form.attr('ver_err').trim() !== "") {
                     return false;
                 }
                 //是否异步提交

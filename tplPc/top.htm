@@ -117,16 +117,12 @@
             $('.float_div').each(function(){
                 $(this).css('left',$(window).width()/2-$(this).width()/2+'px');
             });
-
             v.verifyForm('registerForm',{
                 "u_name": {
-                    "name": "用户名",
-                    "check": ["noSpechars", {"length": [4, 20]}, {"ajax": ["/server/iskeySer.php"]}]
+                    name: "用户名",
+                    check: ["noSpechars", {"length": [4,20],"ajax": ["/server/iskeySer.php"]}]
                 }
             });
-            //$(function(){
-             //   alert('aaa');
-            //});
         });
 
 
