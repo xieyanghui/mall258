@@ -71,7 +71,7 @@
             if (this.eem.val() === va) {
                 return this.output(true);
             } else {
-                return this.output(false,'isContrast');
+                return this.output(false,'contrast');
             }
         },
 
@@ -91,7 +91,7 @@
         },
 
 //字符长度验证
-        "length": function (min, /*可选*/max) {
+        length: function (min, /*可选*/max) {
             if(typeof max === 'undefined'){
                 if(this.eem.val().length <min ){//最少长度判断
                     //this.megs['length'] = this.megs['length'] || this.name + "长度至少要" + min + "位";
@@ -106,14 +106,14 @@
             }
         },
 //空验证 只要有验证就会验证noNull 有些的可以为空需要手动调用
-        "null": function () {
+        null: function () {
             if (this.eem.val() === "") {
                return this.output(true);
             }
             return false;
         },
 //不为空验证  只有没有 null 就会自动调用
-        "noNull": function () {
+        noNull: function () {
             if (this.eem.val() == "") {
                 return this.output(false,'noNull');
             } else {
@@ -121,7 +121,7 @@
             }
         },
 //输出消息
-        "output": function (b,meg) {
+        output: function (b,meg) {
             this.location.children("span[name='"+this.eem.attr('name')+"']").remove();
             var megv  = $("<span name='"+this.eem.attr('name')+"'>" + this.getMeg( meg|| 'success') + "</span>");
             var form = this.eem.parents('form');
@@ -139,7 +139,7 @@
         },
 
 //预定义的消息
-        "megsp": {
+        megsp: {
             "length": "长度为 到 位",
             "noNull": "不能为空！",
             "email": "格式不对， 列：xx@126.com",
@@ -151,14 +151,8 @@
             "money":"数字格式不对 如 :147.55"
         },
 
-//根据消息KEY 判断是否为用户自定义消息
-        "getProp": function (key) {
-            if(this.megs[key])return true;
-            return false;
-        },
-
 //根据消息KEY获取消息
-        "getMeg": function (key) {
+        getMeg: function (key) {
             if (this.megs[key])return this.megs[key];
             if (this.megsp[key])return this.name + this.megsp[key];
             if(key=== 'success') return "";

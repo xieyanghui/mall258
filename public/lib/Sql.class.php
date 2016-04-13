@@ -166,6 +166,8 @@ class Sql
             if(!call_user_func_array(array($sqlStmt,"bind_param"),$this->refValues($where->getPrepArges()))){
                 if(Config::Debug){
                     echo '语句或参数错误'.$str;
+                    print_r($where->getPrepArges());
+
                 }
                 $sqlStmt->close();
                 return false;
@@ -211,6 +213,7 @@ class Sql
         if(!call_user_func_array(array($sqlStmt,"bind_param"),$this->refValues($where->getPrepArges()))){
             if(Config::Debug){
                 echo '语句或参数错误'.$str;
+                print_r($where->getPrepArges());
             }
             $sqlStmt->close();
             return false;
@@ -275,6 +278,7 @@ class Sql
         if(!call_user_func_array(array($sqlStmt,"bind_param"),$this->refValues($arges))){
             if(Config::Debug){
                 echo '语句或参数错误'.$str;
+                print_r($where->getPrepArges());
             }
             $sqlStmt->close();
             return false;
@@ -338,6 +342,7 @@ class Sql
                 if(!call_user_func_array(array($sqlStmt,"bind_param"),$this->refValues($value))){
                     if(Config::Debug){
                         echo '语句或参数错误'.$str;
+                        print_r($value);
                     }
                     $sqlStmt->close();
                     return false;
@@ -354,6 +359,7 @@ class Sql
                 if(!call_user_func_array(array($sqlStmt,"bind_param"),$this->refValues($data))){
                     if(Config::Debug){
                         echo '语句或参数错误'.$str;
+                        print_r($data);
                     }
                     $sqlStmt->close();
                     return false;

@@ -10,7 +10,7 @@ require_once($_SERVER['DOCUMENT_ROOT'] . "/public/autoload.php");
 class User extends Model{
     public function __construct()
     {
-        $this->columnName = array('u_id','u_name','u_pwd','u_phone','u_email','u_address','u_img','u_reg','u_status'=>'int');
+        $this->columnName = array('u_id','u_name','u_pwd','u_phone','u_nick','u_email','u_address','u_img','u_reg','u_status'=>'int');
 
     }
     public function save()
@@ -21,6 +21,7 @@ class User extends Model{
             if(!empty($user['u_id'])){//修改
                 $data = array();
                 foreach($user as $key=>$value){
+                    if($key==='u_id')continue;
                     array_push($data,array('columnName'=>$key,'value'=>$value,'type'=>$this->columnType($key)));
                 }
                 $sql->update('user',new Where('u_id',$user['u_id'],'int'),$data);
@@ -31,6 +32,8 @@ class User extends Model{
                     $column[$key] =$this->columnType($key);
                     array_push($data,$value);
                 }
+                //print_r($column);
+               // print_r($data);
                 $u_id =$sql->insert('user',$column,$data);
             }
         }
