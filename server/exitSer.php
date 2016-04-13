@@ -8,6 +8,8 @@ $local = $_SERVER['HTTP_HOST'];
 
 if(preg_match("/^\/\/{$_SERVER['HTTP_HOST']}\\".Config::ADMIN_DIR."/",$_SERVER['HTTP_REFERER'])){
     $local = $_SERVER['HTTP_HOST'].Config::ADMIN_DIR;
+}else{
+    $local = $_SERVER['HTTP_HOST'].'/view';
 }
 ?>
 <script type="text/javascript">

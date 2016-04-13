@@ -90,6 +90,7 @@ class User extends Model{
     public function query(Where $where,$columnName = '*')
     {
         $sql = $this->getSql();
-        $this->model = $sql->selectData('user',$columnName,$where);
+       $this->model =$sql->selectData('user',$columnName,$where) ;
+
     }
 }

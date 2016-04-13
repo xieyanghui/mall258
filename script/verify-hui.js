@@ -89,7 +89,6 @@
             });
             return true;
         },
-
 //字符长度验证
         length: function (min, /*可选*/max) {
             if(typeof max === 'undefined'){
@@ -108,9 +107,9 @@
 //空验证 只要有验证就会验证noNull 有些的可以为空需要手动调用
         null: function () {
             if (this.eem.val() === "") {
-               return this.output(true);
+                return  !this.output(true);
             }
-            return false;
+            return true;
         },
 //不为空验证  只有没有 null 就会自动调用
         noNull: function () {
@@ -125,11 +124,11 @@
             this.location.children("span[name='"+this.eem.attr('name')+"']").remove();
             var megv  = $("<span name='"+this.eem.attr('name')+"'>" + this.getMeg( meg|| 'success') + "</span>");
             var form = this.eem.parents('form');
-            if (b) {
+            if (b) { //验证成功
                 form.attr('ver_err',form.attr('ver_err').replace(this.eem.attr('name'),''));
                 this.location.append(megv.addClass('verify_su'));
                 return true;
-            } else {
+            } else { //验证失败
                 if(form.attr('ver_err').indexOf(this.eem.attr('name')) ===-1){
                     form.attr('ver_err',form.attr('ver_err')+' '+this.eem.attr('name'));
                 }
@@ -172,6 +171,7 @@
         if (!verify) return;
         var ver = new Verify(el, verify.megs, verify.name, verify.location);
         el[verify['method']](function(){
+            if(!el.is(':visible')){console.log(el.attr('name')+'没有显示所以不验证'); return;} //如果元素没有显示,就不验证了
             var vc = verify["check"];
             if (vc.indexOf("null") == -1) { //如果没有设置null 就先检查noNull
                 vc.unshift('noNull');
@@ -271,8 +271,8 @@
                         return false;
                     }
                     $.ajax({
-                        url: from.attr('action'),
-                        data: from.serialize(),
+                        url: form.attr('action'),
+                        data: form.serialize(),
                         type: "POST",
                         global: false,
                         dataType: "json",

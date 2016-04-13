@@ -5,10 +5,10 @@ class ValidateCode {
     private $code;//验证码
     private $codelen = 4;//验证码长度
     private $width = 80;//宽度
-    private $height = 25;//高度
+    private $height = 33;//高度
     private $img;//图形资源句柄
     private $font;//指定的字体
-    private $fontsize = 15;//指定字体大小
+    private $fontsize = 20;//指定字体大小
     private $fontcolor;//指定字体颜色
     //构造方法初始化
     public function __construct() {

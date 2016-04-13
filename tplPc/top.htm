@@ -2,9 +2,11 @@
     <div class="top_util">
         <div class="top_left">
             <{if !empty($user)}>
+            <{$user['u_nick']}>
+            <a href="/server/exitSer.php">安全退出</a>
             <{else}>
                 <div>
-                   欢迎光临![<a class="login" href="javascript:void(0)">请登录</a>] [<a class="register" href="javascript:void(0)">注册</a>]
+                   欢迎光临![<a class="show_float_div" float_id="login" href="javascript:void(0)">请登录</a>] [<a class="show_float_div" float_id="register" href="javascript:void(0)">注册</a>]
                 </div>
             <{/if}>
         </div>
@@ -21,11 +23,10 @@
             </ul>
         </div>
     </div>
-
 </div>
 <{if empty($user)}>
 <div id ='login' class="float_div">
-    <div class="float_head">登录  <div class="float_div_close">×</div></div>
+    <div class="float_head">登录  <div class="float_div_close close_float_div">×</div></div>
     <form method="post" id="loginForm" action="<{$HTTP_HOST}>/server/userLoginSer.php">
     <div class="float_row">
         <label class="float_row_head" for="l_name">用户名: </label>
@@ -39,22 +40,21 @@
             <input type="password" name="u_pwd" id="l_pwd" class="form_div" />
         </div>
     </div>
-    <div class="float_row">
+    <div class="float_row verify_row">
         <label class="float_row_head" for="l_verify">验证码: </label>
         <div class="float_row_input">
             <input type="text" name="u_verify" id="l_verify" class="form_div_verify"/>
-            <div class="verify_img"><img src="" />
-            </div>
+            <div class="verify_img"><img src="<{$HTTP_HOST}>/server/validateSer.php?name=login_verify" /> </div>
         </div>
     </div>
     <div class="float_row">
-        <div class="button_left cancel">取消</div>
+        <div class="button_left close_float_div">取消</div>
         <div class="button_right submit">登录</div>
     </div>
     </form>
 </div>
 <div id="register" class="float_div">
-    <div class="float_head">注册 <div class="float_div_close">×</div></div>
+    <div class="float_head">注册 <div class="float_div_close close_float_div">×</div></div>
     <form action="<{$HTTP_HOST}>/server/userRegisterSer.php" method="post" id="registerForm">
         <div class="float_row">
             <label class="float_row_head" for="r_name">用户名: </label>
@@ -105,7 +105,7 @@
             </div>
         </div>
         <div class="float_row">
-            <div class="button_left cancel">取消</div>
+            <div class="button_left close_float_div">取消</div>
             <div class="button_right submit">登录</div>
         </div>
     </form>
@@ -113,10 +113,12 @@
 <{/if}>
 <script type="text/javascript" charset="utf-8">
     window.onload = function(){
-        require(['verify'],function(v){
+        require(['verify','main'],function(v){
             $('.float_div').each(function(){
-                $(this).css('left',$(window).width()/2-$(this).width()/2+'px');
+                $(this).appendTo($('body'));
             });
+
+            //注册验证
             v.verifyForm('registerForm',{
                 u_name: {
                     name: "用户名",
@@ -124,30 +126,64 @@
                 },
                 u_pwd:{
                     name: "密码",
-                    check: ["noSpechars", {"length": [6,20]}]
+                    check: [{"length": [6,20]}]
                 },
                 us_pwd:{
                     name: "重复密码",
-                    check: ["noSpechars", {"length": [6,20],'contrast':['u_pwd']}]
+                    check: [{"length": [6,20],'contrast':['u_pwd']}]
+                },
+                u_phone:{
+                    name: "手机号码",
+                    check: ['phone',{"ajax":["/server/iskeySer.php"]}]
+                },
+                u_email:{
+                    name: "电子邮件",
+                    check: ['email',{"ajax":["/server/iskeySer.php"]}]
                 }
+            },{'success':function(data){
+                h_util.toast(data);
+                if(data.status){
+                    $('#register').hide();
+                }
+            }});
+            //登录验证
+            v.verifyForm('loginForm',{
+                u_name: {
+                    name: "用户名",
+                    check: ["noSpechars", {"length": [4,20]}]
+                },
+                u_pwd:{
+                    name: "密码",
+                    check: [{"length": [6,20]}]
+                },
+                u_verify:{
+                    name: "验证码",
+                    check:['null' ,'noSpechars',{'length':[4,4]}]
+                }
+            },{
+                'success':function(data){
+                    h_util.toast(data);
+                    if(data.status){
+                        $('#top_div').load('<{$HTTP_HOST}>/view/top.php');
+                        h_util.closeFloatDiv('login');
+                    }
+                    if(typeof data.verify !=='undefined'){
+                        $('.verify_row').show();
+                        $('.verify_img >img').trigger('click');
+                    }
+            }});
+            if(h_util.getCookie('login_verify') ==='' ||  h_util.getCookie('login_verify') <= 1 ){
+                $('.verify_row').hide();
+            }
+
+            //验证码刷新
+            $('.verify_img >img').click(function(){
+                var src = $(this).attr('src');
+                src = src.indexOf('&time')=== -1?src:src.substr(0, src.indexOf('&time'));
+                $(this).attr('src',src+'&time='+new Date().getTime());
             });
         });
 
-
-
-//            $.checks.checkform($('#registerForm'),{
-//                "async": {'success': function(data){
-//                    toast(data.status,data.megs);
-//                }},
-//                "u_name": {
-//                    "name": "用户名",
-//                    "check": ["noSpechars", {"isLength": [4, 20]}, {"isAjax": ["/server/iskeySer.php"]}]
-//                },
-//                "u_pwd": {
-//                    "name": "密码",
-//                    "check": [{"isLength": [2, 20]}]
-//                }
-//            });
     };
 
 </script>

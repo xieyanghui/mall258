@@ -9,19 +9,14 @@ require.config({
         'plupload.full':['//cdn.bootcss.com/plupload/2.1.8/plupload.full.min','plupload.full.min'],
 
         'verify':['verify-hui'],
-
-        'qiniu':['//cdn.staticfile.org/qiniu-js-sdk/1.0.14-beta/qiniu.min','qiniu.min']
+        'qiniu':['//cdn.staticfile.org/qiniu-js-sdk/1.0.14-beta/qiniu.min','qiniu.min'],
+        'main':['main'],
+        'jquery-ui':['//cdn.bootcss.com/jqueryui/1.11.4/jquery-ui.min','jquery-ui.min']
     },
+    urlArgs: "bust=" +  (new Date()).getTime(),
     shim:{
         'qiniu':['jquery','plupload','plupload.full'],
-        'verify':['jquery']
+        'verify':['jquery'],
+        'jquery-ui':['jquery']
     }
-});
-require(['jquery'],function($){
-    $('body').on('click','.submit',function(){
-        if(typeof $(this).attr('callback') !=='undefined'){
-            $(this).trigger($(this).attr('callback'));
-        }
-        $(this).parents('form').submit();
-    });
 });

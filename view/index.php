@@ -7,4 +7,6 @@
  */
 include_once ('./header.inc.php');
 $sma = new Smartys();
+include_once ('./top.php');
+$sma->assign('top',$top);
 $sma->display('index.htm');

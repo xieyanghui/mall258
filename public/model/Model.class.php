@@ -37,7 +37,8 @@ abstract class Model implements Iterator{
     }
 
     public function length(){
-        return array_sum($this->model);
+       // print_r($this->model);
+        return count($this->model);
     }
 
     public function set($key,$value){

@@ -159,7 +159,7 @@ class Sql
         $conn = $this->getConn();
         $sqlStmt = $conn->stmt_init();
         $sqlStmt->prepare($str);
-       // echo $str;
+       // echo $str; print_r($where->getPrepArges());
         if($where->getPrepType() ==""){
             $sqlStmt->execute();
         }else{

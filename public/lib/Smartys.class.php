@@ -19,6 +19,6 @@ class Smartys extends Smarty
         //$this->assign('sub_args',!empty($GLOBALS['sub_args']) && $GLOBALS['sub_args'] !='?'?$GLOBALS['sub_args']:false);
         $this->assign("HTTP_HOST", 'http://' . $_SERVER['HTTP_HOST']);
         $this->assign("HTTP_MODEL", 'http://' . $_SERVER['HTTP_HOST'].Config::ADMIN_DIR);
-       // $this->assign("HTTP_FILE", substr($_SERVER['PHP_SELF'],strrpos($_SERVER['PHP_SELF'],"/")+1,strrpos($_SERVER['PHP_SELF'],".")-strrpos($_SERVER['PHP_SELF'],"/")-1));
+        $this->assign("HTTP_FILE", substr($_SERVER['PHP_SELF'],strrpos($_SERVER['PHP_SELF'],"/")+1,strrpos($_SERVER['PHP_SELF'],".")-strrpos($_SERVER['PHP_SELF'],"/")-1));
     }
 }

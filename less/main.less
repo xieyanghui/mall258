@@ -68,6 +68,8 @@ a:hover  {
 
 //浮动表格
 .float_div{
+  background-color: #fff;
+  display: none;
   position: absolute;
   overflow: hidden;
   z-index: 99;
@@ -98,6 +100,9 @@ a:hover  {
       cursor: pointer;
     }
   }
+  .float_head:hover{
+    cursor: move;
+  }
   .float_row{
     width: 100%;
     height: 60px;
@@ -113,18 +118,47 @@ a:hover  {
     .float_row_input{
       float: left;
       margin-left: 10px;
-      width: 400px;
-      .form_div{
-        outline: none;
-        border: @border_one;
-        padding: 8px;
-        margin-right: 5px;
-      }
+      width: 380px;
+
     }
   }
 }
-#login{
+//浮动窗口背景
+#float_back{
+  top:0;
+  left: 0;
+  position: fixed;
+  opacity: 0.5;
+  z-index: 98;
+  background-color: black;
   display: none;
+}
+
+//输入框
+.form_div{
+  outline: none;
+  border: @border_one;
+  padding: 8px 5px;
+  margin-right: 5px;
+  width: 160px;
+}
+//验证输入款
+.form_div_verify{
+  &:extend(.form_div);
+  width: 70px;
+  margin-right: 0;
+}
+.verify_img{
+  display: inline-block;
+}
+.verify_img >img{
+  vertical-align:middle;
+}
+.verify_img >img:hover{
+  cursor: pointer;
+}
+#login{
+  top:100px;
 }
 #register{
   top: 150px;
@@ -153,7 +187,8 @@ a:hover  {
   &:extend(.button);
   float: left;
   margin: 10px 0 10px 20%;
-}//按钮居右
+}
+//按钮居右
 .button_right{
   &:extend(.button);
   float: right;
@@ -176,4 +211,27 @@ a:hover  {
     display: inline-block;
     color: green;
   }
+}
+//吐司
+.toast {
+  z-index: 1001;
+  display: none;
+  position: absolute;
+  width: 200px;
+  height: 20px;
+  line-height: 20px;
+  text-align: center;
+  top: 40px;
+}
+/*吐司错误*/
+.toast_er {
+  &:extend(.toast);
+  background-color: #FFCCCC;
+  border: 1px solid #FF0033;
+}
+/*吐司成功*/
+.toast_su {
+  &:extend(.toast);
+  background-color: #E0F8FB;
+  border: 1px solid #50D1DE;
 }

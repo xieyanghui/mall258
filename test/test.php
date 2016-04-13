@@ -108,4 +108,4 @@ header("Content-Type:text/html;charset=utf-8");
 //
 //print_r($arr);
 //echo Xss::RemoveXSS("<script language='javascript'>alert('hello world');</script>");
-print_r($_SERVER);
+print_r($_SERVER);;
