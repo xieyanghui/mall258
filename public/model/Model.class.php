@@ -24,20 +24,19 @@ abstract class Model implements Iterator{
     }
 
     protected function columnType($columnName){
-    if(preg_match("/_id$/",$columnName)){
-    return 'int';
-    }
-    foreach ($this->columnName as $key=>$value){
-    if(is_int($key) && $columnName === $value){
-    return 'string';
-    }elseif($columnName ===$key){
-    return $value;
-    }
-    }
+        if(preg_match("/_id$/",$columnName)){
+        return 'int';
+        }
+        foreach ($this->columnName as $key=>$value){
+            if(is_int($key) && $columnName === $value){
+                return 'string';
+            }elseif($columnName ===$key){
+                return $value;
+            }
+        }
     }
 
     public function length(){
-       // print_r($this->model);
         return count($this->model);
     }
 

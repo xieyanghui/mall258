@@ -171,6 +171,7 @@ class Where{
         array_unshift($vs,$this->prepType);
         return $vs;
     }
+
     public function __toString(){
         $str = "";
         foreach($this->where as $value){
