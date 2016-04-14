@@ -75,6 +75,20 @@
             </div>
         </div>
         <div class="float_row">
+            <label class="float_row_head" >地址: </label>
+            <div class="float_row_input">
+                <div id="address_start" class="address"><span class="address_title">省/直辖市</span><span class="address_name"></span>
+                    <ul></ul>
+                </div>
+                <div class="address"><span class="address_title">市</span><span class="address_name"></span>
+                    <ul></ul>
+                </div>
+                <div class="address"><span class="address_title">区县</span><span class="address_name"></span>
+                    <ul></ul>
+                </div>
+            </div>
+        </div>
+        <div class="float_row">
             <label class="float_row_head" for="r_nick">昵称: </label>
             <div class="float_row_input">
                 <input type="text" name="u_nick" id="r_nick" class="form_div"/>
@@ -93,12 +107,6 @@
             </div>
         </div>
         <div class="float_row">
-            <label class="float_row_head" for="r_address">地址: </label>
-            <div class="float_row_input">
-                <input type="text" name="u_address" id="r_address" class="form_div"/>
-            </div>
-        </div>
-        <div class="float_row">
             <label class="float_row_head" for="r_img">头像: </label>
             <div class="float_row_input">
                 <input type="text" name="u_img" id="r_img" class="form_div"/>
@@ -114,9 +122,51 @@
 <script type="text/javascript" charset="utf-8">
     window.onload = function(){
         require(['verify','main'],function(v){
-            $('.float_div').each(function(){
-                $(this).appendTo($('body'));
+
+            $('.address').mouseover(function(){
+                $(this).children('ul').show();
+            }).mouseout(function(){
+                $(this).children('ul').hide();
             });
+
+            $('body').on('click','.address li',function(){
+                var self = $(this).parents('.address');
+                self.attr('address',$(this).attr('value'));
+                self.children('span.address_title').hide();
+                self.children('span.address_name').show().html($(this).html());
+                self.nextAll().children('span.address_name').hide();
+                self.nextAll().children('span.address_title').show();
+                self.nextAll().find('li').remove();
+                if(self.next().length >0){
+                    var s = self.next();
+                    $.getJSON('//aws.mall258.com/getAddress.php?add_number='+$(this).attr('value')+'&callback=?',function(data){
+                        for (var el in data){
+                            s.children('ul').append("<li value='"+data[el]['add_number']+"' title='"+data[el]['add_name']+"'> "+data[el]['add_name']+"</li>");
+                        }
+                        if(data.length >5){
+                            s.children('ul').css('width',parseInt(s.find('li').first().width())*5+10);
+                        }
+                    });
+                }
+                self.children('ul').hide();
+            });
+            $.getJSON('//aws.mall258.com/getAddress.php?callback=?',function(data){
+                for (var el in data){
+                    $('#address_start >ul').append("<li value='"+data[el]['add_number']+"' title='"+data[el]['add_name']+"'> "+data[el]['add_name']+"</li>");
+                }
+                if(data.length >5){
+                    alert($('#address_start >ul>li').first().width());
+                    $('#address_start >ul').css('width',parseInt($('#address_start >ul>li').first().width())*5+10);
+
+                }
+            });
+
+
+            $('.float_div').each(function(){$(this).appendTo($('body')); });
+
+            if(h_util.getCookie('login_verify') ==='' ||  h_util.getCookie('login_verify') <= 1 ){
+                $('.verify_row').hide();
+            }
 
             //注册验证
             v.verifyForm('registerForm',{
@@ -173,16 +223,13 @@
                     }
             }});
 
-            if(h_util.getCookie('login_verify') ==='' ||  h_util.getCookie('login_verify') <= 1 ){
-                $('.verify_row').hide();
-            }
-
             //验证码刷新
             $('.verify_img >img').click(function(){
                 var src = $(this).attr('src');
                 src = src.indexOf('&time')=== -1?src:src.substr(0, src.indexOf('&time'));
                 $(this).attr('src',src+'&time='+new Date().getTime());
             });
+
         });
 
     };
