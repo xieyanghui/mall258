@@ -2,7 +2,6 @@
 <form action="<{$HTTP_MODEL}>/server/goodsAUSer.php" method="post" id="goodsAUForm">
     <div id='goodsAU' class='win'>
         <input type="hidden" name="g_id" id="g_id" value="<{$goods['g_id']|default:''}>" />
-        <input type="hidden" name="g_number" id="g_number" />
         <input type="hidden" name="gt_id" id="gt_id" />
         <input type="hidden" name="g_img" id="g_img" />
 
@@ -27,10 +26,10 @@
                 <label class ="win_row_head">商品编号</label>
                 <div class ="win_row_input">
                     <{if !empty($goods) }>
+                    <input  type="hidden" name="g_number" value="<{$goods['g_number']}>"/>
                     <div class="input_label g_number" ><{$goods['g_number']}></div>
                     <{else}>
-                    <div class="input_label"  ><label id="gt_number"></label><input tabindex="2" type="text" name="g_numbers" class="input_label_value"/></div>
-                    <div id="number_megs" ></div>
+                    <div class="win_row_input"  ><input tabindex="2" type="text" name="g_number" class="form_div"/></div>
                     <{/if}>
                 </div>
             </div>
@@ -47,7 +46,7 @@
                 <label class ="win_row_head">商品预览图</label>
                 <div class ="win_row_con">
                     <div class="upload_img_div">
-                        <img class="preview_img select_img" img_url="<{$goods['g_img']|default:''}>" src="<{$goods['g_img']|default:$GOODS_IMG_DEFAULT}>?imageView2/5/w/75/h/75"/>
+                        <img preview=".upload_img_div >img" class="preview_img select_img img_75" img_url="<{$goods['g_img']|default:''}>"  src="<{$goods['g_img']|default:$GOODS_IMG_DEFAULT}>?imageView2/5/w/75/h/75"/>
                     </div>
                     <div class="upload_img_button button select_img" preview=".upload_img_div >img">选择图片</div>
                 </div>
@@ -142,9 +141,6 @@
         };
         $.checks.checkform($('#goodsAUForm'),{
             "async": {'success': su,'beforeSend':function(){
-                if($("input[name='g_numbers']").length >0){
-                    $("input[name='g_number']").val($('#gt_number').html().toString()+$("input[name='g_numbers']").val().toString());
-                }
                 $("input[name='g_img']").val($('.upload_img_div >img').attr('img_url'));
             }},
             "g_numbers": {
@@ -154,7 +150,7 @@
             },
             "g_name": {
                 "name": "商品名称",
-                "check": [{"isLength": [2, 20]}]
+                "check": ['noNull']
             }
         });
     });

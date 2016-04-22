@@ -3,12 +3,40 @@
 <{$top|default:'' }>
 </div>
 <div>
-    <div id ='index_roll'>
-
+    <div class ='index_roll'>
+        <ul class ='roll_ul'>
+            <li class = 'roll_li' style="background-color: #1c94c4">1</li>
+            <li class = 'roll_li' style="background-color: #EEEEEE">2</li>
+            <li class = 'roll_li' style="background-color: #222">3</li>
+            <li class = 'roll_li' style="background-color: #888">4</li>
+        </ul>
+        <ul class="roll_key"></ul>
     </div>
-    <div id="class_menu">
 
-    </div>
 </div>
+<script>
+    window.main.push(function(){
 
+        var roll =function (sum){
+            var left = parseInt($('.roll_ul').css('left'));
+            var h_sum= Math.floor(Math.abs(left)/li_width)+1;
+            if(h_sum >= li_sum){ h_sum = 0; }
+            if(typeof sum !=='undefined'){ h_sum = sum;}
+            $('.roll_key_li').removeClass('roll_key_li_sel');
+            $('.roll_key_li[key="'+h_sum+'"]').addClass('roll_key_li_sel');
+            $('.roll_ul').animate({'left':-h_sum*li_width},500);
+        };
+        var li_sum =  $('.roll_li').length;
+        var li_width = $('.roll_li').first().width();
+        $('.roll_ul').css('width', li_width* li_sum);
+        var i = 0;
+        while (i < li_sum){$('.roll_key').append('<li class="roll_key_li" key="'+i+'"></li>');i++;}
+        $('.roll_key_li').first().addClass('roll_key_li_sel');
+        $('.roll_key_li').click(function(){
+            roll($(this).attr('key'));
+        });
+        var sl = setInterval(roll,8000);
+
+    });
+</script>
 <{include 'bottom.tpl'}>

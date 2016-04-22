@@ -138,4 +138,9 @@ define('main',['jquery-ui'],function(){
 
 
     };
+    var main;
+    for( main in window.main){
+
+        window.main[main]();
+    }
 });

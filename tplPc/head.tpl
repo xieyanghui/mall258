@@ -8,6 +8,10 @@
     <link rel="stylesheet" type="text/css" href="<{$HTTP_HOST}>/css/main.min.css"/>
     <link rel="stylesheet" type="text/css" href="<{$HTTP_HOST}>/css/jquery-ui.min.css"/>
     <script src="/script/require.min.js" data-main="/script/config.js" type="text/javascript" charset="utf-8"></script>
-
+    <script> window.main =[]; window.onload = function(){
+        require(['main'],function(){
+            console.log('开始了');
+        });
+    }</script>
 </head>
 <body>

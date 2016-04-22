@@ -298,7 +298,6 @@
         editor.config.mapAk="FB48626872cb58590f33faf85ea639fd";
         editor.create();
         var img_button = $('.wangeditor-menu-img-picture').parents('.menu-item');
-        editor.$txt.html("<{$g_text|default:''}>");
         img_button.unbind('click').addClass('select_img').attr('callback','imgCall');
         img_button.find('a').unbind('click').attr('href',"javascript:void()");
         img_button.bind('imgCall',function(){
@@ -319,6 +318,9 @@
                 }
             },'json');
         });
+
+
+        editor.$txt.append("<{$g_text|default:''}>");
     });
     $(function (){
         //取消操作

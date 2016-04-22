@@ -8,7 +8,7 @@ CREATE TABLE  `admin_auth` (
 ALTER TABLE `admin_auth` ADD PRIMARY KEY (`aa_id`);
 ALTER TABLE `admin_auth` MODIFY `aa_id` INT UNSIGNED AUTO_INCREMENT;
 ALTER TABLE `admin_auth` ADD UNIQUE (`aa_nick`);
-INSERT INTO `admin_auth` (`aa_nick`,`aa_remark`) VALUES ('超级管理员','系统的主宰'),('无权限管理员','一点权限都没有'),('普通管理员','一般的管理');
+# INSERT INTO `admin_auth` (`aa_nick`,`aa_remark`) VALUES ('超级管理员','系统的主宰'),('无权限管理员','一点权限都没有'),('普通管理员','一般的管理');
 
 DROP TABLE IF EXISTS `auth_list`;
 -- 权限列表
@@ -21,13 +21,13 @@ CREATE TABLE `auth_list`(
 ALTER TABLE `auth_list` ADD PRIMARY KEY (`al_id`);
 ALTER TABLE `auth_list` ADD UNIQUE(`al_key`);
 ALTER TABLE `auth_list` MODIFY `al_id` INT UNSIGNED AUTO_INCREMENT;
-INSERT INTO `auth_list` (`al_key`,`al_nick`,`al_remark`) VALUES ('report','报表统计','营运状况'),('service','客服管理','管理客服'),('order','订单管理','订单处理'),('goods','商品管理','商品各种操作');
-INSERT INTO `auth_list` (`al_key`,`al_nick`,`al_remark`) VALUES ('systemLog','系统日志','查看系统日志');
-INSERT INTO `auth_list` (`al_key`,`al_nick`,`al_remark`) VALUES ('goodsRecommend','推荐商品管理','');
-INSERT INTO `auth_list` (`al_key`,`al_nick`,`al_remark`) VALUES ('adminInfo','管理员管理',''),('adminDelete','删除管理员','超级权限'),('adminAdd','增加管理员',''),('adminUpdate','修改管理员','');
-INSERT INTO `auth_list` (`al_key`,`al_nick`,`al_remark`) VALUES ('adminAuth','管理员权限管理',''),('adminAuthAdd','增加管理员权限',''),('adminAuthUpdate','修改管理员权限',''),('adminAuthDelete','删除管理员权限','');
-INSERT INTO `auth_list` (`al_key`,`al_nick`,`al_remark`) VALUES ('goodsType','商品类型管理',null),('goodsTypeAdd','增加商品类型',''),('goodsTypeUpdate','修改商品类型',''),('goodsTypeDelete','删除商品类型','');
-INSERT INTO `auth_list` (`al_key`,`al_nick`,`al_remark`) VALUES ('goodsInfo','商品管理',''),('goodsIndex','首页商品管理',''),('goodsAdd','增加商品',''),('goodsUpdate','修改商品',''),('goodsDelete','删除商品','');
+# # INSERT INTO `auth_list` (`al_key`,`al_nick`,`al_remark`) VALUES ('report','报表统计','营运状况'),('service','客服管理','管理客服'),('order','订单管理','订单处理'),('goods','商品管理','商品各种操作');
+# # INSERT INTO `auth_list` (`al_key`,`al_nick`,`al_remark`) VALUES ('systemLog','系统日志','查看系统日志');
+# # INSERT INTO `auth_list` (`al_key`,`al_nick`,`al_remark`) VALUES ('goodsRecommend','推荐商品管理','');
+# # INSERT INTO `auth_list` (`al_key`,`al_nick`,`al_remark`) VALUES ('adminInfo','管理员管理',''),('adminDelete','删除管理员','超级权限'),('adminAdd','增加管理员',''),('adminUpdate','修改管理员','');
+# # INSERT INTO `auth_list` (`al_key`,`al_nick`,`al_remark`) VALUES ('adminAuth','管理员权限管理',''),('adminAuthAdd','增加管理员权限',''),('adminAuthUpdate','修改管理员权限',''),('adminAuthDelete','删除管理员权限','');
+# # INSERT INTO `auth_list` (`al_key`,`al_nick`,`al_remark`) VALUES ('goodsType','商品类型管理',null),('goodsTypeAdd','增加商品类型',''),('goodsTypeUpdate','修改商品类型',''),('goodsTypeDelete','删除商品类型','');
+# INSERT INTO `auth_list` (`al_key`,`al_nick`,`al_remark`) VALUES ('goodsInfo','商品管理',''),('goodsIndex','首页商品管理',''),('goodsAdd','增加商品',''),('goodsUpdate','修改商品',''),('goodsDelete','删除商品','');
 --  连接表
 DROP TABLE IF EXISTS `admin_auth_list`;
 CREATE TABLE `admin_auth_list`(
@@ -52,7 +52,7 @@ CREATE TABLE `admin`(
 ALTER TABLE `admin` ADD PRIMARY KEY (`a_id`);
 ALTER TABLE `admin` MODIFY `a_id` INT UNSIGNED AUTO_INCREMENT;
 ALTER TABLE `admin` ADD UNIQUE (`a_name`);
-INSERT INTO `admin`(`a_name`,`a_pwd` ,`a_nick`,`aa_id`) VALUES('xieyanghui' , 'e10adc3949ba59abbe56e057f20f883e' ,'谢扬辉',1),('yefengxi' , 'e10adc3949ba59abbe56e057f20f883e' ,'逗比',2);
+# INSERT INTO `admin`(`a_name`,`a_pwd` ,`a_nick`,`aa_id`) VALUES('xieyanghui' , 'e10adc3949ba59abbe56e057f20f883e' ,'谢扬辉',1),('yefengxi' , 'e10adc3949ba59abbe56e057f20f883e' ,'逗比',2);
 
 -- 管理员日志
 DROP TABLE IF EXISTS `system_log`;
@@ -87,7 +87,7 @@ CREATE TABLE `admin_img_type`(
 )DEFAULT CHARSET = utf8 ENGINE=MyISAM;
 ALTER TABLE `admin_img_type` ADD PRIMARY KEY (`ait_id`);
 ALTER TABLE `admin_img_type` MODIFY `ait_id` INT UNSIGNED AUTO_INCREMENT;
-INSERT INTO `admin_img_type` (`ait_name`,`a_id`) VALUES ('回收站',0),('商品图片',0),('头像图片',0);
+# INSERT INTO `admin_img_type` (`ait_name`,`a_id`) VALUES ('回收站',0),('商品图片',0),('头像图片',0);
 -- 管理员图片空间
 DROP TABLE IF EXISTS `admin_img_space`;
 CREATE TABLE `admin_img_space`(
@@ -120,7 +120,7 @@ CREATE TABLE `user`(
 ALTER TABLE `user` ADD PRIMARY KEY (`u_id`);
 ALTER TABLE `user` MODIFY `u_id` INT UNSIGNED AUTO_INCREMENT;
 ALTER TABLE `user` ADD UNIQUE (`u_name` , `u_phone`);
-INSERT INTO `user` (`u_name`,`u_pwd` ,`u_nick`,`u_phone`,`u_email`) VALUES('xiehui' , 'e10adc3949ba59abbe56e057f20f883e' ,'谢辉','18588711500' ,'xieiyanghui@126.com');
+# INSERT INTO `user` (`u_name`,`u_pwd` ,`u_nick`,`u_phone`,`u_email`) VALUES('xiehui' , 'e10adc3949ba59abbe56e057f20f883e' ,'谢辉','18588711500' ,'xieiyanghui@126.com');
 
 -- 用户收货地址
 DROP TABLE IF EXISTS `user_ship_address`;
@@ -148,14 +148,14 @@ ALTER TABLE `goods_type` ADD PRIMARY KEY (`gt_id`);
 ALTER TABLE `goods_type` MODIFY `gt_id` INT UNSIGNED AUTO_INCREMENT;
 ALTER TABLE `goods_type` ADD UNIQUE (`gt_name`,`gt_number`);
 
-INSERT INTO goods_type (`gt_number`,`gt_name`,`gt_remark`)VALUES('01001','手机','手机，合约机，各种定制机器'),
-	('01002','相机','数码相机等');
+# INSERT INTO goods_type (`gt_number`,`gt_name`,`gt_remark`)VALUES('01001','手机','手机，合约机，各种定制机器'),
+# 	('01002','相机','数码相机等');
 
 -- 商品
 DROP TABLE IF EXISTS `goods`;
 CREATE TABLE `goods`(
 	`g_id` INT NOT NULL,         -- ID
-	`g_number` CHAR(10) NOT NULL, -- 编号
+	`g_number` VARCHAR(30) NOT NULL, -- 编号
 	`g_name` VARCHAR(100) NOT NULL, -- 商品名
 	`gt_id` INT UNSIGNED NOT NULL,  -- 商品类型ID
 	`g_price` DECIMAL(8,2) NOT NULL,   -- 价格
@@ -164,29 +164,34 @@ CREATE TABLE `goods`(
 	`g_img` VARCHAR(300),              -- 商品图片
 	`g_reg` TIMESTAMP DEFAULT NOW(),   -- 上架时间
 	`g_status` tinyINT NOT NULL DEFAULT 1,  -- 商品 状态
-	`g_text` text         -- 详细资料
+	`g_text` text,         -- 详细资料
+	`g_temp` CHARACTER(20)   -- 爬虫用
 )DEFAULT CHARSET =utf8 ENGINE=MyISAM;
 
 ALTER TABLE `goods` ADD PRIMARY KEY (`g_id`);
 ALTER TABLE `goods` MODIFY `g_id` INT UNSIGNED AUTO_INCREMENT;
 ALTER TABLE `goods` ADD UNIQUE (`g_name`,`g_number`);
 
-INSERT INTO  `goods`(`g_number`,`g_name`,`gt_id`,`g_price`,`g_keywords`,`g_description`)VALUES
-	('0100100001','一加one',1,1999.99,'智能手机，4G手机','不错的一款手机' ),
-	('0100200001','佳能',2,1999.99,'100000s，wifi','不错的一款相机' );
+# INSERT INTO  `goods`(`g_number`,`g_name`,`gt_id`,`g_price`,`g_keywords`,`g_description`)VALUES
+# 	('0100100001','一加one',1,1999.99,'智能手机，4G手机','不错的一款手机' ),
+# 	('0100200001','佳能',2,1999.99,'100000s，wifi','不错的一款相机' );
 
 
 -- 商品类型属性
 DROP TABLE IF EXISTS `gt_attr`;
 CREATE TABLE `gt_attr`(
-  `gta_id` INT  NOT NULL,        -- ID
-  `gt_id` INT UNSIGNED NOT NULL, -- 类型ID
-  `gta_name` CHAR(20) NOT NULL    -- 属性名
+	`gta_id` INT  NOT NULL,        -- ID
+	`gt_id` INT UNSIGNED NOT NULL, -- 类型ID
+	`gta_name` CHAR(40) NOT NULL ,   -- 属性名
+	`gta_type` CHAR(40)    -- 大分类
 )DEFAULT CHARSET =utf8 ENGINE=MyISAM;
 
 ALTER TABLE `gt_attr` ADD PRIMARY KEY (`gta_id`);
+ALTER TABLE `gt_attr` ADD KEY(`gta_type`);
 ALTER TABLE `gt_attr` MODIFY `gta_id` INT UNSIGNED AUTO_INCREMENT;
-INSERT INTO gt_attr(`gt_id`,`gta_name`)VALUES(1,'品牌'),(1,'型号'),(1,'屏幕尺寸'),(1,'分辨率'),(1,'CPU'),(1,'前置摄像头'),(1,'后置摄像头'),(1,'长'),(1,'厚'),(1,'宽'),(1,'RAM'),(1,'上市时间'),(2,'品牌'),(2,'型号'),(2,'像素'),(2,'显示屏类型'),(2,'上市时间');
+# INSERT INTO gt_attr(`gt_id`,`gta_name`)VALUES(1,'品牌'),(1,'型号'),(1,'屏幕尺寸'),(1,'分辨率'),(1,'CPU'),(1,'前置摄像头'),(1,'后置摄像头'),(1,'长'),(1,'厚'),(1,'宽'),(1,'RAM'),(1,'上市时间'),(2,'品牌'),(2,'型号'),(2,'像素'),(2,'显示屏类型'),(2,'上市时间');
+
+
 
 -- 商品属性
 DROP TABLE IF EXISTS `g_attr`;
@@ -211,7 +216,7 @@ CREATE TABLE `gt_price`(
 ALTER TABLE `gt_price` ADD PRIMARY KEY (`gtp_id`);
 ALTER TABLE `gt_price` MODIFY `gtp_id` INT UNSIGNED AUTO_INCREMENT;
 
-INSERT INTO gt_price(`gt_id`,`gtp_name`) VALUES(1,'版本'),(1,'颜色'),(1,'容量'),(1,'套餐'),(2,'版本'),(2,'套餐');
+# INSERT INTO gt_price(`gt_id`,`gtp_name`) VALUES(1,'版本'),(1,'颜色'),(1,'容量'),(1,'套餐'),(2,'版本'),(2,'套餐');
 
 -- 商品价格名
 DROP TABLE IF EXISTS `g_price`;
@@ -224,8 +229,8 @@ CREATE TABLE `g_price`(
 ALTER TABLE `g_price` ADD PRIMARY KEY (`gp_id`);
 ALTER TABLE `g_price` MODIFY `gp_id` INT UNSIGNED AUTO_INCREMENT;
 
-INSERT INTO g_price(`g_id`,`gtp_id`,`gp_name`)VALUES (1,1,'亚太'),(1,1,'欧版'),(1,1,'国行'),(1,2,'红色'),(1,2,'白色'),(1,3,'16'),(1,3,'32'),(1,4,'套餐1');
-INSERT INTO g_price(`g_id`,`gtp_id`,`gp_name`)VALUES (2,5,'亚太'),(2,5,'欧版'),(2,5,'国行'),(2,6,'套餐1'),(2,6,'套餐2');
+# INSERT INTO g_price(`g_id`,`gtp_id`,`gp_name`)VALUES (1,1,'亚太'),(1,1,'欧版'),(1,1,'国行'),(1,2,'红色'),(1,2,'白色'),(1,3,'16'),(1,3,'32'),(1,4,'套餐1');
+# INSERT INTO g_price(`g_id`,`gtp_id`,`gp_name`)VALUES (2,5,'亚太'),(2,5,'欧版'),(2,5,'国行'),(2,6,'套餐1'),(2,6,'套餐2');
 
 
 
@@ -316,7 +321,7 @@ CREATE TABLE `web_info`(
 )DEFAULT CHARSET =utf8 ENGINE=MyISAM;
 
 ALTER TABLE `web_info` ADD PRIMARY KEY (`key`);
-INSERT INTO `web_info`(`key`,`title`,`keywords`,`description`) VALUES('index','星火数码','手机，相机','599只要599');
+# INSERT INTO `web_info`(`key`,`title`,`keywords`,`description`) VALUES('index','星火数码','手机，相机','599只要599');
 
 
 -- 首页滚动页面

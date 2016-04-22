@@ -1,6 +1,6 @@
 @import "config";
 body,div,ul,li,label{
-  font-size: 12px ;
+  font-size: 13px ;
   margin: 0;
   padding: 0;
 }
@@ -16,258 +16,406 @@ a:hover  {
   color: red;
   cursor: pointer;
 }
-//顶部
-#top{
-  position: relative;
-  height: 40px;
+//头顶部
+.header_top{
+  background-color: @one_color;
   width: 100%;
-  background-color: @two_color;
-  line-height: 40px;
-  .top_util{
+  color: #fff;
+  a{
+    color: #fff;
+    text-decoration: none;
+  }
+  a:hover{
+    color: @one_tint;
+    cursor: pointer;
+  }
+  .wrap{
+    background-color: @one_color;
+    height: 35px;
+    line-height: 35px;
     width: 1200px;
     margin: 0 auto;
-    text-align: center;
-    .top_left{
-      float: left;
+    ul>span{
+      margin: 0 5px;
     }
-    .top_right{
-      float: right;
-      li ,span{
+    .header_top_left{
+      ul ,li,span {
+        float: left;
+      }
+    }
+    .header_top_right{
+      ul ,li,span {
+        float:right;
+      }
+    }
+  }
+}
+
+//头底部
+.header_bottom{
+  background-color:#fff;
+  width: 100%;
+  .wrap {
+    height: 100px;
+    line-height: 100px;
+    width: 1200px;
+    margin: 0 auto;
+    .header_bottom_left{
+      img{
+        vertical-align:middle;
+      }
+      div{
+        display: inline-block;
         float: left;
       }
       li{
-        width: 60px;
-        text-align: center;
-      }
-
-    }
-
-    .top_center{
-      display: inline-block;
-      width: 400px;
-      height: 30px;
-      background-color: #fff;
-      margin-top: 5px;
-      border-radius: 15px;
-      padding: 0 15px;
-      overflow: hidden;
-      #search{
-        display: block;
-        outline:none;
-        border: hidden;
-        height: 28px;
-        width: 350px;
-        float: left;
-      }
-      .search_button{
-        float: left;
-      }
-    }
-  }
-}
-
-//浮动表格
-.float_div{
-  background-color: #fff;
-  display: none;
-  position: absolute;
-  overflow: hidden;
-  z-index: 99;
-  border: @border_one;
-  .float_head{
-    width: 100%;
-    height: 40px;
-    background-color: @four_color;
-    text-align: center;
-    line-height: 40px;
-    font-size: 30px;
-    font-weight: bold;
-    overflow: hidden;
-    .float_div_close{
-      position: absolute;
-      right: 0;
-      top: 0;
-      width: 40px;
-      height: 40px;
-      text-align: center;
-      line-height: 40px;
-      font-size: 30px;
-      font-weight: bold;
-      color: red;
-    }
-    .float_div_close:hover {
-      background-color: @one_color;
-      cursor: pointer;
-    }
-  }
-  .float_head:hover{
-    cursor: move;
-  }
-  .float_row{
-    width: 100%;
-    height: 60px;
-    line-height: 60px;
-    //overflow: hidden;
-    .float_row_head{
-      float: left;
-      width: 120px;
-      color:@five_color;
-      text-align: right;
-      font-size: 18px;
-    }
-    .float_row_input{
-      #sheng{
-
-      }
-      .address:hover,.address li:hover{
-        background-color: @three_color;
-        cursor: pointer;
-      }
-      .address{
-        border: @border_one;
-        height: 30px;
-        line-height: 30px;
-        width: 70px;
-        float: left;
-        margin: 15px 5px 0 0;
-        text-align: center;
-        background-color: @gray_color;
-        position: relative;
-        ul{
-          display: none;
-          position: absolute;
-          z-index: 100;
-          left: -1px;
-          border-left: @border_one;
-          border-top: @border_one;
-          li{
-            height: 30px;
-            line-height: 30px;
-            width: 70px;
-            overflow: hidden;
-            border-bottom: @border_one;
-            border-right: @border_one;
-            background-color: @gray_color;
-            float: left;
-          }
+        margin: 0 10px;
+        a{
+          font-size: 15px;
         }
       }
+      ul ,li,span {
+        float: left;
+      }
+    }
+    .header_bottom_right>div{
+      margin: 35px 10px 0 5px;
       float: left;
-      margin-left: 10px;
-      width: 380px;
+    }
+    .header_bottom_right{
+      float: right;
 
+      .search{
+        height: 30px;
+        border: 1px solid #ddd;
+        .search_text{
+          display: block;
+          float: left;
+          border: none;
+          outline: none;
+          background: none;
+          color: #777;
+          width: 160px;
+          padding: 7px;
+        }
+        .search_submit{
+          float: left;
+          cursor: pointer;
+          background: url("http://7xsiy9.com2.z0.glb.clouddn.com/search.png")no-repeat 0px 3px;
+          width: 30px;
+          height: 25px;
+          padding: 8px 0 8px 8px;
+        }
+      }
+
+      .collect{
+        background-image: url("http://7xsiy9.com2.z0.glb.clouddn.com/tag.png");
+        background-size: 30px;
+        width: 30px ;
+        height: 30px;
+        cursor: pointer;
+      }
+      .cart{
+        background-image: url("http://7xsiy9.com2.z0.glb.clouddn.com/cart.png");
+        background-size: 30px;
+        width: 30px ;
+        height: 30px;
+        cursor: pointer;
+      }
     }
   }
 }
-//浮动窗口背景
-#float_back{
-  top:0;
-  left: 0;
-  position: fixed;
-  opacity: 0.5;
-  z-index: 98;
-  background-color: black;
-  display: none;
-}
 
-//输入框
-.form_div{
-  outline: none;
-  border: @border_one;
-  padding: 8px 5px;
-  margin-right: 5px;
-  width: 160px;
-}
-//验证输入款
-.form_div_verify{
-  &:extend(.form_div);
-  width: 70px;
-  margin-right: 0;
-}
-.verify_img{
-  display: inline-block;
-}
-.verify_img >img{
-  vertical-align:middle;
-}
-.verify_img >img:hover{
-  cursor: pointer;
-}
-#login{
-  top:100px;
-}
-#register{
-  top: 150px;
-}
-.button {
-  height: 35px;
-  text-align: center;
-  font-size: 25px;
-  font-weight: bold;
-  background-color: @four_color;
-  line-height: 35px;
-  padding: 0 8px;
-}
-[class*='button']:hover{
-  cursor: pointer;
-  background-color: @five_color;
-}
-//按钮居中
-.button_center{
-  &:extend(.button);
-  width: 80px;
+.index_roll{
+  width: 1200px;
+  height: 600px;
+  background-color: #00ff00;
   margin: 0 auto;
-}
-//按钮居左
-.button_left{
-  &:extend(.button);
-  float: left;
-  margin: 10px 0 10px 20%;
-}
-//按钮居右
-.button_right{
-  &:extend(.button);
-  float: right;
-  margin: 10px 20% 10px 0;
+  overflow: hidden;
+  position: relative;
+  .roll_ul{
+    position: relative;
+    height: 600px;
+    left: 0;
+    .roll_li{
+      width: 1200px;
+      height: 600px;
+      float: left;
+    }
+  }
+  .roll_key{
+    position: absolute;
+    right: 100px;
+    bottom: 40px;
+    .roll_key_li{
+      float: left;
+      width: 20px;
+      height: 20px;
+      border-radius: 20px;
+      opacity: 0.5;
+      margin-left: 10px;
+      cursor: pointer;
+      background-color:@two_color;
+    }
+
+    .roll_key_li:hover ,.roll_key_li_sel{
+      background-color: @one_tint;
+    }
+  }
 }
 
-//验证
-.verify_megs{
-
-  float: right;
-  width: 200px;
-  height: 60px;
-  .verify_er{
-    color: red;
-    line-height: 14px;
-    display: inline-block;
-  }
-  .verify_su{
-    line-height: 14px;
-    display: inline-block;
-    color: green;
-  }
-}
-//吐司
-.toast {
-  z-index: 1001;
-  display: none;
-  position: absolute;
-  width: 200px;
-  height: 20px;
-  line-height: 20px;
-  text-align: center;
-  top: 40px;
-}
-/*吐司错误*/
-.toast_er {
-  &:extend(.toast);
-  background-color: #FFCCCC;
-  border: 1px solid #FF0033;
-}
-/*吐司成功*/
-.toast_su {
-  &:extend(.toast);
-  background-color: #E0F8FB;
-  border: 1px solid #50D1DE;
-}
+////顶部
+//#top{
+//  position: relative;
+//  height: 40px;
+//  width: 100%;
+//  background-color: @two_color;
+//  line-height: 40px;
+//  .top_util{
+//    width: 1200px;
+//    margin: 0 auto;
+//    text-align: center;
+//    .top_left{
+//      float: left;
+//    }
+//    .top_right{
+//      float: right;
+//      li ,span{
+//        float: left;
+//      }
+//      li{
+//        width: 60px;
+//        text-align: center;
+//      }
+//
+//    }
+//
+//    .top_center{
+//      display: inline-block;
+//      width: 400px;
+//      height: 30px;
+//      background-color: #fff;
+//      margin-top: 5px;
+//      border-radius: 15px;
+//      padding: 0 15px;
+//      overflow: hidden;
+//      #search{
+//        display: block;
+//        outline:none;
+//        border: hidden;
+//        height: 28px;
+//        width: 350px;
+//        float: left;
+//      }
+//      .search_button{
+//        float: left;
+//      }
+//    }
+//  }
+//}
+//
+////浮动表格
+//.float_div{
+//  background-color: #fff;
+//  display: none;
+//  position: absolute;
+//  overflow: hidden;
+//  z-index: 99;
+//  border: @border_one;
+//  .float_head{
+//    width: 100%;
+//    height: 40px;
+//    background-color: @four_color;
+//    text-align: center;
+//    line-height: 40px;
+//    font-size: 30px;
+//    font-weight: bold;
+//    overflow: hidden;
+//    .float_div_close{
+//      position: absolute;
+//      right: 0;
+//      top: 0;
+//      width: 40px;
+//      height: 40px;
+//      text-align: center;
+//      line-height: 40px;
+//      font-size: 30px;
+//      font-weight: bold;
+//      color: red;
+//    }
+//    .float_div_close:hover {
+//      background-color: @one_color;
+//      cursor: pointer;
+//    }
+//  }
+//  .float_head:hover{
+//    cursor: move;
+//  }
+//  .float_row{
+//    width: 100%;
+//    height: 60px;
+//    line-height: 60px;
+//    //overflow: hidden;
+//    .float_row_head{
+//      float: left;
+//      width: 120px;
+//      color:@five_color;
+//      text-align: right;
+//      font-size: 18px;
+//    }
+//    .float_row_input{
+//      #sheng{
+//
+//      }
+//      .address:hover,.address li:hover{
+//        background-color: @three_color;
+//        cursor: pointer;
+//      }
+//      .address{
+//        border: @border_one;
+//        height: 30px;
+//        line-height: 30px;
+//        width: 70px;
+//        float: left;
+//        margin: 15px 5px 0 0;
+//        text-align: center;
+//        background-color: @gray_color;
+//        position: relative;
+//        ul{
+//          display: none;
+//          position: absolute;
+//          z-index: 100;
+//          left: -1px;
+//          border-left: @border_one;
+//          border-top: @border_one;
+//          li{
+//            height: 30px;
+//            line-height: 30px;
+//            width: 70px;
+//            overflow: hidden;
+//            border-bottom: @border_one;
+//            border-right: @border_one;
+//            background-color: @gray_color;
+//            float: left;
+//          }
+//        }
+//      }
+//      float: left;
+//      margin-left: 10px;
+//      width: 380px;
+//
+//    }
+//  }
+//}
+////浮动窗口背景
+//#float_back{
+//  top:0;
+//  left: 0;
+//  position: fixed;
+//  opacity: 0.5;
+//  z-index: 98;
+//  background-color: black;
+//  display: none;
+//}
+//
+////输入框
+//.form_div{
+//  outline: none;
+//  border: @border_one;
+//  padding: 8px 5px;
+//  margin-right: 5px;
+//  width: 160px;
+//}
+////验证输入款
+//.form_div_verify{
+//  &:extend(.form_div);
+//  width: 70px;
+//  margin-right: 0;
+//}
+//.verify_img{
+//  display: inline-block;
+//}
+//.verify_img >img{
+//  vertical-align:middle;
+//}
+//.verify_img >img:hover{
+//  cursor: pointer;
+//}
+//#login{
+//  top:100px;
+//}
+//#register{
+//  top: 150px;
+//}
+//.button {
+//  height: 35px;
+//  text-align: center;
+//  font-size: 25px;
+//  font-weight: bold;
+//  background-color: @four_color;
+//  line-height: 35px;
+//  padding: 0 8px;
+//}
+//[class*='button']:hover{
+//  cursor: pointer;
+//  background-color: @five_color;
+//}
+////按钮居中
+//.button_center{
+//  &:extend(.button);
+//  width: 80px;
+//  margin: 0 auto;
+//}
+////按钮居左
+//.button_left{
+//  &:extend(.button);
+//  float: left;
+//  margin: 10px 0 10px 20%;
+//}
+////按钮居右
+//.button_right{
+//  &:extend(.button);
+//  float: right;
+//  margin: 10px 20% 10px 0;
+//}
+//
+////验证
+//.verify_megs{
+//
+//  float: right;
+//  width: 200px;
+//  height: 60px;
+//  .verify_er{
+//    color: red;
+//    line-height: 14px;
+//    display: inline-block;
+//  }
+//  .verify_su{
+//    line-height: 14px;
+//    display: inline-block;
+//    color: green;
+//  }
+//}
+////吐司
+//.toast {
+//  z-index: 1001;
+//  display: none;
+//  position: absolute;
+//  width: 200px;
+//  height: 20px;
+//  line-height: 20px;
+//  text-align: center;
+//  top: 40px;
+//}
+///*吐司错误*/
+//.toast_er {
+//  &:extend(.toast);
+//  background-color: #FFCCCC;
+//  border: 1px solid #FF0033;
+//}
+///*吐司成功*/
+//.toast_su {
+//  &:extend(.toast);
+//  background-color: #E0F8FB;
+//  border: 1px solid #50D1DE;
+//}

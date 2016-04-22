@@ -33,7 +33,8 @@ $sma->assign('table',$table);
 $sma->assign('add',$add);
 $sma->assign('delete',$delete);
 $sma->assign('update',$update);
-$sma->assign('page', $sp->getPages($data['count']));
-$sma->assign('data' ,$data['data']);
+
+$sma->assign('page', $data? $sp->getPages($data['count']):0);
+$sma->assign('data' ,$data?$data['data']:null);
 $sma->ds('winTable.tpl');
 
