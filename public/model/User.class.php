@@ -11,40 +11,13 @@ class User extends Model{
     public function __construct()
     {
         $this->columnName = array('u_id','u_name','u_pwd','u_phone','u_nick','u_email','u_address','u_img','u_reg','u_status'=>'int');
-
+        $this->tableName = 'user';
+        $this->tableId = 'u_id';
     }
-    public function save()
-    {
-        $u_id = 0;
-        $sql = new Sql();
-        foreach ($this->model as $user){
-            if(!empty($user['u_id'])){//修改
-                $data = array();
-                foreach($user as $key=>$value){
-                    if($key==='u_id')continue;
-                    array_push($data,array('columnName'=>$key,'value'=>$value,'type'=>$this->columnType($key)));
-                }
-                $sql->update('user',new Where('u_id',$user['u_id'],'int'),$data);
-            }else{//增加
-                $column = array();
-                $data = array();
-                foreach($user as $key=>$value){
-                    $column[$key] =$this->columnType($key);
-                    array_push($data,$value);
-                }
-                //print_r($column);
-               // print_r($data);
-                $u_id =$sql->insert('user',$column,$data);
-            }
-        }
-        return $u_id;
-    }
-    
     public function read($arr)
     {
         $row = array();
         foreach($arr as $key=>$value){
-            if(empty($value))continue;
             $value =Xss::RemoveXSS($value);
             if($key ==='u_id'){
                 $row['u_id'] = intval($value);
@@ -75,22 +48,5 @@ class User extends Model{
             }
         }
         $this->model[] = $row;
-    }
-
-    public function remove()
-    {
-        $sql = $this->getSql();
-        foreach ($this->model as $user){
-            if(!empty($user['u_id'])){
-                $sql->delete('user',new Where('u_id',$user['u_id'],'int'));
-            }
-        }
-    }
-
-    public function query(Where $where,$columnName = '*')
-    {
-        $sql = $this->getSql();
-       $this->model =$sql->selectData('user',$columnName,$where) ;
-
     }
 }

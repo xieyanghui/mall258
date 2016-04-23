@@ -26,6 +26,12 @@ a:hover  {
   background-color: black;
   display: none;
 }
+//流块
+.wrap{
+  margin: 0 auto;
+  width: 1200px;
+  position: relative;
+}
 
 //头顶部
 .header_top{
@@ -44,8 +50,6 @@ a:hover  {
     background-color: @one_color;
     height: 35px;
     line-height: 35px;
-    width: 1200px;
-    margin: 0 auto;
     ul>span{
       margin: 0 5px;
     }
@@ -63,81 +67,75 @@ a:hover  {
 }
 
 //头底部
-.header_bottom{
-  background-color:#fff;
-  width: 100%;
-  .wrap {
-    height: 100px;
-    line-height: 100px;
-    width: 1200px;
-    margin: 0 auto;
-    position: relative;
-    .header_bottom_left{
-      img{
-        vertical-align:middle;
-      }
-      div{
-        display: inline-block;
-        float: left;
-      }
-      li{
-        margin: 0 10px;
-        a{
-          font-size: 15px;
-        }
-      }
-      ul ,li,span {
-        float: left;
-      }
-    }
-    .header_bottom_right>div{
-      display: inline-block;
+.header_bottom {
+  &:extend(.wrap);
+  height: 100px;
+  line-height: 100px;
+  .header_bottom_left{
+    img{
       vertical-align:middle;
     }
-    .header_bottom_right{
-      float: right;
-      width: 350px;
-      .search{
-        height: 30px;
-        border: 1px solid #ddd;
-        .search_text{
-          display: block;
-          float: left;
-          border: none;
-          outline: none;
-          background: none;
-          color: #777;
-          width: 160px;
-          padding: 7px;
-          .transition(all,0.4s,linear);
-        }
-        .search_text:focus{
-          width: 200px;
-        }
-        .search_submit{
-          float: left;
-          cursor: pointer;
-          background: url("http://7xsiy9.com2.z0.glb.clouddn.com/search.png")no-repeat 0px 3px;
-          width: 30px;
-          height: 25px;
-          padding: 8px 0 8px 8px;
-        }
+    div{
+      display: inline-block;
+      float: left;
+    }
+    li{
+      margin: 0 10px;
+      a{
+        font-size: 15px;
       }
+    }
+    ul ,li,span {
+      float: left;
+    }
+  }
+  .header_bottom_right>div{
+    display: inline-block;
+    vertical-align:middle;
+  }
+  .header_bottom_right{
+    float: right;
+    width: 350px;
+    .search{
+      height: 30px;
+      border: 1px solid #ddd;
+      .search_text{
+        display: block;
+        float: left;
+        border: none;
+        outline: none;
+        background: none;
+        color: #777;
+        width: 160px;
+        padding: 7px;
+        .transition(all,0.4s,linear);
+      }
+      .search_text:focus{
+        width: 200px;
+      }
+      .search_submit{
+        float: left;
+        cursor: pointer;
+        background: url("http://7xsiy9.com2.z0.glb.clouddn.com/search.png")no-repeat 0px 3px;
+        width: 30px;
+        height: 25px;
+        padding: 8px 0 8px 8px;
+      }
+    }
 
-      .collect{
-        background-image: url("http://7xsiy9.com2.z0.glb.clouddn.com/tag.png");
-        background-size: 30px;
-        width: 30px ;
-        height: 30px;
-        cursor: pointer;
-      }
-      .cart{
-        background-image: url("http://7xsiy9.com2.z0.glb.clouddn.com/cart.png");
-        background-size: 30px;
-        width: 30px ;
-        height: 30px;
-        cursor: pointer;
-      }
+    .collect{
+      background-image: url("http://7xsiy9.com2.z0.glb.clouddn.com/tag.png");
+      background-size: 30px;
+      width: 30px ;
+      height: 30px;
+      cursor: pointer;
+    }
+    .cart{
+      background-image: url("http://7xsiy9.com2.z0.glb.clouddn.com/cart.png");
+      background-size: 30px;
+      width: 30px ;
+      height: 30px;
+      cursor: pointer;
     }
   }
 }
@@ -165,9 +163,9 @@ a:hover  {
     bottom: 40px;
     .roll_key_li{
       float: left;
-      width: 20px;
-      height: 20px;
-      border-radius: 20px;
+      width: 15px;
+      height: 15px;
+      border-radius: 15px;
       opacity: 0.5;
       margin-left: 10px;
       cursor: pointer;

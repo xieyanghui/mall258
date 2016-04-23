@@ -125,14 +125,14 @@ ALTER TABLE `user` ADD UNIQUE (`u_name` , `u_phone`);
 -- 用户收货地址
 DROP TABLE IF EXISTS `user_ship_address`;
 CREATE TABLE `user_ship_address`(
-  `add_id` INT NOT NULL,      -- ID
+  `usa_id` INT NOT NULL,      -- ID
 	`u_id` INT ,								 -- 用户ID
-  `add_number` CHAR(12) NOT NULL , -- 地址编号
-  `add_consignee` CHAR(12) NOT NULL, -- 收件人姓名
-	`add_phone` CHAR(15) NOT NULL      -- 收件人电话
+  `usa_number` CHAR(12) NOT NULL , -- 地址编号
+  `usa_name` CHAR(12) NOT NULL, -- 收件人姓名
+	`usa_phone` CHAR(15) NOT NULL      -- 收件人电话
 )DEFAULT CHARSET =utf8 ENGINE=MyISAM;
-ALTER TABLE `user_ship_address` ADD PRIMARY KEY (`add_id`);
-ALTER TABLE `user_ship_address` MODIFY `add_id` INT UNSIGNED AUTO_INCREMENT;
+ALTER TABLE `user_ship_address` ADD PRIMARY KEY (`usa_id`);
+ALTER TABLE `user_ship_address` MODIFY `usa_id` INT UNSIGNED AUTO_INCREMENT;
 
 -- 商品类型
 DROP TABLE IF EXISTS `goods_type`;
@@ -264,7 +264,7 @@ DROP TABLE IF EXISTS `cart`;
 CREATE TABLE `cart`(
 	`c_id` INT NOT NULL,         -- ID
 	`u_id` INT UNSIGNED NOT NULL, -- 用户ID
-	`gps_id` INT UNSIGNED NOT NULL, --  商品ID
+	`gpi_id` INT UNSIGNED NOT NULL, --  商品ID
 	`c_sum` INT UNSIGNED NOT NULL DEFAULT 1  -- 数量
 )DEFAULT CHARSET =utf8 ENGINE=MyISAM;
 
@@ -274,13 +274,11 @@ ALTER TABLE `cart` MODIFY `c_id` INT UNSIGNED AUTO_INCREMENT;
 -- 收藏夹
 DROP TABLE IF EXISTS `collect`;
 CREATE TABLE `collect`(
-	`c_id` INT NOT NULL,  -- ID
 	`u_id` INT UNSIGNED NOT NULL, -- 用户ID
 	`g_id` INT UNSIGNED NOT NULL  -- 商品ID
 
 )DEFAULT CHARSET =utf8 ENGINE=MyISAM;
-ALTER TABLE `collect` ADD PRIMARY KEY (`c_id`);
-ALTER TABLE `collect` MODIFY `c_id` INT UNSIGNED AUTO_INCREMENT;
+ALTER TABLE `collect` ADD PRIMARY KEY (`u_id`,`g_id`);
 
 
 -- 订单
@@ -303,7 +301,7 @@ DROP TABLE IF EXISTS `order_goods`;
 CREATE TABLE `order_goods`(
 	`og_id` INT NOT NULL ,       -- ID
 	`o_id` INT UNSIGNED NOT NULL,  -- 订单ID
-	`gps_id` INT UNSIGNED NOT NULL  -- 商品ID
+	`gpi_id` INT UNSIGNED NOT NULL  -- 商品ID
 
 )DEFAULT CHARSET =utf8 ENGINE=MyISAM;
 
@@ -311,34 +309,46 @@ ALTER TABLE `order_goods` ADD PRIMARY KEY (`og_id`);
 ALTER TABLE `order_goods` MODIFY `og_id` INT UNSIGNED AUTO_INCREMENT;
 
 
---  页面SEO设置
-DROP TABLE IF EXISTS `web_info`;
-CREATE TABLE `web_info`(
-	`key` CHAR(20) NOT NULL,  -- key
-	`title` CHAR(100) NOT NULL, -- 标题
-	`keywords` CHAR(200) NOT NULL,  -- 关键字
-	`description` CHAR(200) NOT NULL   -- 描述
-)DEFAULT CHARSET =utf8 ENGINE=MyISAM;
-
-ALTER TABLE `web_info` ADD PRIMARY KEY (`key`);
+# --  页面SEO设置
+# DROP TABLE IF EXISTS `web_info`;
+# CREATE TABLE `web_info`(
+# 	`key` CHAR(20) NOT NULL,  -- key
+# 	`title` CHAR(100) NOT NULL, -- 标题
+# 	`keywords` CHAR(200) NOT NULL,  -- 关键字
+# 	`description` CHAR(200) NOT NULL   -- 描述
+# )DEFAULT CHARSET =utf8 ENGINE=MyISAM;
+#
+# ALTER TABLE `web_info` ADD PRIMARY KEY (`key`);
 # INSERT INTO `web_info`(`key`,`title`,`keywords`,`description`) VALUES('index','星火数码','手机，相机','599只要599');
 
 
--- 首页滚动页面
-DROP TABLE IF EXISTS `index_roll`;
-CREATE TABLE `index_roll`(
-	`ir_id` INT  NOT NULL ,   -- ID
-	`ir_name` CHAR (100) NOT NULL,  -- 描述
-	`ir_img` CHAR(200) NOT NULL,   -- 图片路径
-	`ir_start_time` TIMESTAMP ,     -- 开始时间
-	`ir_end_time` TIMESTAMP ,       -- 结束时间
-	`ir_status`  TINYINT DEFAULT 1, -- 是否显示
-	`g_id` INT UNSIGNED NOT NULL    -- 商品ID
+
+-- 首页模块管理
+DROP TABLE IF EXISTS `index_model`;
+CREATE TABLE `index_model`(
+	`im_id` INT  NOT NULL ,   -- ID
+	`im_name` CHAR(20) NOT NULL , -- 模块名字
+	`im_class` CHAR(20) DEFAULT 'default', -- 模块主题
+	`im_sort` SMALLINT DEFAULT 30000 -- 排序
+)DEFAULT CHARSET =utf8 ENGINE=MyISAM;
+ALTER TABLE `index_model` ADD PRIMARY KEY (`im_id`);
+ALTER TABLE `index_model` MODIFY `im_id` INT UNSIGNED AUTO_INCREMENT;
+
+
+-- 首页模块内容
+DROP TABLE IF EXISTS `index_goods`;
+CREATE TABLE `index_goods`(
+	`ig_id` INT  NOT NULL ,   -- ID
+	`ig_name` CHAR (100) NOT NULL,  -- 描述
+	`ig_img` CHAR(255) ,              -- 图片路径
+	`ig_label` CHAR(10),            -- 标示
+	`ig_status`  TINYINT DEFAULT 1, -- 是否显示
+	`g_id` INT UNSIGNED NOT NULL ,   -- 商品ID
+	`im_id` INT UNSIGNED  NOT NULL   -- 模块ID
 )DEFAULT CHARSET =utf8 ENGINE=MyISAM;
 
-
-ALTER TABLE `index_roll` ADD PRIMARY KEY (`ir_id`);
-ALTER TABLE `index_roll` MODIFY `ir_id` INT UNSIGNED AUTO_INCREMENT;
+ALTER TABLE `index_goods` ADD PRIMARY KEY (`ig_id`);
+ALTER TABLE `index_goods` MODIFY `ig_id` INT UNSIGNED AUTO_INCREMENT;
 
 
 DROP VIEW IF EXISTS `admin_info_v`;

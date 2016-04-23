@@ -28,6 +28,9 @@ INSERT INTO `admin` (`a_id`, `a_name`, `a_pwd`, `a_reg`, `a_img`, `a_nick`, `a_s
 (1, 'xieyanghui', 'e10adc3949ba59abbe56e057f20f883e', '2016-04-21 20:08:48', NULL, '谢扬辉', 1, 1),
 (2, 'yefengxi', 'e10adc3949ba59abbe56e057f20f883e', '2016-04-21 20:08:48', NULL, '逗比', 1, 2);
 
+
+
+INSERT INTO `index_model`(`im_name`,`im_sort`) VALUES ('滚动图片',30005),('热卖商品',1),('新品上市',2);
 --
 -- 转存表中的数据 `admin_auth`
 --
