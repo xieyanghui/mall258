@@ -10,17 +10,49 @@ $sma = new Smartys();
 $number = $_GET['id'];
 include_once ('./top.php');
 $g = new Goods();
-$g->query(new Where('g_number',$number),'*',"GAttr,GPrice");
+$g = $g->query(new Where('g_number',$number),'*',"GAttr,GPrice")->toArray()[0];
 
-if($gt_id = $g->get('gt_id')){
+
+if($gt_id = $g['gt_id']){
     $where_gt = new Where('gt_id',$gt_id);
 
-    $where = new Where('g_id',$g->get('g_id'),'int');
+    $gt = new GoodsType();
+    $gt = $gt->query(new Where('gt_id',$gt_id,'int'),'*','GTAttr,GTPrice')->toArray()[0];
+
     $gpi = new GPriceInfo();
-    $gpi->query($where,'*',"GPriceList");
-    foreach($gpi as $gp){
-        print_r($gp['GPriceList']);
+    $gpi = $gpi->query(new Where('g_id',$g['g_id'],'int'),'*',"GPriceList")->toArray();
+
+    $newAttr = array();
+    foreach ($g['GAttr'] as $attr){
+        foreach ($gt['GTAttr'] as $gtAttr){
+            if($attr['gta_id'] === $gtAttr['gta_id']){
+                $newAttr[$gtAttr['gta_type']][] = array('ga_value'=>$attr['ga_value'],'gta_name'=>$gtAttr['gta_name']);
+                continue;
+            }
+        }
     }
+
+    $newPrice = array();
+    foreach($g['GPrice'] as $price){
+        foreach ($gt['GTPrice'] as $gtPrice){
+            if($price['gtp_id'] === $gtPrice['gtp_id']){
+                $newPrice[$gtPrice['gtp_name']][] = array('gp_name'=>$price['gp_name'],'gp_id'=>$price['gp_id']);
+                continue;
+            }
+        }
+    }
+    $g['gt_name'] = $gt['gt_name'];
+    $g['GPrice'] =$newPrice;
+    $g['GAttr'] = $newAttr;
+    $g['gpi'] = $gpi;
+    $sma->assign('gpi',json_encode($gpi));
+    $sma->assign('top',$top);
+    $sma->assign('title',$g['g_name']);
+    $sma->assign('keywords',$g['g_keywords']);
+    $sma->assign('description',$g['g_description']);
+    $sma->assign('g',$g);
+    $sma->display('goods.htm');
+
 }else{
 
 }

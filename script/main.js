@@ -47,11 +47,37 @@ define('main',['jquery-ui'],function(){
         });
         $('#float_back').css('width',$(window).width());
         $('#float_back').css('height',$(window).height());
+        if($(window).width() > 800 && $(window).width() < 1200){
+            $('.wrap').css('width',$(window).width());
+        }else if($(window).width() > 1200){
+            $('.wrap').css('width',1200);
+        }
     }
     init();
     $(window).resize(init);
 
     window.h_util = {
+        imgLink:function(url,size){
+            if(url.indexOf('img.alicdn.com') != -1){
+                switch (size){
+                    case 'min':
+                        return url+'_60x60q90.jpg';
+                    case 'centre':
+                        return url+'_430x430q90.jpg';
+                    case 'max':
+                        return url;
+                }
+            }else{
+                switch (size){
+                    case 'min':
+                        return url+'?imageView2/5/w/60/h/60';
+                    case 'centre':
+                        return url+'?imageView2/5/w/400/h/400';
+                    case 'max':
+                        return url+'?imageView2/5/w/800/h/800';
+                }
+            }
+        },
         /**
          * 吐司
          * status bool|object true为成功 false 为失败
@@ -138,9 +164,9 @@ define('main',['jquery-ui'],function(){
 
 
     };
-    var main;
-    for( main in window.main){
+    var h_main;
+    for( h_main in window.h_main){
 
-        window.main[main]();
+        window.h_main[h_main]();
     }
 });

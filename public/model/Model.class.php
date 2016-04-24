@@ -51,6 +51,7 @@ abstract class Model implements Iterator{
         if(!empty(array_filter($value))){
             array_push($this->model,$value);
         }
+        return $this;
     }
 
     
@@ -58,6 +59,7 @@ abstract class Model implements Iterator{
         foreach ($arr as $value){
             $this->read($value);
         }
+        return $this;
     }
 
     public function remove(Where $where){
@@ -135,9 +137,11 @@ abstract class Model implements Iterator{
      *
      * @param $value mixed 需要查询的字段
      *
+     *@return  Model 链式
      */
     public function set($key,$value){
-        $this->model[key($this->model)][$key] = $value;
+        $this->model[$this->current][$key] = $value;
+        return $this;
     }
 
 
@@ -149,6 +153,8 @@ abstract class Model implements Iterator{
      * @param $columnName string|array 需要查询的字段
      *
      *@param $subModel string 子类名,可多个 用","隔开 需要子类引用该类的id
+     *
+     * @return  Model 链式
      */
     public function query(Where $where,$columnName ='*',$subModel = ""){
         $sql = $this->getSql();
@@ -164,8 +170,7 @@ abstract class Model implements Iterator{
                 }
             }
         }
-
-
+        return $this;
     }
 
 
@@ -184,16 +189,23 @@ abstract class Model implements Iterator{
         return $arr[$key];
     }
 
-    public function toJson(){
+    public function toArray(){
         $arr = array();
         foreach ($this->model as $model){
             $a = array();
             foreach($model as $key=>$value){
                 if(is_a($value,'Model')){
-                    
+                    $a[$key] = $value->toArray();
+                }else{
+                    $a[$key] = $value;
                 }
             }
+            array_push($arr,$a);
         }
+        return $arr;
+    }
+    public function toJson(){
+        return json_encode($this->toArray());
     }
 
     //遍历

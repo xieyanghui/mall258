@@ -1,7 +1,13 @@
 <?php
 header("Content-Type:text/html;charset=utf-8");
 require_once($_SERVER['DOCUMENT_ROOT'] . '/public/autoload.php');
-$gp = new GPrice();
-$gp->query(new Where('g_id',1,'int'),"*");
+$gp = new GPriceInfo();
+$gp->query(new Where(),"gpi_id,gpi_img");
 //$gp->query(new Where('g_id',1,'int'),"*",'GAttr');
-print_r($gp);
+
+foreach ($gp as $g){
+    $gp->set('gpi_img',str_replace('_430x430q90.jpg','',$g['gpi_img']));
+}
+$gp->save();
+
+

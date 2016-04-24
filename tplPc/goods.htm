@@ -2,13 +2,52 @@
 <div id ='top_div'>
     <{$top|default:'' }>
 </div>
-<div>
-    <div id ='index_roll'>
+<div class="clear"></div>
+<ul class="goods_nav wrap">
+    <li class = "goods_nav_li"> <a href="<{$HTTP_HOST}>">首页</a></li><span>></span>
+    <li class = "goods_nav_li"> <a href="<{$HTTP_HOST}>">全部商品</a></li><span>></span>
+    <li class = "goods_nav_li"> <a href="<{$HTTP_HOST}>"><{$g['gt_name']}></a></li><span>></span>
+    <li class = "goods_nav_li"><{$g['g_name']}></li>
+</ul>
 
+<div class="goods_head wrap">
+    <div class="goods_head_img">
+        <div class="goods_show_img"><img imgUrl="<{$g['g_img']}>" src=""><div class="goods_view_img"></div></div>
+
+        <div class="goods_roll_img">
+            <{foreach $g['gpi'] as $gpi}>
+            <div class="goods_roll_img_s" name="<{$gpi['gpi_id']}>">
+                <img imgUrl="<{$gpi['gpi_img']}>" src=""/>
+            </div>
+            <{/foreach}>
+        </div>
     </div>
-    <div id="class_menu">
-
+    <div class="goods_info">
+        <h2><{$g['g_name']}></h2>
     </div>
 </div>
+<script>
+    window.h_main.push(function(){
+        $('.goods_show_img >img').attr('src',h_util.imgLink($('.goods_show_img >img').attr('imgUrl'),'centre'));
+        $('.goods_roll_img_s >img').each(function(){
+            $(this).attr('src',h_util.imgLink($(this).attr('imgUrl'),'min'));
+        });
+        $('.goods_roll_img_s >img').mouseenter(function(){
+            $('.goods_show_img >img').attr('imgUrl',$(this).attr('imgUrl')).attr('src',h_util.imgLink($(this).attr('imgUrl'),'centre'));
+        });
+        $('.goods_show_img').mouseenter(function(){
+            $(this).children('.goods_view_img').show();
+        }).mouseleave(function(){
+            $(this).children('.goods_view_img').hide();
+        }).mousemove(function(e){
+            var x =e.pageX-$(this).offset().left;
+            var y=e.pageY-$(this).offset().top;
+            var view = $(this).children('.goods_view_img');
+            view.css('left',x-100);
+            view.css('top',y);
+
+        });
+    });
+</script>
 
 <{include 'bottom.tpl'}>
