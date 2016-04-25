@@ -307,20 +307,14 @@ a:hover  {
         display:none;
 
       }
-      .goods_roll_img_s:hover{
+      .goods_roll_img_s_c,.goods_roll_img_s:hover{
         border: 2px solid @two_color;
       }
-      .goods_roll_img_s_c{
-        cursor: pointer;
-        border: 2px solid @two_color;
-        margin: 10px 10px 0 0;
-        float: left;
-        width: 60px;
-        height: 60px;
+      .goods_roll_img_s_n{
+        border: 2px solid @gray_three;
       }
       .goods_roll_img_s{
         cursor: pointer;
-        border: 2px solid @gray_three;
         margin: 10px 10px 0 0;
         float: left;
         width: 60px;
@@ -347,7 +341,7 @@ a:hover  {
       .goods_info_price_s{
         width: 100%;
         float: left;
-        margin: 10px;
+        margin: 8px;
         .goods_info_price_type{
           float: left;
           width: 80px;
@@ -359,12 +353,14 @@ a:hover  {
         .goods_info_price_ul{
           margin-left: 85px;
           .goods_info_price_li{
+            white-space: nowrap;
+            padding: 0 5px;
             float: left;
             width: 80px;
             height: 30px;
             line-height: 30px;
-            margin-right: 30px;
-            margin-bottom: 5px;
+            margin-right: 8px;
+            margin-bottom: 8px;
             text-align: center;
             cursor: pointer;
             background-color: @gray_one;
@@ -379,8 +375,61 @@ a:hover  {
         }
       }
     }
+    .goods_info_sum{
+      margin-left: 93px;
+      .goods_info_sum_v{
+        margin-right: 5px;
+        width: 50px;
+        padding: 5px;
+        outline:none;
+        border: 1px solid @gray_three;
+      }
+    }
+    .goods_info_util{
+      margin-left: 93px;
+      div{
+        cursor: pointer;
+        border: none;
+        display: inline-block;
+        font-size: 14px;
+        padding: 10px 20px;
+        margin: 20px 20px;
+        color: #FFF;
+      }
+      .goods_info_buy{
+        background: #FF6537;
+      }
+      .goods_info_cart{
+        background: @one_color;
+      }
+      .goods_info_collect{
+        background: @two_color;
+      }
+    }
   }
 }
+.goods_content{
+  border:1px solid @gray_three;
+  padding: 10px;
+  width: 800px;
+  float: left;
+  margin:20px 0 0 -10px;
+  .goods_content_nav{
+    li{
+      float: left;
+      width: 150px;
+      font-size: 16px;
+      height: 60px;
+      line-height: 60px;
+      text-align: center;
+      margin-bottom: 5px;
+    }
+    li:hover{
+      background-color: @gray_one;
+    }
+  }
+}
+
 ////顶部
 //#top{
 //  position: relative;
