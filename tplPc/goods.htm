@@ -9,7 +9,6 @@
     <li class = "goods_nav_li"> <a href="<{$HTTP_HOST}>"><{$g['gt_name']}></a></li><span>></span>
     <li class = "goods_nav_li"><{$g['g_name']}></li>
 </ul>
-
 <div class="goods_head wrap">
     <div class="goods_head_img">
         <div class="goods_show_img">
@@ -31,10 +30,113 @@
     </div>
     <div class="goods_info">
         <h2><{$g['g_name']}></h2>
+        <div class = "goods_price_value">
+            <strong>￥ </strong><strong class="goods_price_value_v"></strong>
+        </div>
+        <div class="goods_info_price">
+            <{foreach $g['GPrice'] as $price}>
+            <div class="goods_info_price_s">
+                <div class="goods_info_price_type"><{$price@key}></div>
+                <ul class="goods_info_price_ul">
+                <{foreach $price as $prices}>
+                    <li class ='goods_info_price_li goods_info_price_li_n' title="<{$prices['gp_name']}>" key="<{$prices['gp_id']}>"><{$prices['gp_name']}></li>
+                <{/foreach}>
+                </ul>
+            </div>
+            <{/foreach}>
+        </div>
     </div>
+    <div class="clear"></div>
 </div>
 <script>
     window.h_main.push(function(){
+        var ul_temp = 0;
+        $('.goods_info_price_ul').each(function(){
+            $(this).attr('type',++ul_temp);
+        });
+        var price_list = JSON.parse("<{$gpi_s|escape:javascript}>");
+        var price_min = 1000000000;
+        var price_max = 0;
+        var price_arr = {};
+        for(var pl in price_list){
+            var gpi_price = parseFloat(price_list[pl]['gpi_price']);
+            if(gpi_price > price_max)price_max = gpi_price;
+            if(gpi_price < price_min)price_min = gpi_price;
+        }
+        $('.goods_price_value_v').html(price_min+' - '+price_max);
+
+        var isSelect= function(){
+            var list ={};//匹配数量
+            for(var pl in price_list){
+                list[price_list[pl]['gpi_id']] = 0;
+                for(var pa in price_arr){//循环当前选定价格元素
+                    for (var pll in price_list[pl]['list']){//判断是否在
+                        if(price_arr[pa] ==  price_list[pl]['list'][pll]){
+                            list[price_list[pl]['gpi_id']]++;
+                            break;
+                        }
+                    }
+                }
+            }
+            console.log(list);
+            console.log(price_list.length +'----'+$('.goods_info_price_li_c').length );
+            if(price_list.length === $('.goods_info_price_li_c').length){
+                var gpi_sum = 0;
+                var gpi_id = '';
+                for(var liss in list){
+                    if (list[liss] >gpi_sum){
+                        gpi_sum = list[liss];
+                        gpi_id = liss;
+                    }
+                }
+                $(".goods_roll_img_s[name='"+gpi_id+"']").trigger('click');
+                for(var pai in price_list){
+                    if(price_list[pai]['gpi_id'] == gpi_id){
+                        $('.goods_price_value_v').html(price_list[pai]['gpi_price']);
+                        break;
+                    }
+                }
+
+            }
+        };
+        //商品价格选择
+        $('.goods_info_price_li').click(function(){
+            if($(this).hasClass('goods_info_price_li_c')){
+                price_arr[$(this).parents('ul').attr('type')] = null;
+                $(this).removeClass('goods_info_price_li_c').addClass('goods_info_price_li_n');
+            }else{
+                price_arr[$(this).parents('ul').attr('type')] = $(this).attr('key');
+                $(this).addClass('goods_info_price_li_c').removeClass('goods_info_price_li_n').siblings().removeClass('goods_info_price_li_c').addClass('goods_info_price_li_n');
+            }
+            isSelect();
+        });
+
+        //图片选商品
+        $('.goods_roll_img_s').click(function(){
+            if($(this).hasClass('goods_roll_img_s_c')){
+                $(this).removeClass('goods_roll_img_s_c').addClass('goods_roll_img_s');
+                $(this).parents('ul').removeAttr('img_s');
+            }else{
+                $(this).parents('ul').attr('img_s',"");
+                $(this).addClass('goods_roll_img_s_c').removeClass('goods_roll_img_s').siblings().removeClass('goods_roll_img_s_c').addClass('goods_roll_img_s');
+                $('.goods_show_img >img').attr('imgUrl',$(this).children('img').attr('imgUrl')).attr('src',h_util.imgLink($(this).children('img').attr('imgUrl'),'centre'));
+                for(var pai in price_list){
+                    if(price_list[pai]['gpi_id'] == $(this).attr('name')){
+                        $('.goods_price_value_v').html(price_list[pai]['gpi_price']);
+                        for(var plpl in price_list[pai]['list']){
+                            $('.goods_info_price_li_n[key="'+price_list[pai]['list'][plpl]+'"]').trigger('click');
+                        }
+                        break;
+                    }
+                };
+                $('.goods_info_price_li')
+            }
+        });
+        $('.goods_roll_img_s').mouseenter(function(){
+            if(typeof ($(this).parents('ul').attr('img_s')) ==='undefined'){
+                $('.goods_show_img >img').attr('imgUrl',$(this).children('img').attr('imgUrl')).attr('src',h_util.imgLink($(this).children('img').attr('imgUrl'),'centre'));
+            }
+        });
 
         var sum = $('.goods_roll_img >ul >li').length;
         $('.goods_roll_img >ul').css('width',sum*74);
@@ -65,7 +167,6 @@
             if(parseInt(u.css('left')) < -1){
                 $('.goods_roll_left').show();
             }
-            console.log(parseInt(u.css('left'))+'=====' +(-u.width()+400));
             if(parseInt(u.css('left')) > (-u.width()+400)){
                 $('.goods_roll_right').show();
             }
@@ -75,15 +176,12 @@
             $('.goods_roll_right').hide();
         });
 
+//        初始化图片
         $('.goods_show_img >img').attr('src',h_util.imgLink($('.goods_show_img >img').attr('imgUrl'),'centre'));
         $('.goods_roll_img_s >img').each(function(){
             $(this).attr('src',h_util.imgLink($(this).attr('imgUrl'),'min'));
         });
-        $('.goods_roll_img_s >img').mouseenter(function(){
-            $('.goods_show_img >img').attr('imgUrl',$(this).attr('imgUrl')).attr('src',h_util.imgLink($(this).attr('imgUrl'),'centre'));
-        });
-
-
+        //预览大图
         $('.goods_show_img').mouseenter(function(){
             $(this).children('.goods_view_img').show();
             $(this).children('.goods_max_img').css('background-image',"url('"+h_util.imgLink($(this).children('img').attr('imgUrl'),'max')+"')").show();
@@ -113,7 +211,6 @@
             }
             view.css('top',y).css('left',x);
             $(this).children('.goods_max_img').css('background-position',-x*2+'px '+ -y*2+'px');
-
         });
     });
 </script>

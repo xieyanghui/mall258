@@ -21,7 +21,13 @@ if($gt_id = $g['gt_id']){
 
     $gpi = new GPriceInfo();
     $gpi = $gpi->query(new Where('g_id',$g['g_id'],'int'),'*',"GPriceList")->toArray();
-
+    foreach ($gpi as &$gpl){
+        $gpl['list'] = array();
+        foreach ($gpl['GPriceList'] as $gpls){
+            array_push($gpl['list'],$gpls['gp_id']);
+        }
+        unset($gpl['GPriceList']);
+    }
     $newAttr = array();
     foreach ($g['GAttr'] as $attr){
         foreach ($gt['GTAttr'] as $gtAttr){
@@ -45,7 +51,9 @@ if($gt_id = $g['gt_id']){
     $g['GPrice'] =$newPrice;
     $g['GAttr'] = $newAttr;
     $g['gpi'] = $gpi;
-    $sma->assign('gpi',json_encode($gpi));
+    //print_r($g);
+
+    $sma->assign('gpi_s',json_encode($gpi));
     $sma->assign('top',$top);
     $sma->assign('title',$g['g_name']);
     $sma->assign('keywords',$g['g_keywords']);
