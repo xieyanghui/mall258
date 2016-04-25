@@ -251,9 +251,7 @@ a:hover  {
   overflow: hidden;
   .goods_head_img{
     width: 420px;
-
     float: left;
-
     .goods_show_img{
       width: 400px;
       height: 400px;
@@ -267,10 +265,54 @@ a:hover  {
         left: 0;
         display: none;
       }
+      .goods_max_img{
+        width: 400px;
+        height: 400px;
+        position: absolute;
+        background-repeat:no-repeat;
+        overflow: hidden;
+        display: none;
+        left: 420px;
+        top :0;
+       }
     }
-    .goods_roll_img{
 
+    .goods_roll_img{
+      overflow: hidden;
+      width: 400px;
+      height: 75px;
+      position: relative;
+      ul{
+        position: relative;
+        left: 0;
+      }
+      .goods_roll_left{
+        position: absolute;
+        width: 20px;
+        height: 100%;
+        background-color: @two_color;
+        top:10px;
+        left: 0;
+        z-index: 50;
+        display: none;
+      }
+      .goods_roll_right{
+        position: absolute;
+        width: 20px;
+        height: 100%;
+        z-index: 50;
+        background-color: @two_color;
+        top:10px;
+        right: 0;
+        display:none;
+
+      }
+      .goods_roll_img_s:hover{
+        cursor: pointer;
+        border: 2px solid @one_color;
+      }
       .goods_roll_img_s{
+        border: 2px solid @gray_three;
         margin: 10px 10px 0 0;
         float: left;
         width: 60px;

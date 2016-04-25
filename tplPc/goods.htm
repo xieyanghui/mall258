@@ -12,14 +12,21 @@
 
 <div class="goods_head wrap">
     <div class="goods_head_img">
-        <div class="goods_show_img"><img imgUrl="<{$g['g_img']}>" src=""><div class="goods_view_img"></div></div>
-
+        <div class="goods_show_img">
+            <img imgUrl="<{$g['g_img']}>" src="">
+            <div class="goods_view_img"></div>
+            <div class ='goods_max_img'></div>
+        </div>
         <div class="goods_roll_img">
-            <{foreach $g['gpi'] as $gpi}>
-            <div class="goods_roll_img_s" name="<{$gpi['gpi_id']}>">
-                <img imgUrl="<{$gpi['gpi_img']}>" src=""/>
-            </div>
-            <{/foreach}>
+            <div class="goods_roll_left"> </div>
+            <ul>
+                <{foreach $g['gpi'] as $gpi}>
+                <li class="goods_roll_img_s" name="<{$gpi['gpi_id']}>">
+                    <img imgUrl="<{$gpi['gpi_img']}>" src=""/>
+                </li>
+                <{/foreach}>
+            </ul>
+            <div class="goods_roll_right"></div>
         </div>
     </div>
     <div class="goods_info">
@@ -28,6 +35,46 @@
 </div>
 <script>
     window.h_main.push(function(){
+
+        var sum = $('.goods_roll_img >ul >li').length;
+        $('.goods_roll_img >ul').css('width',sum*74);
+
+
+        $('.goods_roll_left').click(function(){
+            var u = $(this).siblings('ul');
+            if(parseInt(u.css('left')) > -300){
+                u.animate({'left':0},200);
+                $(this).hide();
+            }else{
+                u.animate({'left':parseInt(u.css('left'))+300},200);
+            }
+        });
+
+        $('.goods_roll_right').click(function(){
+            var u = $(this).siblings('ul');
+            if(-u.width() - parseInt(u.css('left')) > -700){
+                u.animate({'left':-u.width()+400},200);
+                $(this).hide();
+            }else{
+                u.animate({'left':parseInt(u.css('left'))-300},200);
+            }
+        });
+        $('.goods_roll_img').mousemove(function(){
+            var u = $(this).children('ul');
+           // console.log(parseInt($(this).children('ul').css('left')));
+            if(parseInt(u.css('left')) < -1){
+                $('.goods_roll_left').show();
+            }
+            console.log(parseInt(u.css('left'))+'=====' +(-u.width()+400));
+            if(parseInt(u.css('left')) > (-u.width()+400)){
+                $('.goods_roll_right').show();
+            }
+
+        }).mouseleave(function(){
+            $('.goods_roll_left').hide();
+            $('.goods_roll_right').hide();
+        });
+
         $('.goods_show_img >img').attr('src',h_util.imgLink($('.goods_show_img >img').attr('imgUrl'),'centre'));
         $('.goods_roll_img_s >img').each(function(){
             $(this).attr('src',h_util.imgLink($(this).attr('imgUrl'),'min'));
@@ -35,16 +82,37 @@
         $('.goods_roll_img_s >img').mouseenter(function(){
             $('.goods_show_img >img').attr('imgUrl',$(this).attr('imgUrl')).attr('src',h_util.imgLink($(this).attr('imgUrl'),'centre'));
         });
+
+
         $('.goods_show_img').mouseenter(function(){
             $(this).children('.goods_view_img').show();
+            $(this).children('.goods_max_img').css('background-image',"url('"+h_util.imgLink($(this).children('img').attr('imgUrl'),'max')+"')").show();
         }).mouseleave(function(){
             $(this).children('.goods_view_img').hide();
-        }).mousemove(function(e){
+            $(this).children('.goods_max_img').hide();
+        }).mousemove( function(e){
             var x =e.pageX-$(this).offset().left;
             var y=e.pageY-$(this).offset().top;
             var view = $(this).children('.goods_view_img');
-            view.css('left',x-100);
-            view.css('top',y);
+
+            var vx = view.width()/2;
+            var vy = view.height()/2;
+            if(parseInt(x) <= vx){
+                x =0
+            }else if(parseInt(x) >= $(this).width()-vx){
+                x= $(this).width()-vx*2;
+            }else{
+                x = x-vx;
+            }
+            if(parseInt(y) <= vy){
+                y = 0;
+            }else if(parseInt(y) >= $(this).height()-vy){
+                y = $(this).height()-vy*2;
+            }else{
+                y = y-vy;
+            }
+            view.css('top',y).css('left',x);
+            $(this).children('.goods_max_img').css('background-position',-x*2+'px '+ -y*2+'px');
 
         });
     });
