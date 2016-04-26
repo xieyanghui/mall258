@@ -11,6 +11,7 @@ class Config{
     const ADMIN_DIR = "/admin";
 
     //调试模式
+    const DEBUG = true;
     const Debug = true;
 
     //管理员默认头像

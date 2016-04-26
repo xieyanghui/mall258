@@ -309,17 +309,17 @@ ALTER TABLE `order_goods` ADD PRIMARY KEY (`og_id`);
 ALTER TABLE `order_goods` MODIFY `og_id` INT UNSIGNED AUTO_INCREMENT;
 
 
-# --  页面SEO设置
-# DROP TABLE IF EXISTS `web_info`;
-# CREATE TABLE `web_info`(
-# 	`key` CHAR(20) NOT NULL,  -- key
-# 	`title` CHAR(100) NOT NULL, -- 标题
-# 	`keywords` CHAR(200) NOT NULL,  -- 关键字
-# 	`description` CHAR(200) NOT NULL   -- 描述
-# )DEFAULT CHARSET =utf8 ENGINE=MyISAM;
-#
-# ALTER TABLE `web_info` ADD PRIMARY KEY (`key`);
-# INSERT INTO `web_info`(`key`,`title`,`keywords`,`description`) VALUES('index','星火数码','手机，相机','599只要599');
+--  页面SEO设置
+DROP TABLE IF EXISTS `web_info`;
+CREATE TABLE `web_info`(
+	`wi_key` CHAR(20) NOT NULL,  -- key
+	`wi_title` CHAR(100) NOT NULL, -- 标题
+	`wi_keywords` CHAR(200) NOT NULL,  -- 关键字
+	`wi_description` CHAR(200) NOT NULL   -- 描述
+)DEFAULT CHARSET =utf8 ENGINE= InnoDB;
+
+ALTER TABLE `web_info` ADD PRIMARY KEY (`wi_key`);
+INSERT INTO `web_info`(`wi_key`,`wi_title`,`wi_keywords`,`wi_description`) VALUES('index','星火数码','手机，相机','599只要599');
 
 
 

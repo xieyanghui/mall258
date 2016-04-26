@@ -1,5 +1,5 @@
 <{if $page['count'] ge 1 || $page['search'] ne "" }>
-<div class='win'>
+<div class='win '>
     <h1 class="win_head"><{$table['title']|default:'列表'}></h1>
     <ul>
         <li class='list_row_head'>

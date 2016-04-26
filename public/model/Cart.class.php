@@ -13,4 +13,7 @@ class Cart extends Model{
         $this->tableName = 'cart';
         $this->tableId ='c_id';
     }
+    public function test(){
+        parent::$ss = '2';
+    }
 }

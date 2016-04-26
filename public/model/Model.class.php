@@ -7,35 +7,126 @@
  */
 require_once($_SERVER['DOCUMENT_ROOT'] . "/public/autoload.php");
 abstract class Model implements Iterator{
+    private static $sql_s = null;
     private $sql = null; //  用于连接的数据库
+    private $columnType = array('int','string','double');
+    private $current =0; //游标
     protected $model = array(); //模型数据仓库
-    private $current =0;
     protected $columnName = array(); //数据库列名列表 关联数组KEY 为列名, VALUE为类型,类型默认为 String
     protected $tableName = ''; //表名
     protected $tableId = ''; //表主键
 
     //数据库类连接
     protected function getSql(){
+        if($this::$sql_s !== null ){
+            return $this::$sql_s;
+        }
         if($this->sql === null){
             $this->sql = new Sql;
         }
         return $this->sql;
     }
+    
+    /**
+     * Model列名转数据库列名
+     *
+     * @param $columnName string  Model列名
+     *
+     *@return string 数据库列名
+     *
+     * @throws ModelException 没找到抛出异常
+     */
+    protected function columnToSql($columnName){
+        foreach ($this->columnName as $key=>$value){
+            if(is_int($key) && $columnName === $value){//column 为string
+                return $value;
+            }else if($key === $columnName && is_array($value)){  //column 为array
+                return $value['columnName'];
+            }else if(in_array($value,$this->columnType) && $key ===$columnName ){ //column 单带类型
+                return $key;
+            }else if($key ===$columnName){
+                return $value;
+            }
+        }
+        throw new ModelException("找不到 {$columnName} 所对应的Sql 列");
+    }
 
+    /**
+     * 数据库取出来的列名转Model
+     *
+     * @param $columnName string 数据库列名
+     *
+     *@return string  Model 列名
+     *
+     * @throws ModelException 没找到抛出异常
+    */
+    protected function columnToModel($columnName){
+        foreach ($this->columnName as $key=>$value){
+            if(is_int($key) && $columnName === $value){ //column 为string
+                return $value;
+            }else if(is_array($value) && $value['columnName'] === $columnName){ //column 为array
+                return $key;
+            }else if(in_array($value,$this->columnType) && $columnName === $key){
+                return $key;
+            }else if($columnName === $value ){
+                return $key;
+            }
+        }
+        throw new ModelException("找不到 {$columnName} 所对应的Model 列");
+    }
+
+    /**
+     * 数据库取出来的列名转Model
+     *
+     * @param $columnName string 数据库列名
+     *
+     *@return string  Model 列名
+     *
+     * @throws ModelException 没找到抛出异常
+     */
     protected function columnType($columnName){
-        if(preg_match("/_id$/",$columnName)){
-        return 'int';
+        try{
+            $c = $this->columnToSql($columnName);
+            if(preg_match("/_id$/",$c)){
+                return 'int';
+            }
+        }catch(Exception $e){
         }
         foreach ($this->columnName as $key=>$value){
             if(is_int($key) && $columnName === $value){
                 return 'string';
-            }elseif($columnName ===$key){
-                return $value;
+            }elseif($columnName ===$key ){
+                if(in_array($value,$this->columnType)){
+                    return $value;
+                }elseif (is_array($value) && !empty($value['type'])){
+                    return $value['type'];
+                }else{
+                    return 'string';
+                }
             }
         }
+        throw new ModelException("model列 {$columnName} 未定义,或没有确定类型");
     }
 
-    
+    /**
+     * 删除表
+     */
+    protected function remove(Where $where){
+        $sql = $this->getSql();
+        return $sql->delete($this->tableName,$where);
+    }
+
+    public static function startTransaction(){
+        
+    }
+
+    /**
+     * 从数组中读取Model值
+     *
+     * @param $arr array 数组
+     *
+     * @return Model 链式用
+    */
     public function read($arr){
         $value = array();
         foreach ($arr as $key=>$value){
@@ -54,7 +145,13 @@ abstract class Model implements Iterator{
         return $this;
     }
 
-    
+    /**
+     * 从多维数组中读取Model值
+     *
+     * @param $arr array 数组
+     *
+     * @return Model 链式用
+     */
     public function readArr($arr){
         foreach ($arr as $value){
             $this->read($value);
@@ -62,11 +159,7 @@ abstract class Model implements Iterator{
         return $this;
     }
 
-    public function remove(Where $where){
-        $sql = $this->getSql();
-        return $sql->delete($this->tableName,$where);
-    }
-    
+
     public function getTableName(){
         return $this->tableName;
     }
@@ -131,7 +224,7 @@ abstract class Model implements Iterator{
     }
 
     /**
-     * 设置当前游标的值
+     * 设置当前游标行的值
      *
      * @param $key string 条件
      *
