@@ -395,15 +395,19 @@ a:hover  {
         padding: 10px 20px;
         margin: 20px 20px;
         color: #FFF;
+        transition: all 0.4s;
+      }
+      div:hover{
+        background-color: @gray_two;
       }
       .goods_info_buy{
-        background: #FF6537;
+        background-color: #FF6537;
       }
       .goods_info_cart{
-        background: @one_color;
+        background-color: @one_color;
       }
       .goods_info_collect{
-        background: @two_color;
+        background-color: @two_color;
       }
     }
   }
@@ -415,6 +419,9 @@ a:hover  {
   float: left;
   margin:20px 0 0 -10px;
   .goods_content_nav{
+    overflow: hidden;
+    border-bottom: 2px solid @one_deep;
+    margin-bottom: 5px;
     li{
       float: left;
       width: 150px;
@@ -422,10 +429,65 @@ a:hover  {
       height: 60px;
       line-height: 60px;
       text-align: center;
-      margin-bottom: 5px;
+      position: relative;
+      cursor: pointer;
+      margin: 0 5px;
     }
-    li:hover{
+    .li_select:after{
+      content:'';
+      height: 0;
+      width: 0;
+      border-bottom: 5px solid @one_deep;
+      border-left: 5px solid transparent;
+      border-right: 5px solid transparent;
+      position:absolute;
+      bottom:-1px;
+      left: 49%;
+    }
+    li:hover,.li_select{
       background-color: @gray_one;
+    }
+  }
+
+  .goods_content_val{
+    width: 100%;
+    overflow: hidden;
+    li{
+      width: 100%;
+      display: none;
+    }
+    .goods_content_description{
+      display: block;
+    }
+    .goods_content_attr{
+      .goods_content_attr_type{
+        margin-top: 10px;
+        width: 100%;
+        height: 35px;
+        line-height: 35px;
+        background-color: @gray_one;
+        padding-left: 20px;
+        font-size: 16px;
+      }
+      .goods_content_attr_map{
+        overflow: auto;
+        border: 1px solid @gray_one;
+        div{
+          height: 30px;
+          line-height: 30px;
+          padding:0 10px;
+          float: left;
+        }
+        .goods_content_attr_name{
+          width: 120px;
+          text-align: right;
+          border-right:1px solid @gray_one;
+        }
+        .goods_content_attr_value{
+          text-align: left;
+
+        }
+      }
     }
   }
 }

@@ -60,13 +60,25 @@
 <div class="wrap">
     <div class="goods_content">
         <ul class="goods_content_nav">
-            <li class="goods_content_description_nav"><a>详细介绍</a></li>
-            <li class="goods_content_attr_nav"><a>规格参数</a></li>
-            <li class="goods_content_comment_nav"><a>用户评论</a></li>
+            <li class="goods_content_description_nav li_select" for="goods_content_description"><a>详细介绍</a></li>
+            <li class="goods_content_attr_nav" for="goods_content_attr"><a>规格参数</a></li>
+            <li class="goods_content_comment_nav" for="goods_content_comment"><a>用户评论</a></li>
         </ul>
         <ul class="goods_content_val">
-            <li class="goods_content_description"><div><{$g['g_text']}></div></li>
-            <li class="goods_content_attr"><div></div></li>
+            <li class="goods_content_description"><{$g['g_text']}></li>
+            <li class="goods_content_attr">
+                <{foreach $g['GAttr'] as $attr}>
+                <div class="goods_content_attr_s">
+                    <div class="goods_content_attr_type"><{$attr@key}></div>
+                    <{foreach $attr as $attr_s}>
+                    <div class="goods_content_attr_map">
+                        <div class="goods_content_attr_name"><{$attr_s['gta_name']}></div>
+                        <div class="goods_content_attr_value"><{$attr_s['ga_value']}></div>
+                    </div>
+                    <{/foreach}>
+                </div>
+                <{/foreach}>
+            </li>
             <li class="goods_content_comment"><div></div></li>
         </ul>
     </div>
@@ -78,6 +90,12 @@
 
 <script>
     window.h_main.push(function(){
+        $('.goods_content_nav > li').click(function(){
+            if(!$(this).hasClass('li_select')){
+                $(this).addClass('li_select').siblings().removeClass('li_select');
+                $('.goods_content_val li.'+$(this).attr('for')).show().siblings().hide();
+            }
+        });
 
         $('.goods_info_price_li').each(function(){
             if(this.offsetWidth < this.scrollWidth){
