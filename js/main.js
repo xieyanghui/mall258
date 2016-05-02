@@ -322,6 +322,7 @@ $('body').click(function(){
         $('#select_img').hide();
     }
 });
+
 /**
  * 上传或去图库选择图片
  * progress 属性配置 默认进度条元素选择 默认本身
@@ -429,6 +430,10 @@ $('body').on('mouseenter','.preview_img',function(e){
         }
     },1000);
 });
+$('body').on('click','.select_goods',function(){
+    alert('ccc');
+});
+
 $('body').on('mouseleave','.preview_img',function(e){
     $(this).attr('leave','true');
     $('#preview_img').hide();

@@ -7,19 +7,25 @@
  */
 require_once($_SERVER['DOCUMENT_ROOT'] . "/public/autoload.php");
 abstract class Model implements Iterator{
-    private static $sql_s = null;
+    private static $sql_s = null;// 处理事物的数据库连接
     private $sql = null; //  用于连接的数据库
     private $columnType = array('int','string','double');
     private $current =0; //游标
+    private $limit = 0; //分页查询时预测总数
+    public $sibling = array();
+    public $oneLine = array();
+    protected $pageS = 0;//分页预计数
     protected $model = array(); //模型数据仓库
     protected $columnName = array(); //数据库列名列表 关联数组KEY 为列名, VALUE为类型,类型默认为 String
     protected $tableName = ''; //表名
-    protected $tableId = ''; //表主键
+    protected $modelId = ''; //Model主键
+
+
 
     //数据库类连接
     protected function getSql(){
-        if($this::$sql_s !== null ){
-            return $this::$sql_s;
+        if(Model::$sql_s !== null ){
+            return Model::$sql_s;
         }
         if($this->sql === null){
             $this->sql = new Sql;
@@ -49,6 +55,36 @@ abstract class Model implements Iterator{
             }
         }
         throw new ModelException("找不到 {$columnName} 所对应的Sql 列");
+    }
+
+
+    protected function columnToSqls($columnName){
+        if($columnName === '*'){
+            $c = array();
+            foreach ($this->columnName as $key=>$value){
+                if(is_int($key)){//column 为string
+                    array_push($c,$value);
+                }elseif(is_array($value)){  //column 为array
+                    array_push($c," {$value['columnName']}  AS {$key}"); ;
+                }elseif(!in_array($value,$this->columnType)){ //column 单带类型
+                    array_push($c,"{$value}  AS {$key}");
+                }else{
+                    array_push($c,$key);
+                }
+            }
+            return $c;
+        }
+        if(!is_array($columnName)){
+            $columnName = explode(',',$columnName);
+        }
+        foreach ($columnName as &$c){
+            $b = $this->columnToSql($c);
+            if($c !== $b){
+                $c = "{$b}  AS {$c}";
+            }
+        }
+        return $columnName;
+
     }
 
     /**
@@ -110,14 +146,35 @@ abstract class Model implements Iterator{
 
     /**
      * 删除表
+     *
+     * @param $where  Where
+     *
+     * @return bool
      */
-    protected function remove(Where $where){
+    public function remove(Where $where){
+        $where->convertColumn($this->columnName);
         $sql = $this->getSql();
         return $sql->delete($this->tableName,$where);
     }
 
+
+    /**
+     * 开始事务
+    */
     public static function startTransaction(){
-        
+        Model::$sql_s = new Sql(true);
+    }
+
+
+    /**
+     * 提交事务
+     */
+    public static function commitTransaction(){
+        if(!empty(Model::$sql_s)){
+            return Model::$sql_s->commit();
+        }else{
+            return '连接为空';
+        }
     }
 
     /**
@@ -129,14 +186,9 @@ abstract class Model implements Iterator{
     */
     public function read($arr){
         $value = array();
-        foreach ($arr as $key=>$value){
-            foreach($this->columnName as $k=>$v){
-                if(($key === $v && is_int($k))||$k === $key){
-                    if(!is_array($key)){
-                        $value[$key]= $value;
-                        continue;
-                    }
-                }
+        foreach ($arr as $key=>$v){
+            if(!empty($this->columnName[$key]) || in_array($key,$this->columnName)){
+                $value[$key] = $v;
             }
         }
         if(!empty(array_filter($value))){
@@ -159,39 +211,45 @@ abstract class Model implements Iterator{
         return $this;
     }
 
-
-    public function getTableName(){
-        return $this->tableName;
+//    过滤器子类可以实现
+    protected function filter($model){
+        return $model;
     }
-
-    /**
+     /**
      * 保存模型
      *
-     * @param $inject array 注入值可为空
+      * @param $inject array|string 注入值可为空
+      *
+      * @param $value string 注入值的value可为空
      *
      * @return  int|bool 单个保存返回保存后返回的ID
      *
      */
-    public function save($inject = null){
-        $id = 0;
+    public function save($inject = null,$value = null){
+        $id = true;
         $sql = $this->getSql();
         foreach ($this->model as $model){
-            if(!empty($inject)){
+            if(!empty($inject) && is_array($inject)){
                 foreach ($inject as $key=>$value){
                     $model[$key] = $value;
                 }
+            }elseif (!empty($inject) && !empty($value)){
+                $model[$inject] = $value;
             }
-            if(!empty($model[$this->tableId])){//修改
+            $model = $this->filter($model);
+            if(!empty($model[$this->modelId])){//修改
                 $data = array();
                 foreach($model as $key=>$value){
-                    if($key === $this->tableId)continue;
+                    if($key === $this->modelId)continue;
                     if(is_a($value,'Model')){
-                        $value->save(array($this->tableId,$model[$this->tableId]));
+                        $value->save(array($this->modelId=>$model[$this->modelId]));
                     }else{
-                        array_push($data,array('columnName'=>$key,'value'=>$value,'type'=>$this->columnType($key)));
+
+                        array_push($data,array('columnName'=>$this->columnToSql($key),'value'=>$value,'type'=>$this->columnType($key)));
                     }
                 }
-                $sql->update($this->tableName,new Where($this->tableId ,$model[$this->tableId],'int'),$data);
+                $where = new Where($this->modelId ,$model[$this->modelId]);
+                $sql->update($this->tableName,$where->convertColumn($this->columnName),$data);
             }
             else{//增加
                 $column = array();
@@ -201,13 +259,15 @@ abstract class Model implements Iterator{
                     if(is_a($value,'Model')){
                         array_push($models,$value);
                     }else{
-                        $column[$key] =$this->columnType($key);
+                        $column[$this->columnToSql($key)] =$this->columnType($key);
                         array_push($data,$value);
                     }
                 }
                 $id =$sql->insert($this->tableName,$column,$data);
+               // echo $this->tableName.'--------------'.$id;
                 foreach($models as $value){
-                    $value->save(array($this->tableId,$id));
+                 //   print_r($id);
+                    $value->save(array($this->modelId=>$id));
                 }
             }
         }
@@ -221,6 +281,11 @@ abstract class Model implements Iterator{
      */
     public function length(){
         return count($this->model);
+    }
+    public function limitLingth(){
+        if($this->limit >0){
+            return $this->limit;
+        }
     }
 
     /**
@@ -237,7 +302,28 @@ abstract class Model implements Iterator{
         return $this;
     }
 
-
+    public function modelQuery($arr){
+        $mm = get_class($this);
+        $mm = new $mm;
+        foreach ($this->model as $model){
+            $b = true;
+            foreach ($arr as $key=>$value ){
+                if(empty($model[$key]) || $model[$key] !== $value){
+                    $b = false;
+                    continue;
+                }
+            }
+            if($b){
+                foreach ($model as $key =>$value){
+                    $mm->set($key,$value);
+                }
+                $mm->next();
+            }
+        }
+        $mm->sibling = $this->sibling;
+        $mm->oneLine = $this->oneLine;
+        return $mm;
+    }
     /**
      * 查询
      *
@@ -249,19 +335,124 @@ abstract class Model implements Iterator{
      *
      * @return  Model 链式
      */
-    public function query(Where $where,$columnName ='*',$subModel = ""){
+    public function query(Where $where,$columnName ='*',$subModel = null){
+        $where->convertColumn($this->columnName);
         $sql = $this->getSql();
-        $this->model =$sql->selectData($this->tableName,$columnName,$where);
+        $this->model =$this->filter($sql->selectData($this->tableName,$this->columnToSqls($columnName),$where));
+        if(!empty($where->getLimit())){
+            if($this->pageS !== 0){
+                $w = $where->getLimit();
+                if($this->length() <$w['length']){
+                    $this->limit = $w['start'] +$this->length();
+                }else{
+                    $w['start'] += $w['length'];
+                    $w['length'] *= $this->pageS;
+                    $where->setLimit($w);
+                    $aa = $sql->selectData($this->tableName,$this->columnToSqls($this->modelId),$where);
+                    $this->limit = $w['start']+count($aa);
+                   // echo $this->limit."aaaaaaaaaa";
+                }
+            }else{
+                $where->setLimit(array());
+                $cou = $sql->selectData($this->tableName,'count(*) as count',$where);
+                $this->limit = $cou[0]['count'];
+            }
+
+
+        }
         if(!empty($subModel)){
-            foreach ($this->model as &$model){
-                $w = new Where($this->tableId,$model[$this->tableId],'int');
+            $w=array();
+            foreach ($this->model as $model){
+                array_push($w,$model[$this->modelId]);
+            }
+            if(is_array($subModel)){
+                foreach ($subModel as $key=>$value){
+                    $m = null;$mm ='';
+                    if(is_array($value)){
+                        if(!empty($value['sibling'])){
+                            $this->sibling[$key] =$value['sibling'];
+                        }
+                        if(!empty($value['oneLine'])){
+                            $this->oneLine[$key] =$value['oneLine'];
+                        }
+                        $m = new $key;
+                        $tableName = !empty($value['tableName'])?$value['tableName']:$key;
+                        $where = !empty($value['where'])?$value['where']:new Where();
+
+                        //默认查询全部
+                        if(empty($value['columnName'])){
+                            $columnName ='*';
+                        }else{
+                            //如果是字符串先转成数组
+                            if(!is_array($value['columnName']) && $value['columnName'] !== "*"){
+                                $value['columnName'] = explode(',',$value['columnName']);
+                            }
+                            //注入自身ID
+                            if(empty($value['noSub'])){
+                                if(!in_array($this->modelId,$value['columnName'])){
+                                    array_push($value['columnName'],$this->modelId);
+                                }
+                                //注入指定列
+                            }else{
+                                if (!in_array($value['noSub'], $value['columnName'])) {
+                                    array_push($value['columnName'], $value['noSub']);
+                                }
+                            }
+                            $columnName = $value['columnName'];
+                        }
+
+
+
+
+                        //print_r($value['subModel']);
+                        $subModel=!empty($value['subModel'])?$value['subModel']:null;
+
+                        if(!empty($value['noSub'])){
+                            $ws = array();
+                            foreach ($this->model as $model){
+                                array_push($ws,$model[$value['noSub']]);
+                            }
+                            $where->setWhere($value['noSub'],$ws);
+                        }else{
+                            $where->setWhere($this->modelId,$w);
+                        }
+                        $m->query($where,$columnName,$subModel);
+                       //print_r($m->toArray());
+                    }else{
+                        $m = new $value;$tableName = $value;
+                        $m->query(new Where($this->modelId,$w));
+                    }
+                    foreach ($this->model as &$model){
+                        //echo '---------------------------';
+                        //print_r($m->modelQuery(array($this->modelId=>$model[$this->modelId]))->toArray());
+                        if(!empty($value['noSub'])){
+                            $model[$tableName] = $m->modelQuery(array($value['noSub']=>$model[$value['noSub']]));
+                        }else{
+                           // echo "-----{$mm}----{$this->modelId}-----{$model[$this->modelId]}--";
+                            $model[$tableName] = $m->modelQuery(array($this->modelId=>$model[$this->modelId]));
+                            //print_r($m->modelQuery(array($this->modelId=>$model[$this->modelId]))->toArray());
+                        }
+
+                    }
+                   // print_r($this->model);
+
+                }
+            }else{
                 $arr = array_filter(explode(',',$subModel));
+                $m =null;$mm ='';
                 foreach ($arr as $a){
-                    $m = new $a;
-                    $m->query($w);
-                    $model[$a] = $m;
+                    $m = new $a;$mm =$a;
+                    $m->query(new Where($this->modelId,$w));
+                }
+                //print_r($m->toArray());
+                foreach ($this->model as &$model){
+                    //print_r($m->modelQuery(array($this->modelId,$model[$this->modelId]))->toArray());
+                    $model[$mm] = $m->modelQuery(array($this->modelId=>$model[$this->modelId]));
+
+                   // print_r($m->toArray());
                 }
             }
+
         }
         return $this;
     }
@@ -285,10 +476,25 @@ abstract class Model implements Iterator{
     public function toArray(){
         $arr = array();
         foreach ($this->model as $model){
+            //print_r($this->model);
             $a = array();
             foreach($model as $key=>$value){
                 if(is_a($value,'Model')){
-                    $a[$key] = $value->toArray();
+                    if($value->length() ===1 && !empty($this->sibling[get_class($value)])){ //如果是一对一就直接上来
+                        $vv = $value->toArray()[0];
+                        foreach ($vv as $k=>$v){
+                            $a[$k] = $v;
+                        }
+                    }elseif(!empty($this->oneLine[get_class($value)])){
+                        $vv = $value->toArray();
+                        $a[$key] = array();
+                        foreach ($vv as $v){
+                            array_push($a[$key],$v[$this->oneLine[get_class($value)]]);
+                        }
+                   }else{
+                        $a[$key] = $value->toArray();
+                    }
+
                 }else{
                     $a[$key] = $value;
                 }

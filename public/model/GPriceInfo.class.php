@@ -11,6 +11,6 @@ class GPriceInfo extends Model{
     {
         $this->columnName = array('gpi_id','g_id','gpi_img','gpi_sum'=>'int','gpi_price'=>'double');
         $this->tableName = 'g_price_info';
-        $this->tableId = 'gpi_id';
+        $this->modelId = 'gpi_id';
     }
 }

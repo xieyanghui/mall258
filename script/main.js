@@ -78,6 +78,7 @@ define('main',['jquery-ui'],function(){
                 }
             }
         },
+
         /**
          * 吐司
          * status bool|object true为成功 false 为失败
@@ -106,6 +107,7 @@ define('main',['jquery-ui'],function(){
             });
         },
 
+
         /**
          * 消息对话框
          * fun   function  按确定之后执行的方法
@@ -131,6 +133,7 @@ define('main',['jquery-ui'],function(){
         },
 
 
+        //Cookie读写
         getCookie:function(c_name){
             if (document.cookie.length>0){
                 var c_start=document.cookie.indexOf(c_name + "=");
@@ -153,6 +156,7 @@ define('main',['jquery-ui'],function(){
             document.cookie=c_name+ "=" +decodeURI(value)+time+path;
         },
 
+        // 浮动窗口
         showFloatDiv:function(divId){
             $('#float_back').show();
             $('#'+divId).show();
@@ -164,9 +168,13 @@ define('main',['jquery-ui'],function(){
 
 
     };
-    var h_main;
-    for( h_main in window.h_main){
-
-        window.h_main[h_main]();
+    while (window.h_main.length){
+        window.h_main.pop()();
     }
+    $(document).ajaxSuccess(function(){
+        while (window.h_main.length){
+            window.h_main.pop()();
+        }
+    });
+
 });

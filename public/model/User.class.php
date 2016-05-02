@@ -12,7 +12,7 @@ class User extends Model{
     {
         $this->columnName = array('u_id','u_name','u_pwd','u_phone','u_nick','u_email','u_address','u_img','u_reg','u_status'=>'int');
         $this->tableName = 'user';
-        $this->tableId = 'u_id';
+        $this->modelId = 'u_id';
     }
     public function read($arr)
     {

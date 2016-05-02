@@ -11,6 +11,6 @@ class Order extends Model{
     {
         $this->columnName = array('o_id','u_id','o_number','o_regtime','o_status'=>'int');
         $this->tableName = 'Order';
-        $this->tableId = 'o_id';
+        $this->modelId = 'o_id';
     }
 }

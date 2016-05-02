@@ -9,20 +9,26 @@ require_once($_SERVER['DOCUMENT_ROOT'] . "/public/autoload.php");
 class Admin extends Model{
     public function __construct()
     {
-        $this->columnName = array(
-            'aId'=>'a_id',
-            'aName'=>'a_name',
-            'aPwd'=>'a_pwd',
-            'aReg'=>'a_reg',
-            'aImg'=>'a_img',
-            'aNick'=>'a_nick',
-            'aStatus'=>array('type'=>'int','columnName'=>'a_status'),
-            'AaId'=>'aa_id');
+        $this->columnName = array('a_id','a_name','a_pwd',  'a_reg', 'a_img', 'a_nick', 'a_status'=>'int',  'aa_id');
         $this->tableName = 'admin';
-        $this->tableId ='a_id';
+        $this->modelId ='a_id';
     }
-    public function test(){
-        echo parent::$ss;
+    
+    protected function filter($model)
+    {
+        if(!empty($model[0])){//查询时调用
+            foreach ($model as &$value){
+                if(empty($value['a_img'])){
+                    $value['a_img'] = Config::ADMIN_HEAD_DEFAULT;
+                }
+            }
+        }else{ //入库时调用
+            if($model['a_img'] === Config::ADMIN_HEAD_DEFAULT){
+                unset($model['a_img']);
+            }
+        }
+        return $model;
 
     }
+
 }

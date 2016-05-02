@@ -4,7 +4,7 @@ CREATE TABLE  `admin_auth` (
 	`aa_id` INT NOT NULL , -- ID
 	`aa_nick` CHAR(20) NOT NULL ,  -- 昵称
 	`aa_remark` VARCHAR(50)    -- 备注
-)DEFAULT CHARSET = utf8 ENGINE=MyISAM;
+)DEFAULT CHARSET = utf8 ENGINE=InnoDB;
 ALTER TABLE `admin_auth` ADD PRIMARY KEY (`aa_id`);
 ALTER TABLE `admin_auth` MODIFY `aa_id` INT UNSIGNED AUTO_INCREMENT;
 ALTER TABLE `admin_auth` ADD UNIQUE (`aa_nick`);
@@ -17,7 +17,7 @@ CREATE TABLE `auth_list`(
   `al_key` CHAR(20) NOT NULL ,    -- 权限关键字
 	`al_nick` CHAR(20) NOT NULL ,     -- 昵称
 	`al_remark` VARCHAR(50)    -- 备注
-)DEFAULT CHARSET = utf8 ENGINE=MyISAM;
+)DEFAULT CHARSET = utf8 ENGINE=InnoDB;
 ALTER TABLE `auth_list` ADD PRIMARY KEY (`al_id`);
 ALTER TABLE `auth_list` ADD UNIQUE(`al_key`);
 ALTER TABLE `auth_list` MODIFY `al_id` INT UNSIGNED AUTO_INCREMENT;
@@ -33,8 +33,9 @@ DROP TABLE IF EXISTS `admin_auth_list`;
 CREATE TABLE `admin_auth_list`(
 	`al_id` INT UNSIGNED NOT NULL ,     -- 权限列表ID
 	`aa_id` INT UNSIGNED NOT NULL   -- 权限ID
-)DEFAULT CHARSET = utf8 ENGINE=MyISAM;
+)DEFAULT CHARSET = utf8 ENGINE=InnoDB;
 ALTER TABLE `admin_auth_list` ADD PRIMARY KEY (`al_id`,`aa_id`);
+INSERT INTO admin_auth_list(aa_id,al_id) VALUES (3,1),(3,4),(3,6),(3,10),(3,8),(3,9);
 
 -- 管理员
 DROP TABLE IF EXISTS `admin`;
@@ -47,7 +48,7 @@ CREATE TABLE `admin`(
 	`a_nick` CHAR(20)  ,                -- 真实姓名
 	`a_status` TINYINT NOT NULL DEFAULT 1,  -- 状态 1启用,2不启用
 	`aa_id` INT UNSIGNED NOT NULL  DEFAULT 2  -- 权限ID
-)DEFAULT CHARSET = utf8 ENGINE=MyISAM;
+)DEFAULT CHARSET = utf8 ENGINE=InnoDB;
 
 ALTER TABLE `admin` ADD PRIMARY KEY (`a_id`);
 ALTER TABLE `admin` MODIFY `a_id` INT UNSIGNED AUTO_INCREMENT;
@@ -63,7 +64,7 @@ CREATE TABLE `system_log`(
   `sl_content` VARCHAR(200) NOT NULL ,-- 事件详细
 	`sl_date` TIMESTAMP DEFAULT NOW()    -- 事件时间
 
-)DEFAULT CHARSET = utf8 ENGINE=MyISAM;
+)DEFAULT CHARSET = utf8 ENGINE=InnoDB;
 ALTER TABLE `system_log` ADD PRIMARY KEY (`sl_id`);
 ALTER TABLE `system_log` MODIFY `sl_id` INT UNSIGNED AUTO_INCREMENT;
 
@@ -74,7 +75,7 @@ CREATE TABLE `admin_login_log`(
 	`a_id` INT UNSIGNED NOT NULL ,    -- 管理员ID
 	`ip` CHAR(16) NOT NULL ,           -- 登录IP
 	`date` TIMESTAMP DEFAULT NOW()    -- 事件时间
-)DEFAULT CHARSET = utf8 ENGINE=MyISAM;
+)DEFAULT CHARSET = utf8 ENGINE=InnoDB;
 ALTER TABLE `admin_login_log` ADD PRIMARY KEY (`all_id`);
 ALTER TABLE `admin_login_log` MODIFY `all_id` INT UNSIGNED AUTO_INCREMENT;
 
@@ -84,7 +85,7 @@ CREATE TABLE `admin_img_type`(
 	ait_id INT NOT NULL,    -- ID
 	`ait_name` CHAR(40) ,      -- 图片分类
 	`a_id` INT UNSIGNED NOT NULL  -- 用户ID
-)DEFAULT CHARSET = utf8 ENGINE=MyISAM;
+)DEFAULT CHARSET = utf8 ENGINE=InnoDB;
 ALTER TABLE `admin_img_type` ADD PRIMARY KEY (`ait_id`);
 ALTER TABLE `admin_img_type` MODIFY `ait_id` INT UNSIGNED AUTO_INCREMENT;
 # INSERT INTO `admin_img_type` (`ait_name`,`a_id`) VALUES ('回收站',0),('商品图片',0),('头像图片',0);
@@ -97,7 +98,7 @@ CREATE TABLE `admin_img_space`(
   `ais_img_url` VARCHAR(500) NOT NULL ,  -- 图片路径
   `ait_id` INT UNSIGNED NOT NULL ,     -- 图片
   `ais_time` TIMESTAMP DEFAULT NOW()  -- 上传时间
-)DEFAULT CHARSET = utf8 ENGINE=MyISAM;
+)DEFAULT CHARSET = utf8 ENGINE=InnoDB;
 ALTER TABLE `admin_img_space` ADD PRIMARY KEY (`ais_id`);
 ALTER TABLE `admin_img_space` MODIFY `ais_id` INT UNSIGNED AUTO_INCREMENT;
 
@@ -115,7 +116,7 @@ CREATE TABLE `user`(
 	`u_reg` TIMESTAMP DEFAULT NOW(), -- 注册时间
 	`u_status` TINYINT NOT NULL DEFAULT 1,  -- 权限状态 1启用,2不启用
 	`u_img` VARCHAR(400)              -- 头像
-)DEFAULT CHARSET = utf8 ENGINE=MyISAM;
+)DEFAULT CHARSET = utf8 ENGINE=InnoDB;
 
 ALTER TABLE `user` ADD PRIMARY KEY (`u_id`);
 ALTER TABLE `user` MODIFY `u_id` INT UNSIGNED AUTO_INCREMENT;
@@ -130,7 +131,7 @@ CREATE TABLE `user_ship_address`(
   `usa_number` CHAR(12) NOT NULL , -- 地址编号
   `usa_name` CHAR(12) NOT NULL, -- 收件人姓名
 	`usa_phone` CHAR(15) NOT NULL      -- 收件人电话
-)DEFAULT CHARSET =utf8 ENGINE=MyISAM;
+)DEFAULT CHARSET =utf8 ENGINE=InnoDB;
 ALTER TABLE `user_ship_address` ADD PRIMARY KEY (`usa_id`);
 ALTER TABLE `user_ship_address` MODIFY `usa_id` INT UNSIGNED AUTO_INCREMENT;
 
@@ -142,7 +143,7 @@ CREATE TABLE `goods_type`(
 	`gt_name` CHAR(20) NOT NULL ,   -- 类型名称
 	`gt_remark` CHAR(60),             -- 备注
 	`gt_status` TINYINT NOT NULL DEFAULT 1  -- 状态 1启用,2不启用
-)DEFAULT CHARSET =utf8 ENGINE=MyISAM;
+)DEFAULT CHARSET =utf8 ENGINE=InnoDB;
 
 ALTER TABLE `goods_type` ADD PRIMARY KEY (`gt_id`);
 ALTER TABLE `goods_type` MODIFY `gt_id` INT UNSIGNED AUTO_INCREMENT;
@@ -166,7 +167,7 @@ CREATE TABLE `goods`(
 	`g_status` tinyINT NOT NULL DEFAULT 1,  -- 商品 状态
 	`g_text` text,         -- 详细资料
 	`g_temp` CHARACTER(20)   -- 爬虫用
-)DEFAULT CHARSET =utf8 ENGINE=MyISAM;
+)DEFAULT CHARSET =utf8 ENGINE=InnoDB;
 
 ALTER TABLE `goods` ADD PRIMARY KEY (`g_id`);
 ALTER TABLE `goods` MODIFY `g_id` INT UNSIGNED AUTO_INCREMENT;
@@ -184,7 +185,7 @@ CREATE TABLE `gt_attr`(
 	`gt_id` INT UNSIGNED NOT NULL, -- 类型ID
 	`gta_name` CHAR(40) NOT NULL ,   -- 属性名
 	`gta_type` CHAR(40)    -- 大分类
-)DEFAULT CHARSET =utf8 ENGINE=MyISAM;
+)DEFAULT CHARSET =utf8 ENGINE=InnoDB;
 
 ALTER TABLE `gt_attr` ADD PRIMARY KEY (`gta_id`);
 ALTER TABLE `gt_attr` ADD KEY(`gta_type`);
@@ -200,7 +201,7 @@ CREATE TABLE `g_attr`(
   `g_id` INT UNSIGNED NOT NULL,     -- 商品ID
   `gta_id` INT UNSIGNED NOT NULL,   -- 商品属性ID
   `ga_value` CHAR(20)              -- 值
-)DEFAULT CHARSET =utf8 ENGINE=MyISAM;
+)DEFAULT CHARSET =utf8 ENGINE=InnoDB;
 
 ALTER TABLE `g_attr` ADD PRIMARY KEY (`ga_id`);
 ALTER TABLE `g_attr` MODIFY `ga_id` INT UNSIGNED AUTO_INCREMENT;
@@ -211,7 +212,7 @@ CREATE TABLE `gt_price`(
 	`gtp_id` INT  NOT NULL,             -- ID
 	`gt_id` INT UNSIGNED NOT NULL,      -- 商品类型ID
 	`gtp_name` CHAR(20) NOT NULL  -- 价格属性名称
-)DEFAULT CHARSET =utf8 ENGINE=MyISAM;
+)DEFAULT CHARSET =utf8 ENGINE=InnoDB;
 
 ALTER TABLE `gt_price` ADD PRIMARY KEY (`gtp_id`);
 ALTER TABLE `gt_price` MODIFY `gtp_id` INT UNSIGNED AUTO_INCREMENT;
@@ -225,7 +226,7 @@ CREATE TABLE `g_price`(
 	`g_id` INT UNSIGNED NOT NULL,  -- 商品ID
   `gtp_id` INT UNSIGNED NOT NULL ,-- 商品类型价格ID
   `gp_name` CHAR(20) NOT NULL     -- 价格属性
-)DEFAULT CHARSET =utf8 ENGINE=MyISAM;
+)DEFAULT CHARSET =utf8 ENGINE=InnoDB;
 ALTER TABLE `g_price` ADD PRIMARY KEY (`gp_id`);
 ALTER TABLE `g_price` MODIFY `gp_id` INT UNSIGNED AUTO_INCREMENT;
 
@@ -242,7 +243,7 @@ CREATE TABLE  `g_price_info`(
   `gpi_img` VARCHAR(200) ,   -- 图片
   `gpi_sum` INT UNSIGNED NOT NULL DEFAULT 0,  -- 数量
   `gpi_price` DECIMAL(8,2)   -- 价格
-)DEFAULT CHARSET =utf8 ENGINE=MyISAM;
+)DEFAULT CHARSET =utf8 ENGINE=InnoDB;
 ALTER TABLE `g_price_info` ADD PRIMARY KEY (`gpi_id`);
 ALTER TABLE `g_price_info` MODIFY `gpi_id` INT UNSIGNED AUTO_INCREMENT;
 
@@ -253,7 +254,7 @@ DROP TABLE IF EXISTS `g_price_list`;
 CREATE TABLE  `g_price_list`(
   `gpi_id` INT UNSIGNED NOT NULL ,   -- 商品组合价格ID
   `gp_id` INT UNSIGNED NOT NULL  -- 商品价格属性ID
-)DEFAULT CHARSET =utf8 ENGINE=MyISAM;
+)DEFAULT CHARSET =utf8 ENGINE=InnoDB;
 ALTER TABLE `g_price_list` ADD PRIMARY KEY (`gpi_id`,`gp_id`);
 -- INSERT INTO g_price_list(`gp_id`,`gpi_id`) VALUES (1,1),(4,1),(6,1),(7,1),(1,2),(4,2),(5,2),(7,2),(2,3),(6,3),(7,3);
 
@@ -266,7 +267,7 @@ CREATE TABLE `cart`(
 	`u_id` INT UNSIGNED NOT NULL, -- 用户ID
 	`gpi_id` INT UNSIGNED NOT NULL, --  商品ID
 	`c_sum` INT UNSIGNED NOT NULL DEFAULT 1  -- 数量
-)DEFAULT CHARSET =utf8 ENGINE=MyISAM;
+)DEFAULT CHARSET =utf8 ENGINE=InnoDB;
 
 ALTER TABLE `cart` ADD PRIMARY KEY (`c_id`);
 ALTER TABLE `cart` MODIFY `c_id` INT UNSIGNED AUTO_INCREMENT;
@@ -277,7 +278,7 @@ CREATE TABLE `collect`(
 	`u_id` INT UNSIGNED NOT NULL, -- 用户ID
 	`g_id` INT UNSIGNED NOT NULL  -- 商品ID
 
-)DEFAULT CHARSET =utf8 ENGINE=MyISAM;
+)DEFAULT CHARSET =utf8 ENGINE=InnoDB;
 ALTER TABLE `collect` ADD PRIMARY KEY (`u_id`,`g_id`);
 
 
@@ -290,7 +291,7 @@ CREATE TABLE `order`(
 	`o_regtime` TIMESTAMP DEFAULT NOW(), -- 订单产生时间
 	`o_status` tinyINT NOT NULL DEFAULT 1  -- 订单状态
 
-)DEFAULT CHARSET =utf8 ENGINE=MyISAM;
+)DEFAULT CHARSET =utf8 ENGINE=InnoDB;
 
 ALTER TABLE `order` ADD PRIMARY KEY (`o_id`);
 ALTER TABLE `order` MODIFY `o_id` INT UNSIGNED AUTO_INCREMENT;
@@ -303,7 +304,7 @@ CREATE TABLE `order_goods`(
 	`o_id` INT UNSIGNED NOT NULL,  -- 订单ID
 	`gpi_id` INT UNSIGNED NOT NULL  -- 商品ID
 
-)DEFAULT CHARSET =utf8 ENGINE=MyISAM;
+)DEFAULT CHARSET =utf8 ENGINE=InnoDB;
 
 ALTER TABLE `order_goods` ADD PRIMARY KEY (`og_id`);
 ALTER TABLE `order_goods` MODIFY `og_id` INT UNSIGNED AUTO_INCREMENT;
@@ -330,7 +331,7 @@ CREATE TABLE `index_model`(
 	`im_name` CHAR(20) NOT NULL , -- 模块名字
 	`im_class` CHAR(20) DEFAULT 'default', -- 模块主题
 	`im_sort` SMALLINT DEFAULT 30000 -- 排序
-)DEFAULT CHARSET =utf8 ENGINE=MyISAM;
+)DEFAULT CHARSET =utf8 ENGINE=InnoDB;
 ALTER TABLE `index_model` ADD PRIMARY KEY (`im_id`);
 ALTER TABLE `index_model` MODIFY `im_id` INT UNSIGNED AUTO_INCREMENT;
 
@@ -345,98 +346,23 @@ CREATE TABLE `index_goods`(
 	`ig_status`  TINYINT DEFAULT 1, -- 是否显示
 	`g_id` INT UNSIGNED NOT NULL ,   -- 商品ID
 	`im_id` INT UNSIGNED  NOT NULL   -- 模块ID
-)DEFAULT CHARSET =utf8 ENGINE=MyISAM;
+)DEFAULT CHARSET =utf8 ENGINE=InnoDB;
 
 ALTER TABLE `index_goods` ADD PRIMARY KEY (`ig_id`);
 ALTER TABLE `index_goods` MODIFY `ig_id` INT UNSIGNED AUTO_INCREMENT;
 
 
-DROP VIEW IF EXISTS `admin_info_v`;
-CREATE VIEW `admin_info_v` AS
-	SELECT
-		`a_id`,
-		`a_name`,
-		`a_reg`,
-		admin.aa_id as `aa_id`,
-		`aa_nick`,
-		`a_img`,
-		`a_status`,
-		`a_nick`
-	FROM `admin`,`admin_auth` WHERE admin_auth.aa_id = admin.aa_id;
 
+CREATE TABLE `gt_attr_type`(
+	gtat_id INT UNSIGNED AUTO_INCREMENT,
+	gtat_name CHAR(30) NOT NULL ,
+	gt_id INT UNSIGNED NOT NULL ,
+	PRIMARY KEY (gtat_id)
+)DEFAULT CHARSET =utf8 ENGINE=InnoDB;
 
-DROP VIEW IF EXISTS `admin_auth_v`;
-CREATE VIEW `admin_auth_v` AS
-	SELECT
-		admin_auth.aa_id as `aa_id`,
-		auth_list.al_id as `al_id`,
-		`aa_nick`,
-		`al_key`,
-		`al_nick`
-	FROM `admin_auth`,`auth_list`,admin_auth_list WHERE admin_auth.aa_id = admin_auth_list.aa_id AND auth_list.al_id = admin_auth_list.al_id;
+INSERT  INTO gt_attr_type (gt_id,gtat_name)VALUES SELECT gt_id,gta_type FROM gt_attr GROUP BY gta_type;
 
-DROP VIEW IF EXISTS `goods_info_v`;
-CREATE VIEW `goods_info_v` AS
-	SELECT
-		`g_id`,
-		`g_number`,
-		`g_name` ,
-		`gt_name` ,
-		`g_price` ,
-		`g_reg`,
-		`g_img`,
-		`g_keywords`,
-		`g_description`,
-		`g_status`,
-		goods.gt_id as `gt_id`
-	FROM goods,goods_type WHERE goods.gt_id = goods_type.gt_id ;
-
-DROP VIEW IF EXISTS `g_attr_v`;
-CREATE VIEW `g_attr_v` AS
-	SELECT
-		`ga_id`,
-		`g_id`,
-		`gt_id`,
-		`gta_name`,
-		`ga_value` ,
-		g_attr.gta_id as 'gta_id'
-	FROM g_attr,gt_attr WHERE g_attr.gta_id = gt_attr.gta_id ;
-
-DROP VIEW IF EXISTS `g_price_v`;
-CREATE VIEW `g_price_v` AS
-	SELECT
-		`g_id`,
-		`gp_id`,
-		g_price.gtp_id as `gtp_id`,
-		`gp_name`,
-		`gtp_name`
-	FROM gt_price,g_price WHERE g_price.gtp_id = gt_price.gtp_id;
-
-DROP VIEW IF EXISTS `system_log_v`;
-CREATE VIEW `system_log_v` AS
-	SELECT
-		`sl_id`,
-		`sl_key`,
-		`sl_content`,
-		`sl_date`,
-		system_log.a_id as `a_id`,
-		`a_nick`
-	FROM system_log,admin WHERE system_log.a_id = admin.a_id;
-
-
-DROP VIEW IF EXISTS `admin_img_space_v`;
-CREATE VIEW `admin_img_space_v` AS
-	SELECT
-		`ais_id`,
-		`ais_name`,
-		`ais_img_url`,
-		`ais_time`,
-		admin_img_space.ait_id as `ait_id`,
-		admin_img_space.a_id as `a_id`,
-		`ait_name`
-	FROM admin_img_space,admin_img_type WHERE admin_img_space.ait_id = admin_img_type.ait_id;
-
-
+ALTER TABLE gt_attr ADD COLUMN (gtat_id INT UNSIGNED NOT NULL );
 
 -- show variables like "%char%";
 -- SET character_set_database = utf8;

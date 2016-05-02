@@ -9,7 +9,9 @@ class Sql
 
     function __destruct()
     {
-        $this->conn->close();
+        if(!empty($this->conn)){
+            $this->conn->close();
+        }
     }
     public function __construct($is_transaction=false)
     {
@@ -40,20 +42,21 @@ class Sql
             $this->conn->commit();
             return true;
         }else{
+           print_r($this->err_megs);
             return $this->err_megs;
         }
     }
+
     /**
      * 执行SQL语句
      * @param string $sql 语句
      *
      * @return  boolean 成功返回true失败返回false
      *
-     * @throws ModelException
      * */
     public function execute($sql)
     {
-        $this->showErr();
+        if($this->showErr())return false;
         $conn = $this->getConn();
         if($conn->query($sql)){
             return true;
@@ -72,23 +75,14 @@ class Sql
      *
      * @return   array|bool 成功返回查询到的首行失败返回false
      *
-     * @throws ModelException
      * */
     public function queryLine($sql)
     {
-        if($this->is_commit && count($this->err_megs) > 0 ){
-            throw new ModelException('前面有错误');
-        }
+        if($this->showErr())return false;
         $conn = $this->getConn();
         $re = $conn->query($sql);
         if($conn->errno){
-            if($this->is_commit){
-                array_push($this->err_megs,'查询错误!'.$conn->error);
-                $conn->rollback();
-            }elseif(Config::DEBUG){
-                die('查询错误!'.$conn->error);
-            }
-
+            $this->showErr('查询错误!'.$conn->error);
         }
         if(empty($re)){return false;}
         $row = $re->fetch_assoc();
@@ -103,23 +97,14 @@ class Sql
      * @param string $sql 语句
      *
      * @return  array|bool 成功返回查询到数据 失败返回false
-     *
-     *@throws ModelException
      * */
     public function queryData($sql)
     {
-        if($this->is_commit && count($this->err_megs) > 0 ){
-            throw new ModelException('前面有错误');
-        }
+        if($this->showErr())return false;
         $conn = $this->getConn();
         $re = $conn->query($sql);
         if($conn->errno){
-            if($this->is_commit){
-                array_push($this->err_megs,'查询错误!'.$conn->error);
-                $conn->rollback();
-            }elseif(Config::DEBUG){
-                die('查询错误!'.$conn->error);
-            }
+            $this->showErr('执行错误!'.$conn->error);
 
         }
         if(empty($re)){return false;}
@@ -138,25 +123,17 @@ class Sql
      *
      * @return  int|boolean 成功返回ID失败返回false
      *
-     *@throws ModelException
      * */
     public function executeId($sql)
     {
-        if($this->is_commit && count($this->err_megs) > 0 ){
-            throw new ModelException('前面有错误');
-        }
+        if($this->showErr())return false;
         $conn = $this->getConn();
         if($conn->query($sql)){
             $id = $conn->insert_id;
             return $id;
         }else{
             if($conn->errno){
-                if($this->is_commit){
-                    array_push($this->err_megs,'执行错误!'.$conn->error);
-                    $conn->rollback();
-                }elseif(Config::DEBUG){
-                    die('执行错误!'.$conn->error);
-                }
+                $this->showErr('执行错误!'.$conn->error);
             }
             return false;
         }
@@ -192,10 +169,9 @@ class Sql
      * @param $where Where 条件必须是二维数组，子数组条件必须 columnName，type ，value，可选logic，mark
      *
      * @return array|bool 成功返回数组集合，失败返回false
-     *
-     * @throws ModelException
      */
     public function selectData($table,$column,$where){
+        if($this->showErr())return false;
         $columns="";        //列名集合
         if(is_array($column)){
             foreach($column as  $value){
@@ -206,22 +182,30 @@ class Sql
             $columns = $column;
         }
         $str ="SELECT {$columns} FROM {$table} {$where->getPrepWhere()}";
+//        echo $str;
+//        print_r($where->getPrepArges());
         $conn = $this->getConn();
         $sqlStmt = $conn->stmt_init();
         $sqlStmt->prepare($str);
 
         if($where->getPrepType() ==""){  //没有参数的查询
             if(!$sqlStmt->execute()){
-
+                $this->showErr('select错误'.$sqlStmt->error);
+                $sqlStmt->close();
+                return false;
             }
         }else{
             //带参数的查询
             if(!call_user_func_array(array($sqlStmt,"bind_param"),$this->refValues($where->getPrepArges()))){
-
+                $this->showErr('语句或参数错误'.$str.'  '.join(',',$where->getPrepArges()));
                 $sqlStmt->close();
                 return false;
             }
-            $sqlStmt->execute();
+            if(!$sqlStmt->execute()){
+                $this->showErr('select错误'.$sqlStmt->error);
+                $sqlStmt->close();
+                return false;
+            }
         }
         $result = array();
         $md = $sqlStmt->result_metadata();
@@ -254,7 +238,7 @@ class Sql
             }
         }else{
             if($this->is_commit && count($this->err_megs) > 0 ){
-                throw new ModelException('前面有错误');
+                return true;
             }
         }
 
@@ -271,32 +255,24 @@ class Sql
      *
      */
     public function delete($table,$where){
-        if($this->is_commit && count($this->err_megs) > 0 ){
-            throw new ModelException('前面有错误');
-        }
+        if($this->showErr())return false;
         $str ="DELETE FROM  {$table} {$where->getPrepWhere()}";
         $conn = $this->getConn();
         $sqlStmt = $conn->prepare($str);
         if(!call_user_func_array(array($sqlStmt,"bind_param"),$this->refValues($where->getPrepArges()))){
-            if($this->is_commit){
-                array_push($this->err_megs,'语句或参数错误'.$str.'  '.join(',',$where->getPrepArges()));
-                $conn->rossback();
-            }elseif(Config::DEBUG){
-                die('语句或参数错误'.$str.'  '.join(',',$where->getPrepArges()));
-            }
+            $this->showErr('语句或参数错误'.$str.'  '.join(',',$where->getPrepArges()));
             $sqlStmt->close();
             return false;
         }
         $res = $sqlStmt->execute();
         if(!$res){
-            if(Config::DEBUG){
-                echo '错误：'.$sqlStmt->error;
-            }
+            $this->showErr('delete错误'.$sqlStmt->error);
             $sqlStmt->close();
             return false;
         }
+        $ret =  $sqlStmt->affected_rows;
         $sqlStmt->close();
-        return true;
+        return $ret;
     }
 
     /**
@@ -312,9 +288,7 @@ class Sql
      *
      */
     public function update($table,$where,$values){
-        if($this->is_commit && count($this->err_megs) > 0 ){
-            throw new ModelException('前面有错误');
-        }
+        if($this->showErr())return false;
         $set = "";
         $type="";
         $arges=array();
@@ -335,8 +309,8 @@ class Sql
                     break;
                 }else{
                     $type .= 's';
-                    $set .=$value.' =? ,';
-                    array_push($arges, $key);
+                    $set .=$key.' =? ,';
+                    array_push($arges, $value);
                 }
             }
         }
@@ -348,19 +322,14 @@ class Sql
         $conn = $this->getConn();
         $sqlStmt = $conn->prepare($str);
         if(!call_user_func_array(array($sqlStmt,"bind_param"),$this->refValues($arges))){
-            if($this->is_commit){
-                array_push($this->err_megs,'语句或参数错误'.$str.'  '.join(',',$where->getPrepArges()));
-                $conn->rossback();
-            }elseif(Config::DEBUG){
-                die('语句或参数错误'.$str.'  '.join(',',$where->getPrepArges()));
-            }
-        }
-        $res = $sqlStmt->execute();
-        if(!$res){
-            if(Config::DEBUG){
-                echo '错误：'.$sqlStmt->error;
-            }
+            $this->showErr('语句或参数错误'.$str.'  '.join(',',$arges));
             $sqlStmt->close();
+            return false;
+        }
+
+        if(!$sqlStmt->execute()){
+            $sqlStmt->close();
+            $this->showErr('update错误'.$sqlStmt->error);
             return false;
         }
         $sqlStmt->close();
@@ -381,20 +350,19 @@ class Sql
      *
      */
     public function insert($table,$column,$data){
-        if($this->is_commit && count($this->err_megs) > 0 ){
-            throw new ModelException('前面有错误');
-        }
-        $type="";
-        $columns="";
-        $wen ="";
-        foreach($column as  $key=>$value){
+        if($this->showErr())return false;
+        $type="";$columns="";$wen ="";
+        foreach($column as  $key=>$value){//拼装sql字符串 默认为string 凡是后最为 _id 的是int
+            $wen .="? ,";
             if(is_int($key)){
                 $columns .=  $value." ,";
-                $wen .="? ,";
-                $type .= 's';
+                if(preg_match("/_id$/",$value)){
+                    $type .= 'i';
+                }else{
+                    $type .= 's';
+                }
             }else{
                 $columns .=  $key." ,";
-                $wen .="? ,";
                 $type .= substr($value,0,1);
             }
         }
@@ -402,48 +370,39 @@ class Sql
         $wen =substr($wen,0,strlen($wen)-1);
         $str ="INSERT INTO {$table} ({$columns}) VALUES ({$wen});";
         $conn = $this->getConn();
-        //echo $str;
         $sqlStmt = $conn->prepare($str);
-        var_dump($sqlStmt);
         foreach($data as  $value){
-            if(is_array($value)){
+            if(is_array($value)){//插入多行内容
                 array_unshift($value,$type);
                 if(!call_user_func_array(array($sqlStmt,"bind_param"),$this->refValues($value))){
-                    if($this->is_commit){
-                        array_push($this->err_megs,'语句或参数错误'.$str);
-                    }elseif(Config::DEBUG){
-                        die('语句或参数错误'.$str);
-                    }
+                    $this->showErr('语句或参数错误'.$str);
+                    $sqlStmt->close();
+                    return false;
                 }
                 $res = $sqlStmt->execute();
                 if(!$res){
-                    if(Config::DEBUG){
-                        echo '错误：'.$sqlStmt->error;
-                    }
+                    $this->showErr('insert错误'.$sqlStmt->error);
+                    $sqlStmt->close();
                     return false;
                 }
             }else{
-                array_unshift($data,$type);
-                print_r($data);
+                //echo $str;
+                array_unshift($data,$type); //单行插入 返回ID
+              // print_r($data);
                 if(!call_user_func_array(array($sqlStmt,"bind_param"),$this->refValues($data))){
-                    if($this->is_commit){
-                        array_push($this->err_megs,'语句或参数错误'.$str);
-                    }elseif(Config::DEBUG){
-                        die('语句或参数错误'.$str);
-                    }
-                    //$sqlStmt->close();
+                    $this->showErr('语句或参数错误'.$str);
+                    $sqlStmt->close();
                     return false;
                 }
                 $res = $sqlStmt->execute();
                 if(!$res){
-                    if(Config::DEBUG){
-                        echo '错误：'.$sqlStmt->error;
-                    }
+                    $this->showErr('insert错误'.$sqlStmt->error);
                     $sqlStmt->close();
                     return false;
                 }
                 $id= $sqlStmt->insert_id;
                 $sqlStmt->close();
+                //echo $id;
                 return $id;
             }
         }
@@ -463,6 +422,7 @@ class Sql
         } return $arr;
     }
 }
+
 
 
 //

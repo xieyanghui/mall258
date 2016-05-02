@@ -13255,12 +13255,10 @@ INSERT INTO `g_price_list` (`gpi_id`, `gp_id`) VALUES
 INSERT INTO `user` (`u_id`, `u_name`, `u_pwd`, `u_nick`, `u_phone`, `u_email`, `u_address`, `u_reg`, `u_status`, `u_img`) VALUES
 (1, 'xiehui', 'e10adc3949ba59abbe56e057f20f883e', '谢辉', '18588711500', 'xieiyanghui@126.com', NULL, '2016-04-21 20:08:48', 1, NULL);
 
+
 --
 -- 转存表中的数据 `web_info`
 --
-
-INSERT INTO `web_info` (`key`, `title`, `keywords`, `description`) VALUES
-('index', '星火数码', '手机，相机', '599只要599');
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;

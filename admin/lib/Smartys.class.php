@@ -20,7 +20,6 @@ class Smartys extends Smarty
         $this->assign("HTTP_MODEL", 'http://' . $_SERVER['HTTP_HOST'].Config::ADMIN_DIR);
         $this->assign("HTTP_FILE", substr($_SERVER['PHP_SELF'],strrpos($_SERVER['PHP_SELF'],"/")+1,strrpos($_SERVER['PHP_SELF'],".")-strrpos($_SERVER['PHP_SELF'],"/")-1));
     }
-
     function ds($tpl){
         if(!empty($GLOBALS['content'])){
             $this->assign('contents',$GLOBALS['content']);

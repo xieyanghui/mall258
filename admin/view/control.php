@@ -10,12 +10,12 @@ $c[] = array('auth'=>'goods','name'=>'商品管理','url'=>"/view/menuGoods.php"
 $a_id = $_SESSION['adminInfo']['a_id'];
 $menus = array();
 foreach ($c as $value) {
-    if (empty($value['auth']) || AdminAuth::inAdmin($a_id, $value['auth'])) {
+    if (empty($value['auth']) || Auth::inAdmin($a_id, $value['auth'])) {
         array_push($menus, $value);
     }
 }
 $sma->assign('admin', $_SESSION['adminInfo']);
-$sma->assign('c', $c);
+$sma->assign('menus', $menus);
 $sma->assign('con',!empty($GLOBALS['content'])?$GLOBALS['content']:null);
 $sma->display('control.htm');
 

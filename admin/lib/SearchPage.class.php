@@ -52,6 +52,12 @@ class SearchPage{
         $params[] = &$this->sort;
         return $params;
     }
+    public function getLimit(){
+        return array('start'=>$this->page*$this->pageRow,'length'=>$this->pageRow);
+    }
+    public function getOrder(){
+            
+    }
     public function getPages($count){
         $page['page'] = $this->page;//当前第几页
         $page['pageRow'] = $this->pageRow;  //每页几行

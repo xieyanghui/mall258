@@ -9,8 +9,8 @@ require_once($_SERVER['DOCUMENT_ROOT'] . "/public/autoload.php");
 class GTAttr extends Model{
     public function __construct()
     {
-        $this->columnName = array('gta_id','gt_id','gta_type','gta_name');
+        $this->columnName = array('gta_id','gt_id','gtat_id','gta_name');
         $this->tableName = 'gt_attr';
-        $this->tableId = 'gta_id';
+        $this->modelId = 'gta_id';
     }
 }

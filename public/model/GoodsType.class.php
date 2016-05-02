@@ -11,6 +11,6 @@ class GoodsType extends Model{
     {
         $this->columnName = array('gt_id','gt_number','gt_name','gt_remark','gt_status');
         $this->tableName = 'goods_type';
-        $this->tableId ='gt_id';
+        $this->modelId ='gt_id';
     }
 }

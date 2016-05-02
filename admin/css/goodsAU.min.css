@@ -1,4 +1,4 @@
-#goodsAU .win_column{position:relative;float:left;overflow:hidden}
+#goodsAU{width:1200px}#goodsAU .win_column{position:relative;float:left;overflow:hidden;width:50%}
 #goodsAU .g_cancel{float:left;margin:20px 150px}
 #goodsAU .g_submit{float:right;margin:20px 150px}
 #goodsAU .select_div{width:65px;height:30px;border:1px solid #50d1de;text-align:center;line-height:30px;background-color:#eee}
@@ -6,15 +6,18 @@
 #goodsAU .select_ul{display:none;position:absolute;z-index:1000;overflow:hidden;border-top:1px solid #50d1de;border-left:1px solid #50d1de;background-color:#fff}
 #goodsAU .select_li{width:65px;height:30px;border-bottom:1px solid #50d1de;border-right:1px solid #50d1de;text-align:center;line-height:30px;background-color:#eee;float:left}
 #goodsAU .select_li:hover{background-color:#50d1de;cursor:pointer}
-#goodsAU .row_con_head{width:50px;text-align:right;float:left;font-size:14px;color:#07a1b1}
+#goodsAU .row_con_head{width:60px;text-align:right;float:left;font-size:14px;color:#07a1b1}
 #goodsAU .goods_attr_list{height:30px;line-height:30px;border:1px solid #50d1de;margin:0 2px 2px 0;width:145px;float:left;overflow:hidden}
 #goodsAU .goods_attr_list>label{width:70px;float:right}
-#goodsAU .goods_price_list>div.win_row_con{width:230px;margin-bottom:3px}
-#goodsAU div.input_label{border:1px solid #50d1de;padding-left:5px;width:120px;height:27px;line-height:27px;overflow:hidden;display:block}
+#goodsAU .goods_price_list>div.win_row_con{width:400px;margin-bottom:3px;position:relative}
+#goodsAU div.input_label{border:1px solid #50d1de;padding-left:8px;width:340px;height:33px;line-height:33px;overflow:hidden;display:block}
 #goodsAU label#gt_number{width:40px;float:left;text-align:right;display:block}
 #goodsAU input.input_label_value{width:60px;border:hidden;outline:none}
 #goodsAU div.goods_attr_list>input{width:60px;display:block;padding:5px;height:18px;border:hidden;outline:none;float:right}
-#goodsAU .attr_price{width:300px}
-#goodsAU textarea.con_textarea{display:block;outline:none;border:1px solid #50d1de;margin:2px 5px;padding:3px;float:left;max-width:150px;width:150px}
+#goodsAU .attr_price{width:500px}
+#goodsAU textarea.con_textarea{position:relative;display:block;outline:none;border:1px solid #50d1de;margin:2px;width:260px;padding:3px;height:60px;float:left}
 #goodsAU .con_list_add:hover{cursor:pointer}
+#goodsAU .goods_price_list{clear:both;overflow:hidden}
 #goodsAU .img_75{width:75px;height:75px}
+#goodsAU .con_attr_list{width:190px;margin:2px;border:1px solid #50d1de;float:left;height:30px;line-height:30px}#goodsAU .con_attr_list label{width:60px;float:left;text-align:right;color:#07a1b1;overflow:hidden;white-space:nowrap}
+#goodsAU .con_attr_list input{width:120px;float:left;outline:none;border:none;margin:5px 0 0 5px}

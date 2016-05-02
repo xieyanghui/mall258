@@ -21,7 +21,7 @@
         <li><{$admin['a_nick']}>欢迎您</li>
     </ul>
     <ul class = 'top_menus'>
-        <{foreach $c as $menu}>
+        <{foreach $menus as $menu}>
             <li class='top_menu ajax_menu' href="<{$menu['pre_url']|default:$HTTP_MODEL}><{$menu['url']}>"><{$menu['name']}></li>
         <{/foreach}>
 

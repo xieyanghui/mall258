@@ -230,7 +230,7 @@
     </div>
 </div>
 <{if !$select }>
-<div id = 'img_add_button' class="add_button">上传图片</div>
+<div id = 'img_add_button' class="add_button">+</div>
 <{/if}>
 <input type="hidden" name="isUpload" value="no" >
 <script type="text/javascript">
@@ -265,8 +265,6 @@
         $(this).siblings().removeClass('img_type_li_click');
         $(".img_con_list[name='"+ $(this).attr('name')+"']").show().siblings().hide();
     });
-
-
     //选择图片
     $('.img_con').on('dblclick','.img_con_con',function(){
         var src = $(this).find('img').first().attr('src');
@@ -294,8 +292,8 @@
             $.getJSON('<{$HTTP_MODEL}>/server/adminImgTypeDeleteSer.php',{'ait_id':$(this).parent().attr('name').substr(3)},function(data){
                 toast(data.status, data.megs);
                 if (data.status){
-                    $('.img_type_li').eq(1).addClass('img_type_li_click');
-                    $('.img_con_list').eq(1).show();
+                    $('.img_type_li').eq(1).trigger('click');
+                    type.remove();
                     var con = $(".img_con_list[name='"+type.attr('name')+"'] >.img_con_con");
                     con.children('.img_con_con_click').hide();
                     con.children('.img_con_con_time').html("刚刚");
@@ -531,18 +529,20 @@
             if($('.img_con_list:visible').attr('name')== 'img1'){ return;}
             var name =  file.name;
             name = name.substr(0,name.lastIndexOf('.'));
-            $('.img_con_list:visible>div.img_con_util').after("<div class ='img_con_con preview_img' preview = '.img_con_con[name='imgs"+file.id+"'] img.preview ' name = 'imgs"+file.id+"'><div class=' img_con_con_mouse' ></div><div class='img_con_con_click'></div><div class='img_con_con_img'></div><div class='img_con_con_name'><input type='text' value='"+name+"'></div><div class='img_con_con_time'><div class='img_con_con_bar'></div></div></div>");
+            $('.img_con_list:visible>div.img_con_util').after("<div class ='img_con_con preview_img' name = 'imgs"+file.id+"'><div class=' img_con_con_mouse' ></div><div class='img_con_con_click'></div><div class='img_con_con_img'></div><div class='img_con_con_name'><input type='text' value='"+name+"'></div><div class='img_con_con_time'><div class='img_con_con_bar'></div></div></div>");
         };
         up['init'].UploadComplete = function(){
             $("input[name='isUpload']").val('no');
         };
         up['init'].FileUploaded = function (up, file, info) {
+           // alert('aaaaaaaaa');
             var div = $(".img_con_list >div[name='imgs"+file.id+"']");
+            console.log(div);
             var domain = up.getOption('domain');
             var res = JSON.parse(info);
             div.children('.img_con_con_img').append("<img class='preview' src='"+domain + "/" + res.key + "?imageView2/5/w/100/h/100"+"'>");
             var ait_id = div.parent().attr('name').substr(3);
-            $.getJSON('<{$HTTP_MODEL}>//server/adminImgSpaceAddSer.php',{'ais_name':file.name.substr(0,file.name.lastIndexOf('.')),'ais_img_url':domain + "/" + res.key,'ait_id':ait_id},function(data){
+            $.getJSON('<{$HTTP_MODEL}>/server/adminImgSpaceAddSer.php',{'ais_name':file.name.substr(0,file.name.lastIndexOf('.')),'ais_img_url':domain + "/" + res.key,'ait_id':ait_id},function(data){
                 toast(data.status,data.megs);
                 if(data.status){
                     div.children('.img_con_con_time').html("刚刚");

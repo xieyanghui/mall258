@@ -9,18 +9,17 @@ include_once ('./header.inc.php');
 $sma = new Smartys();
 $number = $_GET['id'];
 include_once ('./top.php');
+Model::startTransaction();
 $g = new Goods();
 $g = $g->query(new Where('g_number',$number),'*',"GAttr,GPrice")->toArray()[0];
 
 
 if($gt_id = $g['gt_id']){
-    $where_gt = new Where('gt_id',$gt_id);
-
     $gt = new GoodsType();
-    $gt = $gt->query(new Where('gt_id',$gt_id,'int'),'*','GTAttr,GTPrice')->toArray()[0];
+    $gt = $gt->query(new Where('gt_id',$gt_id),'*','GTAttr,GTPrice')->toArray()[0];
 
     $gpi = new GPriceInfo();
-    $gpi = $gpi->query(new Where('g_id',$g['g_id'],'int'),'*',"GPriceList")->toArray();
+    $gpi = $gpi->query(new Where('g_id',$g['g_id']),'*',"GPriceList")->toArray();
     foreach ($gpi as &$gpl){
         $gpl['list'] = array();
         foreach ($gpl['GPriceList'] as $gpls){
@@ -28,6 +27,7 @@ if($gt_id = $g['gt_id']){
         }
         unset($gpl['GPriceList']);
     }
+    //print_r($gpi);
     $newAttr = array();
     foreach ($g['GAttr'] as $attr){
         foreach ($gt['GTAttr'] as $gtAttr){
@@ -51,8 +51,9 @@ if($gt_id = $g['gt_id']){
     $g['GPrice'] =$newPrice;
     $g['GAttr'] = $newAttr;
     $g['gpi'] = $gpi;
-    //print_r($g);
+   // print_r($g);
 
+    Model::commitTransaction();
     $sma->assign('gpi_s',json_encode($gpi));
     $sma->assign('top',$top);
     $sma->assign('title',$g['g_name']);
@@ -62,7 +63,7 @@ if($gt_id = $g['gt_id']){
     $sma->display('goods.htm');
 
 }else{
-
+    
 }
 
 

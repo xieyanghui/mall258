@@ -12,4 +12,4 @@ $gt = new GoodsType();
 $gt->query(new Where());
 
 $sma->assign('top',$top);
-$sma->display('goods_list.htm');
+$sma->display('goodsList.htm');

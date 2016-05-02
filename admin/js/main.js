@@ -180,8 +180,8 @@ function getUpload(){
 }
 
 function PageSearch(page_url){
-    var load =function(){
-        $('#contents').load(page_url,$('#list_form').serialize());
+    var load =function(win){
+        win.parent().load(page_url,win.find('.list_form').serialize());
     }
     //列表背景颜色
     $('li.list_row:even ').addClass('list_row_even');
@@ -201,57 +201,64 @@ function PageSearch(page_url){
 
     //排序
     $("li.list_row_head > span").click(function () {
-        var sortLine = $('#list_form').children("input[name='sortLine']");
-        var sort = $('#list_form').children("input[name='sort']");
-        if(sortLine.val() == $(this).attr('name')){
+        var par = $(this).parents('.win');
+        var name = $(this).attr('value') || $(this).attr('name');
+        var sortLine = par.find('.list_form').children("input[name='sortLine']");
+        var sort = par.find('.list_form').children("input[name='sort']");
+        if(sortLine.val() == name){
             if(sort.val() == "DESC"){
                 sort.val("ASC");
             }else{
                 sort.val("DESC");
             }
         }else{
-            sortLine.val($(this).attr('name'));
+            sortLine.val(name);
             sort.val("DESC");
         }
-        load();
-    });
-    //列表搜索
-    $("#list_search").click(function () {
-        if($('#search_value').val() !=""){
-            $('#list_form').children("input[name='page']").val('0');
-            $('#list_form').children("input[name='searchLine']").val($("#search_select").val());
-            $('#list_form').children("input[name='search']").val($('#search_value').val());
-            load();
-        }
+        load($(this).parents('.win'));
     });
 
-    //列表取消搜索
-    $("div#search_delete").click(function () {
-        $('#list_form').children("input[name='search']").val("");
-        load();
+    //列表搜索
+    $(".list_search").click(function () {
+        var par = $(this).parents('.win');
+        if(par.find('.search_value').val() !=""){
+            par.find('.list_form').children("input[name='page']").val('0');
+            par.find('.list_form').children("input[name='searchLine']").val(par.find(".search_select").val());
+            par.find('.list_form').children("input[name='search']").val(par.find('.search_value').val());
+            load(par);
+        }
+    });
+    $("div.search_delete").click(function () {
+        var par = $(this).parents('.win');
+        par.find('.list_form').children("input[name='search']").val("");
+        load(par);
     });
     //列表每页多少汗设置
     $("span.list_row_sum").click(function () {
-        $('#list_form').children("input[name='page']").val("0");
-        $('#list_form').children("input[name='pageRow']").val($(this).html());
-        load();
+        var par = $(this).parents('.win');
+        par.find('.list_form').children("input[name='page']").val("0");
+        par.find('.list_form').children("input[name='pageRow']").val($(this).html());
+        load(par);
     });
     //列表选页
     $("div.pageNumber").click(function () {
-        $('#list_form').children("input[name='page']").val(parseInt($(this).html()) - 1);
-        load();
+
+        var par = $(this).parents('.win');
+        par.find('.list_form').children("input[name='page']").val(parseInt($(this).html()) - 1);
+        load(par);
     });
     //列表翻页
     $("div.pageButton").click(function () {
+        var par = $(this).parents('.win');
         if($(this).hasClass('pageOff')){
             return;
         }
         if ($(this).html() == "下一页") {
-            $('#list_form').children("input[name='page']").val($("div.pageOn").html());
+            par.find('.list_form').children("input[name='page']").val($("div.pageOn").html());
         } else {
-            $('#list_form').children("input[name='page']").val(parseInt($("div.pageOn").html()) - 2);
+            par.find('.list_form').children("input[name='page']").val(parseInt($("div.pageOn").html()) - 2);
         }
-        load();
+        load(par);
     });
 }
 
@@ -306,8 +313,13 @@ $('body').on('click','.select_img',function(e){
         progress = $("<div class='progress'></div>");
         progress.appendTo($(this));
     }else{ progress =$(progress);}
-    if(typeof(preview) =='undefined' || preview ==""){
-        preview =$(this).children('img');
+    if(typeof(preview) ==='undefined' || preview ==""){
+        if($(this).children('img').length ===0){
+            preview =$(this);
+        }else{
+            preview =$(this).children('img');
+        }
+
     }else{
         preview =$(preview);
     }
@@ -363,7 +375,6 @@ $('body').on('mouseenter','.preview_img',function(e){
     setTimeout(function(){
         if(self.attr('leave') =='false'){
             var ss = typeof (self.attr('preview')) !='undefined'? $(self.attr('preview')):self; //图片来源默认本身
-
             if($('#preview_img').length ==0){
                 $("body").append("<div id='preview_img'><img /></div>");
             }
@@ -400,7 +411,15 @@ $('body').on('click',".ajax_menu",function(){
     });
 });
 
+$('body').on('click','.select_goods',function(){
+    if($("#goods_select_div").length >0){
+        $("#goods_select_div").remove();
+    }
+    $('body').append("<div id='goods_select_div'></div>");
+    $("#goods_select_div").load('./goodsInfo.php?float='+$(this).attr('id'));
+    loading.start();
 
+});
 $('body').on('click','.submit',function () {
     $(this).parents("form").submit();
 });

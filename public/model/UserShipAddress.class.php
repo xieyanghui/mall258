@@ -11,6 +11,6 @@ class UserShipAddress extends Model{
     {
         $this->columnName = array('usa_id','u_id','usa_number','usa_consignee','usa_phone');
         $this->tableName = 'user_ship_address';
-        $this->tableId = 'usa_id';
+        $this->modelId = 'usa_id';
     }
 }

@@ -11,6 +11,6 @@ class GTPrice extends Model{
     {
         $this->columnName = array('gtp_id','gt_id','gtp_name');
         $this->tableName = 'gt_price';
-        $this->tableId = 'gtp_id';
+        $this->modelId = 'gtp_id';
     }
 }

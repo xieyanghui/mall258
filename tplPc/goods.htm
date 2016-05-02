@@ -90,33 +90,34 @@
 
 <script>
     window.h_main.push(function(){
-        $('.goods_content_nav > li').click(function(){
+        $('.goods_content_nav > li').click(function(){//详细导航
             if(!$(this).hasClass('li_select')){
                 $(this).addClass('li_select').siblings().removeClass('li_select');
                 $('.goods_content_val li.'+$(this).attr('for')).show().siblings().hide();
             }
         });
 
-        $('.goods_info_price_li').each(function(){
+        $('.goods_info_price_li').each(function(){//价格名称大小
             if(this.offsetWidth < this.scrollWidth){
                 $(this).css('width',this.scrollWidth);
             }
         });
         var ul_temp = 0;
-        $('.goods_info_price_ul').each(function(){
+        $('.goods_info_price_ul').each(function(){ //设定价格分类编号
             $(this).attr('type',++ul_temp);
         });
+
         var price_list = JSON.parse("<{$gpi_s|escape:javascript}>");
         var price_min = 1000000000;
         var price_max = 0;
         var price_arr = {};
-        for(var pl in price_list){
+        for(var pl in price_list){//找出最大最小价格
             var gpi_price = parseFloat(price_list[pl]['gpi_price']);
             if(gpi_price > price_max)price_max = gpi_price;
             if(gpi_price < price_min)price_min = gpi_price;
         }
         $('.goods_price_value_v').html(price_min+' - '+price_max);
-
+        //商品价格选择
         var isSelect= function(){
             var list ={};//匹配数量
             for(var pl in price_list){
@@ -130,7 +131,6 @@
                     }
                 }
             }
-            console.log(price_list[0]['list'].length +'----'+$('.goods_info_price_li_c').length );
             if(price_list[0]['list'].length === $('.goods_info_price_li_c').length){
                 console.log(price_arr);
                 var gpi_sum = 0;
@@ -160,7 +160,6 @@
                 $('.goods_info_sum_sum').html("");
             }
         };
-        //商品价格选择
         $('.goods_info_price_li').click(function(){
             if($(this).hasClass('goods_info_price_li_c')){
                 price_arr[$(this).parents('ul').attr('type')] = null;
@@ -190,12 +189,11 @@
                         }
                         break;
                     }
-                };
+                }
 
             }
         });
-
-
+        //小图浏览
         $('.goods_roll_img_s').mouseenter(function(){
             if(typeof ($(this).parents('ul').attr('img_s')) ==='undefined'){
                 $('.goods_show_img >img').attr('imgUrl',$(this).children('img').attr('imgUrl')).attr('src',h_util.imgLink($(this).children('img').attr('imgUrl'),'centre'));
@@ -204,7 +202,6 @@
 
         var sum = $('.goods_roll_img >ul >li').length;
         $('.goods_roll_img >ul').css('width',sum*74);
-
 
         $('.goods_roll_left').click(function(){
             var u = $(this).siblings('ul');
@@ -225,6 +222,8 @@
                 u.animate({'left':parseInt(u.css('left'))-300},200);
             }
         });
+
+        //是否显示左右滑块
         $('.goods_roll_img').mousemove(function(){
             var u = $(this).children('ul');
            // console.log(parseInt($(this).children('ul').css('left')));

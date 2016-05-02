@@ -7,11 +7,15 @@
  */
 $auth = "goodsAdd";
 include_once ("./header.inc.php");
-$g['g_id'] = $_POST['g_id'];
-$g['g_text'] = $_POST['g_text'];
 $goods = new Goods();
-$arr = array("status" => FALSE, "megs" => "失败！！");
-if($goods->updateGoods($g,$_SESSION['adminInfo']['a_id'],"aaaaaaaaaa")){
-    $arr = array("status" => true, "megs" => "成功");
+$goods->read($_POST);
+if($goods->save()){
+    exit(json_encode(array("status" => true, "megs" => "成功")));
 }
-echo json_encode($arr);
+exit(json_encode(array("status" => false, "megs" => "失败")));
+
+//$arr = array("status" => FALSE, "megs" => "失败！！");
+//if($goods->updateGoods($g,$_SESSION['adminInfo']['a_id'],"aaaaaaaaaa")){
+//    $arr = array("status" => true, "megs" => "成功");
+//}
+//echo json_encode($arr);

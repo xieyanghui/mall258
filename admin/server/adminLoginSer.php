@@ -27,13 +27,11 @@ function getIp()
 
 $a_name = $_POST['a_name'];
 $a_pwd = md5($_POST['a_pwd']);
-$admin = new Admin;
-$adminInfo = $admin->adminLogin($a_name, $a_pwd, getIp());
-if (!empty($adminInfo)) {
-    if(empty($adminInfo['a_img'])){
-        $adminInfo['a_img'] = Config::ADMIN_HEAD_DEFAULT;
-    }
-    $_SESSION['adminInfo'] = $adminInfo;
+$admin = new Admin();
+$where = new Where('a_name',$a_name);
+$where->setWhere('a_pwd',$a_pwd);
+if ($admin->query($where,array('a_id','a_name','a_img','a_nick'))->length() === 1) {
+    $_SESSION['adminInfo'] = $admin->toArray()[0];;
     exit(json_encode(array("status" => true, "megs" => "登录成功")));
 }
 exit(json_encode(array("status" => FALSE, "megs" => "登录失败")));

@@ -11,6 +11,6 @@ class OrderGoods extends Model{
     {
         $this->columnName = array('og_id','o_id','gpi_id');
         $this->tableName = 'Order_Goods';
-        $this->tableId = 'og_id';
+        $this->modelId = 'og_id';
     }
 }

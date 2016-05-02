@@ -11,6 +11,6 @@ class IndexModel extends Model{
     {
         $this->columnName = array('im_id','im_name','im_class','im_sort');
         $this->tableName = 'index_model';
-        $this->tableId = 'im_id';
+        $this->modelId = 'im_id';
     }
 }

@@ -7,8 +7,7 @@
  */
 class Config{
 
-    //后台主目录
-    const ADMIN_DIR = "/admin";
+
 
     //调试模式
     const DEBUG = true;
@@ -26,6 +25,9 @@ class Config{
     const QINIU_SCOPE = "mall258";
     const QINIU_URL = "//7xsiy4.com1.z0.glb.clouddn.com";
 
+    //后台主目录
+    const ADMIN_DIR = "/admin";
+//    后台目录树
     static $tree = array(
         'control'=>array(
             'menuSystem'=>array(
@@ -45,11 +47,17 @@ class Config{
                 'goodsInfo',
                 'goodsRecommend',
                 'goodsAU',
-                'goodsAU2',
+                'goodsPriceAU',
+                'goodsTextAU',
                 'goodsTypeAU',
-                'goodsIndex',
-                'goodsIndexAU'
+                'indexModel'
             )
+        )
+    );
+
+    static $model_filter=array(
+        'Admin.a_img'=>array(
+            'null'=>'//7xsiy9.com2.z0.glb.clouddn.com/mall258_guest.png'
         )
     );
 }

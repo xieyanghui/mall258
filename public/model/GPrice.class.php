@@ -12,15 +12,7 @@ class GPrice extends Model{
     {
         $this->columnName = array('gp_id','g_id','gtp_id','gp_name');
         $this->tableName = 'g_price';
-        $this->tableId = 'gp_id';
-    }
-    public function read($arr)
-    {
-        // TODO: Implement read() method.
-    }
-
-    public function remove(Where $where = null)
-    {
+        $this->modelId = 'gp_id';
     }
 
 }

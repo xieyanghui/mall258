@@ -11,6 +11,6 @@ class GAttr extends Model{
     {
         $this->columnName = array('ga_id','g_id','gta_id','ga_value');
         $this->tableName = 'g_attr';
-        $this->tableId ='ga_id';
+        $this->modelId ='ga_id';
     }
 }

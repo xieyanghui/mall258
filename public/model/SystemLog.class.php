@@ -11,6 +11,6 @@ class SystemLog extends Model{
     {
         $this->columnName = array('sl_id','a_id','sl_key','sl_content','sl_date');
         $this->tableName = 'system_log';
-        $this->tableId = 'sl_id';
+        $this->modelId = 'sl_id';
     }
 }

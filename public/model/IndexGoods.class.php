@@ -11,6 +11,6 @@ class IndexGoods extends Model{
     {
         $this->columnName = array('ig_id','ig_name','ig_img','ig_label','ig_status'=>'int','g_id','im_id');
         $this->tableName = 'index_goods';
-        $this->tableId = 'ig_id';
+        $this->modelId = 'ig_id';
     }
 }

@@ -1,25 +1,29 @@
 <{if $page['count'] ge 1 || $page['search'] ne "" }>
-<div class='win '>
-    <h1 class="win_head"><{$table['title']|default:'列表'}></h1>
+<div class=" <{if !empty($page['float'])}>float_win<{/if}> win">
+    <h1 class="win_head"><{$view['table']['title']|default:'列表'}><{if !empty($page['float'])}><div class="show_win_close">×</div><{/if}></h1>
     <ul>
         <li class='list_row_head'>
-            <{foreach $table['column'] as $column}>
-            <span name="<{$column['key']}>" style="width:<{$column['width']|default:'100'}>px"><{$column['name']}></span>
+            <{foreach $view['table']['column'] as $column}>
+            <span name="<{$column['key']}>" value="<{$column['value']|default:''}>"  style="width:<{$column['width']|default:'100'}>px"><{$column['name']}></span>
             <{/foreach}>
         </li>
         <{foreach $data as $row}>
-        <li class='list_row' name="<{$row[$table['id']]}>">
-            <{foreach $table['column'] as $c1}>
-                <span title="<{$row[$c1['key']]}>"  style="width:<{$c1['width']|default:'100'}>px"><{$row[$c1['key']]}></span>
+        <li class='list_row' name="<{$row[$view['table']['id']]}>">
+            <{foreach $view['table']['column'] as $c1}>
+                <span name="<{$c1['key']}>" title="<{$row[$c1['key']]}>"  style="width:<{$c1['width']|default:'100'}>px"><{$row[$c1['key']]}></span>
             <{/foreach}>
-            <{if !empty($delete) }>
+            <{if empty($page['float'])}>
+            <{if !empty($view['delete']) }>
             <span class="list_delete" >×</span>
             <{/if}>
+            <{/if}>
+
         </li>
         <{/foreach}>
 
         <!--分页搜索-->
-        <form id = 'list_form'>
+        <form class = 'list_form'>
+            <input type="hidden" name="float" value="<{$page['float']}>" />
             <input type="hidden" name="sort" value="<{$page['sort']['key']}>" />
             <input type="hidden" name="sortLine" value="<{$page['sort']['sortLine']}>" />
             <input type="hidden" name="search" value="<{$page['search']['key']}>" />
@@ -40,21 +44,21 @@
         </li>
         <{/if}>
 
-        <{if empty($table['noSearch'] )}>
+        <{if empty($view['table']['noSearch'] )}>
         <!--搜索-->
         <li class="list_row_search">
-            <input type="text" id="search_value" class="form_div" placeholder="搜索关键字" value="<{$page['search']['key']}>">
-            <{if !empty($table['search']) }>
-            <select id="search_select" class="form_div">
-                <{foreach $table['column'] as $c2 }>
+            <input type="text"  class="form_div search_value" placeholder="搜索关键字" value="<{$page['search']['key']}>">
+            <{if !empty($view['table']['search']) }>
+            <select  class="search_select form_div">
+                <{foreach $view['table']['column'] as $c2 }>
                     <{if empty($c2['noSearch']) || !$c2['noSearch'] }>
                     <option value="<{$c2['key']}>"><{$c2['name']}></option>
                     <{/if}>
                 <{/foreach}>
             </select>
             <{/if}>
-            <div id = "list_search" class="button">搜索</div>
-            <div id = "search_delete" class="delete">×</div>
+            <div class="list_search button">搜索</div>
+            <div  class="search_delete delete">×</div>
             <span class="list_row_sum" title="每页显示3行">3</span>
             <span class="list_row_sum" title="每页显示10行">10</span>
             <span class="list_row_sum" title="每页显示15行">15</span>
@@ -62,23 +66,29 @@
         </li>
         <{/if}>
     </ul>
+
+
+    <!--增加-->
+    <{if empty($page['float'])}>
+    <{if !empty($view['add'])  }>
+    <div class="add_button ajax_menu" href="<{$HTTP_MODEL}><{$view['add']}>">+</div>
+    <{/if}>
+    <{/if}>
 </div>
 <{/if}>
 
-<!--增加-->
-<{if  !empty($add) }>
-<div class="add_button button ajax_menu" href="<{$HTTP_MODEL}><{$add['url']}>"><{$add['label']}></div>
-<{/if}>
+
+<{if empty($page['float'])}>
 <!--删除-->
-<{if !empty($delete) }>
+<{if !empty($view['delete']) }>
 <script type="text/javascript">
     $(function(){
-        $('.list_row > span.list_delete').click(function(e){
+        $('.win').on('click','.list_row > span.list_delete',function(e){
             var self = $(this);
             dialogue(function(){
-                $.getJSON("<{$HTTP_MODEL}><{$delete}>?id="+self.parents('.list_row').attr('name'),function(data){
+                $.getJSON("<{$HTTP_MODEL}><{$view['delete']}>?id="+self.parents('.list_row').attr('name'),function(data){
                     toast(data.status,data.megs);
-                    $('#contents').load(document.URL,$('#list_form').serialize());
+                    $(this).parents('.win').parent().load("<{$page['url']}>",$('#list_form').serialize());
                 });
             });
             e.stopPropagation();
@@ -87,18 +97,50 @@
 </script>
 <{/if}>
 <!--更新-->
-<{if !empty($update)}>
+<{if !empty($view['update'])}>
 <script type="text/javascript">
     $(function(){
         $('.list_row').each(function(){
-            $(this).attr('href','<{$HTTP_MODEL}><{$update}>?id='+$(this).attr('name'));
+            $(this).attr('href','<{$HTTP_MODEL}><{$view['update']}>?id='+$(this).attr('name'));
             $(this).addClass('ajax_menu');
         });
     });
 </script>
 <{/if}>
-<script type="text/javascript">
+    <script type="text/javascript">
+        $(function(){
+            PageSearch(document.URL);
+        });
+    </script>
+<{else}>
+<script>
     $(function(){
-        PageSearch(document.URL);
+        var callback = $("#"+"<{$page['float']}>");
+        var args = "<{$view['table']['float_args']|default:''}>";
+        $('.list_row').dblclick(function(){
+            var x = new Object();
+            x.id = $(this).attr('name');
+            args = args.split(',');
+            for(var a in args){
+                x[args[a]] = $(this).find("[name='"+args[a]+"']").html();
+            }
+            callback.trigger('call',x);
+            $(this).parents('.win').hide();
+            loading.end();
+        });
+
+        $('.show_win_close').click(function(){
+            $(this).parents('.win').hide();
+            loading.end();
+        });
     });
 </script>
+    <script type="text/javascript">
+        $(function(){
+            PageSearch("<{$page['url']}>");
+        });
+    </script>
+<{/if}>
+
+
+

@@ -11,9 +11,8 @@ class Cart extends Model{
     {
         $this->columnName = array('c_id','u_id','gpi_id','c_sum'=>'int');
         $this->tableName = 'cart';
-        $this->tableId ='c_id';
+        $this->modelId ='c_id';
     }
     public function test(){
-        parent::$ss = '2';
     }
 }
