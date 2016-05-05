@@ -4,7 +4,7 @@ body,div,ul,li,label{
   margin: 0;
   padding: 0;
 }
-.clear{clear: both;  }
+ .clear{clear: both;  }
 
 ul{
   list-style: none;
@@ -139,7 +139,7 @@ a:hover  {
     }
   }
 }
-
+//滚动
 .index_roll{
   width: 100%;
   height: 600px;
@@ -180,7 +180,7 @@ a:hover  {
     }
   }
 }
-
+//导航
 .goods_nav{
   height: 30px;
   line-height: 30px;
@@ -202,6 +202,7 @@ a:hover  {
   }
 }
 
+//显示
 .goods_model{
   top:20px;
   width: 1000px;
@@ -247,7 +248,7 @@ a:hover  {
 
   }
 }
-
+//商品详细
 .goods_head{
   margin-top: 20px ;
   padding: 10px;
@@ -546,199 +547,205 @@ a:hover  {
 //  }
 //}
 //
-////浮动表格
-//.float_div{
-//  background-color: #fff;
-//  display: none;
-//  position: absolute;
-//  overflow: hidden;
-//  z-index: 99;
-//  border: @border_one;
-//  .float_head{
-//    width: 100%;
-//    height: 40px;
-//    background-color: @four_color;
-//    text-align: center;
-//    line-height: 40px;
-//    font-size: 30px;
-//    font-weight: bold;
-//    overflow: hidden;
-//    .float_div_close{
-//      position: absolute;
-//      right: 0;
-//      top: 0;
-//      width: 40px;
-//      height: 40px;
-//      text-align: center;
-//      line-height: 40px;
-//      font-size: 30px;
-//      font-weight: bold;
-//      color: red;
-//    }
-//    .float_div_close:hover {
-//      background-color: @one_color;
-//      cursor: pointer;
-//    }
-//  }
-//  .float_head:hover{
-//    cursor: move;
-//  }
-//  .float_row{
-//    width: 100%;
-//    height: 60px;
-//    line-height: 60px;
-//    //overflow: hidden;
-//    .float_row_head{
-//      float: left;
-//      width: 120px;
-//      color:@five_color;
-//      text-align: right;
-//      font-size: 18px;
-//    }
-//    .float_row_input{
-//      #sheng{
-//
-//      }
-//      .address:hover,.address li:hover{
-//        background-color: @three_color;
-//        cursor: pointer;
-//      }
-//      .address{
-//        border: @border_one;
-//        height: 30px;
-//        line-height: 30px;
-//        width: 70px;
-//        float: left;
-//        margin: 15px 5px 0 0;
-//        text-align: center;
-//        background-color: @gray_color;
-//        position: relative;
-//        ul{
-//          display: none;
-//          position: absolute;
-//          z-index: 100;
-//          left: -1px;
-//          border-left: @border_one;
-//          border-top: @border_one;
-//          li{
-//            height: 30px;
-//            line-height: 30px;
-//            width: 70px;
-//            overflow: hidden;
-//            border-bottom: @border_one;
-//            border-right: @border_one;
-//            background-color: @gray_color;
-//            float: left;
-//          }
-//        }
-//      }
-//      float: left;
-//      margin-left: 10px;
-//      width: 380px;
-//
-//    }
-//  }
-//}
+//浮动表格
+.float_div{
+  width: 500px;
+  background-color: #fff;
+  display: none;
+  position: fixed;
+  z-index: 99;
+  border: 1px solid @one_color;
+  .float_head{
+    width: 100%;
+    height: 40px;
+    background-color: @one_color;
+    text-align: center;
+    line-height: 40px;
+    font-size: 30px;
+    color: #333;
+    font-weight: bold;
+    overflow: hidden;
+    .float_div_close{
+      position: absolute;
+      right: 0;
+      top: 0;
+      width: 40px;
+      height: 40px;
+      text-align: center;
+      line-height: 40px;
+      font-size: 30px;
+      font-weight: bold;
+      color: red;
+      cursor: pointer;
+    }
+    .float_div_close:hover {
+      background-color: @one_tint;
+    }
+  }
+  .float_row{
+    width: 100%;
+    height: 60px;
+    line-height: 60px;
+    .float_row_head{
+      float: left;
+      width: 120px;
+      color:@one_color;
+      text-align: right;
+      font-size: 18px;
+    }
+    .float_row_input{
+      margin-left: 130px;
+    }
+  }
+}
 
 //
-////输入框
-//.form_div{
-//  outline: none;
-//  border: @border_one;
-//  padding: 8px 5px;
-//  margin-right: 5px;
-//  width: 160px;
-//}
-////验证输入款
-//.form_div_verify{
-//  &:extend(.form_div);
-//  width: 70px;
-//  margin-right: 0;
-//}
-//.verify_img{
-//  display: inline-block;
-//}
-//.verify_img >img{
-//  vertical-align:middle;
-//}
-//.verify_img >img:hover{
-//  cursor: pointer;
-//}
+//输入框
+.form_div{
+  outline: none;
+  border: 1px solid @one_color;
+  padding: 8px 5px;
+  margin-right: 5px;
+  width: 160px;
+}
+//验证
+.verify_megs{
+  width: 190px;
+  height: 60px;
+  display: inline-block;
+  float: right;
+  .verify_er{
+    color: red;
+    line-height: 14px;
+    display: inline-block;
+    vertical-align:middle;
+
+  }
+  .verify_su{
+    line-height: 14px;
+    display: inline-block;
+    vertical-align:middle;
+    color: green;
+  }
+}
+//验证输入款
+.form_div_verify{
+  &:extend(.form_div);
+  width: 70px;
+  margin-right: 0;
+}
+.verify_img{
+  display: inline;
+}
+.verify_img >img{
+  vertical-align:middle;
+  cursor: pointer;
+}
+.address {
+  height: 30px;
+  border: 1px solid @one_color;
+  line-height: 30px;
+  width: 70px;
+  float: left;
+  margin: 15px 0 0 -1px;
+  text-align: center;
+  cursor: pointer;
+  position: relative;
+  background-color: @gray_one;
+  color: @gray_two;
+  span {
+    display: block;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+
+  }
+  ul {
+    display: none;
+    position: absolute;
+    z-index: 100;
+    left: -1px;
+    border-left: 1px solid @one_color;
+    border-top: 1px solid @one_color;
+
+    li {
+      border-right: 1px solid @one_color;
+      border-bottom: 1px solid @one_color;
+      cursor: pointer;
+      height: 30px;
+      line-height: 30px;
+      width: 70px;
+      overflow: hidden;
+      float: left;
+      background-color: @gray_one;
+      color: @gray_two;
+    }
+    li:hover{
+      background-color: @one_color;
+
+    }
+  }
+}
 //#login{
 //  top:100px;
 //}
 //#register{
 //  top: 150px;
 //}
-//.button {
-//  height: 35px;
-//  text-align: center;
-//  font-size: 25px;
-//  font-weight: bold;
-//  background-color: @four_color;
-//  line-height: 35px;
-//  padding: 0 8px;
-//}
-//[class*='button']:hover{
-//  cursor: pointer;
-//  background-color: @five_color;
-//}
-////按钮居中
-//.button_center{
-//  &:extend(.button);
-//  width: 80px;
-//  margin: 0 auto;
-//}
-////按钮居左
-//.button_left{
-//  &:extend(.button);
-//  float: left;
-//  margin: 10px 0 10px 20%;
-//}
-////按钮居右
-//.button_right{
-//  &:extend(.button);
-//  float: right;
-//  margin: 10px 20% 10px 0;
-//}
+.button {
+  height: 35px;
+  text-align: center;
+  font-size: 25px;
+  font-weight: bold;
+  background-color: @one_tint;
+  line-height: 35px;
+  padding: 0 15px;
+  cursor: pointer;
+  transition: all 0.4s;
+}
+[class*='button']:hover{
+  background-color: @two_color;
+}
+//按钮居中
+.button_center{
+  &:extend(.button);
+  width: 80px;
+  margin: 0 auto;
+}
+//按钮居左
+.button_left{
+  &:extend(.button);
+  float: left;
+  margin: 10px 0 10px 20%;
+}
+//按钮居右
+.button_right{
+  &:extend(.button);
+  float: right;
+  margin: 10px 20% 10px 0;
+}
 //
-////验证
-//.verify_megs{
-//
-//  float: right;
-//  width: 200px;
-//  height: 60px;
-//  .verify_er{
-//    color: red;
-//    line-height: 14px;
-//    display: inline-block;
-//  }
-//  .verify_su{
-//    line-height: 14px;
-//    display: inline-block;
-//    color: green;
-//  }
-//}
-////吐司
-//.toast {
-//  z-index: 1001;
-//  display: none;
-//  position: absolute;
-//  width: 200px;
-//  height: 20px;
-//  line-height: 20px;
-//  text-align: center;
-//  top: 40px;
-//}
-///*吐司错误*/
-//.toast_er {
-//  &:extend(.toast);
-//  background-color: #FFCCCC;
-//  border: 1px solid #FF0033;
-//}
-///*吐司成功*/
-//.toast_su {
-//  &:extend(.toast);
-//  background-color: #E0F8FB;
-//  border: 1px solid #50D1DE;
-//}
+
+//吐司
+.toast {
+  z-index: 1001;
+  display: none;
+  position: absolute;
+  width: 200px;
+  height: 20px;
+  line-height: 20px;
+  text-align: center;
+  top: 40px;
+}
+/*吐司错误*/
+.toast_er {
+  &:extend(.toast);
+  background-color: #FFCCCC;
+  border: 1px solid #FF0033;
+}
+/*吐司成功*/
+.toast_su {
+  &:extend(.toast);
+  background-color: #E0F8FB;
+  border: 1px solid #50D1DE;
+}

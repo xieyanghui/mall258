@@ -22,7 +22,7 @@
     }
 })(function(){
     /**
-     * 验证单个表单
+     * 验证单个input
      * eem  Element  需要验证的元素
      * location Element 消息显示的位置
      * name String  可选参数，表单提示显示的名字

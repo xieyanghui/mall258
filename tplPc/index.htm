@@ -8,7 +8,7 @@
     <div class ='index_roll'>
         <ul class ='roll_ul'>
             <{foreach $ro['IndexGoods'] as $o}>
-            <li class = 'roll_li'><a href="<{$HTTP_HOST}>/view/goods.php?id=<{$o['g_number']}>"><img class="roll_li_img" src="<{$o['ig_img']|default:$o['g_img'] }>" /></a></li>
+            <li class = 'roll_li'><a href="<{$HTTP_HOST}>/view/goods.php?id=<{$o['g_number']}>"><img class="roll_li_img" src="<{$o['ig_img']|default:$o['g_img'] }>?imageView2/5/w/1200/h/600" /></a></li>
             <{/foreach}>
         </ul>
         <ul class="roll_key"></ul>
@@ -24,7 +24,7 @@
             <div class ='goods_model_body'>
                 <a href="<{$HTTP_HOST}>/view/goods.php?id=<{$ms['g_number']}>">
                     <div class = 'goods_model_list'>
-                        <div class = 'goods_model_list_img'><img src ="<{$ms['ig_img']|default:$ms['g_img'] }>"/></div>
+                        <div class = 'goods_model_list_img'><img src ="<{$ms['ig_img']|default:$ms['g_img'] }>?imageView2/5/w/1200/h/600"/></div>
                         <div class="goods_model_list_name"><{$ms['g_name']}></div>
                         <div class = 'goods_model_list_price'><{$ms['g_price']}></div>
                     </div>

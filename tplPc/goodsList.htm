@@ -1,0 +1,25 @@
+<{include 'head.tpl' }>
+<div id ='top_div'>
+    <{$top|default:'' }>
+</div>
+<div class="wrap">
+        <div class="goods_model">
+            <{foreach $g as $gs}>
+            <div class ='goods_model_body'>
+                <a href="<{$HTTP_HOST}>/view/goods.php?id=<{$gs['g_number']}>">
+                    <div class = 'goods_model_list'>
+                        <div class = 'goods_model_list_img'><img src ="<{$gs['g_img'] }>"/></div>
+                        <div class="goods_model_list_name"><{$gs['g_name']}></div>
+                        <div class = 'goods_model_list_price'><{$gs['g_price']}></div>
+                    </div>
+                </a>
+            </div>
+            <{/foreach}>
+        </div>
+        <div class="clear"></div>
+    <div class = 'nva'>
+    </div>
+</div>
+
+
+<{include 'bottom.tpl'}>

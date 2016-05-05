@@ -10,6 +10,7 @@ define('main',['jquery-ui'],function(){
         $(this).parents('form').submit();
     });
 
+
     //监听键盘事件
     $(document).keydown(function(e){
         var enter=function(e){//enter 如果有焦点就提交
@@ -17,13 +18,17 @@ define('main',['jquery-ui'],function(){
                 $("input:focus").parents('form').submit();
             }
         };
+       // console.log(e.keyCode);
         switch (e.keyCode){
-            case 13:
+            case 13:             //提交按钮
                 enter(e);
                 break;
+            case 27:            //关闭浮动窗口
+                h_util.closeFloatDiv($('.float_div:visible').attr('id'));
+                break;
+
         }
     });
-
     //打开浮动窗口
     $('body').on('click','.show_float_div',function(){
         h_util.showFloatDiv($(this).attr('float_id'));
@@ -37,13 +42,16 @@ define('main',['jquery-ui'],function(){
         }
 
     });
-    //浮动窗口移动
-    $( ".float_div" ).draggable({ handle: ".float_head" , containment:'#float_back'});
+    //浮动窗口
+    $('.float_div').appendTo($('body'));
+
+
 
     //窗口变化初始化
     function init(e){
         $('.float_div').each(function(){
             $(this).css('left',$(window).width()/2-$(this).width()/2+'px');
+            $(this).css('top',$(window).height()/2-$(this).height()/2+'px');
         });
         $('#float_back').css('width',$(window).width());
         $('#float_back').css('height',$(window).height());
@@ -53,10 +61,82 @@ define('main',['jquery-ui'],function(){
             $('.wrap').css('width',1200);
         }
     }
-    init();
     $(window).resize(init);
+    //地址选择
+    $('body').on('mouseenter','.address',function(){
+        $(this).children('ul').show();
+    });
+    $('body').on('mouseleave','.address',function(){
+        $(this).children('ul').hide();
+    });
+    $('body').on('click','.address li',function(){
+        var self = $(this).parents('.address');
+        self.children('span.address_title').html($(this).html()).attr('title',$(this).html());
+        self.nextAll().remove();
+        var addStr = self.hasClass('address_start')? self:self.siblings('.address_start');
+        addStr.attr('address',$(this).attr('value'));
+        var address_title  ='';
+        var j = 0;
+        var v = $(this).attr('value');
+        console.log(v);
+        if(/0{10}$/.test(v)){
+            if(/(^11)|(^12)|(^50)|(^31)/.test(v)){
+                address_title = '区/县';
+                j =2;
+            }else{
+                address_title = '市';
+                j=1;
+            }
+        }else if(/0{8}$/.test(v)){
+            address_title = '区/县';
+            j=2;
+        }else if(/0{6}$/.test(v)){
+            address_title = '街道/镇';
+            j=3;
+        }else if(/0{3}$/.test(v)){
+            address_title = '居委会/村';
+            j=4;
+        }
+        if(addStr.attr('size') > j){
+            var s =$('<div class="address"><span class="address_title">'+address_title+'</span><ul></ul> </div>');
+            self.after(s);
+            h_util.addressSelect($(this));
+        }
+        self.children('ul').hide();
+    });
+
 
     window.h_util = {
+        // 选择地址
+        addressSelect:function(form){
+            var d = "?";
+            if(form[0].tagName =='LI'){
+                d ='?add_number='+form.attr('value')+'&';
+                form = form.parents('.address').next();
+            }
+            var e = form.find('ul');
+
+            $.getJSON('//aws.mall258.com/getAddress.php'+d+'callback=?',function(data){
+                console.log(data);
+                for (var el in data){
+                    e.append("<li value='"+data[el]['add_number']+"' title='"+data[el]['add_name']+"'> "+data[el]['add_name']+"</li>");
+                }
+                if(data.length >20){
+                    form.find('ul').css('width',parseInt(form.find('li').first().width())*5+8);
+                }else if(data.length >8){
+                    form.find('ul').css('width',parseInt(form.find('li').first().width())*3+4);
+                }else if(data.length >3){
+                    form.find('ul').css('width',parseInt(form.find('li').first().width())*2+2);
+                }else{
+                    form.find('ul').css('width','auto');
+                }
+                if(d !== '?'){
+                    form.find('ul').show();
+                }
+            });
+        },
+
+        //淘宝 七牛图片转换
         imgLink:function(url,size){
             if(url.indexOf('img.alicdn.com') != -1){
                 switch (size){
@@ -158,23 +238,43 @@ define('main',['jquery-ui'],function(){
 
         // 浮动窗口
         showFloatDiv:function(divId){
-            $('#float_back').show();
-            $('#'+divId).show();
+            $('#'+divId).trigger('show');
+            $('#float_back').slideDown(300);
+            $('#'+divId).slideDown(300);
         },
         closeFloatDiv:function(divId){
-            $('#float_back').hide();
-            $('#'+divId).hide();
+            $('#'+divId).trigger('hide');
+            $('#float_back').slideUp(300);
+            $('#'+divId).slideUp(300);
         }
-
 
     };
-    while (window.h_main.length){
-        window.h_main.pop()();
-    }
-    $(document).ajaxSuccess(function(){
+    //加载JS
+    var load=function(){
+        console.log('----');
         while (window.h_main.length){
-            window.h_main.pop()();
+            var l = window.h_main.pop();
+            if(l instanceof Array){
+                var ls = l.pop();
+                if(typeof ls === "function"){
+                    require(l,ls);
+                }else{
+                    console.log(ls+'必须是方法');
+                }
+            }else{
+                l();
+            }
         }
+    };
+
+    //监听ajax
+    $(document).ajaxSuccess(function(){
+        //浮动窗口移动
+        $('.float_div').appendTo($('body'));
+        //加载文件中的js
+        load();
     });
 
+    init();
+    load();
 });

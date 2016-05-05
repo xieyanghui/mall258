@@ -5,8 +5,8 @@
 <div class="clear"></div>
 <ul class="goods_nav wrap">
     <li class = "goods_nav_li"> <a href="<{$HTTP_HOST}>">首页</a></li><span>></span>
-    <li class = "goods_nav_li"> <a href="<{$HTTP_HOST}>">全部商品</a></li><span>></span>
-    <li class = "goods_nav_li"> <a href="<{$HTTP_HOST}>"><{$g['gt_name']}></a></li><span>></span>
+    <li class = "goods_nav_li"> <a href="<{$HTTP_HOST}>/view/goodsList.php">全部商品</a></li><span>></span>
+    <li class = "goods_nav_li"> <a href="<{$HTTP_HOST}>/view/goodsList.php?type=<{$g_number}>"><{$g['gt_name']}></a></li><span>></span>
     <li class = "goods_nav_li"><{$g['g_name']}></li>
 </ul>
 <div class="goods_head wrap">
@@ -34,17 +34,19 @@
             <strong>￥ </strong><strong class="goods_price_value_v"></strong>
         </div>
         <div class="goods_info_price">
-            <{foreach $g['GPrice'] as $price}>
+            <{foreach $g['gp'] as $price}>
             <div class="goods_info_price_s">
-                <div class="goods_info_price_type"><{$price@key}></div>
+                <div class="goods_info_price_type"><{$price['gtp_name']}></div>
                 <ul class="goods_info_price_ul">
-                <{foreach $price as $prices}>
+                <{foreach $price['GPrice'] as $prices}>
                     <li class ='goods_info_price_li goods_info_price_li_n' title="<{$prices['gp_name']}>" key="<{$prices['gp_id']}>"><{$prices['gp_name']}></li>
                 <{/foreach}>
                 </ul>
             </div>
             <{/foreach}>
         </div>
+
+
 
         <div class="goods_info_sum">
             <input type="number" name="goods_sum" class="goods_info_sum_v" min="0" value="1" /><span>剩余数量 :</span><span class="goods_info_sum_sum"></span>
@@ -67,10 +69,10 @@
         <ul class="goods_content_val">
             <li class="goods_content_description"><{$g['g_text']}></li>
             <li class="goods_content_attr">
-                <{foreach $g['GAttr'] as $attr}>
+                <{foreach $g['ga'] as $attr}>
                 <div class="goods_content_attr_s">
-                    <div class="goods_content_attr_type"><{$attr@key}></div>
-                    <{foreach $attr as $attr_s}>
+                    <div class="goods_content_attr_type"><{$attr['gtat_name']}></div>
+                    <{foreach $attr['GTAttr'] as $attr_s}>
                     <div class="goods_content_attr_map">
                         <div class="goods_content_attr_name"><{$attr_s['gta_name']}></div>
                         <div class="goods_content_attr_value"><{$attr_s['ga_value']}></div>

@@ -7,38 +7,42 @@ $table= '';
 $where = null;
 switch ($name) {
     case 'registerForm.u_name':
-        $table = 'user';
+        $model = 'User';
         $where = new Where('u_name',$value);
         break;
     case 'registerForm.u_email':
-        $table = 'user';
+        $model = 'User';
         $where = new Where('u_email',$value);
         break;
+    case 'registerForm.u_phone':
+        $model = 'User';
+        $where = new Where('u_phone',$value);
+        break;
     case 'adminAuthAddForm.aa_nick':
-        $table = 'admin_auth';
+        $model = 'AdminAuth';
         $where = new Where('aa_nick',$value);
         break;
     case 'adminAUForm.a_name':
-        $table = 'admin';
+        $model = 'Admin';
         $where = new Where('a_name',$value);
         break;
     case 'goodsTypeAddForm.gt_name':
-        $table = 'goods_type';
+        $model = 'GoodsType';
         $where = new Where('gt_name',$value);
         break;
     case 'goodsTypeAddForm.gt_number':
-        $table = 'goods_type';
+        $model = 'GoodsType';
         $where = new Where('gt_number',$value);
         break;
     default:
         break;
 }
-
 $arr = array('name' => $name, 'isNull' => false);
-if(empty($table)){exit(json_encode($arr));}
-$mysql = new Sql();
-$row = $mysql->selectLine($table,"*",$where);
-if (count($row) > 1) {
+if(empty($model)){exit(json_encode($arr));}
+
+$m = new $model;
+$m->query($where);
+if ($m->length() > 0) {
     $arr['isNull'] = true;
 }
 echo json_encode($arr);

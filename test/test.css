@@ -1,0 +1,21 @@
+@x _hh {
+  margin: inherit;
+  default-string: and I am the default;
+  margin: auto;
+}
+.button-green {
+  margin: inherit;
+  default-string: and I am the default;
+}
+.button-foo {
+  case-1: I am 'foo';
+  margin: inherit;
+  default-string: and I am the default;
+}
+.button-baz {
+  margin: inherit;
+  default-string: and I am the default;
+}
+.button:hover {
+  padding: inherit;
+}

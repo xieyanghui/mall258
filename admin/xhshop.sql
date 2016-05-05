@@ -360,9 +360,24 @@ CREATE TABLE `gt_attr_type`(
 	PRIMARY KEY (gtat_id)
 )DEFAULT CHARSET =utf8 ENGINE=InnoDB;
 
-INSERT  INTO gt_attr_type (gt_id,gtat_name)VALUES SELECT gt_id,gta_type FROM gt_attr GROUP BY gta_type;
+
+
+
+
+
+UPDATE `goods` SET g_img = replace(g_img ,'_430x430q90.jpg','');
+
+UPDATE `g_price_info` SET gpi_img = replace(gpi_img ,'_430x430q90.jpg','');
+
+
+INSERT  INTO gt_attr_type (gt_id,gtat_name) SELECT 1,gta_type as gtat_name FROM gt_attr GROUP BY gta_type;
 
 ALTER TABLE gt_attr ADD COLUMN (gtat_id INT UNSIGNED NOT NULL );
+
+UPDATE gt_attr INNER JOIN gt_attr_type ON gt_attr.gta_type=gt_attr_type.gtat_name SET gt_attr.gtat_id=gt_attr_type.gtat_id;
+
+ALTER TABLE gt_attr DROP COLUMN gta_type;
+
 
 -- show variables like "%char%";
 -- SET character_set_database = utf8;
