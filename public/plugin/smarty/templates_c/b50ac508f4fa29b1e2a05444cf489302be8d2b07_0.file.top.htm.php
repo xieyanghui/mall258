@@ -1,7 +1,7 @@
-<?php /* Smarty version 3.1.27, created on 2016-05-05 04:00:08
+<?php /* Smarty version 3.1.27, created on 2016-05-09 21:59:58
          compiled from "/home/xiehui/work/mall258/tplPc/top.htm" */ ?>
 <?php
-/*%%SmartyHeaderCode:2022118885572a54c83be837_39586747%%*/
+/*%%SmartyHeaderCode:984087728573097de24bfc5_20912903%%*/
 if(!defined('SMARTY_DIR')) exit('no direct access allowed');
 $_valid = $_smarty_tpl->decodeProperties(array (
   'file_dependency' => 
@@ -9,11 +9,11 @@ $_valid = $_smarty_tpl->decodeProperties(array (
     'b50ac508f4fa29b1e2a05444cf489302be8d2b07' => 
     array (
       0 => '/home/xiehui/work/mall258/tplPc/top.htm',
-      1 => 1462392000,
+      1 => 1462802395,
       2 => 'file',
     ),
   ),
-  'nocache_hash' => '2022118885572a54c83be837_39586747',
+  'nocache_hash' => '984087728573097de24bfc5_20912903',
   'variables' => 
   array (
     'user' => 0,
@@ -21,13 +21,13 @@ $_valid = $_smarty_tpl->decodeProperties(array (
   ),
   'has_nocache_code' => false,
   'version' => '3.1.27',
-  'unifunc' => 'content_572a54c83c5d26_90336983',
+  'unifunc' => 'content_573097de2578f2_66508365',
 ),false);
 /*/%%SmartyHeaderCode%%*/
-if ($_valid && !is_callable('content_572a54c83c5d26_90336983')) {
-function content_572a54c83c5d26_90336983 ($_smarty_tpl) {
+if ($_valid && !is_callable('content_573097de2578f2_66508365')) {
+function content_573097de2578f2_66508365 ($_smarty_tpl) {
 
-$_smarty_tpl->properties['nocache_hash'] = '2022118885572a54c83be837_39586747';
+$_smarty_tpl->properties['nocache_hash'] = '984087728573097de24bfc5_20912903';
 ?>
 <!--顶部-->
 <div class="header_top">
@@ -35,7 +35,7 @@ $_smarty_tpl->properties['nocache_hash'] = '2022118885572a54c83be837_39586747';
         <div class="header_top_left">
             <ul>
                 <?php if (!empty($_smarty_tpl->tpl_vars['user']->value)) {?>
-                <li><a><?php echo (($tmp = @$_smarty_tpl->tpl_vars['user']->value['u_nick'])===null||$tmp==='' ? $_smarty_tpl->tpl_vars['user']->value['u_name'] : $tmp);?>
+                <li id="user"><a><?php echo (($tmp = @$_smarty_tpl->tpl_vars['user']->value['u_nick'])===null||$tmp==='' ? $_smarty_tpl->tpl_vars['user']->value['u_name'] : $tmp);?>
 </a></li>
                 <li>&nbsp;欢迎回来</li>
                 <?php } else { ?>
@@ -69,11 +69,16 @@ $_smarty_tpl->properties['nocache_hash'] = '2022118885572a54c83be837_39586747';
         <ul class="menu">
             <li><a href="<?php echo $_smarty_tpl->tpl_vars['HTTP_HOST']->value;?>
 /view/goodsList.php">全部商品</a></li>
-            <li><a href="">手机</a></li>
-            <li><a href="">笔记本</a></li>
-            <li><a href="">电视</a></li>
-            <li><a href="">相机</a></li>
-            <li><a href="">周边</a></li>
+            <li><a href="<?php echo $_smarty_tpl->tpl_vars['HTTP_HOST']->value;?>
+/view/goodsList.php?gt_id=1">手机</a></li>
+            <li><a href="<?php echo $_smarty_tpl->tpl_vars['HTTP_HOST']->value;?>
+/view/goodsList.php?gt_id=2">笔记本</a></li>
+            <li><a href="<?php echo $_smarty_tpl->tpl_vars['HTTP_HOST']->value;?>
+/view/goodsList.php?gt_id=4">电视</a></li>
+            <li><a href="<?php echo $_smarty_tpl->tpl_vars['HTTP_HOST']->value;?>
+/view/goodsList.php?gt_id=3">相机</a></li>
+            <li><a href="<?php echo $_smarty_tpl->tpl_vars['HTTP_HOST']->value;?>
+/view/goodsList.php">周边</a></li>
         </ul>
     </div>
     <div class="header_bottom_right">
@@ -81,11 +86,20 @@ $_smarty_tpl->properties['nocache_hash'] = '2022118885572a54c83be837_39586747';
             <input type="text" class = 'search_text' placeholder="搜索商品" >
             <div class = 'search_submit'></div>
         </div>
-        <div class="collect">
-
+        <div class="collect c_c">
+            <div class="c_c_img"></div>
+            <ul class="c_c_ul">
+                <li class="c_c_li">
+                    <img /><div class=""></div>
+                </li>
+            </ul>
         </div>
 
-        <div class="cart">
+        <div class="cart c_c">
+            <div class="c_c_img"></div>
+            <ul class="c_c_ul">
+                <li class="c_c_li"></li>
+            </ul>
 
         </div>
     </div>
@@ -183,15 +197,19 @@ $_smarty_tpl->properties['nocache_hash'] = '2022118885572a54c83be837_39586747';
         </div>
     </form>
 </div>
-<?php }?>
 <?php echo '<script'; ?>
  type="text/javascript" charset="utf-8">
     h_main.push(['verify',function(v){
+
+        $('.c_c').mouseleave(function(){
+            $(this).children('ul').hide();
+        }).mouseenter(function(){
+            $(this).children('ul').show();
+        });
         //默认不开启验证码
         if(h_util.getCookie('login_verify') ==='' ||  h_util.getCookie('login_verify') <= 1 ){
             $('.verify_row').hide();
         }
-
         //注册验证
         v.verifyForm('registerForm',{
             u_name: {
@@ -216,18 +234,18 @@ $_smarty_tpl->properties['nocache_hash'] = '2022118885572a54c83be837_39586747';
             }
         },{
             'success':function(data){
-            h_util.toast(data);
-            if(data.status){
-                h_util.closeFloatDiv('#register');
-            }else{
-                
-            }
-        },
-            'beforeSend':function(){
-                if(typeof($('#registerForm .address_start').attr('address')) !=='undefined'){
-                $('#registerForm') .find("input[name='u_address']").val($('#registerForm .address_start').attr('address'));
+                h_util.toast(data);
+                if(data.status){
+                    h_util.closeFloatDiv('#register');
+                }else{
+
                 }
-            }});
+            },'before':function(){
+                if(typeof($('#registerForm .address_start').attr('address')) !=='undefined'){
+                    $('#registerForm') .find("input[name='u_address']").val($('#registerForm .address_start').attr('address'));
+                }
+            }
+        });
 
         //登录验证
         v.verifyForm('loginForm',{
@@ -276,142 +294,11 @@ $_smarty_tpl->properties['nocache_hash'] = '2022118885572a54c83be837_39586747';
         $('#register').on('show',function(){
             h_util.addressSelect($(this));
         });
-
-
     }]);
-//    window.onload = function(){
-//        require(['verify','main'],function(v){
-//
-//            $('.address').mouseover(function(){
-//                $(this).children('ul').show();
-//            }).mouseout(function(){
-//                $(this).children('ul').hide();
-//            });
-//
-//            $('body').on('click','.address li',function(){
-//                var self = $(this).parents('.address');
-//                self.attr('address',$(this).attr('value'));
-//                self.children('span.address_title').hide();
-//                self.children('span.address_name').show().html($(this).html());
-//                self.nextAll().children('span.address_name').hide();
-//                self.nextAll().children('span.address_title').show();
-//                self.nextAll().find('li').remove();
-//                if(self.next().length >0){
-//                    var s = self.next();
-//                    $.getJSON('//aws.mall258.com/getAddress.php?add_number='+$(this).attr('value')+'&callback=?',function(data){
-//                        for (var el in data){
-//                            s.children('ul').append("<li value='"+data[el]['add_number']+"' title='"+data[el]['add_name']+"'> "+data[el]['add_name']+"</li>");
-//                        }
-//                        if(data.length >5){
-//                            s.children('ul').css('width',parseInt(s.find('li').first().width())*5+10);
-//                        }
-//                    });
-//                }
-//                self.children('ul').hide();
-//            });
-
-
-//
-//            $('.float_div').each(function(){$(this).appendTo($('body')); });
-//
-//            if(h_util.getCookie('login_verify') ==='' ||  h_util.getCookie('login_verify') <= 1 ){
-//                $('.verify_row').hide();
-//            }
-//
-//            //注册验证
-//            v.verifyForm('registerForm',{
-//                u_name: {
-//                    name: "用户名",
-//                    check: ["noSpechars", {"length": [4,20],"ajax": ["/server/iskeySer.php"]}]
-//                },
-//                u_pwd:{
-//                    name: "密码",
-//                    check: [{"length": [6,20]}]
-//                },
-//                us_pwd:{
-//                    name: "重复密码",
-//                    check: [{"length": [6,20],'contrast':['u_pwd']}]
-//                },
-//                u_phone:{
-//                    name: "手机号码",
-//                    check: ['phone',{"ajax":["/server/iskeySer.php"]}]
-//                },
-//                u_email:{
-//                    name: "电子邮件",
-//                    check: ['email',{"ajax":["/server/iskeySer.php"]}]
-//                }
-//            },{'success':function(data){
-//                h_util.toast(data);
-//                if(data.status){
-//                    $('#register').hide();
-//                }
-//            }});
-//            //登录验证
-//            v.verifyForm('loginForm',{
-//                u_name: {
-//                    name: "用户名",
-//                    check: ["noSpechars", {"length": [4,20]}]
-//                },
-//                u_pwd:{
-//                    name: "密码",
-//                    check: [{"length": [6,20]}]
-//                },
-//                u_verify:{
-//                    name: "验证码",
-//                    check:['noSpechars',{'length':[4,4]}]
-//                }
-//            },{
-//                'success':function(data){
-//                    h_util.toast(data);
-//                    if(data.status){
-//                        $('#top_div').load('<?php echo $_smarty_tpl->tpl_vars['HTTP_HOST']->value;?>
-/view/top.php');
-//                        h_util.closeFloatDiv('login');
-//                    }
-//                    if(typeof data.verify !=='undefined'){
-//                        $('.verify_row').show();
-//                        $('.verify_img >img').trigger('click');
-//                    }
-//                }});
-//
-//            //验证码刷新
-//            $('.verify_img >img').click(function(){
-//                var src = $(this).attr('src');
-//                src = src.indexOf('&time')=== -1?src:src.substr(0, src.indexOf('&time'));
-//                $(this).attr('src',src+'&time='+new Date().getTime());
-//            });
-//
-//        });
-//
-//    };
 <?php echo '</script'; ?>
 >
-<!--<div id="top">-->
-    <!--<div class="top_util">-->
-        <!--<div class="top_left">-->
-            <!--<?php if (!empty($_smarty_tpl->tpl_vars['user']->value)) {?>-->
-            <!--<?php echo $_smarty_tpl->tpl_vars['user']->value['u_nick'];?>
--->
-            <!--<a href="/server/exitSer.php">安全退出</a>-->
-            <!--<?php } else { ?>-->
-                <!--<div>-->
-                   <!--欢迎光临![<a class="show_float_div" float_id="login" href="javascript:void(0)">请登录</a>] [<a class="show_float_div" float_id="register" href="javascript:void(0)">注册</a>]-->
-                <!--</div>-->
-            <!--<?php }?>-->
-        <!--</div>-->
-        <!--<div class="top_center">-->
-            <!--<input name="search" type="text" id="search" />-->
-            <!--<div><a>搜索</a></div>-->
-        <!--</div>-->
-        <!--<div class="top_right">-->
-            <!--<ul>-->
-                <!--<li><a>购物车</a></li><span>|</span>-->
-                <!--<li><a>收藏夹</a></li><span>|</span>-->
-                <!--<li><a>随便逛逛</a></li><span>|</span>-->
-                <!--<li><a>联系我们</a></li>-->
-            <!--</ul>-->
-        <!--</div>-->
-    <!--</div>-->
-<!--</div>--><?php }
+<?php }?>
+
+<?php }
 }
 ?>

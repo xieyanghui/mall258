@@ -14,18 +14,10 @@ class Admin extends Model{
         $this->modelId ='a_id';
     }
     
-    protected function filter($model)
+    protected function queryFilter($model)
     {
-        if(!empty($model[0])){//查询时调用
-            foreach ($model as &$value){
-                if(empty($value['a_img'])){
-                    $value['a_img'] = Config::ADMIN_HEAD_DEFAULT;
-                }
-            }
-        }else{ //入库时调用
-            if($model['a_img'] === Config::ADMIN_HEAD_DEFAULT){
-                unset($model['a_img']);
-            }
+        if( empty($model['a_img'])){
+            $model['a_img'] = Config::ADMIN_HEAD_DEFAULT;
         }
         return $model;
 

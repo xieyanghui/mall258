@@ -12,7 +12,6 @@ class Goods extends Model{
         $this->columnName = array('g_id','g_number','g_name','gt_id','g_price'=>'double','g_keywords','g_description','g_img','g_reg','g_status'=>'int','g_text');
         $this->tableName = 'goods';
         $this->modelId = 'g_id';
-        $this->pageS = 4;
     }
     protected function filter($model)
     {

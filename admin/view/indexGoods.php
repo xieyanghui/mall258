@@ -15,7 +15,7 @@ $view['table'] = array(
     'noSearch'=>true,
     'column'=>array(
         array('name'=>'商品备注','key'=>'ig_name','width'=>"150"),
-        array('name'=>'商品名称','key'=>'g_name','width'=>"150" ,'value'=>'g_id'),
+        array('name'=>'商品名称','key'=>'g_name','width'=>"250" ,'value'=>'g_id'),
         array('name'=>'标签','key'=>'ig_label','width'=>"150"),
         array('name'=>'展示图片','key'=>'ig_img','width'=>"80")
     )

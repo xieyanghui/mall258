@@ -12,12 +12,13 @@ abstract class Model implements Iterator{
     private $columnType = array('int','string','double');
     private $current =0; //游标
     private $limit = 0; //分页查询时预测总数
-    public $sibling = array();
-    public $oneLine = array();
+    private $sibling = array();
+    private $oneLine = array();
     protected $pageS = 0;//分页预计数
     protected $model = array(); //模型数据仓库
     protected $columnName = array(); //数据库列名列表 关联数组KEY 为列名, VALUE为类型,类型默认为 String
-    protected $tableName = ''; //表名
+    protected $tableName = ''; //数据库表名
+    protected $index = array();  //索引
     protected $modelId = ''; //Model主键
 
 
@@ -144,23 +145,21 @@ abstract class Model implements Iterator{
         throw new ModelException("model列 {$columnName} 未定义,或没有确定类型");
     }
 
-    /**
-     * 删除表
-     *
-     * @param $where  Where
-     *
-     * @return bool
-     */
-    public function remove(Where $where){
-        $where->convertColumn($this->columnName);
-        $sql = $this->getSql();
-        return $sql->delete($this->tableName,$where);
+    //过滤器
+    protected function readFilter($model){
+        return $model;
+    }
+    protected function saveFilter($model){
+        return $model;
+    }
+    protected function queryFilter($model){
+        return $model;
     }
 
 
     /**
      * 开始事务
-    */
+     */
     public static function startTransaction(){
         Model::$sql_s = new Sql(true);
     }
@@ -177,13 +176,33 @@ abstract class Model implements Iterator{
         }
     }
 
+
+    /**
+     * 长度
+     *
+     *@return int
+     */
+    public function length(){
+        return count($this->model);
+    }
+
+    /**
+     * 预计总长度
+     */
+    public function limitLingth(){
+        if($this->limit >0){
+            return $this->limit;
+        }
+    }
+
+
     /**
      * 从数组中读取Model值
      *
      * @param $arr array 数组
      *
      * @return Model 链式用
-    */
+     */
     public function read($arr){
         $value = array();
         foreach ($arr as $key=>$v){
@@ -211,24 +230,41 @@ abstract class Model implements Iterator{
         return $this;
     }
 
-//    过滤器子类可以实现
-    protected function readFilter($model){
-        return $model;
-    }
-    protected function saveFilter($model){
-        return $model;
+    /**
+     * 设置当前游标行的值
+     *
+     * @param $key string 条件
+     *
+     * @param $value mixed 需要查询的字段
+     *
+     *@return  Model 链式
+     */
+    public function set($key,$value){
+        $this->model[$this->current][$key] = $value;
+        return $this;
     }
 
-    protected function queryFilter($model){
-        return $model;
+    /**
+     * 获取当前游标下的值
+     *
+     * @param $key string 列名
+     *
+     * @return 值
+     */
+    public function get($key){
+        if(!$this->valid()){
+            $this->current = 0;
+        }
+        $arr = $this->model[$this->current];
+        return $arr[$key];
     }
 
     /**
      * 保存模型
      *
-      * @param $inject array|string 注入值可为空
-      *
-      * @param $value string 注入值的value可为空
+     * @param $inject array|string 注入值可为空
+     *
+     * @param $value string 注入值的value可为空
      *
      * @return  int|bool 单个保存返回保存后返回的ID
      *
@@ -272,9 +308,9 @@ abstract class Model implements Iterator{
                     }
                 }
                 $id =$sql->insert($this->tableName,$column,$data);
-               // echo $this->tableName.'--------------'.$id;
+                // echo $this->tableName.'--------------'.$id;
                 foreach($models as $value){
-                 //   print_r($id);
+                    //   print_r($id);
                     $value->save(array($this->modelId=>$id));
                 }
             }
@@ -283,33 +319,56 @@ abstract class Model implements Iterator{
     }
 
     /**
-     * 长度
+     * 数据库删除
      *
-     *@return int
+     * @param $where  Where
+     *
+     * @return bool
      */
-    public function length(){
-        return count($this->model);
+    public function remove(Where $where){
+        $where->convertColumn($this->columnName);
+        $sql = $this->getSql();
+        return $sql->delete($this->tableName,$where);
     }
-    public function limitLingth(){
-        if($this->limit >0){
-            return $this->limit;
+
+    public function setArgs($arr){
+        if(!empty($arr['sibling'])){
+            $this->sibling = $arr['sibling'];
+        }
+        if(!empty($arr['oneLine'])){
+            $this->oneLine = $arr['oneLine'];
+
         }
     }
 
-    /**
-     * 设置当前游标行的值
-     *
-     * @param $key string 条件
-     *
-     * @param $value mixed 需要查询的字段
-     *
-     *@return  Model 链式
-     */
-    public function set($key,$value){
-        $this->model[$this->current][$key] = $value;
-        return $this;
-    }
+//    /**
+//     * 连接查询
+//     *
+//     * @param $model array 关联数组
+//     * model为Model名
+//     * columnName查询出来的列名用,隔开
+//     * Line自身的连接列，
+//     * joinLine连接的列
+//     *
+//     * @param $where Where 条件
+//     * @param $columnName string|array 需要检索的line Where 条件
+//     *
+//     * @param $method string 连接方法 默认 INNER 可选LEFT RIGHT
+//     *
+//    */
+//    public function joinQuery($model,$where,$columnName ='*',$method ='INNER'){
+//
+//
+//
+//    }
 
+
+    /**
+     * model内部过滤
+     * @param $arr array Key为Model列名 value为值
+     *
+     * @return Model 返回新过滤后的Model
+     */
     public function modelQuery($arr){
         $mm = get_class($this);
         $mm = new $mm;
@@ -328,19 +387,21 @@ abstract class Model implements Iterator{
                 $mm->next();
             }
         }
-        $mm->sibling = $this->sibling;
-        $mm->oneLine = $this->oneLine;
+        $mm->setArgs(array(
+            'sibling'=>$this->sibling,
+            'oneLine'=>$this->oneLine
+        ));
         return $mm;
     }
     
     /**
      * 查询
-     *
+     *src
      * @param $where Where 条件
      *
      * @param $columnName string|array 需要查询的字段
      *
-     *@param $subModel string 子类名,可多个 用","隔开 需要子类引用该类的id
+     *@param $subModel string|array 子类名,可多个 用","隔开 需要子类引用该类的id
      * $subModel子查询 详细配置
      *
      *subModel array 子查询的子查询
@@ -386,129 +447,135 @@ abstract class Model implements Iterator{
 
 
         }
+
         //子查询
         if(!empty($subModel)){
-            $w=array();
-            //遍历已查询到的行
-            foreach ($this->model as $model){
-                array_push($w,$model[$this->modelId]);
-            }
-            //子查询数组
-            if(is_array($subModel)){
-
-                foreach ($subModel as $key=>$value){
-                    $m = null;
-                    if(is_array($value)){
-                        if(!empty($value['sibling'])){ //右连接
-                            $this->sibling[$key] =$value['sibling'];
-                        }
-                        if(!empty($value['oneLine'])){//一对多查询时，如果只有一列，可直接汇总成数组
-                            $this->oneLine[$key] =$value['oneLine'];
-                        }
-                        $m = new $key;
-                        //指定子查询的表名
-                        $tableName = !empty($value['tableName'])?$value['tableName']:$key;
-                        //注入WHERE
-                        $where = !empty($value['where'])?$value['where']:new Where();
-
-                        //默认查询全部列
-                        if(empty($value['columnName'])){
-                            $columnName ='*';
-                        }
-                        else
-                        {
-                            //如果是字符串先转成数组
-                            if(!is_array($value['columnName']) && $value['columnName'] !== "*"){
-                                $value['columnName'] =  explode(',',trim($value['columnName'],','));
-                            }
-                            //注入自身ID列
-                            if(empty($value['noSub'])){
-                                if(!in_array($this->modelId,$value['columnName'])){
-                                    array_push($value['columnName'],$this->modelId);
-                                }
-                                //注入指定列
-                            }else{
-                                if (!in_array($value['noSub'], $value['columnName'])) {
-                                    array_push($value['columnName'], $value['noSub']);
-                                }
-                            }
-                            $columnName = $value['columnName'];
-                        }
-
-
-                        //如果子查询里还有子查询
-                        $subModel=!empty($value['subModel'])?$value['subModel']:null;
-
-                        //如果是注入了指定列
-                        if(!empty($value['noSub'])){
-                            $ws = array();
-                            foreach ($this->model as $model){
-                                array_push($ws,$model[$value['noSub']]);
-                            }
-                            $where->setWhere($value['noSub'],$ws);
-                        }else{
-                            $where->setWhere($this->modelId,$w);
-                        }
-                        //执行子查询
-                        $m->query($where,$columnName,$subModel);
-
-                    }
-                    //不带参数的子查询
-                    else
-                    {
-                        $m = new $value;$tableName = $value;
-                        $m->query(new Where($this->modelId,$w));
-                    }
-
-                    //查询出来后分别赋值
-                    foreach ($this->model as &$model){
-                        if(!empty($value['noSub'])){
-                            $model[$tableName] = $m->modelQuery(array($value['noSub']=>$model[$value['noSub']]));
-                        }else{
-                            $model[$tableName] = $m->modelQuery(array($this->modelId=>$model[$this->modelId]));
-                        }
-                    }
-                }
-            }
-            //字符串 子查询 不带参数
-            else
-            {
-                $arr = array_filter(explode(',',$subModel));
-                $m =null;$mm ='';
-                foreach ($arr as $a){
-                    $m = new $a;$mm =$a;
-                    $m->query(new Where($this->modelId,$w));
-                }
-                foreach ($this->model as &$model){
-                    $model[$mm] = $m->modelQuery(array($this->modelId=>$model[$this->modelId]));
-
-                }
-            }
-
+            $this->subQuery($subModel);
         }
         return $this;
     }
 
 
     /**
-    */
-    public function subQuery($arr){
-
-    }
-
-    /**
-     * 获取当前游标下的值
+     * 子查询
+     *@param $subModel array 子查询配置 需要子类引用该类的id
      *
-     * @param $key string 列名
+     * $arr  详细配置
      *
-     * @return 值
+     * key 为Model名称
+     *
+     *subModel array 子查询的子查询
+     *
+     *noSub string 默认是以ID去子查询，noSub为Model的列名，设置后就覆盖了ID
+     *
+     *where Where  附加条件
+     *
+     *tableName string 查询出来后以该名称代替Model名
+     *
+     *sibling  bool 如果true 当只有一条子查询记录时，右连接子Model
+     *
+     *oneLine string 一对多查询时，如果只有一列，可直接汇总成数组
+     *
+     * @return  Model 链式
     */
-    public function get($key){
-        if(!$this->valid()){
-            $this->current = 0;
+    public function subQuery($subModel){
+        $w=array();
+        //遍历已查询到的行
+        foreach ($this->model as $model){
+            array_push($w,$model[$this->modelId]);
         }
-        $arr = $this->model[$this->current];
-        return $arr[$key];
+        //子查询数组
+        if(is_array($subModel)){
+
+            foreach ($subModel as $key=>$value){
+                $m = null;
+                if(is_array($value)){
+                    if(!empty($value['sibling'])){ //右连接
+                        $this->sibling[$key] =$value['sibling'];
+                    }
+                    if(!empty($value['oneLine'])){//一对多查询时，如果只有一列，可直接汇总成数组
+                        $this->oneLine[$key] =$value['oneLine'];
+                    }
+                    $m = new $key;
+                    //指定子查询的表名
+                    $tableName = !empty($value['tableName'])?$value['tableName']:$key;
+                    //注入WHERE
+                    $where = !empty($value['where'])?$value['where']:new Where();
+
+                    //默认查询全部列
+                    if(empty($value['columnName'])){
+                        $columnName ='*';
+                    }
+                    else
+                    {
+                        //如果是字符串先转成数组
+                        if(!is_array($value['columnName']) && $value['columnName'] !== "*"){
+                            $value['columnName'] =  explode(',',trim($value['columnName'],','));
+                        }
+                        //注入自身ID列
+                        if(empty($value['noSub'])){
+                            if(!in_array($this->modelId,$value['columnName'])){
+                                array_push($value['columnName'],$this->modelId);
+                            }
+                            //注入指定列
+                        }else{
+                            if (!in_array($value['noSub'], $value['columnName'])) {
+                                array_push($value['columnName'], $value['noSub']);
+                            }
+                        }
+                        $columnName = $value['columnName'];
+                    }
+
+
+                    //如果子查询里还有子查询
+                    $subModel=!empty($value['subModel'])?$value['subModel']:null;
+
+                    //如果是注入了指定列
+                    if(!empty($value['noSub'])){
+                        $ws = array();
+                        foreach ($this->model as $model){
+                            array_push($ws,$model[$value['noSub']]);
+                        }
+                        $where->setWhere($value['noSub'],$ws);
+                    }else{
+                        $where->setWhere($this->modelId,$w);
+                    }
+                    //执行子查询
+                    $m->query($where,$columnName,$subModel);
+
+                }
+                //不带参数的子查询
+                else
+                {
+                    $m = new $value;$tableName = $value;
+                    $m->query(new Where($this->modelId,$w));
+                }
+
+                //查询出来后分别赋值
+                foreach ($this->model as &$model){
+                    if(!empty($value['noSub'])){
+                        $model[$tableName] = $m->modelQuery(array($value['noSub']=>$model[$value['noSub']]));
+                    }else{
+                        $model[$tableName] = $m->modelQuery(array($this->modelId=>$model[$this->modelId]));
+                    }
+                }
+            }
+        }
+        //字符串 子查询 不带参数
+        else
+        {
+            $arr = array_filter(explode(',',$subModel));
+            $m =null;$mm ='';
+            foreach ($arr as $a){
+                $m = new $a;$mm =$a;
+                $m->query(new Where($this->modelId,$w));
+            }
+            foreach ($this->model as &$model){
+                $model[$mm] = $m->modelQuery(array($this->modelId=>$model[$this->modelId]));
+
+            }
+        }
+        return $this;
     }
 
     public function toArray(){

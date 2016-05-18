@@ -30,7 +30,7 @@
     </div>
     <div class="goods_info">
         <h2><{$g['g_name']}></h2>
-        <div class = "goods_price_value">
+        <div class = "goods_price_value" g_id="<{$g['g_id']}>">
             <strong>￥ </strong><strong class="goods_price_value_v"></strong>
         </div>
         <div class="goods_info_price">
@@ -92,14 +92,36 @@
 
 <script>
     window.h_main.push(function(){
+        //收藏商品
+        $('.goods_info_collect').click(function(){
+            $.get("<{$HTTP_HOST}>/server/collectAddSer.php?g_id="+$('.goods_price_value').attr('g_id'),function(data){
+                h_util.toast(data);
+                if(data.status){
+
+                }
+            },'json');
+//            if($('#user').length >0){
+//                alert('已登陆');
+//            }else{
+//
+//            }
+        });
+        //加入购物车
+        $('.goods_info_cart').click(function(){
+        });
+        //立即购买
+        $('.goods_info_buy').click(function(){
+
+        });
+
         $('.goods_content_nav > li').click(function(){//详细导航
             if(!$(this).hasClass('li_select')){
                 $(this).addClass('li_select').siblings().removeClass('li_select');
                 $('.goods_content_val li.'+$(this).attr('for')).show().siblings().hide();
             }
         });
-
-        $('.goods_info_price_li').each(function(){//价格名称大小
+        //价格名称大小
+        $('.goods_info_price_li').each(function(){
             if(this.offsetWidth < this.scrollWidth){
                 $(this).css('width',this.scrollWidth);
             }
@@ -110,15 +132,17 @@
         });
 
         var price_list = JSON.parse("<{$gpi_s|escape:javascript}>");
-        var price_min = 1000000000;
+        var price_min = Number.MAX_VALUE;
         var price_max = 0;
         var price_arr = {};
-        for(var pl in price_list){//找出最大最小价格
+        //找出最大最小价格
+        for(var pl in price_list){
             var gpi_price = parseFloat(price_list[pl]['gpi_price']);
             if(gpi_price > price_max)price_max = gpi_price;
             if(gpi_price < price_min)price_min = gpi_price;
         }
         $('.goods_price_value_v').html(price_min+' - '+price_max);
+
         //商品价格选择
         var isSelect= function(){
             var list ={};//匹配数量
@@ -147,6 +171,7 @@
                 for(var pai in price_list){
                     if(price_list[pai]['gpi_id'] == gpi_id){
                         $('.goods_price_value_v').html(price_list[pai]['gpi_price']);
+                        $('.goods_price_value_v').attr('gpi_id',price_list[pai]['gpi_id']);
                         $('.goods_info_sum_sum').html(price_list[pai]['gpi_sum']);
                         if(price_list[pai]['gpi_sum'] < $('.goods_info_sum_v').val()){
                             $('.goods_info_sum_v').val(price_list[pai]['gpi_sum']);
@@ -162,6 +187,7 @@
                 $('.goods_info_sum_sum').html("");
             }
         };
+        //商品价格
         $('.goods_info_price_li').click(function(){
             if($(this).hasClass('goods_info_price_li_c')){
                 price_arr[$(this).parents('ul').attr('type')] = null;
@@ -192,7 +218,6 @@
                         break;
                     }
                 }
-
             }
         });
         //小图浏览
@@ -204,7 +229,7 @@
 
         var sum = $('.goods_roll_img >ul >li').length;
         $('.goods_roll_img >ul').css('width',sum*74);
-
+        //左右滑块
         $('.goods_roll_left').click(function(){
             var u = $(this).siblings('ul');
             if(parseInt(u.css('left')) > -300){
@@ -214,7 +239,6 @@
                 u.animate({'left':parseInt(u.css('left'))+300},200);
             }
         });
-
         $('.goods_roll_right').click(function(){
             var u = $(this).siblings('ul');
             if(-u.width() - parseInt(u.css('left')) > -700){
@@ -236,7 +260,8 @@
                 $('.goods_roll_right').show();
             }
 
-        }).mouseleave(function(){
+        }).mouseleave(
+                function(){
             $('.goods_roll_left').hide();
             $('.goods_roll_right').hide();
         });
@@ -253,7 +278,7 @@
         }).mouseleave(function(){
             $(this).children('.goods_view_img').hide();
             $(this).children('.goods_max_img').hide();
-        }).mousemove( function(e){
+        }).mousemove(function(e){
             var x =e.pageX-$(this).offset().left;
             var y=e.pageY-$(this).offset().top;
             var view = $(this).children('.goods_view_img');

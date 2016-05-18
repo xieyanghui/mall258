@@ -122,20 +122,51 @@ a:hover  {
         padding: 8px 0 8px 8px;
       }
     }
+    .c_c {
+      position: relative;
+      .c_c_img{
+        background-size: 30px;
+        width: 30px ;
+        height: 30px;
+        cursor: pointer;
+      }
+      .c_c_ul:after{
+        content: '';
+        height: 0;
+        width: 0;
+        border-bottom: 15px solid @gray_one;
+        border-left: 15px solid transparent;
+        border-right: 15px solid transparent;
+        position: absolute;
+        top: -4px;
+        left: 47%;
+      }
+      .c_c_ul{
 
+        box-shadow:0 0  10px @gray_two;
+        display: none;
+        position: absolute;
+        background-color: @gray_one;
+        z-index: 100;
+        left: -118px;
+        top:  35px;
+        .c_c_li{
+          width: 250px;
+          height: 40px;
+        }
+      }
+    }
     .collect{
-      background-image: url("http://7xsiy9.com2.z0.glb.clouddn.com/tag.png");
-      background-size: 30px;
-      width: 30px ;
-      height: 30px;
-      cursor: pointer;
+      .c_c_img{
+        background-image: url("http://7xsiy9.com2.z0.glb.clouddn.com/tag.png");
+      }
+
+
     }
     .cart{
-      background-image: url("http://7xsiy9.com2.z0.glb.clouddn.com/cart.png");
-      background-size: 30px;
-      width: 30px ;
-      height: 30px;
-      cursor: pointer;
+      .c_c_img{
+        background-image: url("http://7xsiy9.com2.z0.glb.clouddn.com/cart.png");
+      }
     }
   }
 }
@@ -724,8 +755,6 @@ a:hover  {
   float: right;
   margin: 10px 20% 10px 0;
 }
-//
-
 //吐司
 .toast {
   z-index: 1001;
@@ -748,4 +777,31 @@ a:hover  {
   &:extend(.toast);
   background-color: #E0F8FB;
   border: 1px solid #50D1DE;
+}
+
+
+//商品列表分页
+.goods_limit_li >a{
+  display: block ;
+  float: left;
+  height: 30px;
+  line-height: 30px;
+  text-align: center;
+}
+.page_move{
+  font-size: 20px;
+}
+.page_off{
+
+}
+.page_number{
+  margin: 0 5px;
+  width: 30px;
+}
+.page_number:hover ,.page_number_on{
+  text-decoration: underline;
+  font-weight: bold;
+}
+.page_on{
+
 }

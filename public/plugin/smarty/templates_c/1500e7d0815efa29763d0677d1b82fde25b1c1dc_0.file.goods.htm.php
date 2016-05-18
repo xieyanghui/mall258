@@ -1,7 +1,7 @@
-<?php /* Smarty version 3.1.27, created on 2016-05-03 04:04:45
+<?php /* Smarty version 3.1.27, created on 2016-05-09 20:22:19
          compiled from "/home/xiehui/work/mall258/tplPc/goods.htm" */ ?>
 <?php
-/*%%SmartyHeaderCode:7575447495727b2dd9070e3_54208785%%*/
+/*%%SmartyHeaderCode:1530325492573080fb149068_39522111%%*/
 if(!defined('SMARTY_DIR')) exit('no direct access allowed');
 $_valid = $_smarty_tpl->decodeProperties(array (
   'file_dependency' => 
@@ -9,11 +9,11 @@ $_valid = $_smarty_tpl->decodeProperties(array (
     '1500e7d0815efa29763d0677d1b82fde25b1c1dc' => 
     array (
       0 => '/home/xiehui/work/mall258/tplPc/goods.htm',
-      1 => 1462216363,
+      1 => 1462794608,
       2 => 'file',
     ),
   ),
-  'nocache_hash' => '7575447495727b2dd9070e3_54208785',
+  'nocache_hash' => '1530325492573080fb149068_39522111',
   'variables' => 
   array (
     'top' => 0,
@@ -29,13 +29,13 @@ $_valid = $_smarty_tpl->decodeProperties(array (
   ),
   'has_nocache_code' => false,
   'version' => '3.1.27',
-  'unifunc' => 'content_5727b2dd93be93_96743269',
+  'unifunc' => 'content_573080fb154ca6_77269588',
 ),false);
 /*/%%SmartyHeaderCode%%*/
-if ($_valid && !is_callable('content_5727b2dd93be93_96743269')) {
-function content_5727b2dd93be93_96743269 ($_smarty_tpl) {
+if ($_valid && !is_callable('content_573080fb154ca6_77269588')) {
+function content_573080fb154ca6_77269588 ($_smarty_tpl) {
 
-$_smarty_tpl->properties['nocache_hash'] = '7575447495727b2dd9070e3_54208785';
+$_smarty_tpl->properties['nocache_hash'] = '1530325492573080fb149068_39522111';
 echo $_smarty_tpl->getSubTemplate ('head.tpl', $_smarty_tpl->cache_id, $_smarty_tpl->compile_id, 0, $_smarty_tpl->cache_lifetime, array(), 0);
 ?>
 
@@ -94,7 +94,8 @@ $_smarty_tpl->tpl_vars['gpi'] = $foreach_gpi_Sav;
     <div class="goods_info">
         <h2><?php echo $_smarty_tpl->tpl_vars['g']->value['g_name'];?>
 </h2>
-        <div class = "goods_price_value">
+        <div class = "goods_price_value" g_id="<?php echo $_smarty_tpl->tpl_vars['g']->value['g_id'];?>
+">
             <strong>￥ </strong><strong class="goods_price_value_v"></strong>
         </div>
         <div class="goods_info_price">
@@ -217,14 +218,37 @@ $_smarty_tpl->tpl_vars['attr'] = $foreach_attr_Sav;
 <?php echo '<script'; ?>
 >
     window.h_main.push(function(){
+        //收藏商品
+        $('.goods_info_collect').click(function(){
+            $.get("<?php echo $_smarty_tpl->tpl_vars['HTTP_HOST']->value;?>
+/server/collectAddSer.php?g_id="+$('.goods_price_value').attr('g_id'),function(data){
+                h_util.toast(data);
+                if(data.status){
+
+                }
+            },'json');
+//            if($('#user').length >0){
+//                alert('已登陆');
+//            }else{
+//
+//            }
+        });
+        //加入购物车
+        $('.goods_info_cart').click(function(){
+        });
+        //立即购买
+        $('.goods_info_buy').click(function(){
+
+        });
+
         $('.goods_content_nav > li').click(function(){//详细导航
             if(!$(this).hasClass('li_select')){
                 $(this).addClass('li_select').siblings().removeClass('li_select');
                 $('.goods_content_val li.'+$(this).attr('for')).show().siblings().hide();
             }
         });
-
-        $('.goods_info_price_li').each(function(){//价格名称大小
+        //价格名称大小
+        $('.goods_info_price_li').each(function(){
             if(this.offsetWidth < this.scrollWidth){
                 $(this).css('width',this.scrollWidth);
             }
@@ -236,15 +260,17 @@ $_smarty_tpl->tpl_vars['attr'] = $foreach_attr_Sav;
 
         var price_list = JSON.parse("<?php echo strtr($_smarty_tpl->tpl_vars['gpi_s']->value, array("\\" => "\\\\", "'" => "\\'", "\"" => "\\\"", "\r" => "\\r", "\n" => "\\n", "</" => "<\/" ));?>
 ");
-        var price_min = 1000000000;
+        var price_min = Number.MAX_VALUE;
         var price_max = 0;
         var price_arr = {};
-        for(var pl in price_list){//找出最大最小价格
+        //找出最大最小价格
+        for(var pl in price_list){
             var gpi_price = parseFloat(price_list[pl]['gpi_price']);
             if(gpi_price > price_max)price_max = gpi_price;
             if(gpi_price < price_min)price_min = gpi_price;
         }
         $('.goods_price_value_v').html(price_min+' - '+price_max);
+
         //商品价格选择
         var isSelect= function(){
             var list ={};//匹配数量
@@ -273,6 +299,7 @@ $_smarty_tpl->tpl_vars['attr'] = $foreach_attr_Sav;
                 for(var pai in price_list){
                     if(price_list[pai]['gpi_id'] == gpi_id){
                         $('.goods_price_value_v').html(price_list[pai]['gpi_price']);
+                        $('.goods_price_value_v').attr('gpi_id',price_list[pai]['gpi_id']);
                         $('.goods_info_sum_sum').html(price_list[pai]['gpi_sum']);
                         if(price_list[pai]['gpi_sum'] < $('.goods_info_sum_v').val()){
                             $('.goods_info_sum_v').val(price_list[pai]['gpi_sum']);
@@ -288,6 +315,7 @@ $_smarty_tpl->tpl_vars['attr'] = $foreach_attr_Sav;
                 $('.goods_info_sum_sum').html("");
             }
         };
+        //商品价格
         $('.goods_info_price_li').click(function(){
             if($(this).hasClass('goods_info_price_li_c')){
                 price_arr[$(this).parents('ul').attr('type')] = null;
@@ -318,7 +346,6 @@ $_smarty_tpl->tpl_vars['attr'] = $foreach_attr_Sav;
                         break;
                     }
                 }
-
             }
         });
         //小图浏览
@@ -330,7 +357,7 @@ $_smarty_tpl->tpl_vars['attr'] = $foreach_attr_Sav;
 
         var sum = $('.goods_roll_img >ul >li').length;
         $('.goods_roll_img >ul').css('width',sum*74);
-
+        //左右滑块
         $('.goods_roll_left').click(function(){
             var u = $(this).siblings('ul');
             if(parseInt(u.css('left')) > -300){
@@ -340,7 +367,6 @@ $_smarty_tpl->tpl_vars['attr'] = $foreach_attr_Sav;
                 u.animate({'left':parseInt(u.css('left'))+300},200);
             }
         });
-
         $('.goods_roll_right').click(function(){
             var u = $(this).siblings('ul');
             if(-u.width() - parseInt(u.css('left')) > -700){
@@ -362,7 +388,8 @@ $_smarty_tpl->tpl_vars['attr'] = $foreach_attr_Sav;
                 $('.goods_roll_right').show();
             }
 
-        }).mouseleave(function(){
+        }).mouseleave(
+                function(){
             $('.goods_roll_left').hide();
             $('.goods_roll_right').hide();
         });
@@ -379,7 +406,7 @@ $_smarty_tpl->tpl_vars['attr'] = $foreach_attr_Sav;
         }).mouseleave(function(){
             $(this).children('.goods_view_img').hide();
             $(this).children('.goods_max_img').hide();
-        }).mousemove( function(e){
+        }).mousemove(function(e){
             var x =e.pageX-$(this).offset().left;
             var y=e.pageY-$(this).offset().top;
             var view = $(this).children('.goods_view_img');

@@ -47,12 +47,14 @@ function getPages($count){
     $page['countPages'] = ceil($count/$GLOBALS['pageRow']);//总页面数
     $page['search'] = array('searchLine'=>"",'key'=>"");// 搜索
     $page['sort'] = array('sortLine'=>"",'key'=>""); //排序
+    $page['args'] = "?"; //
     if(!empty($_GET['float'])){
         $page['float'] = $_GET['float'];
         $page['url'] = $_SERVER['PHP_SELF'];
     }
     if($GLOBALS['search'] != null){
         $page['search']  = array('searchLine'=>$GLOBALS['searchLine'],'key'=>$GLOBALS['search']);
+        $page['args'] .='search'.$page['search'];
     }
     if($GLOBALS['sort'] != null){
         $page['sort']  = array('sortLine'=>$GLOBALS['sortLine'],'key'=>$GLOBALS['sort']);

@@ -3,23 +3,39 @@
     <{$top|default:'' }>
 </div>
 <div class="wrap">
-        <div class="goods_model">
-            <{foreach $g as $gs}>
-            <div class ='goods_model_body'>
-                <a href="<{$HTTP_HOST}>/view/goods.php?id=<{$gs['g_number']}>">
-                    <div class = 'goods_model_list'>
-                        <div class = 'goods_model_list_img'><img src ="<{$gs['g_img'] }>"/></div>
-                        <div class="goods_model_list_name"><{$gs['g_name']}></div>
-                        <div class = 'goods_model_list_price'><{$gs['g_price']}></div>
-                    </div>
-                </a>
-            </div>
-            <{/foreach}>
+    <div class="goods_model">
+        <{foreach $g as $gs}>
+        <div class ='goods_model_body'>
+            <a href="<{$HTTP_HOST}>/view/goods.php?id=<{$gs['g_number']}>">
+                <div class = 'goods_model_list'>
+                    <div class = 'goods_model_list_img'><img src ="<{$gs['g_img'] }>"/></div>
+                    <div class="goods_model_list_name"><{$gs['g_name']}></div>
+                    <div class = 'goods_model_list_price'><{$gs['g_price']}></div>
+                </div>
+            </a>
         </div>
-        <div class="clear"></div>
+        <{/foreach}>
+        <!--分页-->
+        <ul class="goods_limit_ul clear">
+            <li class="goods_limit_li">
+                <a href="<{if $startPage ge 1}><{$page}>startPage=<{$startPage-1}><{/if}>" class="  page_move <{if $startPage ge 1}><{else}> page_off <{/if}>">上一页</a>
+                <{section name=loop loop=$showLimit}>
+                <a href="<{$page}>startPage=<{$startLimit+$smarty.section.loop.index}>" class="<{if $startLimit+$smarty.section.loop.index eq $startPage}>
+                    page_number_on<{/if}>  page_number"><{$startLimit+$smarty.section.loop.index }>
+                </a>
+                <{/section}>
+                <a href="<{if $startPage+1 lt $countPages}><{$page}>startPage=<{$startPage+1}><{/if}>" class=" page_move <{if $startPage+1 lt $countPages}>  page_on <{else}> page_off <{/if}>">下一页</a>
+            </li>
+        </ul>
+    </div>
+    <div class="clear"></div>
     <div class = 'nva'>
+
     </div>
 </div>
-
+<script>
+    h_main.push(function(){
+    });
+</script>
 
 <{include 'bottom.tpl'}>

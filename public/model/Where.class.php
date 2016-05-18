@@ -18,7 +18,6 @@ class Where{
     /**
      * @param $columnName string 列名
      * @param $value string 值
-     * @param $type string 列类型,默认string
      * @param $logic string 逻辑,默认AND
      * @param $mark string 操作符,默认'='
     */
@@ -32,11 +31,10 @@ class Where{
      * 设置条件
      * @param $columnName string 列名
      * @param $value string 值
-     * @param $type string 列类型,默认string
      * @param $logic string 逻辑,默认AND
      * @param $mark string 操作符,默认'='
      * @return Where 链式
-     * @throws Exception
+     * @throws ModelException
      *
      */
     public function setWhere($columnName =null,$value ,$logic = 'AND', $mark = '='){
@@ -61,7 +59,6 @@ class Where{
      * @param $key string  组key
      * @param $columnName string 列名
      * @param $value string 值
-     * @param $type string 列类型,默认string
      * @param $logic string 逻辑,默认AND
      * @param $mark string 操作符,默认'=-
      * @return Where 链式

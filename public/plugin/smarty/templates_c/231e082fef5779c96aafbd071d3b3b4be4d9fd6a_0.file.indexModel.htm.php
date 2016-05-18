@@ -1,7 +1,7 @@
-<?php /* Smarty version 3.1.27, created on 2016-05-02 15:02:57
+<?php /* Smarty version 3.1.27, created on 2016-05-18 00:19:28
          compiled from "/home/xiehui/work/mall258/admin/tplPc/indexModel.htm" */ ?>
 <?php
-/*%%SmartyHeaderCode:2121600255726fba19ca6d8_97382552%%*/
+/*%%SmartyHeaderCode:254401677573b4490964099_78500929%%*/
 if(!defined('SMARTY_DIR')) exit('no direct access allowed');
 $_valid = $_smarty_tpl->decodeProperties(array (
   'file_dependency' => 
@@ -9,11 +9,11 @@ $_valid = $_smarty_tpl->decodeProperties(array (
     '231e082fef5779c96aafbd071d3b3b4be4d9fd6a' => 
     array (
       0 => '/home/xiehui/work/mall258/admin/tplPc/indexModel.htm',
-      1 => 1462101950,
+      1 => 1463501951,
       2 => 'file',
     ),
   ),
-  'nocache_hash' => '2121600255726fba19ca6d8_97382552',
+  'nocache_hash' => '254401677573b4490964099_78500929',
   'variables' => 
   array (
     'HTTP_MODEL' => 0,
@@ -24,13 +24,13 @@ $_valid = $_smarty_tpl->decodeProperties(array (
   ),
   'has_nocache_code' => false,
   'version' => '3.1.27',
-  'unifunc' => 'content_5726fba19d0642_78810304',
+  'unifunc' => 'content_573b449097ae75_41593575',
 ),false);
 /*/%%SmartyHeaderCode%%*/
-if ($_valid && !is_callable('content_5726fba19d0642_78810304')) {
-function content_5726fba19d0642_78810304 ($_smarty_tpl) {
+if ($_valid && !is_callable('content_573b449097ae75_41593575')) {
+function content_573b449097ae75_41593575 ($_smarty_tpl) {
 
-$_smarty_tpl->properties['nocache_hash'] = '2121600255726fba19ca6d8_97382552';
+$_smarty_tpl->properties['nocache_hash'] = '254401677573b4490964099_78500929';
 ?>
 <style>
     .list_row_text{
@@ -86,7 +86,7 @@ $_smarty_tpl->properties['nocache_hash'] = '2121600255726fba19ca6d8_97382552';
     <div class="add_button">+</div>
     <li class='list_row'  id="goods_list_row_template">
         <span style="width:150px"><input class="list_row_text" type="text" name ='ig_name'></span>
-        <span style="width:150px"><div class="select_goods"></div></span>
+        <span style="width:250px"><div class="select_goods"></div></span>
         <span style="width:150px"><input class="list_row_text" type="text"  name ='ig_label'></span>
         <span style="width:80px"><img class="index_img select_img preview_img"/></span>
         <span class='list_save' >S</span>

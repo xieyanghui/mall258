@@ -235,6 +235,20 @@ define('main',['jquery-ui'],function(){
             path = typeof path !=='undefined'?";path="+path:";path=/";
             document.cookie=c_name+ "=" +decodeURI(value)+time+path;
         },
+        pushCookie:function(c_name,value){
+            if(this.getCookie(c_name) === ""){
+                document.cookie=c_name+ "=" +decodeURI(value)+";path=/";
+            }else{
+                document.cookie = c_name+ "="+decodeURI(value)+','+decodeURI(this.getCookie(c_name));
+            }
+            // if(typeof time !=='undefined'){
+            //     var date=new Date();
+            //     date.setTime(date.getTime()+time);
+            //     time = ";expires="+date.toUTCString();
+            // }else{ time="";}
+            // path = typeof path !=='undefined'?";path="+path:";path=/";
+            // document.cookie=c_name+ "=" +decodeURI(value)+time+path;
+        },
 
         // 浮动窗口
         showFloatDiv:function(divId){

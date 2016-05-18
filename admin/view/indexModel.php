@@ -14,7 +14,6 @@ $view['table'] = array(
     'noSearch'=>true,
     'column'=>array(
         array('name'=>'模块名称','key'=>'im_name','width'=>"150"),
-        array('name'=>'模块主题','key'=>'im_class','width'=>"150"),
         array('name'=>'排序','key'=>'im_sort','width'=>"150")
     )
 );

@@ -13,7 +13,10 @@ require_once($_SERVER['DOCUMENT_ROOT'] . '/public/autoload.php');
 //print_r($g->toArray());
 //Auth::inAdmin(3,'report');
 $x = ',gt_number,gt_name,';
-echo preg_replace('/(^,)|(,','',$x);
+echo dirname ($_SERVER['DOCUMENT_ROOT']);
 
 //print trim($x,',');
 //echo $x;
+$a = new Admin();
+$a->query (new Where('a_id',1),'a_id,a_img');
+print_r ($a->toArray());
