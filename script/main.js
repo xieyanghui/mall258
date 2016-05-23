@@ -106,7 +106,15 @@ define('main',['jquery-ui'],function(){
     });
 
 
+    window.addEventListener("storage", function(e){
+        console.log(e);
+        for (var x in h_util.StorageEvenList){
+            h_util.StorageEvenList[x](e);
+        }
+    });
+
     window.h_util = {
+        StorageEvenList:[],
         // 选择地址
         addressSelect:function(form){
             var d = "?";
@@ -159,6 +167,57 @@ define('main',['jquery-ui'],function(){
             }
         },
 
+        addStorageEven:function(fun){
+            h_util.StorageEvenList.push(fun);
+        },
+
+        setStorage:function(k,v){
+            localStorage.setItem(k,v);
+            for (var x in h_util.StorageEvenList){
+                h_util.StorageEvenList[x]();
+            }
+        },
+        removeStorage:function(k){
+            localStorage.removeItem(k);
+            for (var x in h_util.StorageEvenList){
+                h_util.StorageEvenList[x]();
+            }
+        },
+
+        //区分
+        gblen:function(str,lens,ins,lines){
+            var len = 0,duan = 0,line =1;
+            var newStr ='';
+            for (var i=0; i<str.length; i++) {
+                if((len%lens === 0 && len!==0) || (duan+1 < i && (len-1)%lens === 0 )){
+                    if(lines === line){break;}
+                    newStr +=str.slice(duan,i)+ins;
+                    duan = i;
+                    line++;
+
+                }
+                var c = str.charCodeAt(i);
+                //单字节加1
+                if ((c >= 0x0001 && c <= 0x007e) || (0xff60<=c && c<=0xff9f)) {
+                    len++;
+                }
+                else {
+                    len+=2;
+                }
+
+            }
+            newStr+=str.slice(duan);
+            return newStr;
+        },
+
+        inArray:function(str,arr){
+            for(var x in arr){
+                if(arr[x] === str){
+                    return true;
+                }
+            }
+            return false;
+        },
         /**
          * 吐司
          * status bool|object true为成功 false 为失败
@@ -212,7 +271,6 @@ define('main',['jquery-ui'],function(){
             $('#dialogue >div.dia_ok').unbind('trig').bind('trig',fun);
         },
 
-
         //Cookie读写
         getCookie:function(c_name){
             if (document.cookie.length>0){
@@ -226,30 +284,27 @@ define('main',['jquery-ui'],function(){
             }
             return ""
         },
-        setCookie:function(c_name,value,time,path){
+        setCookie:function(name,value,push,time,path){
             if(typeof time !=='undefined'){
                 var date=new Date();
                 date.setTime(date.getTime()+time);
                 time = ";expires="+date.toUTCString();
-            }else{ time="";}
-            path = typeof path !=='undefined'?";path="+path:";path=/";
-            document.cookie=c_name+ "=" +decodeURI(value)+time+path;
-        },
-        pushCookie:function(c_name,value){
-            if(this.getCookie(c_name) === ""){
-                document.cookie=c_name+ "=" +decodeURI(value)+";path=/";
             }else{
-                document.cookie = c_name+ "="+decodeURI(value)+','+decodeURI(this.getCookie(c_name));
+                var defDate=new Date();
+                defDate.setTime(defDate.getTime()+3600*1000);
+                time = ";expires="+defDate.toUTCString();
             }
-            // if(typeof time !=='undefined'){
-            //     var date=new Date();
-            //     date.setTime(date.getTime()+time);
-            //     time = ";expires="+date.toUTCString();
-            // }else{ time="";}
-            // path = typeof path !=='undefined'?";path="+path:";path=/";
-            // document.cookie=c_name+ "=" +decodeURI(value)+time+path;
+            path = typeof path !=='undefined'?";path="+path:";path=/";
+            if(push){
+                if(this.getCookie(c_name) === ""){
+                    document.cookie=c_name+ "=" +decodeURI(value)+";path=/";
+                }else{
+                    document.cookie = c_name+ "="+decodeURI(value)+','+decodeURI(this.getCookie(c_name));
+                }
+            }else{
+                document.cookie=name+ "=" +decodeURI(value)+time+path;
+            }
         },
-
         // 浮动窗口
         showFloatDiv:function(divId){
             $('#'+divId).trigger('show');
@@ -265,7 +320,6 @@ define('main',['jquery-ui'],function(){
     };
     //加载JS
     var load=function(){
-        console.log('----');
         while (window.h_main.length){
             var l = window.h_main.pop();
             if(l instanceof Array){

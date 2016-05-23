@@ -35,13 +35,17 @@ if($gt_id = $g['gt_id']) {
 
         )
     ))->toArray ();
-    foreach ($ga as &$value){
+    foreach ($ga as $key=>&$value){
         foreach ($value['GTAttr'] as $k =>$v){
             if(is_array($v['GAttr'])){
                 unset($value['GTAttr'][$k]);
             }
         }
+        if(count($value['GTAttr']) === 0){
+            unset($ga[$key]);
+        }
     }
+
     $gp = new GTPrice();
     $gp =$gp->query(new Where('gt_id',$gt_id),'*',array(
         'GPrice'=>array(
@@ -49,7 +53,11 @@ if($gt_id = $g['gt_id']) {
             'columnName'=>'gp_id,gp_name'
         )
     ))->toArray();
-
+    foreach ($gp as $k=>$v){
+        if(count($v['GPrice']) ===0){
+            unset($gp[$k]);
+        }
+    }
     $gpi = new GPriceInfo();
     $gpi = $gpi->query(new Where('g_id',$g['g_id']),'*',
         array(
@@ -63,6 +71,9 @@ if($gt_id = $g['gt_id']) {
     $g['gp'] = $gp;
     $g['ga'] = $ga;
     Model::commitTransaction();
+    if(!empty( $_GET['gpi_id'])){
+        $sma->assign('gpi_id',$_GET['gpi_id']);
+    }
     $sma->assign('gpi_s',json_encode($gpi));
     $sma->assign('title',$g['g_name']);
     $sma->assign('keywords',$g['g_keywords']);

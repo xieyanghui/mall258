@@ -1,0 +1,24 @@
+<{include 'head.tpl' }>
+<div id ='top_div'>
+    <{$top|default:'' }>
+</div>
+<div class="clear"></div>
+<ul class="goods_nav wrap">
+    <li class = "goods_nav_li"> <a href="<{$HTTP_HOST}>">首页</a></li><span>></span>
+    <li class = "goods_nav_li"> <a href="<{$HTTP_HOST}>/view/user.php">个人中心</a></li>
+</ul>
+<div class="wrap">
+    <ul class="user_menu_ul">
+        <li class="user_menu_li">订单管理</li>
+        <li class="user_menu_li">购物车</li>
+        <li class="user_menu_li">收藏夹</li>
+        <li class="user_menu_li">收货地址管理</li>
+        <li class="user_menu_li">资料修改</li>
+        <li class="user_menu_li">修改密码</li>
+    </ul>
+    <div class="user_con">
+
+    </div>
+</div>
+
+<{include 'bottom.tpl'}>

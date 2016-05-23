@@ -12,11 +12,12 @@ require_once($_SERVER['DOCUMENT_ROOT'] . '/public/autoload.php');
 //$g->query($w,'*',array('GAttr'=>array('where'=>new Where('gta_id','5'),'columnName'=>array('ga_value','gta_id','g_id'))));
 //print_r($g->toArray());
 //Auth::inAdmin(3,'report');
-$x = ',gt_number,gt_name,';
-echo dirname ($_SERVER['DOCUMENT_ROOT']);
-
-//print trim($x,',');
-//echo $x;
-$a = new Admin();
-$a->query (new Where('a_id',1),'a_id,a_img');
-print_r ($a->toArray());
+//$x = ',gt_number,gt_name,';
+//echo dirname ($_SERVER['DOCUMENT_ROOT']);
+//
+////print trim($x,',');
+////echo $x;
+//$a = new Admin();
+//$a->query (new Where('a_id',1),'a_id,a_img');
+//print_r ($a->toArray());
+echo 0 ===false;

@@ -1,11 +1,10 @@
 @import "config";
+//全局
 body,div,ul,li,label{
   font-size: 13px ;
   margin: 0;
   padding: 0;
 }
- .clear{clear: both;  }
-
 ul{
   list-style: none;
 }
@@ -17,6 +16,8 @@ a:hover  {
   color: red;
   cursor: pointer;
 }
+.clear{clear: both;  }
+
 //浮动窗口背景
 #float_back{
   top:0;
@@ -29,6 +30,7 @@ a:hover  {
 }
 //流块
 .wrap{
+  clear: both;
   margin: 0 auto;
   width: 1200px;
   position: relative;
@@ -129,30 +131,56 @@ a:hover  {
         width: 30px ;
         height: 30px;
         cursor: pointer;
-      }
-      .c_c_ul:after{
-        content: '';
-        height: 0;
-        width: 0;
-        border-bottom: 15px solid @gray_one;
-        border-left: 15px solid transparent;
-        border-right: 15px solid transparent;
-        position: absolute;
-        top: -4px;
-        left: 47%;
+        position: relative;
+        .c_c_sum{
+          display: none;
+          position: absolute;
+          right: 0;
+          width: 14px;
+          height: 14px;
+          border-radius: 14px;
+          background-color: RED;
+          font-size: 9px;
+          line-height: 14px;
+          text-align: center;
+          color: #fff;
+        }
       }
       .c_c_ul{
-
         box-shadow:0 0  10px @gray_two;
         display: none;
         position: absolute;
         background-color: @gray_one;
         z-index: 100;
-        left: -118px;
-        top:  35px;
+        left: -143px;
+        top:  30px;
         .c_c_li{
-          width: 250px;
-          height: 40px;
+          position: relative;
+          width: 300px;
+          height: 50px;
+          display: block;
+          text-align: center;
+          line-height: 50px;
+          padding: 7px 0;
+          margin: 0 5px;
+          border-bottom: 1px solid @gray_three;
+          img{
+            display: block;
+            float: left;
+            width: 50px;
+            height: 50px;
+          }
+          .c_c_div{
+            width: 200px;
+            height: 50px;
+            float: left;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            overflow: hidden;
+            line-height: 20px;
+            padding: 2px 5px ;
+            text-align: left;
+          }
         }
       }
     }
@@ -211,6 +239,7 @@ a:hover  {
     }
   }
 }
+
 //导航
 .goods_nav{
   height: 30px;
@@ -233,7 +262,7 @@ a:hover  {
   }
 }
 
-//显示
+//商品列表
 .goods_model{
   top:20px;
   width: 1000px;
@@ -242,44 +271,42 @@ a:hover  {
     margin-left:20px;
     font-size: 20px;
   }
-  .goods_model_body{
-    width: 100%;
-    .goods_model_list{
-      width: 280px;
-      box-shadow:0 0 5px #aaa;
+  .goods_model_list{
+    width: 280px;
+    box-shadow:0 0 5px #aaa;
+    position: relative;
+    .transition(all,0.4s,linear);
+    padding: 10px;
+    margin: 20px 10px;
+    float: left;
+    .goods_model_list_img{
       position: relative;
-      .transition(all,0.4s,linear);
-      padding: 10px;
-      margin: 20px 10px;
-      float: left;
-      .goods_model_list_img{
-        position: relative;
-        width: 280px;
-        height: 280px;
-        background-color: #fff;
-        overflow: hidden;
-        img{
-          width: 100%;
-          height: 100%;
-        }
-      }
-      .goods_model_list_name{
-        height: 40px;
-        margin: 10px 0;
-      }
-      .goods_model_list_price{
-        height: 20px;
+      width: 280px;
+      height: 280px;
+      background-color: #fff;
+      overflow: hidden;
+      img{
+        width: 100%;
+        height: 100%;
       }
     }
-    .goods_model_list:hover{
-      background-color: @one_color;
-      color: #fff;
+    .goods_model_list_name{
+      height: 40px;
+      margin: 10px 0;
     }
-
-
+    .goods_model_list_price{
+      height: 20px;
+    }
   }
+  .goods_model_list:hover{
+    background-color: @one_color;
+    color: #fff;
+  }
+
 }
-//商品详细
+
+
+//商品价格选项
 .goods_head{
   margin-top: 20px ;
   padding: 10px;
@@ -305,6 +332,7 @@ a:hover  {
         width: 400px;
         height: 400px;
         position: absolute;
+        background-size:800px 800px;
         background-repeat:no-repeat;
         overflow: hidden;
         display: none;
@@ -448,6 +476,8 @@ a:hover  {
     }
   }
 }
+
+//商品详细资料
 .goods_content{
   border:1px solid @gray_three;
   padding: 10px;
@@ -515,7 +545,7 @@ a:hover  {
           float: left;
         }
         .goods_content_attr_name{
-          width: 120px;
+          width: 180px;
           text-align: right;
           border-right:1px solid @gray_one;
         }
@@ -578,6 +608,8 @@ a:hover  {
 //  }
 //}
 //
+
+
 //浮动表格
 .float_div{
   width: 500px;
@@ -672,6 +704,8 @@ a:hover  {
   vertical-align:middle;
   cursor: pointer;
 }
+
+//地址选择
 .address {
   height: 30px;
   border: 1px solid @one_color;
@@ -723,6 +757,8 @@ a:hover  {
 //#register{
 //  top: 150px;
 //}
+
+//按钮
 .button {
   height: 35px;
   text-align: center;
@@ -759,7 +795,7 @@ a:hover  {
 .toast {
   z-index: 1001;
   display: none;
-  position: absolute;
+  position: fixed;
   width: 200px;
   height: 20px;
   line-height: 20px;
@@ -804,4 +840,33 @@ a:hover  {
 }
 .page_on{
 
+}
+
+
+//个人中心
+//功能导航
+.user_menu_ul{
+  width: 200px;
+  float: left;
+  .user_menu_li{
+    width: 100%;
+    text-align: center;
+    height: 30px;
+    line-height: 30px;
+    margin: 5px 0;
+    background-color: @gray_one;
+    color: @one_color;
+    cursor: pointer;
+    font-size: 16px;
+    .transition(all,0.2s,linear);
+  }
+  .user_menu_li:hover{
+    background-color: @one_color;
+    color: #fff;
+  }
+}
+.user_con{
+  margin-left: 210px;
+  background-color: #000000;
+  height: 50px;
 }

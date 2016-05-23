@@ -1,7 +1,7 @@
-<?php /* Smarty version 3.1.27, created on 2016-05-09 20:22:19
+<?php /* Smarty version 3.1.27, created on 2016-05-21 16:20:36
          compiled from "/home/xiehui/work/mall258/tplPc/goods.htm" */ ?>
 <?php
-/*%%SmartyHeaderCode:1530325492573080fb149068_39522111%%*/
+/*%%SmartyHeaderCode:118803325457401a548c2d24_55261994%%*/
 if(!defined('SMARTY_DIR')) exit('no direct access allowed');
 $_valid = $_smarty_tpl->decodeProperties(array (
   'file_dependency' => 
@@ -9,16 +9,15 @@ $_valid = $_smarty_tpl->decodeProperties(array (
     '1500e7d0815efa29763d0677d1b82fde25b1c1dc' => 
     array (
       0 => '/home/xiehui/work/mall258/tplPc/goods.htm',
-      1 => 1462794608,
+      1 => 1463818065,
       2 => 'file',
     ),
   ),
-  'nocache_hash' => '1530325492573080fb149068_39522111',
+  'nocache_hash' => '118803325457401a548c2d24_55261994',
   'variables' => 
   array (
     'top' => 0,
     'HTTP_HOST' => 0,
-    'g_number' => 0,
     'g' => 0,
     'gpi' => 0,
     'price' => 0,
@@ -26,16 +25,17 @@ $_valid = $_smarty_tpl->decodeProperties(array (
     'attr' => 0,
     'attr_s' => 0,
     'gpi_s' => 0,
+    'gpi_id' => 0,
   ),
   'has_nocache_code' => false,
   'version' => '3.1.27',
-  'unifunc' => 'content_573080fb154ca6_77269588',
+  'unifunc' => 'content_57401a548e8bc3_29063750',
 ),false);
 /*/%%SmartyHeaderCode%%*/
-if ($_valid && !is_callable('content_573080fb154ca6_77269588')) {
-function content_573080fb154ca6_77269588 ($_smarty_tpl) {
+if ($_valid && !is_callable('content_57401a548e8bc3_29063750')) {
+function content_57401a548e8bc3_29063750 ($_smarty_tpl) {
 
-$_smarty_tpl->properties['nocache_hash'] = '1530325492573080fb149068_39522111';
+$_smarty_tpl->properties['nocache_hash'] = '118803325457401a548c2d24_55261994';
 echo $_smarty_tpl->getSubTemplate ('head.tpl', $_smarty_tpl->cache_id, $_smarty_tpl->compile_id, 0, $_smarty_tpl->cache_lifetime, array(), 0);
 ?>
 
@@ -50,11 +50,13 @@ echo $_smarty_tpl->getSubTemplate ('head.tpl', $_smarty_tpl->cache_id, $_smarty_
     <li class = "goods_nav_li"> <a href="<?php echo $_smarty_tpl->tpl_vars['HTTP_HOST']->value;?>
 /view/goodsList.php">全部商品</a></li><span>></span>
     <li class = "goods_nav_li"> <a href="<?php echo $_smarty_tpl->tpl_vars['HTTP_HOST']->value;?>
-/view/goodsList.php?type=<?php echo $_smarty_tpl->tpl_vars['g_number']->value;?>
+/view/goodsList.php?gt_id=<?php echo $_smarty_tpl->tpl_vars['g']->value['gt_id'];?>
 "><?php echo $_smarty_tpl->tpl_vars['g']->value['gt_name'];?>
 </a></li><span>></span>
-    <li class = "goods_nav_li"><?php echo $_smarty_tpl->tpl_vars['g']->value['g_name'];?>
-</li>
+    <li class = "goods_nav_li"><a href="<?php echo $_smarty_tpl->tpl_vars['HTTP_HOST']->value;?>
+/view/goods.php?id=<?php echo $_smarty_tpl->tpl_vars['g']->value['g_number'];?>
+"><?php echo $_smarty_tpl->tpl_vars['g']->value['g_name'];?>
+</a></li>
 </ul>
 <div class="goods_head wrap">
     <div class="goods_head_img">
@@ -218,26 +220,91 @@ $_smarty_tpl->tpl_vars['attr'] = $foreach_attr_Sav;
 <?php echo '<script'; ?>
 >
     window.h_main.push(function(){
+
         //收藏商品
         $('.goods_info_collect').click(function(){
             $.get("<?php echo $_smarty_tpl->tpl_vars['HTTP_HOST']->value;?>
 /server/collectAddSer.php?g_id="+$('.goods_price_value').attr('g_id'),function(data){
                 h_util.toast(data);
                 if(data.status){
-
+                    if(localStorage.getItem('collect')){
+                        var collect = JSON.parse(localStorage.getItem('collect'));
+                        var g_ids = new Array();
+                        for(var x in collect){
+                            g_ids.push(collect[x]['g_id']);
+                        }
+                        for(var x in data['goods']){
+                            if(!h_util.inArray(data['goods'][x]['g_id'],g_ids)){
+                                collect.push(data['goods'][x]);
+                            }
+                        }
+                        h_util.setStorage('collect',JSON.stringify(collect));
+                    }else{
+                        h_util.setStorage('collect',JSON.stringify(data['goods']))
+                    }
                 }
             },'json');
-//            if($('#user').length >0){
-//                alert('已登陆');
-//            }else{
-//
-//            }
+
         });
         //加入购物车
         $('.goods_info_cart').click(function(){
+            var gpi_id = $('.goods_price_value_v').attr('gpi_id');
+            if(typeof gpi_id === 'undefined'){
+                h_util.toast(false,'请先选择价格属性');
+                return false;
+            }
+            var sum = parseInt($('input[name="goods_sum"]').val());
+            if(sum <1 || sum > parseInt($('.goods_info_sum_sum').html())){
+                h_util.toast(false,'数量选择不对');
+                return false;
+            }
+            var gpi = JSON.parse('{"'+gpi_id+'":"'+sum+'"}');
+            $.getJSON("<?php echo $_smarty_tpl->tpl_vars['HTTP_HOST']->value;?>
+/server/cartAddSer.php",{'gpi':gpi},function(data){
+                h_util.toast(data);
+                if(data.status){
+                    if(localStorage.getItem('cart')){
+                        var cart = JSON.parse(localStorage.getItem('cart'));
+                        for(var x in data['gpi']){
+                            var b =true;
+                            for(var x1 in cart){
+                                if(data['gpi'][x]['gpi_id'] == cart[x1]['gpi_id']){
+                                    cart[x1]['sum'] += data['gpi'][x]['sum'];
+                                    b = false;
+                                }
+                            }
+                            if(b){
+                                cart.push(data['gpi'][x]);
+                            }
+                        }
+                        h_util.setStorage('cart',JSON.stringify(cart));
+                    }else{
+                        h_util.setStorage('cart',JSON.stringify(data['gpi']))
+                    }
+                }
+            });
+
         });
         //立即购买
         $('.goods_info_buy').click(function(){
+            var gpi_id = $('.goods_price_value_v').attr('gpi_id');
+            if(typeof gpi_id === 'undefined'){
+                h_util.toast(false,'请先选择价格属性');
+                return false;
+            }
+            if(parseInt($('.goods_info_sum_sum').html()) < 1){
+                h_util.toast(false,'亲，暂时缺货');
+                return false;
+            }
+            var sum = parseInt($('input[name="goods_sum"]').val());
+            if(sum <1 || sum > parseInt($('.goods_info_sum_sum').html())){
+                h_util.toast(false,'数量选择不对');
+                return false;
+            }
+            if($('#user').length !==1){
+                $('.show_float_div[float_id="login"]').trigger('click');
+                return false;
+            }
 
         });
 
@@ -286,7 +353,6 @@ $_smarty_tpl->tpl_vars['attr'] = $foreach_attr_Sav;
                 }
             }
             if(price_list[0]['list'].length === $('.goods_info_price_li_c').length){
-                console.log(price_arr);
                 var gpi_sum = 0;
                 var gpi_id = '';
                 for(var liss in list){
@@ -298,8 +364,8 @@ $_smarty_tpl->tpl_vars['attr'] = $foreach_attr_Sav;
                 $(".goods_roll_img_s_n[name='"+gpi_id+"']").trigger('click');
                 for(var pai in price_list){
                     if(price_list[pai]['gpi_id'] == gpi_id){
-                        $('.goods_price_value_v').html(price_list[pai]['gpi_price']);
-                        $('.goods_price_value_v').attr('gpi_id',price_list[pai]['gpi_id']);
+                        $('.goods_price_value_v').html(price_list[pai]['gpi_price'])
+                                .attr('gpi_id',price_list[pai]['gpi_id']);
                         $('.goods_info_sum_sum').html(price_list[pai]['gpi_sum']);
                         if(price_list[pai]['gpi_sum'] < $('.goods_info_sum_v').val()){
                             $('.goods_info_sum_v').val(price_list[pai]['gpi_sum']);
@@ -311,10 +377,12 @@ $_smarty_tpl->tpl_vars['attr'] = $foreach_attr_Sav;
                 }
 
             }else{
-                $('.goods_price_value_v').html(price_min+' - '+price_max);
+                $('.goods_price_value_v').html(price_min+' - '+price_max).removeAttr('gpi_id');
                 $('.goods_info_sum_sum').html("");
             }
         };
+
+
         //商品价格
         $('.goods_info_price_li').click(function(){
             if($(this).hasClass('goods_info_price_li_c')){
@@ -337,7 +405,6 @@ $_smarty_tpl->tpl_vars['attr'] = $foreach_attr_Sav;
                 $(this).addClass('goods_roll_img_s_c').removeClass('goods_roll_img_s_n').siblings().removeClass('goods_roll_img_s_c').addClass('goods_roll_img_s_n');
                 $('.goods_show_img >img').attr('imgUrl',$(this).children('img').attr('imgUrl')).attr('src',h_util.imgLink($(this).children('img').attr('imgUrl'),'centre'));
                 for(var pai in price_list){
-                    console.log(price_list[pai]);
                     if(price_list[pai]['gpi_id'] == $(this).attr('name')){
                         $('.goods_price_value_v').html(price_list[pai]['gpi_price']);
                         for(var plpl in price_list[pai]['list']){
@@ -388,8 +455,8 @@ $_smarty_tpl->tpl_vars['attr'] = $foreach_attr_Sav;
                 $('.goods_roll_right').show();
             }
 
-        }).mouseleave(
-                function(){
+        }).
+        mouseleave(function(){
             $('.goods_roll_left').hide();
             $('.goods_roll_right').hide();
         });
@@ -430,6 +497,12 @@ $_smarty_tpl->tpl_vars['attr'] = $foreach_attr_Sav;
             view.css('top',y).css('left',x);
             $(this).children('.goods_max_img').css('background-position',-x*2+'px '+ -y*2+'px');
         });
+        var gpi_id ="<?php echo (($tmp = @$_smarty_tpl->tpl_vars['gpi_id']->value)===null||$tmp==='' ? '' : $tmp);?>
+";
+        if(gpi_id != ""){
+            console.log($(".goods_roll_img_s_n[name='"+gpi_id+"']").length);
+            $(".goods_roll_img_s_n[name='"+gpi_id+"']").trigger('click');
+        }
     });
 <?php echo '</script'; ?>
 >

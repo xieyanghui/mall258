@@ -14,7 +14,9 @@ if(preg_match("/^\/\/{$_SERVER['HTTP_HOST']}\\".Config::ADMIN_DIR."/",$_SERVER['
 ?>
 <script type="text/javascript">
     (function () {
+        localStorage.clear();
         window.location.href = "http://<?=$local ?>";
+
     })();
 </script>
 

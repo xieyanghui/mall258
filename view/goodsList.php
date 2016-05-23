@@ -9,10 +9,10 @@ include_once ('./header.inc.php');
 $sma = new Smartys();
 include_once ('./top.php');
 $page = '//'.$_SERVER['HTTP_HOST'].$_SERVER['PHP_SELF'].'?';
-$showPage = 15;
-$startPage = 1;
-$startLimit = 1;
-$showLimit = 11;
+$showPage = 15;     //每页数量
+$startPage = 1;     //开始页面
+$startLimit = 1;    //开始分页
+$showLimit = 11;    //分页按钮总数
 
 $g = new Goods();
 

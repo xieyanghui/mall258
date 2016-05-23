@@ -6,8 +6,8 @@
 <ul class="goods_nav wrap">
     <li class = "goods_nav_li"> <a href="<{$HTTP_HOST}>">首页</a></li><span>></span>
     <li class = "goods_nav_li"> <a href="<{$HTTP_HOST}>/view/goodsList.php">全部商品</a></li><span>></span>
-    <li class = "goods_nav_li"> <a href="<{$HTTP_HOST}>/view/goodsList.php?type=<{$g_number}>"><{$g['gt_name']}></a></li><span>></span>
-    <li class = "goods_nav_li"><{$g['g_name']}></li>
+    <li class = "goods_nav_li"> <a href="<{$HTTP_HOST}>/view/goodsList.php?gt_id=<{$g['gt_id']}>"><{$g['gt_name']}></a></li><span>></span>
+    <li class = "goods_nav_li"><a href="<{$HTTP_HOST}>/view/goods.php?id=<{$g['g_number']}>"><{$g['g_name']}></a></li>
 </ul>
 <div class="goods_head wrap">
     <div class="goods_head_img">
@@ -92,25 +92,89 @@
 
 <script>
     window.h_main.push(function(){
+
         //收藏商品
         $('.goods_info_collect').click(function(){
             $.get("<{$HTTP_HOST}>/server/collectAddSer.php?g_id="+$('.goods_price_value').attr('g_id'),function(data){
                 h_util.toast(data);
                 if(data.status){
-
+                    if(localStorage.getItem('collect')){
+                        var collect = JSON.parse(localStorage.getItem('collect'));
+                        var g_ids = new Array();
+                        for(var x in collect){
+                            g_ids.push(collect[x]['g_id']);
+                        }
+                        for(var x in data['goods']){
+                            if(!h_util.inArray(data['goods'][x]['g_id'],g_ids)){
+                                collect.push(data['goods'][x]);
+                            }
+                        }
+                        h_util.setStorage('collect',JSON.stringify(collect));
+                    }else{
+                        h_util.setStorage('collect',JSON.stringify(data['goods']))
+                    }
                 }
             },'json');
-//            if($('#user').length >0){
-//                alert('已登陆');
-//            }else{
-//
-//            }
+
         });
         //加入购物车
         $('.goods_info_cart').click(function(){
+            var gpi_id = $('.goods_price_value_v').attr('gpi_id');
+            if(typeof gpi_id === 'undefined'){
+                h_util.toast(false,'请先选择价格属性');
+                return false;
+            }
+            var sum = parseInt($('input[name="goods_sum"]').val());
+            if(sum <1 || sum > parseInt($('.goods_info_sum_sum').html())){
+                h_util.toast(false,'数量选择不对');
+                return false;
+            }
+            var gpi = JSON.parse('{"'+gpi_id+'":"'+sum+'"}');
+            $.getJSON("<{$HTTP_HOST}>/server/cartAddSer.php",{'gpi':gpi},function(data){
+                h_util.toast(data);
+                if(data.status){
+                    if(localStorage.getItem('cart')){
+                        var cart = JSON.parse(localStorage.getItem('cart'));
+                        for(var x in data['gpi']){
+                            var b =true;
+                            for(var x1 in cart){
+                                if(data['gpi'][x]['gpi_id'] == cart[x1]['gpi_id']){
+                                    cart[x1]['sum'] += data['gpi'][x]['sum'];
+                                    b = false;
+                                }
+                            }
+                            if(b){
+                                cart.push(data['gpi'][x]);
+                            }
+                        }
+                        h_util.setStorage('cart',JSON.stringify(cart));
+                    }else{
+                        h_util.setStorage('cart',JSON.stringify(data['gpi']))
+                    }
+                }
+            });
+
         });
         //立即购买
         $('.goods_info_buy').click(function(){
+            var gpi_id = $('.goods_price_value_v').attr('gpi_id');
+            if(typeof gpi_id === 'undefined'){
+                h_util.toast(false,'请先选择价格属性');
+                return false;
+            }
+            if(parseInt($('.goods_info_sum_sum').html()) < 1){
+                h_util.toast(false,'亲，暂时缺货');
+                return false;
+            }
+            var sum = parseInt($('input[name="goods_sum"]').val());
+            if(sum <1 || sum > parseInt($('.goods_info_sum_sum').html())){
+                h_util.toast(false,'数量选择不对');
+                return false;
+            }
+            if($('#user').length !==1){
+                $('.show_float_div[float_id="login"]').trigger('click');
+                return false;
+            }
 
         });
 
@@ -158,7 +222,6 @@
                 }
             }
             if(price_list[0]['list'].length === $('.goods_info_price_li_c').length){
-                console.log(price_arr);
                 var gpi_sum = 0;
                 var gpi_id = '';
                 for(var liss in list){
@@ -170,8 +233,8 @@
                 $(".goods_roll_img_s_n[name='"+gpi_id+"']").trigger('click');
                 for(var pai in price_list){
                     if(price_list[pai]['gpi_id'] == gpi_id){
-                        $('.goods_price_value_v').html(price_list[pai]['gpi_price']);
-                        $('.goods_price_value_v').attr('gpi_id',price_list[pai]['gpi_id']);
+                        $('.goods_price_value_v').html(price_list[pai]['gpi_price'])
+                                .attr('gpi_id',price_list[pai]['gpi_id']);
                         $('.goods_info_sum_sum').html(price_list[pai]['gpi_sum']);
                         if(price_list[pai]['gpi_sum'] < $('.goods_info_sum_v').val()){
                             $('.goods_info_sum_v').val(price_list[pai]['gpi_sum']);
@@ -183,10 +246,12 @@
                 }
 
             }else{
-                $('.goods_price_value_v').html(price_min+' - '+price_max);
+                $('.goods_price_value_v').html(price_min+' - '+price_max).removeAttr('gpi_id');
                 $('.goods_info_sum_sum').html("");
             }
         };
+
+
         //商品价格
         $('.goods_info_price_li').click(function(){
             if($(this).hasClass('goods_info_price_li_c')){
@@ -209,7 +274,6 @@
                 $(this).addClass('goods_roll_img_s_c').removeClass('goods_roll_img_s_n').siblings().removeClass('goods_roll_img_s_c').addClass('goods_roll_img_s_n');
                 $('.goods_show_img >img').attr('imgUrl',$(this).children('img').attr('imgUrl')).attr('src',h_util.imgLink($(this).children('img').attr('imgUrl'),'centre'));
                 for(var pai in price_list){
-                    console.log(price_list[pai]);
                     if(price_list[pai]['gpi_id'] == $(this).attr('name')){
                         $('.goods_price_value_v').html(price_list[pai]['gpi_price']);
                         for(var plpl in price_list[pai]['list']){
@@ -260,8 +324,8 @@
                 $('.goods_roll_right').show();
             }
 
-        }).mouseleave(
-                function(){
+        }).
+        mouseleave(function(){
             $('.goods_roll_left').hide();
             $('.goods_roll_right').hide();
         });
@@ -302,6 +366,11 @@
             view.css('top',y).css('left',x);
             $(this).children('.goods_max_img').css('background-position',-x*2+'px '+ -y*2+'px');
         });
+        var gpi_id ="<{$gpi_id|default:''}>";
+        if(gpi_id != ""){
+            console.log($(".goods_roll_img_s_n[name='"+gpi_id+"']").length);
+            $(".goods_roll_img_s_n[name='"+gpi_id+"']").trigger('click');
+        }
     });
 </script>
 

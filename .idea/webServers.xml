@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="b18130c8-0e0a-419d-bca4-fd5027358539" name="mall258" url="http://mall258.l">
+        <fileTransfer host="72.41.32.75" port="21" rootFolder="/mall258.com" password="dfebdf9bdf93df93df9adf93df9bdf99dfcb" username="xiehui">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" />
+          </advancedOptions>
+          <option name="port" value="21" />
+        </fileTransfer>
+      </webServer>
+      <webServer id="1947ee1d-d53c-497b-9383-69bc09893535" name="shen" url="http://localhost">
+        <fileTransfer port="0" mountedRoot="" accessType="MOUNT" />
+      </webServer>
+    </option>
+  </component>
+</project>

@@ -54,7 +54,7 @@ a:hover {
 #toast {
     z-index: 1001;
     display: none;
-    position: absolute;
+    position: fixed;
     width: 200px;
     height: 20px;
     line-height: 20px;
