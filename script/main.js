@@ -308,13 +308,21 @@ define('main',['jquery-ui'],function(){
         // 浮动窗口
         showFloatDiv:function(divId){
             $('#'+divId).trigger('show');
-            $('#float_back').slideDown(300);
-            $('#'+divId).slideDown(300);
+            $('#float_back').css('bottom',$(window).height());
+            $('#float_back').show().animate({'bottom':0},500);
+            $('#'+divId).css('top',-($(window).height()-parseInt($('#'+divId).css('top')))+'px');
+            var top = $(window).height()/2-$('#'+divId).height()/2+'px';
+            $('#'+divId).show().animate({'top':top},500);
+            $('#'+divId).find('input:not([type="hidden"])').first().focus();
         },
         closeFloatDiv:function(divId){
             $('#'+divId).trigger('hide');
-            $('#float_back').slideUp(300);
-            $('#'+divId).slideUp(300);
+            $('#float_back').animate({'bottom':$(window).height()},500,function(){
+                $('#float_back').hide().css('bottom',0);
+            });
+            $('#'+divId).animate({'top':-($(window).height()-parseInt($('#'+divId).css('top')))+'px'},500,function(){
+                $('#'+divId).css('top',$(window).height()/2-$('#'+divId).height()/2+'px').hide();
+            });
         }
 
     };

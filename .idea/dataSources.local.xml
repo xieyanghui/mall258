@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="dataSourceStorageLocal">
+    <data-source name="mall" uuid="2f3da891-7df8-40d3-b52e-cc148220d35c">
+      <secret-storage>master_key</secret-storage>
+      <user-name>root</user-name>
+      <schema-pattern>mall258.*</schema-pattern>
+      <default-schemas>mall258.*</default-schemas>
+    </data-source>
+    <data-source name="ygdy" uuid="1e6803e7-01f3-47ac-acad-0ff4c01ebe6d">
+      <secret-storage>master_key</secret-storage>
+      <user-name>root</user-name>
+      <schema-pattern>ygdy.*</schema-pattern>
+      <default-schemas>ygdy.*</default-schemas>
+    </data-source>
+  </component>
+</project>

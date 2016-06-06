@@ -20,4 +20,4 @@ require_once($_SERVER['DOCUMENT_ROOT'] . '/public/autoload.php');
 //$a = new Admin();
 //$a->query (new Where('a_id',1),'a_id,a_img');
 //print_r ($a->toArray());
-echo 0 ===false;
+print_r ($_SERVER);

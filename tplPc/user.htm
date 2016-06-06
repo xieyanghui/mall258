@@ -9,15 +9,15 @@
 </ul>
 <div class="wrap">
     <ul class="user_menu_ul">
-        <li class="user_menu_li">订单管理</li>
-        <li class="user_menu_li">购物车</li>
-        <li class="user_menu_li">收藏夹</li>
-        <li class="user_menu_li">收货地址管理</li>
-        <li class="user_menu_li">资料修改</li>
-        <li class="user_menu_li">修改密码</li>
+        <a href="<{$HTTP_HOST}>/view/user.php?order"><li class="user_menu_li">订单管理</li></a>
+        <a href="<{$HTTP_HOST}>/view/user.php?cart"><li class="user_menu_li">购物车</li></a>
+        <a href="<{$HTTP_HOST}>/view/user.php?collect"><li class="user_menu_li">收藏夹</li></a>
+        <a href="<{$HTTP_HOST}>/view/user.php?user_ship_address"><li class="user_menu_li">收货地址管理</li></a>
+        <a href="<{$HTTP_HOST}>/view/user.php?userAU"><li class="user_menu_li">资料修改</li></a>
+        <a href="<{$HTTP_HOST}>/view/user.php?password"><li class="user_menu_li">修改密码</li></a>
     </ul>
     <div class="user_con">
-
+        <{$con|default:''}>
     </div>
 </div>
 
